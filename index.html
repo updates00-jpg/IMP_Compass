@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0c0f">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="IMP Compass">
 <title>IMP Compass — Camp Butmir</title>
 <style>
 :root {
@@ -186,6 +188,85 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+
+/* GLOBAL SEARCH */
+.gsearch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);display:none;flex-direction:column}
+.gsearch-overlay.open{display:flex}
+.gsearch-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.gsearch-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--body);outline:none}
+.gsearch-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px 8px}
+.gsearch-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px}
+.gsearch-result{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;cursor:pointer}
+.gsearch-result:active{border-color:var(--accent)}
+.gsearch-tag{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.gsearch-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.gsearch-snippet{font-size:11px;color:var(--text3);line-height:1.4}
+.gsearch-empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+
+/* QUICK ACTION BUTTON */
+.quick-action-fab{position:fixed;bottom:calc(var(--nav-h) + 14px);right:14px;z-index:200;width:54px;height:54px;border-radius:50%;background:var(--danger);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(214,48,49,.5);transition:transform .15s}
+.quick-action-fab:active{transform:scale(.92)}
+.quick-action-fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* QUICK ACTION MODAL */
+.qa-modal{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.85);display:none;align-items:flex-end}
+.qa-modal.open{display:flex}
+.qa-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px;max-height:75vh;overflow-y:auto}
+.qa-title{font-weight:700;font-size:16px;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.qa-btn{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:left;cursor:pointer;margin-bottom:8px;font-family:var(--body);display:flex;align-items:center;gap:12px}
+.qa-btn:active{border-color:var(--accent)}
+.qa-btn-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qa-btn-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.qa-btn-title{font-weight:700;font-size:14px;color:var(--text)}
+.qa-btn-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* DUI CALCULATOR */
+.dui-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;align-items:flex-end}
+.dui-modal.open{display:flex}
+.dui-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
+.dui-result{background:var(--surface2);border-radius:8px;padding:14px;margin-top:12px;border-left:3px solid var(--danger)}
+.dui-slider{width:100%;margin:12px 0;accent-color:var(--danger)}
+
+/* INCIDENT LOG */
+.log-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;flex-direction:column}
+.log-modal.open{display:flex}
+.log-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.log-body{flex:1;overflow-y:auto;padding:12px 14px}
+.log-entry{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.log-entry-time{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:4px}
+.log-entry-type{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.log-entry-note{font-size:12px;color:var(--text2)}
+.log-form{padding:12px 14px;background:var(--surface);border-top:1px solid var(--border)}
+.log-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;margin-bottom:8px;outline:none}
+.log-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;resize:none;height:72px;outline:none}
+.log-submit{width:100%;background:var(--accent);border:none;border-radius:6px;padding:12px;color:#000;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body);margin-top:8px}
+
+/* IMPROVED DECISION TREE */
+.dtree-flow{padding:0}
+.dtree-flow-step{display:flex;gap:0;position:relative}
+.dtree-flow-step::before{content:'';position:absolute;left:24px;top:44px;bottom:0;width:2px;background:var(--border);z-index:0}
+.dtree-flow-step:last-child::before{display:none}
+.dtree-flow-num{width:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding-top:12px;z-index:1}
+.dtree-flow-circle{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dtree-flow-content{flex:1;padding:10px 14px 16px 0}
+.dtree-flow-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.dtree-flow-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.dtree-flow-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--surface3);color:var(--accent);border:1px solid var(--border)}
+.dtree-flow-branch{display:flex;align-items:flex-start;gap:8px;margin:4px 0 4px 48px;padding:7px 10px;border-radius:6px;background:var(--surface3)}
+.cond-yes{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
+.cond-no{background:#1f1000;color:var(--warn);border:1px solid #4a3000;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
+.cond-if{background:#0d1520;color:var(--accent2);border:1px solid #1a3060;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
+.dtree-flow-branch-text{font-size:12px;color:var(--text2);line-height:1.4}
+
+/* REPORTS HIGHLIGHT */
+.report-day-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex}
+.report-day-bar{width:4px;flex-shrink:0}
+.report-day-content{flex:1;padding:12px 14px}
+.report-day-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.report-day-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px}
+.report-day-chain{font-size:12px;color:var(--text2)}
+.report-day-time{font-family:var(--mono);font-size:12px;font-weight:700;text-align:right;padding:12px 14px 12px 0;display:flex;align-items:center}
+
 /* SUBNAV */
 .subnav{display:flex;gap:0;margin-bottom:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;flex-shrink:0}
 .subnav-btn{flex:1;padding:9px 4px;background:none;border:none;color:var(--text3);font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:var(--body);transition:all .15s;border-right:1px solid var(--border)}
@@ -277,6 +358,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
   <div class="header-status">
+    <button onclick="openGSearch()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text3);display:flex;align-items:center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
     <span class="alert-badge alert-bravo" id="alertBadge" onclick="openAlertModal()">BRAVO</span>
     <span class="clock" id="clock">--:--</span>
   </div>
@@ -362,40 +446,80 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
 
     <div class="subcontent" id="sub-reports">
-      <div class="section-label">Polish Chain — DORSZ</div>
-      <div class="contact-full">
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Informacja Tygodniowa</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → NSE PL → DORSZ</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">MONDAY</div><div style="font-family:var(--mono);font-size:11px;color:var(--warn)">by 08:00</div></div>
+      <div class="section-label">🇵🇱 Polish Chain — DORSZ</div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:#e8a020"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:#e8a020">Every Monday</div>
+          <div class="report-day-title">Informacja Tygodniowa</div>
+          <div class="report-day-chain">IMP → NSE PL → DORSZ</div>
         </div>
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Wstawka do Meldunku NSE</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → NSE PL → Dowództwo Operacyjne SZ (DORSZ)</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">THURSDAY</div><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">routine</div></div>
-        </div>
+        <div class="report-day-time" style="color:#e8a020">08:00</div>
       </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:#3a7bd5"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:#3a7bd5">Every Thursday</div>
+          <div class="report-day-title">Wstawka do Meldunku NSE</div>
+          <div class="report-day-chain">IMP → NSE PL → Dowództwo Operacyjne SZ (DORSZ)</div>
+        </div>
+        <div class="report-day-time" style="color:#3a7bd5">routine</div>
+      </div>
+
       <div class="section-label mt8">EUFOR / IMP Chain</div>
-      <div class="contact-full">
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">IMP Report (Incident)</div><div style="font-size:12px;color:var(--text2);margin-top:3px">After each incident → SNR + Branch Chief + FPM</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--danger)">IMMEDIATE</div></div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--danger)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--danger)">After Incident</div>
+          <div class="report-day-title">IMP Report</div>
+          <div class="report-day-chain">SNR + Branch Chief + FPM</div>
         </div>
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">DOB Entry</div><div style="font-size:12px;color:var(--text2);margin-top:3px">Daily Occurrence Book — every incident/contact</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--warn)">SAME DAY</div></div>
-        </div>
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Weekly Update Report (WUR)</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → JOC → HQ EUFOR</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">WEEKLY</div></div>
-        </div>
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Parking Warning Follow-up</div><div style="font-size:12px;color:var(--text2);margin-top:3px">Driver reports to IMP Station within 48h</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--warn)">48h</div></div>
-        </div>
-        <div class="contact-row">
-          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">DUI — Breath Test Result</div><div style="font-size:12px;color:var(--text2);margin-top:3px">DUI confirmed → SNR/Branch Chief + FPM + HQ CAMP CMDT</div></div>
-          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--danger)">IMMEDIATE</div></div>
-        </div>
+        <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
       </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--warn)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--warn)">Every Incident</div>
+          <div class="report-day-title">DOB Entry</div>
+          <div class="report-day-chain">Daily Occurrence Book</div>
+        </div>
+        <div class="report-day-time" style="color:var(--warn);font-size:10px">SAME DAY</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--ok)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--ok)">Weekly</div>
+          <div class="report-day-title">Weekly Update Report (WUR)</div>
+          <div class="report-day-chain">IMP → JOC → HQ EUFOR</div>
+        </div>
+        <div class="report-day-time" style="color:var(--ok);font-size:10px">WEEKLY</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--warn)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--warn)">Parking Warning</div>
+          <div class="report-day-title">Driver Follow-up</div>
+          <div class="report-day-chain">Driver must report to IMP Station</div>
+        </div>
+        <div class="report-day-time" style="color:var(--warn);font-size:10px">48h</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--danger)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--danger)">DUI Confirmed</div>
+          <div class="report-day-title">Breath Test Result</div>
+          <div class="report-day-chain">SNR/Branch Chief + FPM + HQ CAMP CMDT</div>
+        </div>
+        <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
+      </div>
+
       <div class="section-label mt8">DOB Entry Format</div>
       <div class="contact-full">
         <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.9;font-family:var(--mono)">
@@ -526,7 +650,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('refs','sub-sop',this)">SOP</button>
       <button class="subnav-btn" onclick="switchSub('refs','sub-routes',this)">Routes</button>
-      <button class="subnav-btn" onclick="switchSub('refs','sub-dipl',this)">Dipl. Plates</button>
     </div>
     <div class="subcontent active" id="sub-sop">
       <div class="search-bar">
@@ -548,15 +671,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <span class="filter-chip" data-rfilter="tactical">Tactical</span>
       </div>
       <div id="routeList"></div>
-    </div>
-    <div class="subcontent" id="sub-dipl">
-      <div class="search-bar">
-        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-        <input type="text" id="diplSearch" placeholder="Number or country/org…" oninput="filterDipl(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <div id="diplStats" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
-      <div id="diplList"></div>
-      <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:12px">Format: <strong style="color:var(--accent)">A</strong> = Embassy &nbsp;|&nbsp; <strong style="color:var(--accent)">M</strong> = Mission. &nbsp;e.g. 44-A-146 = Denmark Embassy</span></div>
     </div>
   </div>
 
@@ -619,9 +733,105 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   </button>
   <button class="nav-btn" data-tab="acronyms" onclick="switchTab('acronyms',this)">
     <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="19" cy="17" r="3"/><path d="M21.5 20.5l-1.5-1.5"/></svg>
-    Codes
+    Lookup
   </button>
 </nav>
+
+<!-- QUICK ACTION FAB -->
+<button class="quick-action-fab" onclick="openQA()" title="Quick Action">
+  <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+</button>
+
+<!-- GLOBAL SEARCH OVERLAY -->
+<div class="gsearch-overlay" id="gsearchOverlay">
+  <div class="gsearch-bar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input class="gsearch-input" id="gsearchInput" placeholder="Search violations, procedures, SOP…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="runGSearch(this.value)">
+    <button class="gsearch-close" onclick="closeGSearch()">✕</button>
+  </div>
+  <div class="gsearch-results" id="gsearchResults">
+    <div class="gsearch-empty">Type to search across all content</div>
+  </div>
+</div>
+
+<!-- QUICK ACTION MODAL -->
+<div class="qa-modal" id="qaModal" onclick="if(event.target===this)closeQA()">
+  <div class="qa-sheet">
+    <div class="qa-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Quick Action
+    </div>
+    <button class="qa-btn" onclick="closeQA();switchTab('procedures',document.querySelector('[data-tab=procedures]'));switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1])">
+      <div class="qa-btn-icon" style="background:#2a0500;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div><div class="qa-btn-title">Decision Tree</div><div class="qa-btn-sub">Step-by-step for any incident</div></div>
+    </button>
+    <button class="qa-btn" onclick="closeQA();openDUI()">
+      <div class="qa-btn-icon" style="background:#1f1000;color:var(--warn)"><svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg></div>
+      <div><div class="qa-btn-title">DUI Calculator</div><div class="qa-btn-sub">Breath test result → procedure</div></div>
+    </button>
+    <button class="qa-btn" onclick="closeQA();openLog()">
+      <div class="qa-btn-icon" style="background:#0d1520;color:var(--accent2)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div><div class="qa-btn-title">Log Incident</div><div class="qa-btn-sub">Quick DOB entry</div></div>
+    </button>
+    <button class="qa-btn" onclick="closeQA();switchTab('contacts',document.querySelector('[data-tab=contacts]'))">
+      <div class="qa-btn-icon" style="background:#0d1f0d;color:#4caf50"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <div><div class="qa-btn-title">Emergency Contacts</div><div class="qa-btn-sub">910 · 911 · 912 · 913</div></div>
+    </button>
+    <button class="qa-btn" onclick="closeQA();openGSearch()">
+      <div class="qa-btn-icon" style="background:#1a1520;color:var(--text2)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div><div class="qa-btn-title">Global Search</div><div class="qa-btn-sub">Search all content</div></div>
+    </button>
+  </div>
+</div>
+
+<!-- DUI CALCULATOR MODAL -->
+<div class="dui-modal" id="duiModal" onclick="if(event.target===this)closeDUI()">
+  <div class="dui-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-weight:700;font-size:16px;color:var(--warn);text-transform:uppercase;letter-spacing:1px">DUI Calculator</div>
+      <button onclick="closeDUI()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Breath test result (promille):</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+      <input type="range" class="dui-slider" id="duiSlider" min="0" max="3" step="0.01" value="0" oninput="updateDUI(this.value)">
+      <div id="duiValue" style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--danger);min-width:52px;text-align:right">0.00</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:4px">
+      <button onclick="setDUI(0.2)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--body)">0.2</button>
+      <button onclick="setDUI(0.5)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--body)">0.5</button>
+      <button onclick="setDUI(1.0)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--body)">1.0</button>
+      <button onclick="setDUI(1.5)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--body)">1.5</button>
+      <button onclick="setDUI(2.0)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--body)">2.0</button>
+    </div>
+    <div id="duiResult"></div>
+  </div>
+</div>
+
+<!-- INCIDENT LOG MODAL -->
+<div class="log-modal" id="logModal">
+  <div class="log-header">
+    <div style="font-weight:700;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px">Incident Log — DOB</div>
+    <button onclick="closeLog()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+  </div>
+  <div class="log-body" id="logBody"></div>
+  <div class="log-form">
+    <select class="log-select" id="logType">
+      <option value="">— Select Incident Type —</option>
+      <option value="Speeding">Speeding</option>
+      <option value="Parking Violation">Parking Violation</option>
+      <option value="DUI / Alcohol">DUI / Alcohol</option>
+      <option value="No ID">No ID</option>
+      <option value="Dress Violation">Dress Violation</option>
+      <option value="Bicycle Violation">Bicycle Violation</option>
+      <option value="Quiet Hours">Quiet Hours</option>
+      <option value="Unauthorized Weapon">Unauthorized Weapon</option>
+      <option value="Uncooperative Behaviour">Uncooperative Behaviour</option>
+      <option value="Other">Other</option>
+    </select>
+    <textarea class="log-textarea" id="logNote" placeholder="Person, unit, location, action taken…"></textarea>
+    <button class="log-submit" onclick="saveLogEntry()">+ Add to Log</button>
+  </div>
+</div>
 
 <!-- ALERT MODAL -->
 <div class="modal-overlay" id="alertModal" onclick="if(event.target===this)closeAlertModal()">
@@ -2147,6 +2357,199 @@ function renderRankPage(){
     });
   });
 }
+
+
+// ── GLOBAL SEARCH ─────────────────────────────────────────────────────────────
+function openGSearch(){
+  document.getElementById('gsearchOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('gsearchInput').focus(),100);
+}
+function closeGSearch(){
+  document.getElementById('gsearchOverlay').classList.remove('open');
+  document.getElementById('gsearchInput').value='';
+  document.getElementById('gsearchResults').innerHTML='<div class="gsearch-empty">Type to search across all content</div>';
+}
+
+function runGSearch(q){
+  const out=document.getElementById('gsearchResults');
+  if(!q||q.length<2){out.innerHTML='<div class="gsearch-empty">Type at least 2 characters</div>';return;}
+  const fq=q.toLowerCase();
+  const results=[];
+
+  // Search violations
+  violations.forEach(v=>{
+    if(v.title.toLowerCase().includes(fq)||v.penalties.some(p=>p.text.toLowerCase().includes(fq))){
+      results.push({tag:'VIOLATION',title:v.title,snippet:v.penalties[0]?.text||'',action:`switchTab('violations',document.querySelector('[data-tab=violations]'));closeGSearch()`});
+    }
+  });
+
+  // Search procedures
+  procedures.forEach(p=>{
+    if(p.title.toLowerCase().includes(fq)||p.steps.some(s=>s.toLowerCase().includes(fq))){
+      const match=p.steps.find(s=>s.toLowerCase().includes(fq))||p.steps[0];
+      results.push({tag:'PROCEDURE',title:p.title,snippet:match,action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));closeGSearch()`});
+    }
+  });
+
+  // Search decision trees
+  dtrees.forEach(d=>{
+    if(d.title.toLowerCase().includes(fq)||d.steps.some(s=>s.title.toLowerCase().includes(fq)||s.desc.toLowerCase().includes(fq))){
+      const match=d.steps.find(s=>s.title.toLowerCase().includes(fq)||s.desc.toLowerCase().includes(fq));
+      results.push({tag:'DECISION TREE',title:d.title,snippet:match?match.title:'',action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1]);setTimeout(()=>{const el=document.getElementById('dt-${d.id}');if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open');}},100)},50);closeGSearch()`});
+    }
+  });
+
+  // Search SOP
+  sopRefs.forEach(r=>{
+    if(r.title.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))){
+      const match=r.rules.find(rule=>rule.toLowerCase().includes(fq))||r.rules[0];
+      results.push({tag:'SOP',title:r.title,snippet:match.substring(0,80)+'…',action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
+    }
+  });
+
+  // Search acronyms
+  const acroHits=acronyms.filter(a=>a[0].toLowerCase().includes(fq)||a[1].toLowerCase().includes(fq)).slice(0,5);
+  if(acroHits.length){
+    results.push({tag:'ACRONYMS',title:`${acroHits.length} result(s): ${acroHits.map(a=>a[0]).join(', ')}`,snippet:acroHits.map(a=>`${a[0]} = ${a[1]}`).join(' · ').substring(0,100),action:`switchTab('acronyms',document.querySelector('[data-tab=acronyms]'));setTimeout(()=>filterAcro('${q}'),50);closeGSearch()`});
+  }
+
+  // Search routes
+  const routeHits=routes.filter(r=>r.name.toLowerCase().includes(fq)||r.path.toLowerCase().includes(fq)).slice(0,3);
+  routeHits.forEach(r=>{
+    results.push({tag:'ROUTE',title:r.name,snippet:r.path.substring(0,80),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));setTimeout(()=>{switchSub('refs','sub-routes',document.querySelectorAll('#tab-refs .subnav-btn')[1]);setTimeout(()=>filterRoutes('${r.name}'),100)},50);closeGSearch()`});
+  });
+
+  if(!results.length){out.innerHTML=`<div class="gsearch-empty">No results for "<strong>${q}</strong>"</div>`;return;}
+  out.innerHTML=results.map(r=>`
+    <div class="gsearch-result" onclick="${r.action}">
+      <div class="gsearch-tag">${r.tag}</div>
+      <div class="gsearch-title">${r.title}</div>
+      ${r.snippet?`<div class="gsearch-snippet">${r.snippet}</div>`:''}
+    </div>`).join('');
+}
+
+// ── QUICK ACTION ──────────────────────────────────────────────────────────────
+function openQA(){document.getElementById('qaModal').classList.add('open');}
+function closeQA(){document.getElementById('qaModal').classList.remove('open');}
+
+// ── DUI CALCULATOR ────────────────────────────────────────────────────────────
+function openDUI(){document.getElementById('duiModal').classList.add('open');updateDUI(0);}
+function closeDUI(){document.getElementById('duiModal').classList.remove('open');}
+function setDUI(v){document.getElementById('duiSlider').value=v;updateDUI(v);}
+
+function updateDUI(v){
+  v=parseFloat(v);
+  document.getElementById('duiValue').textContent=v.toFixed(2);
+  const res=document.getElementById('duiResult');
+  if(v===0){res.innerHTML='';return;}
+
+  let level,color,actions;
+  if(v>0&&v<0.2){
+    level='TRACE — Below threshold';color='var(--ok)';
+    actions=['No formal violation if not impaired','Note in DOB if behaviour suspicious','Monitor situation'];
+  } else if(v>=0.2&&v<0.5){
+    level='LOW — Positive result';color='var(--warn)';
+    actions=["Notify driver's SNR/Branch Chief","Driver's license suspended until further notice","All action reported to FPM","IMP Report required"];
+  } else if(v>=0.5&&v<1.0){
+    level='MEDIUM — DUI Confirmed';color='#e67e22';
+    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical check recommended"];
+  } else {
+    level='HIGH — Severe DUI';color='var(--danger)';
+    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical Station (912) — consider welfare check","Detain if aggressive or unsafe"];
+  }
+
+  res.innerHTML=`
+    <div class="dui-result" style="border-color:${color}">
+      <div style="font-weight:700;font-size:14px;color:${color};margin-bottom:10px">${level}</div>
+      ${actions.map((a,i)=>`
+        <div style="display:flex;gap:8px;margin-bottom:6px;align-items:flex-start">
+          <span style="font-family:var(--mono);font-size:11px;color:${color};font-weight:700;flex-shrink:0;margin-top:1px">${i+1}.</span>
+          <span style="font-size:13px;color:var(--text2)">${a}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ── INCIDENT LOG ──────────────────────────────────────────────────────────────
+function openLog(){
+  document.getElementById('logModal').classList.add('open');
+  renderLog();
+}
+function closeLog(){document.getElementById('logModal').classList.remove('open');}
+
+function renderLog(){
+  const body=document.getElementById('logBody');
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+  if(!entries.length){
+    body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text3);font-size:13px">No entries yet.<br>Add your first incident below.</div>';
+    return;
+  }
+  body.innerHTML=entries.slice().reverse().map((e,i)=>`
+    <div class="log-entry">
+      <div class="log-entry-time">${e.time} &nbsp;|&nbsp; ${e.date}</div>
+      <div class="log-entry-type">${e.type}</div>
+      ${e.note?`<div class="log-entry-note">${e.note}</div>`:''}
+      <button onclick="deleteLogEntry(${entries.length-1-i})" style="background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:4px 0 0;font-family:var(--body)">Delete</button>
+    </div>`).join('');
+}
+
+function saveLogEntry(){
+  const type=document.getElementById('logType').value;
+  if(!type){alert('Please select an incident type.');return;}
+  const note=document.getElementById('logNote').value.trim();
+  const now=new Date();
+  const date=now.toLocaleDateString('en-GB');
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+  entries.push({type,note,date,time});
+  localStorage.setItem('imp_log',JSON.stringify(entries));
+  document.getElementById('logType').value='';
+  document.getElementById('logNote').value='';
+  renderLog();
+}
+
+function deleteLogEntry(idx){
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+  entries.splice(idx,1);
+  localStorage.setItem('imp_log',JSON.stringify(entries));
+  renderLog();
+}
+
+// ── PUSH NOTIFICATIONS ────────────────────────────────────────────────────────
+function requestNotifPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default'){
+    Notification.requestPermission();
+  }
+}
+
+function scheduleReportReminders(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  // Check every minute if it's time for a reminder
+  setInterval(()=>{
+    const now=new Date();
+    const day=now.getDay(); // 0=Sun,1=Mon,...4=Thu
+    const h=now.getHours();
+    const m=now.getMinutes();
+    const key=`notif_${now.toDateString()}`;
+    const sent=JSON.parse(localStorage.getItem(key)||'{}');
+
+    if(day===1&&h===7&&m===45&&!sent.monday){
+      new Notification('IMP Compass — Report Due',{body:'Informacja Tygodniowa must be sent by 08:00',icon:'icon-192.png',tag:'monday-report'});
+      sent.monday=true;localStorage.setItem(key,JSON.stringify(sent));
+    }
+    if(day===4&&h===7&&m===45&&!sent.thursday){
+      new Notification('IMP Compass — Report Due',{body:'Wstawka do Meldunku NSE due today',icon:'icon-192.png',tag:'thursday-report'});
+      sent.thursday=true;localStorage.setItem(key,JSON.stringify(sent));
+    }
+  },60000);
+}
+
+// Init notifications on load
+requestNotifPermission();
+scheduleReportReminders();
 
 try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
 </script>
