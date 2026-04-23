@@ -414,6 +414,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>
           <span class="quick-btn-label">Walk-out</span>
         </div>
+        <div class="quick-btn" onclick="openProc('altgate')" style="color:#e67e22">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          <span class="quick-btn-label">Alt. Gate</span>
+        </div>
       </div>
       <div class="section-label">Step-by-Step Procedures</div>
       <div id="procList"></div>
@@ -836,11 +840,80 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <!-- ALERT MODAL -->
 <div class="modal-overlay" id="alertModal" onclick="if(event.target===this)closeAlertModal()">
   <div class="modal-sheet">
-    <div class="modal-title">Alert States <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
-    <div class="alert-row a-bravo"><div class="alert-row-title">BRAVO</div><div class="alert-row-text">All personnel comply with Dress-Weapon Code, Vehicle movement code, Walking out code.</div></div>
-    <div class="alert-row a-charlie"><div class="alert-row-title">CHARLIE</div><div class="alert-row-text">Dress-Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div></div>
-    <div class="alert-row a-delta"><div class="alert-row-title">DELTA</div><div class="alert-row-text">Dress-Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div></div>
+    <div class="modal-title">Alert States — Camp Butmir <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
+
+    <div class="alert-row a-bravo">
+      <div class="alert-row-title">BRAVO</div>
+      <div class="alert-row-text">All personnel comply with Dress/Weapon Code, Vehicle movement code, Walking out code.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:10px;font-weight:700;color:#4caf50;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+        <div style="font-size:12px;color:var(--text2)">• Conduct regular patrols inside and around the base ICCW HQ CAMP CMDT.</div>
+      </div>
+    </div>
+
+    <div class="alert-row a-charlie">
+      <div class="alert-row-title">CHARLIE</div>
+      <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>
+          • Implement Alternate gate procedure if Main gate closed.
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Notify JOC on alert state change for FPG.<br>
+          • Establish HQ CAMP CMDT TOC.<br>
+          • Request JOC to activate MNBN units to reinforce protection CB.<br>
+          • Evacuate Claims Office and close public parking area IVO Claim Office.<br>
+          • Evacuate German NSE to Camp Butmir.
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Comply with Dress/Weapon/Vehicle/Walking out codes.<br>
+          • Direct change G→J/K: fully equipped within <strong style="color:var(--warn)">60 minutes</strong>.<br>
+          • Limit non-essential activities outside Camp Butmir.
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-row a-delta">
+      <div class="alert-row-title">DELTA</div>
+      <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>
+          • Implement Alternate gate procedure — Main gate closed.
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Notify JOC on alert state change for FPG.<br>
+          • Establish HQ CAMP CMDT TOC.<br>
+          • Request JOC to activate MNBN units to reinforce protection CB.<br>
+          • Evacuate Claims Office and close public parking area IVO Claim Office.<br>
+          • Evacuate German NSE to Camp Butmir.<br>
+          • Request surveillance by UAV from MNBN assets (if required).
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">MNBN COM will:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Send MNBN LNO to HQ CMDT TOC.<br>
+          • Activate CB protection IAW plan in Annex G.<br>
+          • Provide UAV from MNBN assets (if required).
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          • Comply with current Dress/Weapon code, Vehicle movement code and Walking out code.<br>
+          • Direct change G→J/K: fully equipped within <strong style="color:var(--danger)">60 minutes</strong>.<br>
+          • EUFOR/NHQ Sa civilian staff follow orders of branch chiefs.<br>
+          • Local civilian staff informed through HQ CAMP CMDT TOC.<br>
+          • Limit all non-essential activities outside Camp Butmir.
+        </div>
+      </div>
+    </div>
+
     <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:13px;color:var(--text2)">Siren: 20s continuous / 20s wavering / 10s continuous — take next bunker, follow JOC orders.</span></div>
+    <div class="rule-item mt4"><span class="rule-bullet">›</span><span style="font-size:12px;color:var(--text3)">Reference: SOP 3929 · Camp Butmir Defence Plan Annex D (14 Feb 2025)</span></div>
     <div class="section-label mt8">Set Active Alert</div>
     <div class="alert-set-row">
       <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#0d1f0d;border:1px solid #1f3d1f;color:#4caf50">BRAVO</button>
@@ -881,7 +954,8 @@ const procIconSvg={
   speeding:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
   id:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>',
   weapon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-  walkout:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'
+  walkout:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>',
+  altgate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>'
 };
 
 const procedures=[
@@ -889,7 +963,8 @@ const procedures=[
   {id:'speeding',color:'var(--accent2)',bg:'#0d1a2a',title:'Speeding Violation',steps:['Stop the vehicle. Note speed and posted speed limit (30 km/h in CB).','Check driver ID and vehicle documentation.','Determine category: 5–10 / 11–20 / 21+ km/h over limit.','5–10 over: Issue verbal warning (1st). 2nd+: notify SNR/Branch Chief.','11–20 over: Notify SNR/Branch Chief + HQ CAMP CMDT + FPM. Suspend license 2 weeks. Mark 2 pts.','21+ over: Notify SNR/Branch Chief + HQ CAMP CMDT. Suspend license 2 weeks. Mark 3 pts.','5 total penalty points = license suspended for one month.'],note:'Every driver issued a written parking warning must report to IMP Station within 48h or face disciplinary action.'},
   {id:'id',color:'var(--ok)',bg:'#0d1a0d',title:'No Visible ID / Access Card',steps:['Stop the individual and request ID/Access card.','If no card in visible place: issue warning and log in IMP daily occurrence book.','1st & 2nd offence: IMP issues a warning.','3rd+ offence: Notify SNR/Branch Chief. All action reported to FPM.','Notify all EUFOR/NATO personnel nearby to report non-displaying individuals.'],note:'IMP personnel are exempt from visible display but must produce ID when requested. Exception: sport activity.'},
   {id:'weapon',color:'var(--danger)',bg:'#2a0000',title:'Unauthorized Weapon Carry',steps:['Identify the individual carrying a loaded or unauthorized weapon in a restricted area.','Authorized exceptions: FPG Guard, IMP Det, CP details, personnel with written permission, ordered by COM EUFOR/NHQ Sa.','If unauthorized: secure the situation and request individual to disarm.','Immediately notify SNR/Branch Chief.','Report all action to FPM.','No weapons in rec/concession areas or DFAC (except IMP and permitted personnel).'],note:'Reference HQ EUFOR SOP 5275 Force Protection for full weapon carry rules and alert state procedures.'},
-  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:['Confirm current ALERT STATE before any walk-out.','ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Issue Force Exemption Card.','DELTA: NO walking out. All personnel remain in Camp Butmir.','Ensure personnel are NOT going to Off-Limits areas (check monthly J2 Off-Limits list — DFAC and Gym boards).','Recall: Branch Supervisors contact their personnel when alert state increases. Return to Camp immediately.'],note:'Off-limits includes brothels, establishments linked to terrorism/crime/narcotics, and any location on the J2 monthly list.'}
+  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:['Confirm current ALERT STATE before any walk-out.','ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Issue Force Exemption Card.','DELTA: NO walking out. All personnel remain in Camp Butmir.','Ensure personnel are NOT going to Off-Limits areas (check monthly J2 Off-Limits list — DFAC and Gym boards).','Recall: Branch Supervisors contact their personnel when alert state increases. Return to Camp immediately.'],note:'Off-limits includes brothels, establishments linked to terrorism/crime/narcotics, and any location on the J2 monthly list.'},
+  {id:'altgate',color:'#e67e22',bg:'#1f0e00',title:'Alternate (Back) Gate — Opening Procedure',steps:['Provide and emplace road signs (Stop, Direction, etc.) at the Alternate gate. One-way system becomes operational immediately upon entry.','All traffic ENTERING the camp: via Alternate gate — turns RIGHT onto Dayton Road. This applies if Main gate is closed and Alternate gate supports all traffic.','All traffic LEAVING the camp: via Mostar Road ONLY.','Ensure NO parking outside the Alternate vehicle gate or the Alternate pedestrian gate.','IMP COM coordinates with local police to provide traffic control OUTSIDE the Alternate gate.','Control traffic outside the Alternate gate AND traffic inside camp near the Alternate gate.','All personnel in Camp BUTMIR: follow Alternate gate usage rules (para 2.a and 2.b), follow temporary road reorganization and IMP directions, limit traffic to necessary minimum when Main gate is closed.'],note:'Reference Camp Butmir Defence Plan Annex D. Coordinate with HQ CAMP CMDT and notify JOC when Alternate gate is activated.'}
 ];
 
 const sopRefs=[
