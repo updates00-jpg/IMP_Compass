@@ -188,6 +188,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+/* PIN */
+.pin-unit-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 8px;color:var(--text);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--mono);transition:border-color .15s}
+.pin-unit-btn:active{border-color:var(--accent)}
+.pin-key{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px 8px;color:var(--text);font-weight:700;font-size:20px;cursor:pointer;font-family:var(--mono);transition:all .1s}
+.pin-key:active{background:var(--accent);color:#000;border-color:var(--accent)}
+.pin-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:background .15s}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent)}
+.pin-dot.error{background:var(--danger);border-color:var(--danger)}
 
 /* GLOBAL SEARCH */
 .gsearch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);display:none;flex-direction:column}
@@ -765,6 +773,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       Quick Action
     </div>
+    <button class="qa-btn" onclick="closeQA();openAlarmModal();document.getElementById('alarmUserLabel').textContent=currentUserId||'—'"
+      style="border-color:var(--danger)">
+      <div class="qa-btn-icon" style="background:#3a0000;color:var(--danger)">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div><div class="qa-btn-title" style="color:var(--danger)">🚨 ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
+    </button>
     <button class="qa-btn" onclick="closeQA();switchTab('procedures',document.querySelector('[data-tab=procedures]'));switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1])">
       <div class="qa-btn-icon" style="background:#2a0500;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div><div class="qa-btn-title">Decision Tree</div><div class="qa-btn-sub">Step-by-step for any incident</div></div>
@@ -811,7 +826,96 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   </div>
 </div>
 
-<!-- INCIDENT LOG MODAL -->
+<!-- ALARM MODAL -->
+<div class="dui-modal" id="alarmModal" onclick="if(event.target===this)closeAlarmModal2()">
+  <div class="dui-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-weight:700;font-size:16px;color:var(--danger);text-transform:uppercase;letter-spacing:1px">🚨 IMP Alarm</div>
+      <button onclick="closeAlarmModal2()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">
+      Sending as: <strong id="alarmUserLabel" style="color:var(--accent)"></strong>
+      <button onclick="openUserSelect()" style="background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;text-decoration:underline;margin-left:8px">change</button>
+    </div>
+    <textarea id="alarmMessage" class="log-textarea" placeholder="Optional: brief situation description…" style="margin-bottom:12px"></textarea>
+    <button id="triggerAlarmBtn" onclick="triggerAlarm()"
+      style="width:100%;background:var(--danger);border:none;border-radius:8px;padding:16px;color:#fff;font-weight:700;font-size:16px;cursor:pointer;font-family:var(--body);letter-spacing:1px;margin-bottom:8px">
+      SEND ALARM + LOCATION
+    </button>
+    <button onclick="sendAllClear()"
+      style="width:100%;background:var(--surface2);border:1px solid var(--ok);border-radius:8px;padding:12px;color:var(--ok);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">
+      ✅ Send All Clear
+    </button>
+    <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">GPS location will be shared with all 15 IMP units</div>
+  </div>
+</div>
+
+<!-- USER SELECT MODAL -->
+<div class="dui-modal" id="userSelectModal" onclick="if(event.target===this)closeUserSelect()">
+  <div class="dui-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-weight:700;font-size:15px;color:var(--accent);text-transform:uppercase;letter-spacing:1px">IMP Unit Login</div>
+      <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+    </div>
+
+    <!-- Step 1: Select unit -->
+    <div id="pinStep1">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Select your unit:</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <button onclick="pinSelectUnit('IMP-1')"  class="pin-unit-btn">IMP-1</button>
+        <button onclick="pinSelectUnit('IMP-2')"  class="pin-unit-btn">IMP-2</button>
+        <button onclick="pinSelectUnit('IMP-3')"  class="pin-unit-btn">IMP-3</button>
+        <button onclick="pinSelectUnit('IMP-4')"  class="pin-unit-btn">IMP-4</button>
+        <button onclick="pinSelectUnit('IMP-5')"  class="pin-unit-btn">IMP-5</button>
+        <button onclick="pinSelectUnit('IMP-6')"  class="pin-unit-btn">IMP-6</button>
+        <button onclick="pinSelectUnit('IMP-7')"  class="pin-unit-btn">IMP-7</button>
+        <button onclick="pinSelectUnit('IMP-8')"  class="pin-unit-btn">IMP-8</button>
+        <button onclick="pinSelectUnit('IMP-9')"  class="pin-unit-btn">IMP-9</button>
+        <button onclick="pinSelectUnit('IMP-10')" class="pin-unit-btn">IMP-10</button>
+        <button onclick="pinSelectUnit('IMP-11')" class="pin-unit-btn">IMP-11</button>
+        <button onclick="pinSelectUnit('IMP-12')" class="pin-unit-btn">IMP-12</button>
+        <button onclick="pinSelectUnit('IMP-13')" class="pin-unit-btn">IMP-13</button>
+        <button onclick="pinSelectUnit('IMP-14')" class="pin-unit-btn">IMP-14</button>
+        <button onclick="pinSelectUnit('IMP-15')" class="pin-unit-btn">IMP-15</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Enter PIN -->
+    <div id="pinStep2" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <button onclick="pinBack()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">←</button>
+        <div style="font-weight:700;font-size:15px;color:var(--accent)" id="pinUnitLabel"></div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;text-align:center">Enter PIN:</div>
+
+      <!-- PIN display -->
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px">
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd4"></div>
+      </div>
+
+      <!-- PIN error -->
+      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px">❌ Wrong PIN</div>
+
+      <!-- Numpad -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key" onclick="pinKey('0')" style="grid-column:2">0</button>
+        <button class="pin-key" onclick="pinDelete()" style="color:var(--danger)">⌫</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="log-modal" id="logModal">
   <div class="log-header">
     <div style="font-weight:700;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px">Incident Log — DOB</div>
@@ -2625,6 +2729,267 @@ function scheduleReportReminders(){
 // Init notifications on load
 requestNotifPermission();
 scheduleReportReminders();
+
+// ── PUSHER ALARM SYSTEM ───────────────────────────────────────────────────────
+const PUSHER_KEY = 'e6b466c12fe64811ae86';
+const PUSHER_CLUSTER = 'eu';
+const VERCEL_URL = 'https://imp-compass.vercel.app/api/trigger-alarm';
+
+let pusherClient = null;
+let currentUserId = null;
+
+// Load Pusher JS dynamically
+function loadPusher(cb){
+  if(window.Pusher){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://js.pusher.com/8.3/pusher.min.js';
+  s.onload=cb;
+  document.head.appendChild(s);
+}
+
+function initPusher(){
+  loadPusher(()=>{
+    pusherClient = new Pusher(PUSHER_KEY, {cluster: PUSHER_CLUSTER});
+    const channel = pusherClient.subscribe('imp-compass');
+
+    channel.bind('alarm', data => {
+      showIncomingAlarm(data);
+    });
+
+    channel.bind('all-clear', data => {
+      showAllClear(data);
+    });
+
+    console.log('Pusher connected');
+  });
+}
+
+function showIncomingAlarm(data){
+  const mapsUrl = data.lat && data.lng
+    ? `https://maps.google.com/?q=${data.lat},${data.lng}`
+    : null;
+
+  const el = document.createElement('div');
+  el.id = 'alarmBanner';
+  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--danger);padding:12px 14px;display:flex;flex-direction:column;gap:6px;animation:flashBanner 1s infinite`;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-weight:700;font-size:16px;color:#fff;letter-spacing:1px">
+        🚨 ALARM — ${data.userId}
+      </div>
+      <button onclick="document.getElementById('alarmBanner').remove()" 
+        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px">✕</button>
+    </div>
+    <div style="font-size:13px;color:rgba(255,255,255,.9)">
+      ${data.timestamp} ${data.message ? '· ' + data.message : ''}
+    </div>
+    ${mapsUrl ? `
+    <a href="${mapsUrl}" target="_blank"
+      style="background:rgba(0,0,0,.3);color:#fff;text-decoration:none;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;display:block">
+      📍 Open Location in Maps
+    </a>` : '<div style="font-size:12px;color:rgba(255,255,255,.7)">No GPS location available</div>'}`;
+
+  // Remove existing banner if any
+  const existing = document.getElementById('alarmBanner');
+  if(existing) existing.remove();
+
+  document.body.appendChild(el);
+
+  // Vibrate if supported
+  if(navigator.vibrate) navigator.vibrate([500,200,500,200,500]);
+
+  // Push notification
+  if(Notification.permission === 'granted'){
+    new Notification(`🚨 ALARM — ${data.userId}`, {
+      body: mapsUrl ? `Location available — tap to open` : 'No GPS',
+      icon: 'icon-192.png',
+      tag: 'imp-alarm',
+      requireInteraction: true
+    });
+  }
+}
+
+function showAllClear(data){
+  const existing = document.getElementById('alarmBanner');
+  if(existing) existing.remove();
+
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--ok);padding:12px 14px;display:flex;align-items:center;justify-content:space-between`;
+  el.innerHTML = `
+    <div style="font-weight:700;font-size:15px;color:#fff">✅ ALL CLEAR — ${data.userId}</div>
+    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer">✕</button>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 8000);
+}
+
+// ALARM MODAL
+function openAlarmModal(){
+  if(!currentUserId){
+    openUserSelect();
+    return;
+  }
+  document.getElementById('alarmModal').classList.add('open');
+}
+function closeAlarmModal2(){document.getElementById('alarmModal').classList.remove('open');}
+
+function openUserSelect(){
+  document.getElementById('userSelectModal').classList.add('open');
+  pinReset();
+}
+function closeUserSelect(){
+  document.getElementById('userSelectModal').classList.remove('open');
+  pinReset();
+}
+
+// PIN data
+const impPins = {
+  'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
+  'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
+  'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
+  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515'
+};
+
+let pinSelectedUnit = '';
+let pinEntered = '';
+
+function pinReset(){
+  pinSelectedUnit = '';
+  pinEntered = '';
+  document.getElementById('pinStep1').style.display = 'block';
+  document.getElementById('pinStep2').style.display = 'none';
+  document.getElementById('pinError').style.display = 'none';
+  updatePinDots();
+}
+
+function pinSelectUnit(id){
+  pinSelectedUnit = id;
+  pinEntered = '';
+  document.getElementById('pinStep1').style.display = 'none';
+  document.getElementById('pinStep2').style.display = 'block';
+  document.getElementById('pinUnitLabel').textContent = id;
+  document.getElementById('pinError').style.display = 'none';
+  updatePinDots();
+}
+
+function pinBack(){
+  pinReset();
+}
+
+function pinKey(digit){
+  if(pinEntered.length >= 4) return;
+  pinEntered += digit;
+  updatePinDots();
+  if(pinEntered.length === 4) pinVerify();
+}
+
+function pinDelete(){
+  pinEntered = pinEntered.slice(0,-1);
+  updatePinDots();
+}
+
+function updatePinDots(){
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('pd'+i);
+    if(!dot) return;
+    dot.classList.toggle('filled', i <= pinEntered.length);
+    dot.classList.remove('error');
+  }
+}
+
+function pinVerify(){
+  const correct = impPins[pinSelectedUnit];
+  if(pinEntered === correct){
+    // Success
+    currentUserId = pinSelectedUnit;
+    localStorage.setItem('imp_user_id', pinSelectedUnit);
+    closeUserSelect();
+    // Update alarm modal label
+    const lbl = document.getElementById('alarmUserLabel');
+    if(lbl) lbl.textContent = currentUserId;
+    // Open alarm modal
+    document.getElementById('alarmModal').classList.add('open');
+  } else {
+    // Wrong PIN
+    for(let i=1;i<=4;i++){
+      const dot = document.getElementById('pd'+i);
+      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
+    }
+    document.getElementById('pinError').style.display = 'block';
+    setTimeout(()=>{
+      pinEntered = '';
+      updatePinDots();
+      document.getElementById('pinError').style.display = 'none';
+    }, 1200);
+  }
+}
+
+function triggerAlarm(){
+  if(!currentUserId) return;
+  const btn = document.getElementById('triggerAlarmBtn');
+  btn.textContent = 'Getting GPS…';
+  btn.disabled = true;
+
+  const send = (lat, lng) => {
+    const now = new Date();
+    const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
+    const message = document.getElementById('alarmMessage').value.trim();
+
+    fetch(VERCEL_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({type:'alarm', userId:currentUserId, lat, lng, timestamp, message})
+    })
+    .then(r=>r.json())
+    .then(()=>{
+      btn.textContent = '🚨 ALARM SENT';
+      btn.style.background = 'var(--ok)';
+      setTimeout(()=>{
+        btn.textContent = 'SEND ALARM';
+        btn.style.background = '';
+        btn.disabled = false;
+        closeAlarmModal2();
+        document.getElementById('alarmMessage').value = '';
+      }, 2000);
+    })
+    .catch(()=>{
+      btn.textContent = 'ERROR — Retry';
+      btn.disabled = false;
+    });
+  };
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos => send(pos.coords.latitude, pos.coords.longitude),
+      ()  => send(null, null),
+      {timeout:6000, enableHighAccuracy:true}
+    );
+  } else {
+    send(null, null);
+  }
+}
+
+function sendAllClear(){
+  const now = new Date();
+  const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
+  fetch(VERCEL_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({type:'all-clear', userId:currentUserId, timestamp, message:'Situation resolved'})
+  });
+  closeAlarmModal2();
+}
+
+// Flash animation
+const flashStyle = document.createElement('style');
+flashStyle.textContent = `@keyframes flashBanner{0%,100%{opacity:1}50%{opacity:.7}}`;
+document.head.appendChild(flashStyle);
+
+// Init Pusher and restore user
+loadPusher(()=>{
+  initPusher();
+  const saved = localStorage.getItem('imp_user_id');
+  if(saved) currentUserId = saved;
+});
 
 try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
 </script>
