@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0c0f">
+<title>IMP Compass — Camp Butmir</title>
+<style>
+:root {
+  --bg:#0a0c0f; --surface:#12161c; --surface2:#1a1f28; --surface3:#222831;
+  --border:#2a3040; --accent:#e8a020; --accent2:#3a7bd5;
+  --danger:#d63031; --warn:#f39c12; --ok:#27ae60;
+  --text:#d8dde8; --text2:#8a95a8; --text3:#555f72;
+  --mono: 'Courier New', Courier, monospace;
+  --cond: -apple-system-condensed, 'Arial Narrow', Arial, sans-serif;
+  --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --nav-h:60px; --header-h:56px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;overflow:hidden}
+
+/* HEADER */
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px}
+.header-logo{display:flex;align-items:center;gap:10px;min-width:0}
+.logo-badge{width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#000;letter-spacing:.5px;flex-shrink:0;font-family:var(--body)}
+.logo-text{font-weight:700;font-size:16px;color:var(--text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
+.logo-sub{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:1.5px;display:block;margin-top:1px;white-space:nowrap}
+.header-status{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.alert-badge{font-weight:700;font-size:11px;padding:3px 8px;border-radius:3px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;text-transform:uppercase;font-family:var(--body)}
+.alert-bravo{background:#1a3a1a;color:#4caf50;border:1px solid #2d6b2d}
+.alert-charlie{background:#3a2a00;color:var(--warn);border:1px solid #7a5500}
+.alert-delta{background:#3a0000;color:var(--danger);border:1px solid #7a0000}
+.clock{font-family:var(--mono);font-size:12px;color:var(--accent);white-space:nowrap}
+
+/* MAIN */
+#main{position:fixed;top:var(--header-h);bottom:var(--nav-h);left:0;right:0;overflow:hidden}
+.tab-content{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 8px}
+.tab-content.active{display:block}
+
+/* BOTTOM NAV */
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--surface);border-top:1px solid var(--border);display:flex}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(--body)}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--accent)}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:0 0 2px 2px}
+
+/* SECTION LABEL */
+.section-label{font-weight:700;font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(--body)}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* FILTER CHIPS */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filter-chip{font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--body)}
+.filter-chip.active{background:var(--accent);border-color:var(--accent);color:#000}
+
+/* VIOLATION CARDS */
+.violation-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.violation-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
+.violation-header:active{background:var(--surface2)}
+.sev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sev-1{background:var(--warn)} .sev-2{background:#e67e22} .sev-3{background:var(--danger)}
+.violation-title{font-weight:700;font-size:14px;color:var(--text);flex:1;letter-spacing:.2px;font-family:var(--body)}
+.v-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0}
+.violation-card.open .v-chevron,.proc-card.open .v-chevron,.ref-card.open .v-chevron{transform:rotate(180deg)}
+.violation-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.violation-card.open .violation-body{display:block}
+.penalty-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.penalty-row:last-child{border-bottom:none}
+.penalty-num{font-family:var(--mono);font-size:11px;color:var(--accent);flex-shrink:0;padding-top:1px;min-width:28px}
+.penalty-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
+.penalty-points{font-family:var(--mono);font-size:11px;color:var(--danger);flex-shrink:0;padding-top:1px}
+
+/* PROCEDURE CARDS */
+.proc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.proc-header{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
+.proc-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.proc-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.proc-title{font-weight:700;font-size:15px;color:var(--text);flex:1;font-family:var(--body)}
+.proc-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.proc-card.open .proc-body{display:block}
+.step-list{list-style:none}
+.step-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:#fff;flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:var(--text);line-height:1.5}
+.step-note{font-size:12px;color:var(--warn);margin-top:8px;padding:8px 10px;background:#1f1500;border-radius:4px;border-left:3px solid var(--warn);line-height:1.4}
+
+/* QUICK STRIP */
+.quick-strip{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.quick-strip::-webkit-scrollbar{display:none}
+.quick-btn{flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:70px}
+.quick-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.quick-btn-label{font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);white-space:nowrap;font-family:var(--body)}
+
+/* CONTACTS */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;display:block;transition:border-color .15s}
+.contact-card:active{border-color:var(--accent)}
+.contact-label{font-weight:700;font-size:11px;letter-spacing:.5px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;font-family:var(--body)}
+.contact-number{font-family:var(--mono);font-size:22px;color:var(--accent);letter-spacing:2px;font-weight:700}
+.contact-ext{font-family:var(--mono);font-size:12px;color:var(--text2);margin-top:2px}
+.contact-full{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.contact-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);gap:10px}
+.contact-row:last-child{border-bottom:none}
+.contact-row-label{font-weight:600;font-size:13px;color:var(--text);flex:1;font-family:var(--body)}
+.contact-row-call{font-family:var(--mono);font-size:10px;color:var(--accent2);flex-shrink:0}
+.contact-row-num{font-family:var(--mono);font-size:13px;color:var(--accent);flex-shrink:0}
+
+/* RADIO */
+.radio-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
+.radio-row:last-child{border-bottom:none}
+.radio-station{font-size:13px;color:var(--text2);font-family:var(--body)}
+.radio-callsign{font-family:var(--mono);font-size:10px;color:var(--accent2);text-align:right}
+.radio-ipn{font-family:var(--mono);font-size:12px;color:var(--accent);text-align:right;min-width:58px}
+
+/* REFS / SOP */
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.ref-header{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
+.ref-tag{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(--surface3);color:var(--text3);flex-shrink:0;white-space:nowrap}
+.ref-title{font-weight:700;font-size:14px;color:var(--text);flex:1;font-family:var(--body)}
+.ref-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.ref-card.open .ref-body{display:block}
+.rule-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
+.rule-item:last-child{border-bottom:none}
+.rule-bullet{color:var(--accent);flex-shrink:0;font-family:var(--mono);font-size:14px;padding-top:0;line-height:1.4}
+.highlight{background:#3a2a00;color:var(--warn);border-radius:2px;padding:0 2px}
+
+/* SEARCH */
+.search-bar{position:relative;margin-bottom:12px}
+.search-bar input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--body);font-size:15px;padding:10px 14px 10px 40px;outline:none;-webkit-appearance:none}
+.search-bar input:focus{border-color:var(--accent2)}
+.search-bar input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3)}
+.search-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.search-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:15px;letter-spacing:.5px}
+.search-empty svg{width:32px;height:32px;stroke:var(--text3);fill:none;stroke-width:1.5;margin-bottom:8px;display:block;margin:0 auto 8px}
+
+/* MAP */
+.map-container{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:12px;height:calc(100vh - var(--header-h) - var(--nav-h) - 160px);min-height:280px;background:var(--surface2);position:relative}
+.map-container iframe{width:100%;height:100%;border:none}
+.map-info-bar{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:8px}
+.map-info-bar a{color:var(--accent2);text-decoration:none;margin-left:auto;font-weight:600;font-size:12px}
+.map-legend{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.parking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.parking-zone{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center}
+.zone-letter{font-weight:900;font-size:22px;color:var(--accent);line-height:1;font-family:var(--body)}
+.zone-desc{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.3}
+
+/* BAR TABLE */
+.bar-table{width:100%;border-collapse:collapse;font-size:13px}
+.bar-table th{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-family:var(--body)}
+.bar-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+.bar-table tr:last-child td{border-bottom:none}
+.bar-table .day-col{font-weight:600;color:var(--text)}
+.bar-table .time-open{color:var(--ok);font-family:var(--mono)}
+.bar-table .time-last{color:var(--warn);font-family:var(--mono)}
+.bar-table .time-closed{color:var(--danger);font-family:var(--mono)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;border-top:1px solid var(--border)}
+.modal-title{font-weight:900;font-size:18px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;font-family:var(--body)}
+.modal-close{background:var(--surface3);border:none;border-radius:50%;width:30px;height:30px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.alert-row{border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.alert-row-title{font-weight:900;font-size:16px;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;font-family:var(--body)}
+.alert-row-text{font-size:13px;color:var(--text2);line-height:1.5}
+.a-bravo{background:#0d1f0d;border:1px solid #1f3d1f} .a-charlie{background:#1f1000;border:1px solid #4a3000} .a-delta{background:#1f0000;border:1px solid #4a0000}
+.a-bravo .alert-row-title{color:#4caf50} .a-charlie .alert-row-title{color:var(--warn)} .a-delta .alert-row-title{color:var(--danger)}
+.alert-set-row{display:flex;gap:8px;margin-top:6px}
+.alert-set-btn{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border:none;font-family:var(--body)}
+.asb-bravo{background:#0d1f0d;border:1px solid #1f3d1f!important;color:#4caf50;border:none}
+.asb-charlie{background:#1f1000;border:1px solid #4a3000!important;color:var(--warn);border:none}
+.asb-delta{background:#1f0000;border:1px solid #4a0000!important;color:var(--danger);border:none}
+
+::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.mt8{margin-top:8px} .mt12{margin-top:12px}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div class="header-logo">
+    <div class="logo-badge">IMP</div>
+    <div>
+      <div class="logo-text">Compass</div>
+      <span class="logo-sub">CAMP BUTMIR · EUFOR</span>
+    </div>
+  </div>
+  <div class="header-status">
+    <span class="alert-badge alert-bravo" id="alertBadge" onclick="openAlertModal()">BRAVO</span>
+    <span class="clock" id="clock">--:--</span>
+  </div>
+</div>
+
+<div id="main">
+
+  <!-- VIOLATIONS -->
+  <div class="tab-content active" id="tab-violations">
+    <div class="section-label">Violation Categories</div>
+    <div class="filter-row" id="vFilters">
+      <span class="filter-chip active" data-filter="all">All</span>
+      <span class="filter-chip" data-filter="speeding">Speeding</span>
+      <span class="filter-chip" data-filter="parking">Parking</span>
+      <span class="filter-chip" data-filter="vehicle">Vehicle</span>
+      <span class="filter-chip" data-filter="conduct">Conduct</span>
+      <span class="filter-chip" data-filter="dress">Dress</span>
+      <span class="filter-chip" data-filter="id">ID/Access</span>
+    </div>
+    <div id="violationList"></div>
+  </div>
+
+  <!-- PROCEDURES -->
+  <div class="tab-content" id="tab-procedures">
+    <div class="section-label">Quick Access</div>
+    <div class="quick-strip">
+      <div class="quick-btn" onclick="openProc('drunk')" style="color:var(--warn)">
+        <svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
+        <span class="quick-btn-label">Drunk</span>
+      </div>
+      <div class="quick-btn" onclick="openProc('speeding')" style="color:var(--accent2)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
+        <span class="quick-btn-label">Speeding</span>
+      </div>
+      <div class="quick-btn" onclick="openProc('id')" style="color:var(--ok)">
+        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>
+        <span class="quick-btn-label">No ID</span>
+      </div>
+      <div class="quick-btn" onclick="openProc('weapon')" style="color:var(--danger)">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="quick-btn-label">Weapons</span>
+      </div>
+      <div class="quick-btn" onclick="openProc('walkout')" style="color:var(--text2)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="4" r="1.5"/><path d="M8 9l4-2 4 2M12 7v5l3 3M12 12l-2 4"/><path d="M9 20l1-3M15 20l-1-3"/></svg>
+        <span class="quick-btn-label">Walk-out</span>
+      </div>
+    </div>
+    <div class="section-label">Procedures</div>
+    <div id="procList"></div>
+    <div class="section-label mt12">Bar Hours — Annex B</div>
+    <div class="ref-card">
+      <div class="ref-header" onclick="this.closest('.ref-card').classList.toggle('open')">
+        <span class="ref-tag">ANNEX B</span>
+        <span class="ref-title">Bar Operating Hours</span>
+        <span class="v-chevron">▼</span>
+      </div>
+      <div class="ref-body">
+        <table class="bar-table">
+          <thead><tr><th>Day</th><th>Opens</th><th>Last Call</th><th>Closes</th></tr></thead>
+          <tbody>
+            <tr><td class="day-col">Monday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+            <tr><td class="day-col">Tuesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+            <tr><td class="day-col">Wednesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+            <tr><td class="day-col">Thursday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+            <tr><td class="day-col">Friday</td><td class="time-open">17:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
+            <tr><td class="day-col">Saturday</td><td class="time-open">12:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
+            <tr><td class="day-col">Sunday</td><td class="time-open">12:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-item mt8"><span class="rule-bullet">›</span><span>Last call is 15 min before closing. Music volume down and lights on at last call.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div class="tab-content" id="tab-contacts">
+    <div class="section-label">Emergency — Dial 033 49 5000 + EXT</div>
+    <div class="contact-grid">
+      <a class="contact-card" href="tel:03349910"><div class="contact-label">IMP Dispatch</div><div class="contact-number">910</div><div class="contact-ext">IPN: 2075</div></a>
+      <a class="contact-card" href="tel:03349911"><div class="contact-label">Fire Brigade</div><div class="contact-number">911</div><div class="contact-ext">IPN: 5821</div></a>
+      <a class="contact-card" href="tel:03349912"><div class="contact-label">Medical Station</div><div class="contact-number">912</div><div class="contact-ext">MOB: 063 296 544</div></a>
+      <a class="contact-card" href="tel:03349913"><div class="contact-label">Guards (FPG)</div><div class="contact-number">913</div><div class="contact-ext">IPN: 3107</div></a>
+    </div>
+    <div class="section-label">Key Contacts</div>
+    <div class="contact-full">
+      <div class="contact-row"><span class="contact-row-label">JOC</span><span class="contact-row-call">HOTEL CTRL</span><span class="contact-row-num">5366–5368</span></div>
+      <div class="contact-row"><span class="contact-row-label">HQ CMDT OPS</span><span class="contact-row-call"></span><span class="contact-row-num">2041</span></div>
+      <div class="contact-row"><span class="contact-row-label">Billeting / Help Desk</span><span class="contact-row-call"></span><span class="contact-row-num">921</span></div>
+      <div class="contact-row"><span class="contact-row-label">Medic Dispatch</span><span class="contact-row-call">MIKE CTRL</span><span class="contact-row-num">912</span></div>
+      <div class="contact-row"><span class="contact-row-label">S3 HH</span><span class="contact-row-call">SIERRA CTRL</span><span class="contact-row-num">5738/5748</span></div>
+      <div class="contact-row"><span class="contact-row-label">MNBN TOC</span><span class="contact-row-call">BRAVO CTRL</span><span class="contact-row-num">3707</span></div>
+      <div class="contact-row"><span class="contact-row-label">EOD Team</span><span class="contact-row-call">ECHO TANGO</span><span class="contact-row-num">065 735 733</span></div>
+    </div>
+    <div class="section-label mt8">Radio Network — Motorola</div>
+    <div class="contact-full">
+      <div class="radio-row" style="background:var(--surface2)">
+        <span style="font-weight:700;font-size:10px;letter-spacing:1px;color:var(--text3);text-transform:uppercase">Station</span>
+        <span style="font-weight:700;font-size:10px;color:var(--text3);text-align:right">Call Sign</span>
+        <span style="font-weight:700;font-size:10px;color:var(--text3);text-align:right">IPN/MOB</span>
+      </div>
+      <div class="radio-row"><span class="radio-station" style="color:var(--accent);font-weight:600">JOC</span><span class="radio-callsign">HOTEL CTRL</span><span class="radio-ipn">5366–5368</span></div>
+      <div class="radio-row"><span class="radio-station" style="color:var(--accent);font-weight:600">IMP Dispatch</span><span class="radio-callsign">INDIA CTRL</span><span class="radio-ipn">910/2075</span></div>
+      <div class="radio-row"><span class="radio-station">IMP (4 India)</span><span class="radio-callsign">4 INDIA</span><span class="radio-ipn">061 139 603</span></div>
+      <div class="radio-row"><span class="radio-station" style="color:var(--accent);font-weight:600">Medic Dispatch</span><span class="radio-callsign">MIKE CTRL</span><span class="radio-ipn">912</span></div>
+      <div class="radio-row"><span class="radio-station">Medic 2</span><span class="radio-callsign">6 MIKE</span><span class="radio-ipn">063 296 544</span></div>
+      <div class="radio-row"><span class="radio-station" style="color:var(--accent);font-weight:600">Fire Dispatch</span><span class="radio-callsign">FOXTROT CTRL</span><span class="radio-ipn">911/5821</span></div>
+      <div class="radio-row"><span class="radio-station">Guard Dispatch</span><span class="radio-callsign">GOLF CTRL</span><span class="radio-ipn">3107</span></div>
+      <div class="radio-row"><span class="radio-station">Archer Base</span><span class="radio-callsign">ALPHA CTRL</span><span class="radio-ipn">5624</span></div>
+      <div class="radio-row"><span class="radio-station">MNBN TOC</span><span class="radio-callsign">BRAVO CTRL</span><span class="radio-ipn">3707</span></div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="tab-content" id="tab-map">
+    <div class="map-info-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Camp Butmir, Sarajevo
+      <a href="https://maps.google.com/?q=Camp+Butmir+Sarajevo" target="_blank">Open in Maps ↗</a>
+    </div>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2877.7!2d18.3214!3d43.8267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4758c9ca02e073f5%3A0x1f0e8e3d5a5e6e4a!2sCamp+Butmir!5e0!3m2!1sen!2sba!4v1700000000000!5m2!1sen!2sba" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="section-label">Parking Zones — Annex C</div>
+    <div class="parking-grid">
+      <div class="parking-zone"><div class="zone-letter">A</div><div class="zone-desc">BLDG 200 DIRSO/COS NHQ Sa</div></div>
+      <div class="parking-zone"><div class="zone-letter">B</div><div class="zone-desc">HQ CAMP CMDT area</div></div>
+      <div class="parking-zone"><div class="zone-letter">C</div><div class="zone-desc">Nat. Intelligence Cells</div></div>
+      <div class="parking-zone"><div class="zone-letter">D</div><div class="zone-desc">Bldg 209 / Gym / Bldg 236</div></div>
+      <div class="parking-zone"><div class="zone-letter">E</div><div class="zone-desc">NSE / TUZLA Road</div></div>
+      <div class="parking-zone"><div class="zone-letter">F</div><div class="zone-desc">Trucks — Depot 22</div></div>
+      <div class="parking-zone"><div class="zone-letter">N</div><div class="zone-desc">NSE area parking</div></div>
+      <div class="parking-zone"><div class="zone-letter">O</div><div class="zone-desc">Bldg 239 — BiH Op Cmd</div></div>
+      <div class="parking-zone"><div class="zone-letter">R</div><div class="zone-desc">MNBN</div></div>
+      <div class="parking-zone"><div class="zone-letter">X</div><div class="zone-desc">US NSE</div></div>
+    </div>
+    <div class="map-legend">
+      <div class="rule-item"><span class="rule-bullet">›</span><span>Speed limit: <strong style="color:var(--accent)">30 km/h</strong> throughout Camp Butmir. Grassed areas prohibited at all times.</span></div>
+      <div class="rule-item"><span class="rule-bullet">›</span><span>Emergency vehicles (IMP, ambulance, fire, guards, COM CP) may exceed limit in emergencies only.</span></div>
+    </div>
+  </div>
+
+  <!-- SOP -->
+  <div class="tab-content" id="tab-refs">
+    <div class="search-bar">
+      <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="text" id="refSearch" placeholder="Search SOP rules…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+    <div id="refList"></div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM NAV -->
+<nav id="nav">
+  <button class="nav-btn active" data-tab="violations" onclick="switchTab('violations',this)">
+    <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Violations
+  </button>
+  <button class="nav-btn" data-tab="procedures" onclick="switchTab('procedures',this)">
+    <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Procedures
+  </button>
+  <button class="nav-btn" data-tab="contacts" onclick="switchTab('contacts',this)">
+    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Contacts
+  </button>
+  <button class="nav-btn" data-tab="map" onclick="switchTab('map',this)">
+    <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+    Map
+  </button>
+  <button class="nav-btn" data-tab="refs" onclick="switchTab('refs',this)">
+    <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+    SOP
+  </button>
+</nav>
+
+<!-- ALERT MODAL -->
+<div class="modal-overlay" id="alertModal" onclick="if(event.target===this)closeAlertModal()">
+  <div class="modal-sheet">
+    <div class="modal-title">Alert States <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
+    <div class="alert-row a-bravo"><div class="alert-row-title">BRAVO</div><div class="alert-row-text">All personnel comply with Dress-Weapon Code, Vehicle movement code, Walking out code.</div></div>
+    <div class="alert-row a-charlie"><div class="alert-row-title">CHARLIE</div><div class="alert-row-text">Dress-Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div></div>
+    <div class="alert-row a-delta"><div class="alert-row-title">DELTA</div><div class="alert-row-text">Dress-Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div></div>
+    <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:13px;color:var(--text2)">Siren: 20s continuous / 20s wavering / 10s continuous — take next bunker, follow JOC orders.</span></div>
+    <div class="section-label mt8">Set Active Alert</div>
+    <div class="alert-set-row">
+      <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#0d1f0d;border:1px solid #1f3d1f;color:#4caf50">BRAVO</button>
+      <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#1f1000;border:1px solid #4a3000;color:var(--warn)">CHARLIE</button>
+      <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#1f0000;border:1px solid #4a0000;color:var(--danger)">DELTA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const violations=[
+  {id:'v1',cat:'conduct',sev:1,title:'Uncooperative Behaviour to IMP',penalties:[{num:'',text:"Violator's SNR/Branch Chief informed to take disciplinary action. All actions reported to FPM.",points:''}]},
+  {id:'v2',cat:'speeding',sev:1,title:'Speeding: 5–10 km/h over limit',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"Driver's SNR/Branch Chief informed to take disciplinary action.",points:''}]},
+  {id:'v3',cat:'speeding',sev:2,title:'Speeding: 11–20 km/h over limit',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM. Driver's license suspended 2 weeks.",points:'2 pts'}]},
+  {id:'v4',cat:'speeding',sev:3,title:'Speeding: 21+ km/h over limit',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT. Driver's license suspended 2 weeks.",points:'3 pts'}]},
+  {id:'v5',cat:'parking',sev:1,title:'Parking Violation',penalties:[{num:'1st',text:'IMP issues a written warning.',points:''},{num:'2nd',text:'IMP issues a written warning.',points:''},{num:'3rd+',text:"Driver's SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM.",points:''}]},
+  {id:'v6',cat:'parking',sev:2,title:'Parking in front of Bldg 200 / Circle (excl. VIPs, COM EUFOR, COM NHQ Sa)',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM.",points:'3 pts'}]},
+  {id:'v7',cat:'vehicle',sev:2,title:'Smoking in NATO/EUFOR Vehicle',penalties:[{num:'1st',text:'IMP issues a warning.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
+  {id:'v8',cat:'vehicle',sev:1,title:'Failure to Fasten Seatbelts',penalties:[{num:'1st',text:'IMP issues a warning.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
+  {id:'v9',cat:'vehicle',sev:1,title:'Using Cellphone During Operating Vehicle',penalties:[{num:'1st',text:'IMP issues a warning. All action reported to FPM.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
+  {id:'v10',cat:'vehicle',sev:3,title:'Operating Vehicle Under Influence of Alcohol (>0.0 promille) or Illegal Substances',penalties:[{num:'Any',text:"Driver's license suspended until EOT. SNR/Branch Chief informed. All action reported to FPM.",points:'EOT'}]},
+  {id:'v11',cat:'vehicle',sev:2,title:'Intentional / Negligent Damage to EUFOR/NATO Vehicle',penalties:[{num:'Any',text:"Driver's license suspended until EOT. SNR/Branch Chief informed. All action reported to FPM.",points:'EOT'}]},
+  {id:'v12',cat:'vehicle',sev:2,title:'Failure to Report to IMP',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v13',cat:'vehicle',sev:2,title:'5 Penalty Points Accumulated on Driver\'s License',penalties:[{num:'',text:"Driver's license suspended for one month.",points:''}]},
+  {id:'v14',cat:'dress',sev:1,title:'Dress Prescription Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"Driver's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v15',cat:'conduct',sev:2,title:'Alcohol Prescription Violation',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to HQ CAMP CMDT and FPM.",points:''}]},
+  {id:'v16',cat:'conduct',sev:3,title:'Weapon Carry Prescription Violation',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v17',cat:'conduct',sev:1,title:'Pedestrian Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v18',cat:'vehicle',sev:1,title:'Bicycle / Scooter Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed to take disciplinary action.",points:''}]},
+  {id:'v19',cat:'conduct',sev:1,title:'Quiet Hours Violation (2300–0600 daily)',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v20',cat:'id',sev:1,title:'Not Carrying ID Card in Visible Place',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
+  {id:'v21',cat:'id',sev:1,title:'Not Carrying ID Card in Accommodation Block',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]}
+];
+
+const procIconSvg={
+  drunk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
+  speeding:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  id:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>',
+  weapon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  walkout:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'
+};
+
+const procedures=[
+  {id:'drunk',color:'var(--warn)',bg:'#2a1500',title:'Excessive Drinking / Intoxicated Personnel',steps:['Identify the individual and confirm excessive drinking (obnoxious behaviour, lack of self-control, fighting).','Remove the individual from the bar/drinking establishment immediately.','Place the violator under IMP supervision.','Inform the Senior National Representative (SNR) via IMP Report.','Decide: bring to Medical Cell or IMP Station — case by case basis.','Keep violator under IMP supervision until released to SNR or SNR representative.','File IMP report and document all actions taken.'],note:'Zero tolerance for driving. If any vehicle operation suspected — conduct breath test immediately.'},
+  {id:'speeding',color:'var(--accent2)',bg:'#0d1a2a',title:'Speeding Violation',steps:['Stop the vehicle. Note speed and posted speed limit (30 km/h in CB).','Check driver ID and vehicle documentation.','Determine category: 5–10 / 11–20 / 21+ km/h over limit.','5–10 over: Issue verbal warning (1st). 2nd+: notify SNR/Branch Chief.','11–20 over: Notify SNR/Branch Chief + HQ CAMP CMDT + FPM. Suspend license 2 weeks. Mark 2 pts.','21+ over: Notify SNR/Branch Chief + HQ CAMP CMDT. Suspend license 2 weeks. Mark 3 pts.','5 total penalty points = license suspended for one month.'],note:'Every driver issued a written parking warning must report to IMP Station within 48h or face disciplinary action.'},
+  {id:'id',color:'var(--ok)',bg:'#0d1a0d',title:'No Visible ID / Access Card',steps:['Stop the individual and request ID/Access card.','If no card in visible place: issue warning and log in IMP daily occurrence book.','1st & 2nd offence: IMP issues a warning.','3rd+ offence: Notify SNR/Branch Chief. All action reported to FPM.','Notify all EUFOR/NATO personnel nearby to report non-displaying individuals.'],note:'IMP personnel are exempt from visible display but must produce ID when requested. Exception: sport activity.'},
+  {id:'weapon',color:'var(--danger)',bg:'#2a0000',title:'Unauthorized Weapon Carry',steps:['Identify the individual carrying a loaded or unauthorized weapon in a restricted area.','Authorized exceptions: FPG Guard, IMP Det, CP details, personnel with written permission, ordered by COM EUFOR/NHQ Sa.','If unauthorized: secure the situation and request individual to disarm.','Immediately notify SNR/Branch Chief.','Report all action to FPM.','No weapons in rec/concession areas or DFAC (except IMP and permitted personnel).'],note:'Reference HQ EUFOR SOP 5275 Force Protection for full weapon carry rules and alert state procedures.'},
+  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:['Confirm current ALERT STATE before any walk-out.','ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Issue Force Exemption Card.','DELTA: NO walking out. All personnel remain in Camp Butmir.','Ensure personnel are NOT going to Off-Limits areas (check monthly J2 Off-Limits list — DFAC and Gym boards).','Recall: Branch Supervisors contact their personnel when alert state increases. Return to Camp immediately.'],note:'Off-limits includes brothels, establishments linked to terrorism/crime/narcotics, and any location on the J2 monthly list.'}
+];
+
+const sopRefs=[
+  {tag:'SOP §1',title:'Dress — On Camp Butmir',rules:['All personnel wear appropriate national uniform on Camp BUTMIR.','EUFOR personnel (incl. NSE): BDU dress strongly encouraged 0600–1800 hrs — head-dress worn, jackets closed, no hands in pockets.','Mandatory: EUFOR Logo on uniform per national regulations (see Annex H).','Forbidden: visible signs/graphics considered offensive, obscene or indecent.','All military personnel must have proper haircut per national regulations.','BDU exemptions: en route to Gym; going to gate per walking-out policy; civilian clothing required for duty.']},
+  {tag:'SOP §1f',title:'Dress — Dining Facility (DFAC)',rules:['No sports/gym outfits if too tight or sweaty.','No dining if civilian clothes or uniform are dirty.','No sleeveless t-shirts, tops, vests or short shorts.','Head-dress, tactical glasses, sunglasses must be removed (not placed on table). Religious headgear authorized.','No open-toe sandals, flip-flops or shower shoes.','No large bags or rucksacks.','Hands must be washed and sanitized before entering dining area.','No food or drink taken out — only coffee or fruit allowed.']},
+  {tag:'SOP §2',title:'Smoking Rules',rules:['Smoking only in designated areas (see Annex E).','Smoking materials disposed of in metal receptacle bins — NOT on the ground.','Smoking not permitted inside accommodation blocks at any time.','Smoking not allowed while walking around Camp Butmir.','Smoking not allowed in EUFOR/NATO vehicles.']},
+  {tag:'SOP §3',title:'Alcohol Rules',rules:['Excessive drinking will not be tolerated in or outside Camp BUTMIR. IMP removes and detains. SNR informed via IMP report.','Zero tolerance: No alcohol before/during operation of any EUFOR/NHQ Sa vehicle. IMP conducts random breath tests.','No alcohol in accommodation blocks without COM EUFOR or COM NHQ Sa approval.','Forbidden to serve alcohol to visibly intoxicated individuals. Violations = action through chain of command.','Last call: 15 min before authorized bar closing.','Bar hour extensions: application to HQ CAMP CMDT required (7 days advance for functions).','Individual nations may implement stricter policies upon their service members.']},
+  {tag:'SOP §4',title:'Saluting',rules:['Military personnel salute per national military regulations.','Even if national regs do not require a salute — minimum courtesy is expected.','Officers must return courtesy when saluted.','Other nations\' officers to be saluted if identified.','All personnel should be familiar with the Command Group of HQ EUFOR/NHQ Sa (posters distributed).']},
+  {tag:'SOP §5',title:'Weapons',rules:['No loaded weapons on Camp BUTMIR except: FPG Guard, IMP Det, CP details, concealed weapons permission holders, ordered by COM EUFOR/NHQ Sa.','No weapons in recreation/concession areas except IMP and permitted personnel.','No loaded weapons in DFAC except IMP and permitted personnel.','Reference HQ EUFOR SOP 5275 Force Protection for full regulations and alert state procedures.']},
+  {tag:'SOP §6',title:'Vehicles',rules:['Mandatory: use assigned parking spaces.','Speed limit throughout Camp BUTMIR: 30 km/h.','Drivers may stop outside parking area max 5 min with emergency lights on (no traffic hazard). Must move immediately upon IMP command.','Obey all road signs on Camp Butmir.','Forbidden: use cellphone while driving (hands-free kit only).','Written parking warning: report to IMP Station within 48h or face disciplinary action.','Vehicles not to be driven on grassed areas at any time.']},
+  {tag:'SOP §7',title:'Bicycles & Scooters',rules:['All bicycles must be registered with ID office and have valid vignette/sticker.','Bicycles must have white front light/reflector and red rear light/reflector.','Bicycles and scooters obey all traffic laws as road users.','Scooters, skateboards, roller skates: same traffic regulations as vehicles.','After dusk or in bad weather: front and rear lights must be on.','While operating a bicycle: two hands on handlebar at all times.']},
+  {tag:'SOP §8',title:'Pedestrians',rules:['Where footpath/sidewalk is available — must use it.','Where no footpath — walk on side of road opposite to traffic direction, max 2 abreast.']},
+  {tag:'SOP §10',title:'Quiet Hours',rules:['Quiet hours: Monday–Sunday, 2300 hrs – 0600 hrs.','Hallway lights to be turned out.','Music may be played at low volume — must not be heard outside the room.','Voices kept at low level — includes Skype/FaceTime conversations.','Loud noises (e.g., slamming doors) to be avoided.','Consideration for those trying to sleep.']},
+  {tag:'SOP §11',title:'IMP Cooperation — ID Cards',rules:['ID/Access cardholders and Visitor Pass holders must carry cards at all times on camp and within AOO.','Cards must be worn in visible location inside Camp Butmir or EUFOR/NHQ Sa installations — even in civilian clothes. Exception: sport activity.','All EUFOR/NATO personnel must notify IMP if a person is not visibly displaying their ID.','IMP will give a warning to personnel failing to display ID. Violation logged in IMP daily occurrence book.','IMP personnel: not required to display ID visibly but must produce when requested.','All military personnel stopped by IMP Detachment will cooperate regardless of rank.']},
+  {tag:'SOP §12',title:'Accommodation by Gender',rules:['EUFOR/NHQ Sa does NOT provide mixed gender barrack accommodation (exception: Bldg 201/A with separate shower/toilet).','Male personnel NOT allowed in Female Barrack Accommodation blocks.','Female personnel NOT allowed in Male Barrack Accommodation blocks.','National Property (NSE/NIC): nations must provide separate & secure access zones/toilets/bathrooms for male and female personnel.']},
+  {tag:'SOP §15',title:'Walking Out — Delegated Authority',rules:['ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Force Exemption Card issued.','DELTA: NO walking out.','Personnel may walk out in uniform or civilian clothes to any establishment in BiH not on Off-Limits list. Civilian clothes recommended.','Off-limits list published monthly by J2 — posted on GALAXY, CHRONOS, notice boards at DFAC and Gym.','SNR may impose more restrictive conditions on their national contingents.']}
+];
+
+// ── CLOCK ────────────────────────────────────────────────────────────────────
+function updateClock(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+'L'}
+updateClock();setInterval(updateClock,15000);
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── VIOLATIONS ───────────────────────────────────────────────────────────────
+function renderViolations(filter){
+  const items=filter==='all'?violations:violations.filter(v=>v.cat===filter);
+  document.getElementById('violationList').innerHTML=items.map(v=>`
+    <div class="violation-card" id="vc-${v.id}">
+      <div class="violation-header" onclick="document.getElementById('vc-${v.id}').classList.toggle('open')">
+        <span class="sev-dot sev-${v.sev}"></span>
+        <span class="violation-title">${v.title}</span>
+        <span class="v-chevron">&#9660;</span>
+      </div>
+      <div class="violation-body">
+        ${v.penalties.map(p=>`<div class="penalty-row"><span class="penalty-num">${p.num||'—'}</span><span class="penalty-text">${p.text}</span>${p.points?`<span class="penalty-points">${p.points}</span>`:''}</div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+document.getElementById('vFilters').addEventListener('click',function(e){
+  const chip=e.target.closest('.filter-chip');if(!chip)return;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');renderViolations(chip.dataset.filter);
+});
+renderViolations('all');
+
+// ── PROCEDURES ───────────────────────────────────────────────────────────────
+function renderProcedures(){
+  document.getElementById('procList').innerHTML=procedures.map(p=>`
+    <div class="proc-card" id="pc-${p.id}">
+      <div class="proc-header" onclick="document.getElementById('pc-${p.id}').classList.toggle('open')">
+        <div class="proc-icon" style="background:${p.bg};color:${p.color}">${procIconSvg[p.id]}</div>
+        <span class="proc-title">${p.title}</span>
+        <span class="v-chevron">&#9660;</span>
+      </div>
+      <div class="proc-body">
+        <ol class="step-list">
+          ${p.steps.map((s,i)=>`<li class="step-item"><span class="step-num">${i+1}</span><span class="step-text">${s}</span></li>`).join('')}
+        </ol>
+        ${p.note?`<div class="step-note">${p.note}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+renderProcedures();
+
+function openProc(id){
+  switchTab('procedures',document.querySelector('[data-tab="procedures"]'));
+  const c=document.getElementById('pc-'+id);
+  if(c&&!c.classList.contains('open'))c.classList.add('open');
+  setTimeout(()=>c&&c.scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+
+// ── SOP REFS ─────────────────────────────────────────────────────────────────
+function renderRefs(q){
+  const list=document.getElementById('refList');
+  const fq=(q||'').toLowerCase().trim();
+  const items=fq?sopRefs.filter(r=>r.title.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))):sopRefs;
+  if(!items.length){list.innerHTML=`<div class="search-empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>No results for "${q}"</div>`;return;}
+  list.innerHTML=items.map((r,i)=>`
+    <div class="ref-card" id="ref-${i}">
+      <div class="ref-header" onclick="document.getElementById('ref-${i}').classList.toggle('open')">
+        <span class="ref-tag">${r.tag}</span>
+        <span class="ref-title">${r.title}</span>
+        <span class="v-chevron">&#9660;</span>
+      </div>
+      <div class="ref-body">
+        ${r.rules.map(rule=>{
+          const hl=fq?rule.replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):rule;
+          return `<div class="rule-item"><span class="rule-bullet">›</span><span>${hl}</span></div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  if(fq)document.querySelectorAll('.ref-card').forEach(c=>c.classList.add('open'));
+}
+function filterRefs(q){renderRefs(q);}
+renderRefs('');
+
+// ── ALERT MODAL ───────────────────────────────────────────────────────────────
+function openAlertModal(){document.getElementById('alertModal').classList.add('open')}
+function closeAlertModal(){document.getElementById('alertModal').classList.remove('open')}
+function setAlert(level){
+  const b=document.getElementById('alertBadge');
+  b.textContent=level.toUpperCase();
+  b.className='alert-badge alert-'+level;
+  try{localStorage.setItem('alertState',level);}catch(e){}
+  closeAlertModal();
+}
+try{const s=localStorage.getItem('alertState');if(s)setAlert(s);}catch(e){}
+</script>
+</body>
+</html>
