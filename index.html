@@ -188,6 +188,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+/* LOGIN OVERLAY */
+#loginOverlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#loginOverlay.hidden{display:none}
+.login-logo{width:72px;height:72px;background:var(--accent);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#000;margin-bottom:16px;letter-spacing:1px;font-family:var(--body)}
+.login-title{font-weight:700;font-size:22px;color:var(--text);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
+.login-sub{font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.login-step{width:100%;max-width:320px}
+.login-section-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.login-unit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
+.login-unit-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 8px;color:var(--text);font-weight:700;font-size:15px;cursor:pointer;font-family:var(--mono);transition:all .15s}
+.login-unit-btn:active,.login-unit-btn.selected{background:var(--accent);color:#000;border-color:var(--accent)}
 /* PIN */
 .pin-unit-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 8px;color:var(--text);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--mono);transition:border-color .15s}
 .pin-unit-btn:active{border-color:var(--accent)}
@@ -357,6 +368,65 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </head>
 <body>
 
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <!-- Step 1: select unit -->
+  <div id="loginStep1" class="login-step">
+    <div class="login-logo">IMP</div>
+    <div class="login-title">Compass</div>
+    <div class="login-sub">Camp Butmir · EUFOR</div>
+    <div class="login-section-label">Select your unit</div>
+    <div class="login-unit-grid">
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-1')">IMP-1</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-2')">IMP-2</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-3')">IMP-3</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-4')">IMP-4</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-5')">IMP-5</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-6')">IMP-6</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-7')">IMP-7</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-8')">IMP-8</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-9')">IMP-9</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-10')">IMP-10</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-11')">IMP-11</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-12')">IMP-12</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-13')">IMP-13</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-14')">IMP-14</button>
+      <button class="login-unit-btn" onclick="loginSelectUnit('IMP-15')">IMP-15</button>
+    </div>
+  </div>
+
+  <!-- Step 2: PIN entry -->
+  <div id="loginStep2" class="login-step" style="display:none;text-align:center">
+    <div class="login-logo">IMP</div>
+    <div class="login-title" id="loginUnitLabel"></div>
+    <div class="login-sub">Enter PIN</div>
+
+    <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
+      <div class="pin-dot" id="lpd1"></div>
+      <div class="pin-dot" id="lpd2"></div>
+      <div class="pin-dot" id="lpd3"></div>
+      <div class="pin-dot" id="lpd4"></div>
+    </div>
+
+    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">❌ Wrong PIN — try again</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
+      <button class="pin-key" onclick="loginPinKey('1')">1</button>
+      <button class="pin-key" onclick="loginPinKey('2')">2</button>
+      <button class="pin-key" onclick="loginPinKey('3')">3</button>
+      <button class="pin-key" onclick="loginPinKey('4')">4</button>
+      <button class="pin-key" onclick="loginPinKey('5')">5</button>
+      <button class="pin-key" onclick="loginPinKey('6')">6</button>
+      <button class="pin-key" onclick="loginPinKey('7')">7</button>
+      <button class="pin-key" onclick="loginPinKey('8')">8</button>
+      <button class="pin-key" onclick="loginPinKey('9')">9</button>
+      <button class="pin-key" onclick="loginSelectUnit('')" style="color:var(--text3);font-size:13px">←</button>
+      <button class="pin-key" onclick="loginPinKey('0')">0</button>
+      <button class="pin-key" onclick="loginPinDelete()" style="color:var(--danger)">⌫</button>
+    </div>
+  </div>
+</div>
+
 <div id="header">
   <div class="header-logo">
     <div class="logo-badge">IMP</div>
@@ -369,6 +439,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <button onclick="openGSearch()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text3);display:flex;align-items:center">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
+    <span id="userBadge" onclick="logout()"
+      style="font-family:var(--mono);font-size:10px;color:var(--text3);cursor:pointer;border:1px solid var(--border);border-radius:3px;padding:2px 6px;letter-spacing:.5px"
+      title="Tap to logout"></span>
     <span class="alert-badge alert-bravo" id="alertBadge" onclick="openAlertModal()">BRAVO</span>
     <span class="clock" id="clock">--:--</span>
   </div>
@@ -2734,6 +2807,9 @@ scheduleReportReminders();
 const PUSHER_KEY = 'e6b466c12fe64811ae86';
 const PUSHER_CLUSTER = 'eu';
 const VERCEL_URL = 'https://imp-compass.vercel.app/api/trigger-alarm';
+const SUBSCRIBE_URL = 'https://imp-compass.vercel.app/api/subscribe';
+const PUSH_URL = 'https://imp-compass.vercel.app/api/send-push';
+const VAPID_PUBLIC = 'BDLVw-wytUwOpQKk2am-lBKYxADb-cUhy7qU0g78B-SUo8q-VxOsiO0iV2wAuGEIB5kSn4HmtRKVlAMlCqwxdzQ';
 
 let pusherClient = null;
 let currentUserId = null;
@@ -2906,6 +2982,8 @@ function pinVerify(){
     // Update alarm modal label
     const lbl = document.getElementById('alarmUserLabel');
     if(lbl) lbl.textContent = currentUserId;
+    // Subscribe Web Push with new userId
+    navigator.serviceWorker.ready.then(reg => subscribePush(reg)).catch(()=>{});
     // Open alarm modal
     document.getElementById('alarmModal').classList.add('open');
   } else {
@@ -2933,15 +3011,24 @@ function triggerAlarm(){
     const now = new Date();
     const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
     const message = document.getElementById('alarmMessage').value.trim();
+    const payload = {userId:currentUserId, lat, lng, timestamp, message};
 
+    // Send Pusher (for open apps)
     fetch(VERCEL_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({type:'alarm', userId:currentUserId, lat, lng, timestamp, message})
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'alarm', ...payload})
+    });
+
+    // Send Web Push (for closed/background apps)
+    fetch(PUSH_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'alarm', ...payload})
     })
     .then(r=>r.json())
-    .then(()=>{
-      btn.textContent = '🚨 ALARM SENT';
+    .then(d=>{
+      btn.textContent = `🚨 SENT TO ${d.sent || 'ALL'} UNITS`;
       btn.style.background = 'var(--ok)';
       setTimeout(()=>{
         btn.textContent = 'SEND ALARM';
@@ -2971,11 +3058,9 @@ function triggerAlarm(){
 function sendAllClear(){
   const now = new Date();
   const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
-  fetch(VERCEL_URL, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({type:'all-clear', userId:currentUserId, timestamp, message:'Situation resolved'})
-  });
+  const payload = {type:'all-clear', userId:currentUserId, timestamp, message:'Situation resolved'};
+  fetch(VERCEL_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  fetch(PUSH_URL,   {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   closeAlarmModal2();
 }
 
@@ -2991,6 +3076,162 @@ loadPusher(()=>{
   if(saved) currentUserId = saved;
 });
 
+// ── SERVICE WORKER + WEB PUSH ─────────────────────────────────────────────────
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for(let i=0;i<rawData.length;++i) outputArray[i] = rawData.charCodeAt(i);
+  return outputArray;
+}
+
+async function registerSW(){
+  if(!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.register('/IMP_Compass/sw.js');
+    console.log('SW registered');
+    await subscribePush(reg);
+  } catch(e) {
+    console.warn('SW registration failed:', e);
+  }
+}
+
+async function subscribePush(reg){
+  if(!('PushManager' in window)) return;
+  if(!currentUserId) return;
+
+  try {
+    const permission = await Notification.requestPermission();
+    if(permission !== 'granted') return;
+
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
+      });
+    }
+
+    // Save subscription to server
+    await fetch(SUBSCRIBE_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ userId: currentUserId, subscription: sub.toJSON() })
+    });
+    console.log('Push subscription saved for', currentUserId);
+  } catch(e) {
+    console.warn('Push subscription failed:', e);
+  }
+}
+
+// Register SW on load
+window.addEventListener('load', registerSW);
+
+// ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
+const SESSION_DURATION = 12 * 60 * 60 * 1000; // 12 hours
+let loginPinBuffer = '';
+let loginSelectedUnit = '';
+
+function checkSession(){
+  try {
+    const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
+    if(session && session.userId && (Date.now() - session.ts) < SESSION_DURATION){
+      // Valid session — unlock app
+      currentUserId = session.userId;
+      unlockApp();
+      return;
+    }
+  } catch(e){}
+  // No valid session — show login
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+function unlockApp(){
+  document.getElementById('loginOverlay').classList.add('hidden');
+  // Update header with user badge
+  const badge = document.getElementById('userBadge');
+  if(badge) badge.textContent = currentUserId;
+  // Subscribe push
+  navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
+}
+
+function loginSelectUnit(id){
+  if(!id){
+    // Back to step 1
+    loginSelectedUnit = '';
+    loginPinBuffer = '';
+    document.getElementById('loginStep1').style.display = 'block';
+    document.getElementById('loginStep2').style.display = 'none';
+    return;
+  }
+  loginSelectedUnit = id;
+  loginPinBuffer = '';
+  document.getElementById('loginUnitLabel').textContent = id;
+  document.getElementById('loginStep1').style.display = 'none';
+  document.getElementById('loginStep2').style.display = 'block';
+  document.getElementById('loginPinError').style.display = 'none';
+  updateLoginDots();
+}
+
+function loginPinKey(digit){
+  if(loginPinBuffer.length >= 4) return;
+  loginPinBuffer += digit;
+  updateLoginDots();
+  if(loginPinBuffer.length === 4) loginPinVerify();
+}
+
+function loginPinDelete(){
+  loginPinBuffer = loginPinBuffer.slice(0,-1);
+  updateLoginDots();
+}
+
+function updateLoginDots(){
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('lpd'+i);
+    if(!dot) return;
+    dot.classList.toggle('filled', i <= loginPinBuffer.length);
+    dot.classList.remove('error');
+  }
+}
+
+function loginPinVerify(){
+  const correct = impPins[loginSelectedUnit];
+  if(loginPinBuffer === correct){
+    // Save session
+    currentUserId = loginSelectedUnit;
+    localStorage.setItem('imp_user_id', loginSelectedUnit);
+    localStorage.setItem('imp_session', JSON.stringify({userId: loginSelectedUnit, ts: Date.now()}));
+    unlockApp();
+  } else {
+    // Wrong PIN
+    for(let i=1;i<=4;i++){
+      const dot = document.getElementById('lpd'+i);
+      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
+    }
+    document.getElementById('loginPinError').style.display = 'block';
+    setTimeout(()=>{
+      loginPinBuffer = '';
+      updateLoginDots();
+      document.getElementById('loginPinError').style.display = 'none';
+    }, 1400);
+  }
+}
+
+function logout(){
+  localStorage.removeItem('imp_session');
+  localStorage.removeItem('imp_user_id');
+  currentUserId = null;
+  loginSelectedUnit = '';
+  loginPinBuffer = '';
+  document.getElementById('loginStep1').style.display = 'block';
+  document.getElementById('loginStep2').style.display = 'none';
+  updateLoginDots();
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+// Check session on load
+checkSession();
 try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
 </script>
 
