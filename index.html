@@ -186,6 +186,61 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+/* SUBNAV */
+.subnav{display:flex;gap:0;margin-bottom:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;flex-shrink:0}
+.subnav-btn{flex:1;padding:9px 4px;background:none;border:none;color:var(--text3);font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:var(--body);transition:all .15s;border-right:1px solid var(--border)}
+.subnav-btn:last-child{border-right:none}
+.subnav-btn.active{background:var(--accent);color:#000}
+.subcontent{display:none}
+.subcontent.active{display:block}
+
+/* DECISION TREE */
+.dtree-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.dtree-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.dtree-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dtree-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dtree-title{font-weight:700;font-size:14px;color:var(--text);flex:1}
+.dtree-body{display:none;border-top:1px solid var(--border)}
+.dtree-card.open .dtree-body{display:block}
+.dtree-card.open .v-chevron{transform:rotate(180deg)}
+.dtree-step{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.dtree-step:last-child{border-bottom:none}
+.dtree-step-num{width:32px;font-family:var(--mono);font-size:11px;color:var(--accent);padding:10px 0 10px 14px;flex-shrink:0;font-weight:700}
+.dtree-step-content{flex:1;padding:10px 14px 10px 0}
+.dtree-step-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.dtree-step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.dtree-step-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--surface3);color:var(--accent);border:1px solid var(--border)}
+.dtree-branch{display:flex;gap:8px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.dtree-branch:last-child{border-bottom:none}
+.dtree-branch-cond{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700;margin-top:1px}
+.cond-yes{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f}
+.cond-no{background:#1f1000;color:var(--warn);border:1px solid #4a3000}
+.cond-if{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
+.dtree-branch-text{font-size:13px;color:var(--text2);line-height:1.4}
+
+/* ROUTES */
+.route-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.route-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
+.route-name{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0;letter-spacing:1px}
+.route-type-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.rb-main{background:#1a0d00;color:var(--warn);border:1px solid #4a2500}
+.rb-secondary{background:#0d1a0d;color:var(--ok);border:1px solid #1f3d1f}
+.rb-loc{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
+.rb-tactical{background:#1f0000;color:var(--danger);border:1px solid #4a0000}
+.route-body{display:none;padding:0 14px 12px;border-top:1px solid var(--border)}
+.route-card.open .route-body{display:block}
+.route-card.open .v-chevron{transform:rotate(180deg)}
+.route-path{font-size:13px;color:var(--text2);line-height:1.7;margin-top:8px}
+.route-path strong{color:var(--text)}
+
+/* DIPL PLATES */
+.dipl-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--border)}
+.dipl-row:last-child{border-bottom:none}
+.dipl-num{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);min-width:32px;flex-shrink:0}
+.dipl-country{font-size:13px;color:var(--text2);flex:1}
+
+/* REPORT SCHEDULE */
+.report-schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -221,54 +276,118 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div id="violationList"></div>
   </div>
 
-  <!-- PROCEDURES -->
+
+  <!-- ACTION TAB -->
   <div class="tab-content" id="tab-procedures">
-    <div class="section-label">Quick Access</div>
-    <div class="quick-strip">
-      <div class="quick-btn" onclick="openProc('drunk')" style="color:var(--warn)">
-        <svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
-        <span class="quick-btn-label">Drunk</span>
+    <div class="subnav">
+      <button class="subnav-btn active" onclick="switchSub('procedures','sub-proc',this)">Procedures</button>
+      <button class="subnav-btn" onclick="switchSub('procedures','sub-dtree',this)">Dec. Tree</button>
+      <button class="subnav-btn" onclick="switchSub('procedures','sub-reports',this)">Reports</button>
+    </div>
+    <div class="subcontent active" id="sub-proc">
+      <div class="section-label">Quick Access</div>
+      <div class="quick-strip">
+        <div class="quick-btn" onclick="openProc('drunk')" style="color:var(--warn)">
+          <svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
+          <span class="quick-btn-label">Drunk</span>
+        </div>
+        <div class="quick-btn" onclick="openProc('speeding')" style="color:var(--accent2)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="quick-btn-label">Speeding</span>
+        </div>
+        <div class="quick-btn" onclick="openProc('id')" style="color:var(--ok)">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>
+          <span class="quick-btn-label">No ID</span>
+        </div>
+        <div class="quick-btn" onclick="openProc('weapon')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span class="quick-btn-label">Weapons</span>
+        </div>
+        <div class="quick-btn" onclick="openProc('walkout')" style="color:var(--text2)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>
+          <span class="quick-btn-label">Walk-out</span>
+        </div>
       </div>
-      <div class="quick-btn" onclick="openProc('speeding')" style="color:var(--accent2)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
-        <span class="quick-btn-label">Speeding</span>
-      </div>
-      <div class="quick-btn" onclick="openProc('id')" style="color:var(--ok)">
-        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>
-        <span class="quick-btn-label">No ID</span>
-      </div>
-      <div class="quick-btn" onclick="openProc('weapon')" style="color:var(--danger)">
-        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span class="quick-btn-label">Weapons</span>
-      </div>
-      <div class="quick-btn" onclick="openProc('walkout')" style="color:var(--text2)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="4" r="1.5"/><path d="M8 9l4-2 4 2M12 7v5l3 3M12 12l-2 4"/><path d="M9 20l1-3M15 20l-1-3"/></svg>
-        <span class="quick-btn-label">Walk-out</span>
+      <div class="section-label">Step-by-Step Procedures</div>
+      <div id="procList"></div>
+      <div class="section-label mt12">Bar Hours — Annex B</div>
+      <div class="ref-card">
+        <div class="ref-header" onclick="this.closest('.ref-card').classList.toggle('open')">
+          <span class="ref-tag">ANNEX B</span><span class="ref-title">Bar Operating Hours</span><span class="v-chevron">&#9660;</span>
+        </div>
+        <div class="ref-body">
+          <table class="bar-table">
+            <thead><tr><th>Day</th><th>Opens</th><th>Last Call</th><th>Closes</th></tr></thead>
+            <tbody>
+              <tr><td class="day-col">Monday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+              <tr><td class="day-col">Tuesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+              <tr><td class="day-col">Wednesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+              <tr><td class="day-col">Thursday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+              <tr><td class="day-col">Friday</td><td class="time-open">17:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
+              <tr><td class="day-col">Saturday</td><td class="time-open">12:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
+              <tr><td class="day-col">Sunday</td><td class="time-open">12:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
+            </tbody>
+          </table>
+          <div class="rule-item mt8"><span class="rule-bullet">›</span><span>Last call 15 min before closing. Music down, lights on at last call.</span></div>
+        </div>
       </div>
     </div>
-    <div class="section-label">Procedures</div>
-    <div id="procList"></div>
-    <div class="section-label mt12">Bar Hours — Annex B</div>
-    <div class="ref-card">
-      <div class="ref-header" onclick="this.closest('.ref-card').classList.toggle('open')">
-        <span class="ref-tag">ANNEX B</span>
-        <span class="ref-title">Bar Operating Hours</span>
-        <span class="v-chevron">▼</span>
+
+    <div class="subcontent" id="sub-dtree">
+      <div class="section-label">IMP Field Decision Trees</div>
+      <div id="dtreeList"></div>
+    </div>
+
+    <div class="subcontent" id="sub-reports">
+      <div class="section-label">Polish Chain — DORSZ</div>
+      <div class="contact-full">
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Informacja Tygodniowa</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → NSE PL → DORSZ</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">MONDAY</div><div style="font-family:var(--mono);font-size:11px;color:var(--warn)">by 08:00</div></div>
+        </div>
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Wstawka do Meldunku NSE</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → NSE PL → Dowództwo Operacyjne SZ (DORSZ)</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">THURSDAY</div><div style="font-family:var(--mono);font-size:11px;color:var(--text3)">routine</div></div>
+        </div>
       </div>
-      <div class="ref-body">
-        <table class="bar-table">
-          <thead><tr><th>Day</th><th>Opens</th><th>Last Call</th><th>Closes</th></tr></thead>
-          <tbody>
-            <tr><td class="day-col">Monday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
-            <tr><td class="day-col">Tuesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
-            <tr><td class="day-col">Wednesday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
-            <tr><td class="day-col">Thursday</td><td class="time-open">17:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
-            <tr><td class="day-col">Friday</td><td class="time-open">17:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
-            <tr><td class="day-col">Saturday</td><td class="time-open">12:00</td><td class="time-last">23:45</td><td class="time-closed">24:00</td></tr>
-            <tr><td class="day-col">Sunday</td><td class="time-open">12:00</td><td class="time-last">22:45</td><td class="time-closed">23:00</td></tr>
-          </tbody>
-        </table>
-        <div class="rule-item mt8"><span class="rule-bullet">›</span><span>Last call is 15 min before closing. Music volume down and lights on at last call.</span></div>
+      <div class="section-label mt8">EUFOR / IMP Chain</div>
+      <div class="contact-full">
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">IMP Report (Incident)</div><div style="font-size:12px;color:var(--text2);margin-top:3px">After each incident → SNR + Branch Chief + FPM</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--danger)">IMMEDIATE</div></div>
+        </div>
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">DOB Entry</div><div style="font-size:12px;color:var(--text2);margin-top:3px">Daily Occurrence Book — every incident/contact</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--warn)">SAME DAY</div></div>
+        </div>
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Weekly Update Report (WUR)</div><div style="font-size:12px;color:var(--text2);margin-top:3px">IMP → JOC → HQ EUFOR</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--accent)">WEEKLY</div></div>
+        </div>
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">Parking Warning Follow-up</div><div style="font-size:12px;color:var(--text2);margin-top:3px">Driver reports to IMP Station within 48h</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--warn)">48h</div></div>
+        </div>
+        <div class="contact-row">
+          <div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--text)">DUI — Breath Test Result</div><div style="font-size:12px;color:var(--text2);margin-top:3px">DUI confirmed → SNR/Branch Chief + FPM + HQ CAMP CMDT</div></div>
+          <div style="text-align:right"><div style="font-family:var(--mono);font-size:12px;color:var(--danger)">IMMEDIATE</div></div>
+        </div>
+      </div>
+      <div class="section-label mt8">DOB Entry Format</div>
+      <div class="contact-full">
+        <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.9;font-family:var(--mono)">
+          DATE: ___________________<br>
+          TIME: ___________________<br>
+          LOCATION: _______________<br>
+          PERSONS INVOLVED: _______<br>
+          UNIT / NATION: __________<br>
+          ID NUMBER: ______________<br>
+          VIOLATION / INCIDENT: ___<br>
+          ACTION TAKEN: ___________<br>
+          WARNING ISSUED: YES / NO<br>
+          SNR NOTIFIED: YES / NO<br>
+          IMP OFFICER: ____________
+        </div>
       </div>
     </div>
   </div>
@@ -309,6 +428,45 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="radio-row"><span class="radio-station">Archer Base</span><span class="radio-callsign">ALPHA CTRL</span><span class="radio-ipn">5624</span></div>
       <div class="radio-row"><span class="radio-station">MNBN TOC</span><span class="radio-callsign">BRAVO CTRL</span><span class="radio-ipn">3707</span></div>
     </div>
+    <div class="section-label mt8">Radio Procedures</div>
+    <div class="contact-full">
+      <div style="padding:12px 14px"><div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:6px">Channel Usage</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Stations scan Channel 1 simultaneously on their own user group channel. To place a call on Ch.1 — switch to Ch.1. After receiving a call on Ch.1 you can respond from your user channel within <strong style="color:var(--accent)">4 seconds</strong>, or switch to Ch.1 to respond later. Language: <strong style="color:var(--accent)">English</strong>.</div>
+      </div>
+      <div style="padding:0 14px 12px;border-top:1px solid var(--border);padding-top:10px">
+        <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:6px">Daily Radio Check</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">JOC initiates each working day between <strong style="color:var(--accent)">09:00–10:00</strong>. All control stations must respond, plus all other stations available at that time.</div>
+      </div>
+    </div>
+    <div class="section-label mt8">HQ CMDT Fire Dept — Vehicles</div>
+    <div class="contact-full">
+      <div class="radio-row" style="background:var(--surface2);grid-template-columns:1fr auto">
+        <span style="font-weight:700;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Vehicle</span>
+        <span style="font-weight:700;font-size:10px;color:var(--text3);text-align:right">Registration</span>
+      </div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Ford Focus (RED)</span><span class="radio-ipn">A89-E-803</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Skoda Octavia</span><span class="radio-ipn">030-A-408</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Ford Kuga</span><span class="radio-ipn">J67-K-373</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">BMW (BLACK)</span><span class="radio-ipn">A63-M-270</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Golf 7 (BLACK)</span><span class="radio-ipn">J67-T-302</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Passat 6 Karavan</span><span class="radio-ipn">J71-E-643</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Renault Senic</span><span class="radio-ipn">007-M-301</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">BMW F30</span><span class="radio-ipn">J15-M-418</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Mercedes</span><span class="radio-ipn">T17-K-770</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Audi A3 (BLACK)</span><span class="radio-ipn">A06-J-414</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Mercedes E</span><span class="radio-ipn">E95-A-431</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Citroen C3 Picasso (RED)</span><span class="radio-ipn">J89-O-743</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Ford Kuga (WHITE)</span><span class="radio-ipn">T92-O-601</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Opel Meriva (GREY)</span><span class="radio-ipn">J62-A-471</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Hyundai Tucson</span><span class="radio-ipn">M84-E-355</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Hyundai i30 (GREY)</span><span class="radio-ipn">A49-O-777</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Citroen C4 (SILVER)</span><span class="radio-ipn">A06-J-762</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">BMW F30 (BLUE)</span><span class="radio-ipn">M03-K-837</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Kia Sportage (WHITE)</span><span class="radio-ipn">A10-T-934</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Golf IV (BLACK)</span><span class="radio-ipn">J36-K-621</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">Toyota RAW 4</span><span class="radio-ipn">E74-T-860</span></div>
+      <div class="radio-row" style="grid-template-columns:1fr auto"><span class="radio-station">VW T6</span><span class="radio-ipn">A83-E-928</span></div>
+    </div>
   </div>
 
   <!-- MAP -->
@@ -335,28 +493,73 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="parking-zone"><div class="zone-letter">X</div><div class="zone-desc">US NSE</div></div>
     </div>
     <div class="map-legend">
-      <div class="rule-item"><span class="rule-bullet">›</span><span>Speed limit: <strong style="color:var(--accent)">30 km/h</strong> throughout Camp Butmir. Grassed areas prohibited at all times.</span></div>
+      <div class="rule-item"><span class="rule-bullet">›</span><span>Speed limit: <strong style="color:var(--accent)">30 km/h</strong> throughout Camp Butmir. Grassed areas prohibited.</span></div>
       <div class="rule-item"><span class="rule-bullet">›</span><span>Emergency vehicles (IMP, ambulance, fire, guards, COM CP) may exceed limit in emergencies only.</span></div>
     </div>
   </div>
 
-  <!-- SOP -->
+  <!-- REFS TAB -->
   <div class="tab-content" id="tab-refs">
-    <div class="search-bar">
-      <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-      <input type="text" id="refSearch" placeholder="Search SOP rules…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="subnav">
+      <button class="subnav-btn active" onclick="switchSub('refs','sub-sop',this)">SOP</button>
+      <button class="subnav-btn" onclick="switchSub('refs','sub-routes',this)">Routes</button>
+      <button class="subnav-btn" onclick="switchSub('refs','sub-dipl',this)">Dipl. Plates</button>
     </div>
-    <div id="refList"></div>
+    <div class="subcontent active" id="sub-sop">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="refSearch" placeholder="Search SOP rules…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div id="refList"></div>
+    </div>
+    <div class="subcontent" id="sub-routes">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="routeSearch" placeholder="Route name or town…" oninput="filterRoutes(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="filter-row" id="routeFilters">
+        <span class="filter-chip active" data-rfilter="all">All</span>
+        <span class="filter-chip" data-rfilter="main">Main</span>
+        <span class="filter-chip" data-rfilter="secondary">Secondary</span>
+        <span class="filter-chip" data-rfilter="loc">LOC</span>
+        <span class="filter-chip" data-rfilter="tactical">Tactical</span>
+      </div>
+      <div id="routeList"></div>
+    </div>
+    <div class="subcontent" id="sub-dipl">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="diplSearch" placeholder="Number or country/org…" oninput="filterDipl(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div id="diplStats" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
+      <div id="diplList"></div>
+      <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:12px">Format: <strong style="color:var(--accent)">A</strong> = Embassy &nbsp;|&nbsp; <strong style="color:var(--accent)">M</strong> = Mission. &nbsp;e.g. 44-A-146 = Denmark Embassy</span></div>
+    </div>
   </div>
 
-  <!-- ACRONYMS -->
+  <!-- CODES TAB -->
   <div class="tab-content" id="tab-acronyms">
-    <div class="search-bar">
-      <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-      <input type="text" id="acroSearch" placeholder="Search acronym or meaning…" oninput="filterAcro(this.value)" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="characters">
+    <div class="subnav">
+      <button class="subnav-btn active" onclick="switchSub('acronyms','sub-acro',this)">Acronyms</button>
+      <button class="subnav-btn" onclick="switchSub('acronyms','sub-plates',this)">Dipl. Plates</button>
     </div>
-    <div id="acroStats" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
-    <div id="acroList"></div>
+    <div class="subcontent active" id="sub-acro">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="acroSearch" placeholder="Search acronym or meaning…" oninput="filterAcro(this.value)" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="characters">
+      </div>
+      <div id="acroStats" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
+      <div id="acroList"></div>
+    </div>
+    <div class="subcontent" id="sub-plates">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="diplSearch2" placeholder="Number or country/org…" oninput="filterDipl2(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div id="diplStats2" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
+      <div id="diplList2"></div>
+      <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:12px">Format: <strong style="color:var(--accent)">A</strong> = Embassy &nbsp;|&nbsp; <strong style="color:var(--accent)">M</strong> = Mission.</span></div>
+    </div>
   </div>
 
 </div><!-- /main -->
@@ -369,7 +572,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   </button>
   <button class="nav-btn" data-tab="procedures" onclick="switchTab('procedures',this)">
     <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    Procedures
+    Action
   </button>
   <button class="nav-btn" data-tab="contacts" onclick="switchTab('contacts',this)">
     <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -381,11 +584,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   </button>
   <button class="nav-btn" data-tab="refs" onclick="switchTab('refs',this)">
     <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
-    SOP
+    Refs
   </button>
   <button class="nav-btn" data-tab="acronyms" onclick="switchTab('acronyms',this)">
     <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="19" cy="17" r="3"/><path d="M21.5 20.5l-1.5-1.5"/></svg>
-    Acronyms
+    Codes
   </button>
 </nav>
 
@@ -1434,6 +1637,336 @@ function renderAcro(q){
 
 function filterAcro(q){renderAcro(q);}
 renderAcro('');
+
+
+// ── SUB-NAV ───────────────────────────────────────────────────────────────────
+function switchSub(tabId,subId,btn){
+  const tab=document.getElementById('tab-'+tabId);
+  tab.querySelectorAll('.subcontent').forEach(s=>s.classList.remove('active'));
+  tab.querySelectorAll('.subnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(subId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── DECISION TREES ────────────────────────────────────────────────────────────
+const dtrees=[
+  {id:'dt1',color:'var(--warn)',bg:'#2a1500',title:'Bicycle — No Registration / Missing Lights',
+   steps:[
+    {num:'1',title:'Stop the cyclist',desc:'Request ID/Access card. Check if bicycle has valid vignette/sticker from ID Office and required lights.',doc:null},
+    {num:'2',title:'Identify violations',desc:'No vignette/sticker → registration violation. No white front light or red rear light → lighting violation.',doc:null},
+    {num:'3',title:'1st or 2nd offence',desc:'Issue verbal warning. Note in DOB: date, time, location, person, ID number, violation, action taken.',doc:'DOB Entry'},
+    {num:'4',title:'3rd+ offence',desc:'Notify SNR / Branch Chief. Report all action to FPM.',doc:'IMP Report'},
+    {num:'5',title:'If uncooperative',desc:'Notify SNR/Branch Chief immediately. All actions reported to FPM.',doc:'IMP Report'}
+   ],
+   branches:[
+    {cond:'if','cond-class':'cond-if',text:'After dusk or bad weather — front and rear lights MUST be on.'},
+    {cond:'note','cond-class':'cond-if',text:'Cyclists must obey all traffic laws as road users. Two hands on handlebar at all times.'}
+   ]
+  },
+  {id:'dt2',color:'var(--text2)',bg:'#0d0d14',title:'Pedestrian Violation',
+   steps:[
+    {num:'1',title:'Identify violation',desc:'Pedestrian walking on roadway when sidewalk/footpath available, or walking with traffic flow instead of against.',doc:null},
+    {num:'2',title:'1st or 2nd offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
+    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+   ],
+   branches:[
+    {cond:'note','cond-class':'cond-if',text:'No footpath available: max 2 persons side-by-side, walking opposite to traffic direction.'}
+   ]
+  },
+  {id:'dt3',color:'var(--warn)',bg:'#2a1000',title:'Quiet Hours Violation (2300–0600)',
+   steps:[
+    {num:'1',title:'Identify violation',desc:'Excessive noise during quiet hours: loud music, slamming doors, loud voices, Skype/FaceTime calls heard outside room.',doc:null},
+    {num:'2',title:'1st offence',desc:'IMP issues a warning. Log in DOB: time, location, room/building, person involved, nature of noise.',doc:'DOB Entry'},
+    {num:'3',title:'2nd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+   ],
+   branches:[]
+  },
+  {id:'dt4',color:'var(--accent2)',bg:'#0d1520',title:'Dress Prescription Violation',
+   steps:[
+    {num:'1',title:'Identify violation',desc:'BDU not worn during 0600–1800 (unless exempt), offensive graphics, no EUFOR logo, dirty clothing in DFAC, wrong footwear, head-dress not removed in DFAC.',doc:null},
+    {num:'2',title:'Check for exemption',desc:'Exempt: en route to Gym, at gate for walk-out, civilian clothing required for duty reasons.',doc:null},
+    {num:'3',title:'1st offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
+    {num:'4',title:'2nd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+   ],
+   branches:[
+    {cond:'note','cond-class':'cond-if',text:'DFAC rules: no tight/sweaty sports clothes, no sleeveless tops, no sandals/flip-flops, no large bags, wash hands before entry, no food removal (coffee/fruit only).'}
+   ]
+  },
+  {id:'dt5',color:'var(--ok)',bg:'#0d1a0d',title:'ID Card Not Visible / Not Carried',
+   steps:[
+    {num:'1',title:'Stop individual',desc:'Request ID/Access card. Applies to all EUFOR/NHQ Sa personnel and visitors on camp and within AOO.',doc:null},
+    {num:'2',title:'1st or 2nd offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
+    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+   ],
+   branches:[
+    {cond:'note','cond-class':'cond-if',text:'IMP personnel: exempt from visible display but must produce ID when requested. Exception for all: sport activity.'},
+    {cond:'note','cond-class':'cond-if',text:'Not carrying ID in accommodation block: 1st = warning, 2nd+ = notify SNR/Branch Chief.'}
+   ]
+  },
+  {id:'dt6',color:'#e67e22',bg:'#1f1000',title:'Parking Violation',
+   steps:[
+    {num:'1',title:'Identify violation',desc:'Vehicle parked outside assigned zone, blocking access roads, on grassed area, or in restricted zone.',doc:null},
+    {num:'2',title:'1st or 2nd offence',desc:'IMP issues written warning. Leave notice on windshield. Log in DOB.',doc:'Written Warning + DOB'},
+    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. Reported to HQ CAMP CMDT and FPM.',doc:'IMP Report'},
+    {num:'4',title:'Bldg 200 / Circle (non-VIP)',desc:'Immediate: SNR/Branch Chief notified. Reported to HQ CAMP CMDT and FPM. 3 penalty points.',doc:'IMP Report'},
+    {num:'5',title:'Follow-up',desc:'Driver who received written warning MUST report to IMP Station within 48h. Failure = disciplinary action.',doc:null}
+   ],
+   branches:[]
+  },
+  {id:'dt7',color:'var(--danger)',bg:'#1f0000',title:'Alcohol in Accommodation Block',
+   steps:[
+    {num:'1',title:'Identify situation',desc:'Alcohol consumption in accommodation block area without COM EUFOR or COM NHQ Sa approval.',doc:null},
+    {num:'2',title:'Stop consumption',desc:'Remove alcohol from the area.',doc:null},
+    {num:'3',title:'Report',desc:'Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM.',doc:'IMP Report + DOB'}
+   ],
+   branches:[
+    {cond:'note','cond-class':'cond-if',text:'Serving alcohol to visibly intoxicated person is forbidden. Violation = action through chain of command.'}
+   ]
+  },
+  {id:'dt8',color:'var(--danger)',bg:'#200010',title:'Smoking Violation',
+   steps:[
+    {num:'1',title:'Identify violation',desc:'Smoking outside designated area, inside accommodation block, walking around camp while smoking, or smoking in EUFOR/NATO vehicle.',doc:null},
+    {num:'2',title:'Stop the smoking',desc:'Direct person to nearest designated smoking area (see Annex E).',doc:null},
+    {num:'3',title:'Ensure proper disposal',desc:'Smoking materials must go in metal receptacle bins — NOT on the ground.',doc:null},
+    {num:'4',title:'Log and warn',desc:'Issue warning. Log in DOB.',doc:'DOB Entry'}
+   ],
+   branches:[]
+  },
+  {id:'dt9',color:'var(--accent2)',bg:'#0d1a2a',title:'Vehicle Speed Violation',
+   steps:[
+    {num:'1',title:'Stop vehicle',desc:'Note speed and posted limit (30 km/h throughout Camp Butmir).',doc:null},
+    {num:'2',title:'Check ID and documents',desc:'Driver ID, vehicle documentation.',doc:null},
+    {num:'3',title:'5–10 km/h over — 1st offence',desc:'IMP issues verbal warning. Log in DOB.',doc:'DOB Entry'},
+    {num:'4',title:'5–10 km/h over — 2nd+',desc:"Notify driver's SNR/Branch Chief.",doc:'IMP Report'},
+    {num:'5',title:'11–20 km/h over',desc:"Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM. Suspend license 2 weeks. Add 2 penalty points.",doc:'IMP Report'},
+    {num:'6',title:'21+ km/h over',desc:"Notify SNR/Branch Chief. Report to HQ CAMP CMDT. Suspend license 2 weeks. Add 3 penalty points.",doc:'IMP Report'},
+    {num:'7',title:'5 total penalty points',desc:"Driver's license suspended for 1 month.",doc:null}
+   ],
+   branches:[]
+  },
+  {id:'dt10',color:'var(--warn)',bg:'#1a1500',title:'Cellphone / Seatbelt / Smoking in Vehicle',
+   steps:[
+    {num:'1',title:'Stop vehicle',desc:'Identify violation: cellphone use while driving, failure to fasten seatbelt, or smoking in NATO/EUFOR vehicle.',doc:null},
+    {num:'2',title:'1st offence',desc:'IMP issues a warning. 2 penalty points on driver\'s license.',doc:'DOB Entry'},
+    {num:'3',title:'2nd+ offence',desc:"Notify driver's SNR/Branch Chief. 2 penalty points.",doc:'IMP Report'}
+   ],
+   branches:[
+    {cond:'note','cond-class':'cond-if',text:'Cellphone: hands-free kit only permitted. Seatbelt: mandatory for all occupants.'}
+   ]
+  },
+  {id:'dt11',color:'var(--danger)',bg:'#1f0a00',title:'Unauthorized Weapon in Restricted Area',
+   steps:[
+    {num:'1',title:'Identify situation',desc:'Loaded weapon carried in recreation/concession area or DFAC by non-authorized person.',doc:null},
+    {num:'2',title:'Check authorization',desc:'Authorized: FPG Guard, IMP Det, CP details, concealed weapons permit holders, ordered by COM EUFOR/NHQ Sa.',doc:null},
+    {num:'3',title:'If unauthorized',desc:'Secure the situation. Request individual to disarm.',doc:null},
+    {num:'4',title:'Notify immediately',desc:'Notify SNR/Branch Chief immediately.',doc:null},
+    {num:'5',title:'Report',desc:'All action reported to FPM.',doc:'IMP Report + DOB'}
+   ],
+   branches:[]
+  }
+];
+
+function renderDtrees(){
+  const list=document.getElementById('dtreeList');
+  if(!list)return;
+  list.innerHTML=dtrees.map(d=>`
+    <div class="dtree-card" id="dt-${d.id}">
+      <div class="dtree-header" onclick="document.getElementById('dt-${d.id}').classList.toggle('open')">
+        <div class="dtree-icon" style="background:${d.bg};color:${d.color}">${getSvgForDtree(d.id)}</div>
+        <span class="dtree-title">${d.title}</span>
+        <span class="v-chevron">&#9660;</span>
+      </div>
+      <div class="dtree-body">
+        ${d.steps.map(s=>`
+          <div class="dtree-step">
+            <span class="dtree-step-num">${s.num}</span>
+            <div class="dtree-step-content">
+              <div class="dtree-step-title">${s.title}</div>
+              <div class="dtree-step-desc">${s.desc}</div>
+              ${s.doc?`<span class="dtree-step-doc">${s.doc}</span>`:''}
+            </div>
+          </div>`).join('')}
+        ${d.branches.length?d.branches.map(b=>`
+          <div class="dtree-branch">
+            <span class="dtree-branch-cond ${b['cond-class']}">${b.cond.toUpperCase()}</span>
+            <span class="dtree-branch-text">${b.text}</span>
+          </div>`).join(''):''}
+      </div>
+    </div>`).join('');
+}
+
+function getSvgForDtree(id){
+  const svgs={
+    dt1:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M5 20l2-6h10l2 6"/><path d="M5 14l7-4 7 4"/></svg>',
+    dt2:'<svg viewBox="0 0 24 24"><path d="M17 20H7M12 4v12M8 8l4-4 4 4"/></svg>',
+    dt3:'<svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+    dt4:'<svg viewBox="0 0 24 24"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
+    dt5:'<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>',
+    dt6:'<svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+    dt7:'<svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
+    dt8:'<svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><line x1="2" y1="2" x2="22" y2="22"/></svg>',
+    dt9:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    dt10:'<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+    dt11:'<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+  };
+  return svgs[id]||svgs.dt11;
+}
+renderDtrees();
+
+// ── ROUTES ────────────────────────────────────────────────────────────────────
+const routes=[
+  {type:'main',name:'ANGELA',path:'BXP Kamensko (HR) – Brnaze – Mravince – Split.'},
+  {type:'main',name:'ARIZONA',path:'BXP Orasje – Srebrenik – Dobmja – 5 km west of Tuzla.'},
+  {type:'main',name:'ARKANSAS',path:'Klasnice – Hrvacani – Prnjavor – Agici – Derventa.'},
+  {type:'main',name:'BERT (HR)',path:'BXP Zupanja (HR) Cross Roads (CR) STEVE – Vinkovci.'},
+  {type:'main',name:'BLUEBIRD',path:'BXP Maljevac – Velika Kladusa – Cazin – Bihac – Bosanski Petrovac – Klujc – Mrkonjic Grad – Jajce.'},
+  {type:'main',name:'CONNECTICUT',path:'BXP Bosanska Gradiska – Laktasi – Doboj (highway).'},
+  {type:'main',name:'CHARLIE (HR highway)',path:'BXP Nova Sela (BiH/HR) – Dugopolje – CR ANGELA – Skradin – Stupica (34km northeast from ZADAR).'},
+  {type:'main',name:'DEVON',path:'part/: Laktasi – Banja Luka.'},
+  {type:'main',name:'DIAMOND',path:'Donji Vakuf – Turbe – Travnik – Vitez – Kaonik and 5 km east.'},
+  {type:'main',name:'ERIC (HR)',path:'BXP Slavonski Brod (HR) – CR STEVE – Nasice – BXP Donji Miholjac – (HR/HU).'},
+  {'type':'main','name':'FLORIDA_highway',path:'Zenica – Sarajevo.'},
+  {type:'main',name:'GULL',path:'BXP Gradiska – Banja Luka – Jajce – Donji Vakuf – Bugojno – Kupres – Tomislavgrad – BXP Kamensko (BiH/HR).'},
+  {type:'main',name:'HORN BLOWER',path:'Mrkoniic Grad – Baljvine.'},
+  {type:'main',name:'HOWDY (HR)',path:'BXP Stara Gradiska (HR) – CR STEVE – Lipik – Daruvar – Virovitica – Zrinj Lukacki.'},
+  {type:'main',name:'KIM (HR)',path:'BXP Metkovic (HR) – Opuzen.'},
+  {type:'main',name:'LADA',path:'Doboj – Maglaj – Zenica and 10 km south.'},
+  {type:'main',name:'MAGPIE',path:'Livno – Sredevici – Raseljka.'},
+  {type:'main',name:'MELANIE (HR)',path:'BXP Maljevac (HR) – Krstinja – Kolaric – Karlovac.'},
+  {type:'main',name:'NEW JERSEY',path:'BXP Bosanski Brod – Derventa – Doboj – Lukavac – Zivinice – Kladanj.'},
+  {type:'main',name:'OPAL',path:'Jablanica – Prozor – Gornji Vakuf – Bugojno.'},
+  {type:'main',name:'OSTRICH',path:'Zivinice – Dubrave – Tojsici.'},
+  {type:'main',name:'PACMAN',path:'part/: Sarajevo – Konjic – Jablanica – Mostar – Capljina – BXP Metkovic.'},
+  {type:'main',name:'PELICAN',path:'Suica (CR GULL) – Livno – Glamoc – Donji Baraci – CR HORN BLOWER (Podbrdo 1,5km – Mrkonjic 7,5km).'},
+  {type:'main',name:'PYTHON',path:'Kladanj – Olovo – Semizovac.'},
+  {type:'main',name:'SANTA (HR)',path:'BXP Slavonski samac (HR) – CR STEVE – Dakovo – Osijek – BXP Udvar (HR/HU).'},
+  {type:'main',name:'STEVE (HR highway)',path:'BXP Lipovac (HR/SR) – CR BERT – CR SANTA – CR ERIC – CR HOWDY – CR MELANIE – Zagreb.'},
+  {type:'secondary',name:'CANARY',path:'Podromanija – Kula – Kovanj – Rogatica – Kukavice – Brcigovo – Ustipraca.'},
+  {type:'secondary',name:'CROW',path:'part/: Siroki Brijeg – Knespolje – Mostar.'},
+  {type:'secondary',name:'DUCK',path:'part/: Zepce – Bistrica – Zavidovici.'},
+  {type:'secondary',name:'FALCON',path:'part/: Teslic – Jelah – Zabljak – Ends 10 km East of Zabljak connection with LADA.'},
+  {type:'secondary',name:'FARMER',path:'part/: Prijedor – Sanski Most.'},
+  {type:'secondary',name:'FINCH',path:'Lasva – Kakanj – Visoko – Ilijas – Semizovac – Sarajevo.'},
+  {type:'secondary',name:'GEORGIA',path:'part/: Simin Han – Pozamica – Priboj – Suho Polje – Hase – Bijeljina.'},
+  {type:'secondary',name:'HAWAII',path:'part/: Modrica – D. Skugric – Gradacac.'},
+  {type:'secondary',name:'HAWK',path:'Starts 12 km west of Tuzla – Simin Han – Tojsici – Prnjavor – Kalesija Caparde – Karakaj.'},
+  {type:'secondary',name:'MARIANNE',path:'part/: Bosanski Petrovac – Drvar.'},
+  {type:'secondary',name:'MICHIGAN',path:'part/: Crcvica – Donjie Ledenice – Gradacac – D. Lukavac – ends 5 km East of Donje Srnice.'},
+  {type:'secondary',name:'OREGON',path:'Konjevici – Kravica – Bratunac.'},
+  {type:'secondary',name:'PEGASUS',path:'part/: Prijedor – Kozarac – Ivanjska – Banja Luka.'},
+  {type:'secondary',name:'PETRUS',path:'part/: Han Derventa – Pale.'},
+  {type:'secondary',name:'RABBIT',path:'Stolac – Ljubinje – Kotezi – Mrkonjici – Lug – Trebinje.'},
+  {type:'secondary',name:'RIESLING',path:'part/: Gorazde – Vitkovici – Ustikolina – Patkovina – Foca.'},
+  {type:'secondary',name:'SPARROW',path:'Starts 5 km North of Zvornik – Devanje – Drinjaca – Konjevici – Carska – Nova Kasaba – Milici – Vlasenica – Han Pijesak – Mrkalji – Margetici – Vridici – Sokolac – Podromanjia – Mokro – Han Derventa – Sarajevo.'},
+  {type:'secondary',name:'TEXAS',path:'part/: Loncari – Gorice – Brcko.'},
+  {type:'secondary',name:'TURKEY',path:'Gorazde – Sopotnica – Ustipraca – Brodar – Orahovci – Visegrad – Dobrun – Ends 1 km West of BXP Kotroman.'},
+  {type:'secondary',name:'VIPER',path:'Capljina – Tasovici – Recice – Berkovici – Bijeljani – Fatrica – Ends 3 km Southeast of Plana.'},
+  {type:'loc',name:'LOC Hub 1 BANJA LUKA — BL 1&2',path:'FLORIDA – LADA – CONNECTICUT – DEVON. or: FLORIDA – DIAMOND – GULL.'},
+  {type:'loc',name:'LOC Hub 1 BANJA LUKA — Cazin',path:'FLORIDA – DIAMOND – GULL – BLUEBIRD.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Brcko',path:'FLORIDA – PYTHON – NEW JERSEY – ARIZONA – TEXAS.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Tuzla',path:'FLORIDA – PYTHON – NEW JERSEY.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Bratunac',path:'SPARROW – OREGON.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Doboj',path:'FLORIDA – LADA.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Zenica',path:'FLORIDA – LADA.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Livno',path:'FLORIDA – DIAMOND – GULL – PELICAN.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Travnik',path:'FLORIDA – DIAMOND.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Zavidovici',path:'FLORIDA – LADA – DUCK/part.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Mostar',path:'PACMAN.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Jablanica',path:'PACMAN.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Trebinje',path:'PACMAN – VIPER – RABBIT.'},
+  {type:'loc',name:'LOC Hub 5 SARAJEVO — Foca',path:'SPARROW – CANARY – TURKEY – RIESLING.'},
+  {type:'loc',name:'LOC Hub 5 SARAJEVO — Visegrad',path:'SPARROW – CANARY – TURKEY.'},
+  {type:'tactical',name:'FITZROY (via Serbia)',path:'Sarajevo – Tuzla – Orasje/BXP – Zupania (HRV) – BXP Lipovac – Batrovci – Beograd – Nis – Prokuplje – Merdare – Pristina.'},
+  {type:'tactical',name:'HAROLD (via Serbia)',path:'Sarajevo – Rogatica – Visegrad – BXP Vardiste – Cacak – Lesak – Kraljevo – Rudnice – Kosovska Mitrovica – Pristina.'},
+  {type:'tactical',name:'IVAYLO (via Montenegro)',path:'Sarajevo – Jablanica – Mostar – Capljina – Stolac – Ljubinje – Velikani – Trebinje – BXP Klobuk – Niksic – Podgorica – Kolasin – Mojkovac – Ribarevine – Berane – Rozaje – BXP Kula – Pec – Pristina.'},
+  {type:'tactical',name:'STEFAN (via Montenegro, light vehicles only)',path:'Sarajevo – Gorazde – Vitkovici – Cajnice – BXP Metaljka – Pljevlja – Djurdjevica Tara – Mojkovac – Ribarevine – Berane – Rozaje – BXP Kula – Pec – Pristina.'},
+];
+
+function renderRoutes(filter,q){
+  const list=document.getElementById('routeList');
+  if(!list)return;
+  let items=routes;
+  if(filter&&filter!=='all')items=items.filter(r=>r.type===filter);
+  if(q){
+    const fq=q.toLowerCase();
+    items=items.filter(r=>r.name.toLowerCase().includes(fq)||r.path.toLowerCase().includes(fq));
+  }
+  const typeLabels={main:'Main',secondary:'Secondary',loc:'LOC',tactical:'Tactical'};
+  const typeClass={main:'rb-main',secondary:'rb-secondary',loc:'rb-loc',tactical:'rb-tactical'};
+  list.innerHTML=items.map((r,i)=>`
+    <div class="route-card" id="rc-${i}">
+      <div class="route-header" onclick="document.getElementById('rc-${i}').classList.toggle('open')">
+        <span class="route-name">${r.name}</span>
+        <span class="route-type-badge ${typeClass[r.type]}">${typeLabels[r.type]}</span>
+        <span class="v-chevron" style="margin-left:auto">&#9660;</span>
+      </div>
+      <div class="route-body">
+        <div class="route-path">${r.path.replace(/–/g,' <strong>–</strong> ')}</div>
+      </div>
+    </div>`).join('');
+  if(!items.length)list.innerHTML='<div class="search-empty">No routes found.</div>';
+}
+
+let currentRouteFilter='all';
+document.getElementById('routeFilters')&&document.getElementById('routeFilters').addEventListener('click',function(e){
+  const chip=e.target.closest('.filter-chip');if(!chip)return;
+  document.querySelectorAll('#routeFilters .filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  currentRouteFilter=chip.dataset.rfilter;
+  renderRoutes(currentRouteFilter,document.getElementById('routeSearch')?.value||'');
+});
+function filterRoutes(q){renderRoutes(currentRouteFilter,q);}
+renderRoutes('all','');
+
+// ── DIPLOMATIC PLATES ─────────────────────────────────────────────────────────
+const diplPlates=[
+  [10,'France'],[11,'USA'],[12,'Iran'],[13,'Croatia'],[14,'Turkey'],[15,'Germany'],
+  [16,'Austria'],[17,'Saudi Arabia'],[18,'Italy'],[20,'Great Britain'],[23,'Netherlands'],
+  [24,'Libya'],[25,'Switzerland'],[26,'Egypt'],[27,'Ireland'],[28,'Slovenia'],
+  [29,'OSCE — Organisation for Security and Co-operation in Europe'],[30,'Canada'],
+  [32,'Sweden'],[33,'Russian Federation'],[34,'Czech Republic'],[35,'United Nations (UN)'],
+  [36,'Pakistan'],[37,'Office of the High Representative (OHR)'],[38,'Commission for Human Rights'],
+  [39,'Norway'],[40,'Bulgaria'],[41,'World Bank'],[42,'Portugal'],[43,'Malaysia'],
+  [44,'United Nations High Commissioner for Refugees (UNHCR)'],[46,'International Monetary Fund (IMF)'],
+  [47,'Customs and Fiscal Assistant Office (CAFAO)'],[48,'Denmark'],[49,'European Bank'],
+  [50,'European Commission in BiH'],[51,'United Nations Development Program (UNDP)'],
+  [52,'International Organisation for Migration (IOM)'],[53,'Belgium'],[54,'Central Bank'],
+  [55,'Commission for Property Requests of Displaced Persons and Refugees'],[56,'Japan'],
+  [57,'UNESCO — United Nations Educational, Scientific, and Cultural Organisation'],
+  [58,'F.Y.R.O.M. — Former Yugoslav Republic of Macedonia'],[59,'Hungary'],
+  [60,'UNICEF — United Nations Children\'s Fund'],[61,'Spain'],[62,'Palestine'],[63,'Greece'],
+  [64,'EUMM — European Union Monitoring Mission'],[65,'International Monetary Group (IMG)'],
+  [66,'Peoples Republic of China'],[68,'World Health Organisation (WHO)'],[69,'Romania'],
+  [70,'International Centre for Migration Policy Development (ICMPD)'],
+  [71,'International Commission for Missing Person (ICMP)'],[72,'Maltese Sovereign Line'],
+  [73,'International Committee of Red Cross (ICRC)'],[74,'Poland'],[75,'Council of Europe'],
+  [76,'International Trust Fund (ITF)'],[77,'IFRC'],[78,'International Finance Corporation (IFC)'],
+  [79,'Vatican Embassy'],[80,'Serbia and Montenegro'],[81,'UN OHCR'],[82,'Guinea Bissau'],
+  [83,'Refugees Return Foundation'],[84,'EUPM'],[85,'Regional Environmental Centre'],
+  [86,'Stability Pact Anti-corruption Initiative'],[87,'Slovakia'],[88,'The Registry'],
+  [89,'High Judicial and Prosecutorial Council'],[90,'Office of the EU Special Representative'],
+  [91,'Japan International Cooperation Agency'],[92,'Montenegro'],[93,'Australia'],
+  [94,'Qatar'],[95,'Ukraine'],[96,'Regional Cooperation Council'],[97,'PSOTC'],
+];
+
+function renderDipl(q,listId,statsId){
+  const list=document.getElementById(listId);
+  const stats=document.getElementById(statsId);
+  if(!list)return;
+  const fq=(q||'').toLowerCase().trim();
+  const items=fq?diplPlates.filter(([n,c])=>String(n).includes(fq)||c.toLowerCase().includes(fq)):diplPlates;
+  if(stats)stats.textContent=items.length+' / '+diplPlates.length+' ENTRIES';
+  if(!items.length){list.innerHTML='<div class="search-empty">No results.</div>';return;}
+  list.innerHTML='<div class="contact-full">'+items.map(([n,c])=>{
+    const hn=fq?String(n).replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):n;
+    const hc=fq?c.replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):c;
+    return `<div class="dipl-row"><span class="dipl-num">${hn}</span><span class="dipl-country">${hc}</span></div>`;
+  }).join('')+'</div>';
+}
+function filterDipl(q){renderDipl(q,'diplList','diplStats');}
+function filterDipl2(q){renderDipl(q,'diplList2','diplStats2');}
+renderDipl('','diplList','diplStats');
+renderDipl('','diplList2','diplStats2');
 
 try{const s=localStorage.getItem('alertState');if(s)setAlert(s);}catch(e){}
 </script>
