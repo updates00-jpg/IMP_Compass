@@ -241,6 +241,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 /* REPORT SCHEDULE */
 .report-schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
+
+/* RANKS */
+.rank-country-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.rank-country-header{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border)}
+.rank-country-flag{font-size:22px;line-height:1}
+.rank-country-name{font-weight:700;font-size:15px;color:var(--text);flex:1}
+.rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px}
+.rank-section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 14px 4px}
+.rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;padding:8px 14px 12px}
+.rank-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s}
+.rank-item:active{background:var(--surface2)}
+.rank-item img{width:48px;height:auto;min-height:30px;object-fit:contain;border-radius:3px}
+.rank-item-broken{width:48px;height:40px;background:var(--surface2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3)}
+.rank-item-nato{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;text-align:center;letter-spacing:.5px}
+.rank-item-name{font-size:9px;color:var(--text2);text-align:center;line-height:1.3;max-width:64px;word-break:break-word}
+.rank-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center}
+.rank-modal-overlay.open{display:flex}
+.rank-modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;max-width:260px;width:90%;text-align:center}
+.rank-modal img{width:80px;height:auto;margin-bottom:12px}
+.rank-modal-nato{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700;letter-spacing:1px;margin-bottom:4px}
+.rank-modal-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.rank-modal-country{font-size:12px;color:var(--text2);margin-bottom:14px}
+.rank-modal-close{width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--body)}
 </style>
 </head>
 <body>
@@ -542,6 +565,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('acronyms','sub-acro',this)">Acronyms</button>
       <button class="subnav-btn" onclick="switchSub('acronyms','sub-plates',this)">Dipl. Plates</button>
+      <button class="subnav-btn" onclick="switchSub('acronyms','sub-ranks',this)">Ranks</button>
+      <button class="subnav-btn" onclick="switchSub('acronyms','sub-ranks',this)">Ranks</button>
     </div>
     <div class="subcontent active" id="sub-acro">
       <div class="search-bar">
@@ -559,6 +584,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div id="diplStats2" style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;letter-spacing:1px"></div>
       <div id="diplList2"></div>
       <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:12px">Format: <strong style="color:var(--accent)">A</strong> = Embassy &nbsp;|&nbsp; <strong style="color:var(--accent)">M</strong> = Mission.</span></div>
+    </div>
+
+    <!-- RANKS -->
+    <div class="subcontent" id="sub-ranks">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="rankSearch" placeholder="Country…" oninput="filterRankCountry(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="filter-row" style="overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px" id="rankCountryBtns"></div>
+      <div id="rankDisplay"></div>
     </div>
   </div>
 
@@ -1968,6 +2003,735 @@ function filterDipl2(q){renderDipl(q,'diplList2','diplStats2');}
 renderDipl('','diplList','diplStats');
 renderDipl('','diplList2','diplStats2');
 
+
+// ── CSS for ranks ─────────────────────────────────────────────────────────────
+// (injected via JS to avoid touching style block)
+(function(){
+  const s=document.createElement('style');
+  s.textContent=`
+  .rank-section{margin-bottom:16px}
+  .rank-section-title{font-weight:700;font-size:11px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 0 6px;display:flex;align-items:center;gap:8px}
+  .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;margin-bottom:4px}
+  .rank-cell{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 4px 8px;text-align:center;cursor:pointer;transition:border-color .15s}
+  .rank-cell:active{border-color:var(--accent)}
+  .rank-cell img{width:40px;height:auto;display:block;margin:0 auto 4px;min-height:40px;object-fit:contain}
+  .rank-cell .rc-nato{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;letter-spacing:.5px}
+  .rank-cell .rc-name{font-size:9px;color:var(--text2);line-height:1.2;margin-top:2px;word-break:break-word}
+  .rank-img-err{width:40px;height:40px;background:var(--surface3);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px;margin:0 auto 4px}
+  .rank-country-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px}
+  .rank-flag{font-size:28px;line-height:1}
+  .rank-country-name{font-weight:700;font-size:16px;color:var(--text);letter-spacing:1px}
+  .rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3)}
+  `;
+  document.head.appendChild(s);
+})();
+
+// ── RANKS DATA ────────────────────────────────────────────────────────────────
+const ranksData = {
+  'Poland': {
+    code:'POL', flag:'🇵🇱',
+    or:[
+      {nato:'OR-1',name:'Szeregowy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Army-POL-OR-01.svg/60px-Army-POL-OR-01.svg.png'},
+      {nato:'OR-2',name:'Starszy Szeregowy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Army-POL-OR-02.svg/60px-Army-POL-OR-02.svg.png'},
+      {nato:'OR-3',name:'Kapral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Army-POL-OR-03.svg/60px-Army-POL-OR-03.svg.png'},
+      {nato:'OR-4',name:'Plutonowy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Army-POL-OR-04.svg/60px-Army-POL-OR-04.svg.png'},
+      {nato:'OR-5',name:'St. Plutonowy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Army-POL-OR-05.svg/60px-Army-POL-OR-05.svg.png'},
+      {nato:'OR-6',name:'Sierżant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Army-POL-OR-06.svg/60px-Army-POL-OR-06.svg.png'},
+      {nato:'OR-7',name:'St. Sierżant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Army-POL-OR-07.svg/60px-Army-POL-OR-07.svg.png'},
+      {nato:'OR-8',name:'Mł. Chorąży',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Army-POL-OR-08.svg/60px-Army-POL-OR-08.svg.png'},
+      {nato:'OR-9',name:'St. Chorąży',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Army-POL-OR-09.svg/60px-Army-POL-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Podporucznik / Porucznik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Army-POL-OF-01.svg/60px-Army-POL-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapitan',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Army-POL-OF-02.svg/60px-Army-POL-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Army-POL-OF-03.svg/60px-Army-POL-OF-03.svg.png'},
+      {nato:'OF-4',name:'Podpułkownik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Army-POL-OF-04.svg/60px-Army-POL-OF-04.svg.png'},
+      {nato:'OF-5',name:'Pułkownik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Army-POL-OF-05.svg/60px-Army-POL-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gen. Brygady',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Army-POL-OF-06.svg/60px-Army-POL-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. Dywizji',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Army-POL-OF-07.svg/60px-Army-POL-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gen. Broni',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Army-POL-OF-08.svg/60px-Army-POL-OF-08.svg.png'},
+      {nato:'OF-9',name:'Generał',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Army-POL-OF-09.svg/60px-Army-POL-OF-09.svg.png'},
+    ],
+  },
+  'Germany': {
+    code:'DEU', flag:'🇩🇪',
+    or:[
+      {nato:'OR-1',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Army-DEU-OR-01.svg/60px-Army-DEU-OR-01.svg.png'},
+      {nato:'OR-2',name:'Gefreiter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Army-DEU-OR-02.svg/60px-Army-DEU-OR-02.svg.png'},
+      {nato:'OR-3',name:'Obergefreiter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Army-DEU-OR-03.svg/60px-Army-DEU-OR-03.svg.png'},
+      {nato:'OR-4',name:'Hauptgefreiter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Army-DEU-OR-04.svg/60px-Army-DEU-OR-04.svg.png'},
+      {nato:'OR-5',name:'Unteroffizier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Army-DEU-OR-05.svg/60px-Army-DEU-OR-05.svg.png'},
+      {nato:'OR-6',name:'Stabsunteroffizier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Army-DEU-OR-06.svg/60px-Army-DEU-OR-06.svg.png'},
+      {nato:'OR-7',name:'Feldwebel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Army-DEU-OR-07.svg/60px-Army-DEU-OR-07.svg.png'},
+      {nato:'OR-8',name:'Oberfeldwebel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-DEU-OR-08.svg/60px-Army-DEU-OR-08.svg.png'},
+      {nato:'OR-9',name:'Hauptfeldwebel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Army-DEU-OR-09.svg/60px-Army-DEU-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Leutnant / Oberleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Army-DEU-OF-01.svg/60px-Army-DEU-OF-01.svg.png'},
+      {nato:'OF-2',name:'Hauptmann',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Army-DEU-OF-02.svg/60px-Army-DEU-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army-DEU-OF-03.svg/60px-Army-DEU-OF-03.svg.png'},
+      {nato:'OF-4',name:'Oberstleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Army-DEU-OF-04.svg/60px-Army-DEU-OF-04.svg.png'},
+      {nato:'OF-5',name:'Oberst',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Army-DEU-OF-05.svg/60px-Army-DEU-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadegeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Army-DEU-OF-06.svg/60px-Army-DEU-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generalmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Army-DEU-OF-07.svg/60px-Army-DEU-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generalleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Army-DEU-OF-08.svg/60px-Army-DEU-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Army-DEU-OF-09.svg/60px-Army-DEU-OF-09.svg.png'},
+    ],
+  },
+  'France': {
+    code:'FRA', flag:'🇫🇷',
+    or:[
+      {nato:'OR-1',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Army-FRA-OR-01.svg/60px-Army-FRA-OR-01.svg.png'},
+      {nato:'OR-2',name:'Soldat 1ère cl.',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Army-FRA-OR-02.svg/60px-Army-FRA-OR-02.svg.png'},
+      {nato:'OR-3',name:'Caporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Army-FRA-OR-03.svg/60px-Army-FRA-OR-03.svg.png'},
+      {nato:'OR-4',name:'Caporal-chef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Army-FRA-OR-04.svg/60px-Army-FRA-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergent',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Army-FRA-OR-05.svg/60px-Army-FRA-OR-05.svg.png'},
+      {nato:'OR-6',name:'Sergent-chef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Army-FRA-OR-06.svg/60px-Army-FRA-OR-06.svg.png'},
+      {nato:'OR-7',name:'Adjudant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Army-FRA-OR-07.svg/60px-Army-FRA-OR-07.svg.png'},
+      {nato:'OR-8',name:'Adjudant-chef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Army-FRA-OR-08.svg/60px-Army-FRA-OR-08.svg.png'},
+      {nato:'OR-9',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Army-FRA-OR-09.svg/60px-Army-FRA-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Sous-lt / Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Army-FRA-OF-01.svg/60px-Army-FRA-OF-01.svg.png'},
+      {nato:'OF-2',name:'Capitaine',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Army-FRA-OF-02.svg/60px-Army-FRA-OF-02.svg.png'},
+      {nato:'OF-3',name:'Commandant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Army-FRA-OF-03.svg/60px-Army-FRA-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt-colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Army-FRA-OF-04.svg/60px-Army-FRA-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Army-FRA-OF-05.svg/60px-Army-FRA-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gén. de brigade',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Army-FRA-OF-06.svg/60px-Army-FRA-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gén. de division',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Army-FRA-OF-07.svg/60px-Army-FRA-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gén. de corps',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-FRA-OF-08.svg/60px-Army-FRA-OF-08.svg.png'},
+      {nato:'OF-9',name:'Gén. armée',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Army-FRA-OF-09.svg/60px-Army-FRA-OF-09.svg.png'},
+    ],
+  },
+  'United Kingdom': {
+    code:'GBR', flag:'🇬🇧',
+    or:[
+      {nato:'OR-1',name:'Private',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Army-GBR-OR-01.svg/60px-Army-GBR-OR-01.svg.png'},
+      {nato:'OR-3',name:'Lance Corporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Army-GBR-OR-03.svg/60px-Army-GBR-OR-03.svg.png'},
+      {nato:'OR-4',name:'Corporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Army-GBR-OR-04.svg/60px-Army-GBR-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Army-GBR-OR-05.svg/60px-Army-GBR-OR-05.svg.png'},
+      {nato:'OR-6',name:'Staff Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Army-GBR-OR-06.svg/60px-Army-GBR-OR-06.svg.png'},
+      {nato:'OR-7',name:'Colour Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Army-GBR-OR-07.svg/60px-Army-GBR-OR-07.svg.png'},
+      {nato:'OR-8',name:'WO2',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Army-GBR-OR-08.svg/60px-Army-GBR-OR-08.svg.png'},
+      {nato:'OR-9',name:'WO1',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Army-GBR-OR-09.svg/60px-Army-GBR-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'2nd Lt / Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Army-GBR-OF-01.svg/60px-Army-GBR-OF-01.svg.png'},
+      {nato:'OF-2',name:'Captain',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-GBR-OF-02.svg/60px-Army-GBR-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Army-GBR-OF-03.svg/60px-Army-GBR-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Army-GBR-OF-04.svg/60px-Army-GBR-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Army-GBR-OF-05.svg/60px-Army-GBR-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Army-GBR-OF-06.svg/60px-Army-GBR-OF-06.svg.png'},
+      {nato:'OF-7',name:'Major General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Army-GBR-OF-07.svg/60px-Army-GBR-OF-07.svg.png'},
+      {nato:'OF-8',name:'Lt General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Army-GBR-OF-08.svg/60px-Army-GBR-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Army-GBR-OF-09.svg/60px-Army-GBR-OF-09.svg.png'},
+      {nato:'OF-10',name:'Field Marshal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Army-GBR-OF-10.svg/60px-Army-GBR-OF-10.svg.png'},
+    ],
+  },
+  'USA': {
+    code:'USA', flag:'🇺🇸',
+    or:[
+      {nato:'OR-1',name:'Private',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Army-USA-OR-01.svg/60px-Army-USA-OR-01.svg.png'},
+      {nato:'OR-2',name:'Private 2',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Army-USA-OR-02.svg/60px-Army-USA-OR-02.svg.png'},
+      {nato:'OR-3',name:'Private 1st Cl.',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Army-USA-OR-03.svg/60px-Army-USA-OR-03.svg.png'},
+      {nato:'OR-4',name:'Specialist',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Army-USA-OR-04.svg/60px-Army-USA-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Army-USA-OR-05.svg/60px-Army-USA-OR-05.svg.png'},
+      {nato:'OR-6',name:'Staff Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Army-USA-OR-06.svg/60px-Army-USA-OR-06.svg.png'},
+      {nato:'OR-7',name:'SFC',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Army-USA-OR-07.svg/60px-Army-USA-OR-07.svg.png'},
+      {nato:'OR-8',name:'Master Sgt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Army-USA-OR-08.svg/60px-Army-USA-OR-08.svg.png'},
+      {nato:'OR-9',name:'Sgt Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Army-USA-OR-09.svg/60px-Army-USA-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'2nd/1st Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Army-USA-OF-01a.svg/60px-Army-USA-OF-01a.svg.png'},
+      {nato:'OF-2',name:'Captain',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Army-USA-OF-02.svg/60px-Army-USA-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Army-USA-OF-03.svg/60px-Army-USA-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Army-USA-OF-04.svg/60px-Army-USA-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Army-USA-OF-05.svg/60px-Army-USA-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brig. General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-USA-OF-06.svg/60px-Army-USA-OF-06.svg.png'},
+      {nato:'OF-7',name:'Maj. General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Army-USA-OF-07.svg/60px-Army-USA-OF-07.svg.png'},
+      {nato:'OF-8',name:'Lt General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Army-USA-OF-08.svg/60px-Army-USA-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-USA-OF-09.svg/60px-Army-USA-OF-09.svg.png'},
+    ],
+  },
+  'Italy': {
+    code:'ITA', flag:'🇮🇹',
+    or:[
+      {nato:'OR-2',name:'Soldato',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Army-ITA-OR-02.svg/60px-Army-ITA-OR-02.svg.png'},
+      {nato:'OR-4',name:'Caporale',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Army-ITA-OR-04.svg/60px-Army-ITA-OR-04.svg.png'},
+      {nato:'OR-5',name:'Cap. Maggiore',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Army-ITA-OR-05.svg/60px-Army-ITA-OR-05.svg.png'},
+      {nato:'OR-6',name:'Sergente',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Army-ITA-OR-06.svg/60px-Army-ITA-OR-06.svg.png'},
+      {nato:'OR-7',name:'Sgt. Maggiore',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Army-ITA-OR-07.svg/60px-Army-ITA-OR-07.svg.png'},
+      {nato:'OR-8',name:'Mar. Ordinario',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Army-ITA-OR-08.svg/60px-Army-ITA-OR-08.svg.png'},
+      {nato:'OR-9',name:'Mar. Capo',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Army-ITA-OR-09.svg/60px-Army-ITA-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Sottotenente/Tenente',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Army-ITA-OF-01.svg/60px-Army-ITA-OF-01.svg.png'},
+      {nato:'OF-2',name:'Capitano',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Army-ITA-OF-02.svg/60px-Army-ITA-OF-02.svg.png'},
+      {nato:'OF-3',name:'Maggiore',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Army-ITA-OF-03.svg/60px-Army-ITA-OF-03.svg.png'},
+      {nato:'OF-4',name:'Ten. Colonnello',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Army-ITA-OF-04.svg/60px-Army-ITA-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonnello',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Army-ITA-OF-05.svg/60px-Army-ITA-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gen. di Brigata',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Army-ITA-OF-06.svg/60px-Army-ITA-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. di Divisione',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Army-ITA-OF-07.svg/60px-Army-ITA-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gen. di Corpo',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Army-ITA-OF-08.svg/60px-Army-ITA-OF-08.svg.png'},
+      {nato:'OF-9',name:'Generale',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Army-ITA-OF-09.svg/60px-Army-ITA-OF-09.svg.png'},
+    ],
+  },
+  'Spain': {
+    code:'ESP', flag:'🇪🇸',
+    or:[
+      {nato:'OR-1',name:'Soldado',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Army-ESP-OR-01.svg/60px-Army-ESP-OR-01.svg.png'},
+      {nato:'OR-2',name:'Soldado 1a',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Army-ESP-OR-02.svg/60px-Army-ESP-OR-02.svg.png'},
+      {nato:'OR-3',name:'Cabo',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Army-ESP-OR-03.svg/60px-Army-ESP-OR-03.svg.png'},
+      {nato:'OR-4',name:'Cabo Primero',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Army-ESP-OR-04.svg/60px-Army-ESP-OR-04.svg.png'},
+      {nato:'OR-5',name:'Cabo Mayor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Army-ESP-OR-05.svg/60px-Army-ESP-OR-05.svg.png'},
+      {nato:'OR-6',name:'Sargento',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Army-ESP-OR-06.svg/60px-Army-ESP-OR-06.svg.png'},
+      {nato:'OR-7',name:'Sgt. Primero',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Army-ESP-OR-07.svg/60px-Army-ESP-OR-07.svg.png'},
+      {nato:'OR-8',name:'Brigada',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Army-ESP-OR-08.svg/60px-Army-ESP-OR-08.svg.png'},
+      {nato:'OR-9',name:'Subteniente',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Army-ESP-OR-09.svg/60px-Army-ESP-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Alférez/Teniente',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Army-ESP-OF-01.svg/60px-Army-ESP-OF-01.svg.png'},
+      {nato:'OF-2',name:'Capitán',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Army-ESP-OF-02.svg/60px-Army-ESP-OF-02.svg.png'},
+      {nato:'OF-3',name:'Comandante',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Army-ESP-OF-03.svg/60px-Army-ESP-OF-03.svg.png'},
+      {nato:'OF-4',name:'Ten. Coronel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Army-ESP-OF-04.svg/60px-Army-ESP-OF-04.svg.png'},
+      {nato:'OF-5',name:'Coronel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Army-ESP-OF-05.svg/60px-Army-ESP-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gen. de Brigada',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Army-ESP-OF-06.svg/60px-Army-ESP-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. de División',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Army-ESP-OF-07.svg/60px-Army-ESP-OF-07.svg.png'},
+      {nato:'OF-8',name:'Ten. General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Army-ESP-OF-08.svg/60px-Army-ESP-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-ESP-OF-09.svg/60px-Army-ESP-OF-09.svg.png'},
+    ],
+  },
+  'Netherlands': {
+    code:'NLD', flag:'🇳🇱',
+    or:[
+      {nato:'OR-1',name:'Soldaat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Army-NLD-OR-01.svg/60px-Army-NLD-OR-01.svg.png'},
+      {nato:'OR-3',name:'Korporaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Army-NLD-OR-03.svg/60px-Army-NLD-OR-03.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Army-NLD-OR-05.svg/60px-Army-NLD-OR-05.svg.png'},
+      {nato:'OR-7',name:'Sgt-majoor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Army-NLD-OR-07.svg/60px-Army-NLD-OR-07.svg.png'},
+      {nato:'OR-8',name:'Adjudant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Army-NLD-OR-08.svg/60px-Army-NLD-OR-08.svg.png'},
+      {nato:'OR-9',name:'Adjudant sr',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Army-NLD-OR-09.svg/60px-Army-NLD-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'2e/1e luitenant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Army-NLD-OF-01.svg/60px-Army-NLD-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapitein',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Army-NLD-OF-02.svg/60px-Army-NLD-OF-02.svg.png'},
+      {nato:'OF-3',name:'Majoor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Army-NLD-OF-03.svg/60px-Army-NLD-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt-kolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Army-NLD-OF-04.svg/60px-Army-NLD-OF-04.svg.png'},
+      {nato:'OF-5',name:'Kolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Army-NLD-OF-05.svg/60px-Army-NLD-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadegeneraal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Army-NLD-OF-06.svg/60px-Army-NLD-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generaal-majoor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Army-NLD-OF-07.svg/60px-Army-NLD-OF-07.svg.png'},
+      {nato:'OF-8',name:'Luitenant-generaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Army-NLD-OF-08.svg/60px-Army-NLD-OF-08.svg.png'},
+      {nato:'OF-9',name:'Generaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Army-NLD-OF-09.svg/60px-Army-NLD-OF-09.svg.png'},
+    ],
+  },
+  'Belgium': {
+    code:'BEL', flag:'🇧🇪',
+    or:[
+      {nato:'OR-2',name:'Soldaat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Army-BEL-OR-02.svg/60px-Army-BEL-OR-02.svg.png'},
+      {nato:'OR-4',name:'Korporaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Army-BEL-OR-04.svg/60px-Army-BEL-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Army-BEL-OR-05.svg/60px-Army-BEL-OR-05.svg.png'},
+      {nato:'OR-7',name:'Adjudant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Army-BEL-OR-07.svg/60px-Army-BEL-OR-07.svg.png'},
+      {nato:'OR-8',name:'Adjudant-chef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Army-BEL-OR-08.svg/60px-Army-BEL-OR-08.svg.png'},
+      {nato:'OR-9',name:'1e meester-chef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Army-BEL-OR-09.svg/60px-Army-BEL-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Onderluitenant/Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Army-BEL-OF-01.svg/60px-Army-BEL-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapitein',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Army-BEL-OF-02.svg/60px-Army-BEL-OF-02.svg.png'},
+      {nato:'OF-3',name:'Majoor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Army-BEL-OF-03.svg/60px-Army-BEL-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt-kolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Army-BEL-OF-04.svg/60px-Army-BEL-OF-04.svg.png'},
+      {nato:'OF-5',name:'Kolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Army-BEL-OF-05.svg/60px-Army-BEL-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadegeneraal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Army-BEL-OF-06.svg/60px-Army-BEL-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generaal-majoor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Army-BEL-OF-07.svg/60px-Army-BEL-OF-07.svg.png'},
+      {nato:'OF-8',name:'Luitenant-generaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Army-BEL-OF-08.svg/60px-Army-BEL-OF-08.svg.png'},
+      {nato:'OF-9',name:'Generaal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Army-BEL-OF-09.svg/60px-Army-BEL-OF-09.svg.png'},
+    ],
+  },
+  'Denmark': {
+    code:'DNK', flag:'🇩🇰',
+    or:[
+      {nato:'OR-1',name:'Menig',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Army-DNK-OR-01.svg/60px-Army-DNK-OR-01.svg.png'},
+      {nato:'OR-2',name:'Overkonstabel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Army-DNK-OR-02.svg/60px-Army-DNK-OR-02.svg.png'},
+      {nato:'OR-3',name:'Korporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Army-DNK-OR-03.svg/60px-Army-DNK-OR-03.svg.png'},
+      {nato:'OR-5',name:'Sergent',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Army-DNK-OR-05.svg/60px-Army-DNK-OR-05.svg.png'},
+      {nato:'OR-7',name:'Sergenantmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Army-DNK-OR-07.svg/60px-Army-DNK-OR-07.svg.png'},
+      {nato:'OR-9',name:'Chefsergenantmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-DNK-OR-09.svg/60px-Army-DNK-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Løjtnant/Premierløjt.',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Army-DNK-OF-01.svg/60px-Army-DNK-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kaptajn',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Army-DNK-OF-02.svg/60px-Army-DNK-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Army-DNK-OF-03.svg/60px-Army-DNK-OF-03.svg.png'},
+      {nato:'OF-4',name:'Oberstløjtnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Army-DNK-OF-04.svg/60px-Army-DNK-OF-04.svg.png'},
+      {nato:'OF-5',name:'Oberst',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Army-DNK-OF-05.svg/60px-Army-DNK-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadegeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Army-DNK-OF-06.svg/60px-Army-DNK-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generalmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Army-DNK-OF-07.svg/60px-Army-DNK-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generalløjtnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Army-DNK-OF-08.svg/60px-Army-DNK-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Army-DNK-OF-09.svg/60px-Army-DNK-OF-09.svg.png'},
+    ],
+  },
+  'Greece': {
+    code:'GRC', flag:'🇬🇷',
+    or:[
+      {nato:'OR-2',name:'Dekaneás',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Army-GRC-OR-02.svg/60px-Army-GRC-OR-02.svg.png'},
+      {nato:'OR-3',name:'Lochías',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Army-GRC-OR-03.svg/60px-Army-GRC-OR-03.svg.png'},
+      {nato:'OR-5',name:'Archilochías',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Army-GRC-OR-05.svg/60px-Army-GRC-OR-05.svg.png'},
+      {nato:'OR-6',name:'Anthypaspistís',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Army-GRC-OR-06.svg/60px-Army-GRC-OR-06.svg.png'},
+      {nato:'OR-9',name:'Anthypaspistís sr',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Army-GRC-OR-09.svg/60px-Army-GRC-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Anthypolochagós',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Army-GRC-OF-01.svg/60px-Army-GRC-OF-01.svg.png'},
+      {nato:'OF-2',name:'Lochagós',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Army-GRC-OF-02.svg/60px-Army-GRC-OF-02.svg.png'},
+      {nato:'OF-3',name:'Tagmatárchis',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Army-GRC-OF-03.svg/60px-Army-GRC-OF-03.svg.png'},
+      {nato:'OF-4',name:'Antisyntagmatárchis',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Army-GRC-OF-04.svg/60px-Army-GRC-OF-04.svg.png'},
+      {nato:'OF-5',name:'Syntagmatárchis',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Army-GRC-OF-05.svg/60px-Army-GRC-OF-05.svg.png'},
+      {nato:'OF-6',name:'Taxíarchos',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Army-GRC-OF-06.svg/60px-Army-GRC-OF-06.svg.png'},
+      {nato:'OF-7',name:'Ypostratigos',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Army-GRC-OF-07.svg/60px-Army-GRC-OF-07.svg.png'},
+      {nato:'OF-8',name:'Antistratigos',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Army-GRC-OF-08.svg/60px-Army-GRC-OF-08.svg.png'},
+      {nato:'OF-9',name:'Stratigos',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Army-GRC-OF-09.svg/60px-Army-GRC-OF-09.svg.png'},
+    ],
+  },
+  'Hungary': {
+    code:'HUN', flag:'🇭🇺',
+    or:[
+      {nato:'OR-1',name:'Honvéd',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Army-HUN-OR-01.svg/60px-Army-HUN-OR-01.svg.png'},
+      {nato:'OR-2',name:'Vez. Honvéd',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Army-HUN-OR-02.svg/60px-Army-HUN-OR-02.svg.png'},
+      {nato:'OR-3',name:'Tizedes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Army-HUN-OR-03.svg/60px-Army-HUN-OR-03.svg.png'},
+      {nato:'OR-5',name:'Őrmester',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Army-HUN-OR-05.svg/60px-Army-HUN-OR-05.svg.png'},
+      {nato:'OR-7',name:'Főtörzsőrmester',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-HUN-OR-07.svg/60px-Army-HUN-OR-07.svg.png'},
+      {nato:'OR-8',name:'Zászlós',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Army-HUN-OR-08.svg/60px-Army-HUN-OR-08.svg.png'},
+      {nato:'OR-9',name:'Törzszászlós',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Army-HUN-OR-09.svg/60px-Army-HUN-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Hadnagy/Főhadnagy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Army-HUN-OF-01.svg/60px-Army-HUN-OF-01.svg.png'},
+      {nato:'OF-2',name:'Százados',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Army-HUN-OF-02.svg/60px-Army-HUN-OF-02.svg.png'},
+      {nato:'OF-3',name:'Őrnagy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Army-HUN-OF-03.svg/60px-Army-HUN-OF-03.svg.png'},
+      {nato:'OF-4',name:'Alezredes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Army-HUN-OF-04.svg/60px-Army-HUN-OF-04.svg.png'},
+      {nato:'OF-5',name:'Ezredes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Army-HUN-OF-05.svg/60px-Army-HUN-OF-05.svg.png'},
+      {nato:'OF-6',name:'Dandártábornok',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Army-HUN-OF-06.svg/60px-Army-HUN-OF-06.svg.png'},
+      {nato:'OF-7',name:'Vezérőrnagy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Army-HUN-OF-07.svg/60px-Army-HUN-OF-07.svg.png'},
+      {nato:'OF-8',name:'Altábornagy',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Army-HUN-OF-08.svg/60px-Army-HUN-OF-08.svg.png'},
+      {nato:'OF-9',name:'Vezérezredes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Army-HUN-OF-09.svg/60px-Army-HUN-OF-09.svg.png'},
+    ],
+  },
+  'Czech Republic': {
+    code:'CZE', flag:'🇨🇿',
+    or:[
+      {nato:'OR-1',name:'Vojín',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Army-CZE-OR-01.svg/60px-Army-CZE-OR-01.svg.png'},
+      {nato:'OR-2',name:'Svobodník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Army-CZE-OR-02.svg/60px-Army-CZE-OR-02.svg.png'},
+      {nato:'OR-3',name:'Desátník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Army-CZE-OR-03.svg/60px-Army-CZE-OR-03.svg.png'},
+      {nato:'OR-5',name:'Rotný',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Army-CZE-OR-05.svg/60px-Army-CZE-OR-05.svg.png'},
+      {nato:'OR-7',name:'Nadrotmistr',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Army-CZE-OR-07.svg/60px-Army-CZE-OR-07.svg.png'},
+      {nato:'OR-8',name:'Praporčík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Army-CZE-OR-08.svg/60px-Army-CZE-OR-08.svg.png'},
+      {nato:'OR-9',name:'Štábní praporčík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Army-CZE-OR-09.svg/60px-Army-CZE-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Poručík/Nadporučík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Army-CZE-OF-01.svg/60px-Army-CZE-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapitán',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Army-CZE-OF-02.svg/60px-Army-CZE-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Army-CZE-OF-03.svg/60px-Army-CZE-OF-03.svg.png'},
+      {nato:'OF-4',name:'Podplukovník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Army-CZE-OF-04.svg/60px-Army-CZE-OF-04.svg.png'},
+      {nato:'OF-5',name:'Plukovník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Army-CZE-OF-05.svg/60px-Army-CZE-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigádní generál',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Army-CZE-OF-06.svg/60px-Army-CZE-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generálmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Army-CZE-OF-07.svg/60px-Army-CZE-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generálporučík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Army-CZE-OF-08.svg/60px-Army-CZE-OF-08.svg.png'},
+      {nato:'OF-9',name:'Armádní generál',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Army-CZE-OF-09.svg/60px-Army-CZE-OF-09.svg.png'},
+    ],
+  },
+  'Romania': {
+    code:'ROU', flag:'🇷🇴',
+    or:[
+      {nato:'OR-1',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Army-ROU-OR-01.svg/60px-Army-ROU-OR-01.svg.png'},
+      {nato:'OR-3',name:'Caporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Army-ROU-OR-03.svg/60px-Army-ROU-OR-03.svg.png'},
+      {nato:'OR-5',name:'Sergent major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Army-ROU-OR-05.svg/60px-Army-ROU-OR-05.svg.png'},
+      {nato:'OR-6',name:'Plutonier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Army-ROU-OR-06.svg/60px-Army-ROU-OR-06.svg.png'},
+      {nato:'OR-8',name:'Plu. adjutant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Army-ROU-OR-08.svg/60px-Army-ROU-OR-08.svg.png'},
+      {nato:'OR-9',name:'Plu. adj. şef',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Army-ROU-OR-09.svg/60px-Army-ROU-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Sublocotenent/Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Army-ROU-OF-01.svg/60px-Army-ROU-OF-01.svg.png'},
+      {nato:'OF-2',name:'Căpitan',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Army-ROU-OF-02.svg/60px-Army-ROU-OF-02.svg.png'},
+      {nato:'OF-3',name:'Maior',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Army-ROU-OF-03.svg/60px-Army-ROU-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Army-ROU-OF-04.svg/60px-Army-ROU-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Army-ROU-OF-05.svg/60px-Army-ROU-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gen. brigadă',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Army-ROU-OF-06.svg/60px-Army-ROU-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. divizie',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Army-ROU-OF-07.svg/60px-Army-ROU-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gen-locotenent',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Army-ROU-OF-08.svg/60px-Army-ROU-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Army-ROU-OF-09.svg/60px-Army-ROU-OF-09.svg.png'},
+    ],
+  },
+  'Bulgaria': {
+    code:'BGR', flag:'🇧🇬',
+    or:[
+      {nato:'OR-1',name:'Войник',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Army-BGR-OR-01.svg/60px-Army-BGR-OR-01.svg.png'},
+      {nato:'OR-2',name:'Ефрейтор',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Army-BGR-OR-02.svg/60px-Army-BGR-OR-02.svg.png'},
+      {nato:'OR-5',name:'Мл. сержант',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Army-BGR-OR-05.svg/60px-Army-BGR-OR-05.svg.png'},
+      {nato:'OR-6',name:'Сержант',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Army-BGR-OR-06.svg/60px-Army-BGR-OR-06.svg.png'},
+      {nato:'OR-7',name:'Ст. сержант',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Army-BGR-OR-07.svg/60px-Army-BGR-OR-07.svg.png'},
+      {nato:'OR-8',name:'Старшина',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Army-BGR-OR-08.svg/60px-Army-BGR-OR-08.svg.png'},
+      {nato:'OR-9',name:'Щабс-старшина',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Army-BGR-OR-09.svg/60px-Army-BGR-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Лейтенант',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Army-BGR-OF-01.svg/60px-Army-BGR-OF-01.svg.png'},
+      {nato:'OF-2',name:'Капитан',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Army-BGR-OF-02.svg/60px-Army-BGR-OF-02.svg.png'},
+      {nato:'OF-3',name:'Майор',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Army-BGR-OF-03.svg/60px-Army-BGR-OF-03.svg.png'},
+      {nato:'OF-4',name:'Подполковник',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Army-BGR-OF-04.svg/60px-Army-BGR-OF-04.svg.png'},
+      {nato:'OF-5',name:'Полковник',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Army-BGR-OF-05.svg/60px-Army-BGR-OF-05.svg.png'},
+      {nato:'OF-6',name:'Бриг. генерал',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Army-BGR-OF-06.svg/60px-Army-BGR-OF-06.svg.png'},
+      {nato:'OF-7',name:'Генерал-майор',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Army-BGR-OF-07.svg/60px-Army-BGR-OF-07.svg.png'},
+      {nato:'OF-8',name:'Генерал-лейт.',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Army-BGR-OF-08.svg/60px-Army-BGR-OF-08.svg.png'},
+      {nato:'OF-9',name:'Генерал',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-BGR-OF-09.svg/60px-Army-BGR-OF-09.svg.png'},
+    ],
+  },
+  'Austria': {
+    code:'AUT', flag:'🇦🇹',
+    or:[
+      {nato:'OR-1',name:'Rekrut',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Army-AUT-OR-01.svg/60px-Army-AUT-OR-01.svg.png'},
+      {nato:'OR-2',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Army-AUT-OR-02.svg/60px-Army-AUT-OR-02.svg.png'},
+      {nato:'OR-3',name:'Gefreiter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Army-AUT-OR-03.svg/60px-Army-AUT-OR-03.svg.png'},
+      {nato:'OR-4',name:'Korporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Army-AUT-OR-04.svg/60px-Army-AUT-OR-04.svg.png'},
+      {nato:'OR-5',name:'Zugsführer',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Army-AUT-OR-05.svg/60px-Army-AUT-OR-05.svg.png'},
+      {nato:'OR-6',name:'Vizeleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Army-AUT-OR-06.svg/60px-Army-AUT-OR-06.svg.png'},
+      {nato:'OR-8',name:'Leutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Army-AUT-OR-08.svg/60px-Army-AUT-OR-08.svg.png'},
+      {nato:'OR-9',name:'Oberleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Army-AUT-OR-09.svg/60px-Army-AUT-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Leutnant/Oberleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Army-AUT-OF-01.svg/60px-Army-AUT-OF-01.svg.png'},
+      {nato:'OF-2',name:'Hauptmann',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Army-AUT-OF-02.svg/60px-Army-AUT-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Army-AUT-OF-03.svg/60px-Army-AUT-OF-03.svg.png'},
+      {nato:'OF-4',name:'Oberstleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Army-AUT-OF-04.svg/60px-Army-AUT-OF-04.svg.png'},
+      {nato:'OF-5',name:'Oberst',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Army-AUT-OF-05.svg/60px-Army-AUT-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Army-AUT-OF-06.svg/60px-Army-AUT-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generalmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Army-AUT-OF-07.svg/60px-Army-AUT-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generalleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Army-AUT-OF-08.svg/60px-Army-AUT-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Army-AUT-OF-09.svg/60px-Army-AUT-OF-09.svg.png'},
+    ],
+  },
+  'Sweden': {
+    code:'SWE', flag:'🇸🇪',
+    or:[
+      {nato:'OR-1',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Army-SWE-OR-01.svg/60px-Army-SWE-OR-01.svg.png'},
+      {nato:'OR-2',name:'Vicekorpral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Army-SWE-OR-02.svg/60px-Army-SWE-OR-02.svg.png'},
+      {nato:'OR-3',name:'Korpral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Army-SWE-OR-03.svg/60px-Army-SWE-OR-03.svg.png'},
+      {nato:'OR-4',name:'Furir',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Army-SWE-OR-04.svg/60px-Army-SWE-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Army-SWE-OR-05.svg/60px-Army-SWE-OR-05.svg.png'},
+      {nato:'OR-8',name:'Fanjunkare',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Army-SWE-OR-08.svg/60px-Army-SWE-OR-08.svg.png'},
+      {nato:'OR-9',name:'Förvaltare',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Army-SWE-OR-09.svg/60px-Army-SWE-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Fänrik/Löjtnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Army-SWE-OF-01.svg/60px-Army-SWE-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapten',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Army-SWE-OF-02.svg/60px-Army-SWE-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Army-SWE-OF-03.svg/60px-Army-SWE-OF-03.svg.png'},
+      {nato:'OF-4',name:'Överstelöjtnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Army-SWE-OF-04.svg/60px-Army-SWE-OF-04.svg.png'},
+      {nato:'OF-5',name:'Överste',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Army-SWE-OF-05.svg/60px-Army-SWE-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadgeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Army-SWE-OF-06.svg/60px-Army-SWE-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generalmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Army-SWE-OF-07.svg/60px-Army-SWE-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generallöjtnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Army-SWE-OF-08.svg/60px-Army-SWE-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Army-SWE-OF-09.svg/60px-Army-SWE-OF-09.svg.png'},
+    ],
+  },
+  'Turkey': {
+    code:'TUR', flag:'🇹🇷',
+    or:[
+      {nato:'OR-4',name:'Er',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Army-TUR-OR-04.svg/60px-Army-TUR-OR-04.svg.png'},
+      {nato:'OR-5',name:'Onbaşı',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Army-TUR-OR-05.svg/60px-Army-TUR-OR-05.svg.png'},
+      {nato:'OR-6',name:'Çavuş',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Army-TUR-OR-06.svg/60px-Army-TUR-OR-06.svg.png'},
+      {nato:'OR-7',name:'Kıd. Çavuş',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Army-TUR-OR-07.svg/60px-Army-TUR-OR-07.svg.png'},
+      {nato:'OR-8',name:'Astsubay Çvş',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Army-TUR-OR-08.svg/60px-Army-TUR-OR-08.svg.png'},
+      {nato:'OR-9',name:'Astsubay Başçvş',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Army-TUR-OR-09.svg/60px-Army-TUR-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Asteğmen/Teğmen',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Army-TUR-OF-01.svg/60px-Army-TUR-OF-01.svg.png'},
+      {nato:'OF-2',name:'Yüzbaşı',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Army-TUR-OF-02.svg/60px-Army-TUR-OF-02.svg.png'},
+      {nato:'OF-3',name:'Binbaşı',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Army-TUR-OF-03.svg/60px-Army-TUR-OF-03.svg.png'},
+      {nato:'OF-4',name:'Yarbay',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Army-TUR-OF-04.svg/60px-Army-TUR-OF-04.svg.png'},
+      {nato:'OF-5',name:'Albay',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Army-TUR-OF-05.svg/60px-Army-TUR-OF-05.svg.png'},
+      {nato:'OF-6',name:'Tuğgeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Army-TUR-OF-06.svg/60px-Army-TUR-OF-06.svg.png'},
+      {nato:'OF-7',name:'Tümgeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Army-TUR-OF-07.svg/60px-Army-TUR-OF-07.svg.png'},
+      {nato:'OF-8',name:'Korgeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Army-TUR-OF-08.svg/60px-Army-TUR-OF-08.svg.png'},
+      {nato:'OF-9',name:'Orgeneral',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Army-TUR-OF-09.svg/60px-Army-TUR-OF-09.svg.png'},
+    ],
+  },
+  'Slovakia': {
+    code:'SVK', flag:'🇸🇰',
+    or:[
+      {nato:'OR-1',name:'Vojak',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Army-SVK-OR-01.svg/60px-Army-SVK-OR-01.svg.png'},
+      {nato:'OR-2',name:'Slobodník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Army-SVK-OR-02.svg/60px-Army-SVK-OR-02.svg.png'},
+      {nato:'OR-3',name:'Desiatnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Army-SVK-OR-03.svg/60px-Army-SVK-OR-03.svg.png'},
+      {nato:'OR-5',name:'Rotný',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Army-SVK-OR-05.svg/60px-Army-SVK-OR-05.svg.png'},
+      {nato:'OR-7',name:'Nadrotmajster',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Army-SVK-OR-07.svg/60px-Army-SVK-OR-07.svg.png'},
+      {nato:'OR-8',name:'Zástavník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Army-SVK-OR-08.svg/60px-Army-SVK-OR-08.svg.png'},
+      {nato:'OR-9',name:'Štábny zástavník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Army-SVK-OR-09.svg/60px-Army-SVK-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Podporučík/Poručík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Army-SVK-OF-01.svg/60px-Army-SVK-OF-01.svg.png'},
+      {nato:'OF-2',name:'Nadporučík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Army-SVK-OF-02.svg/60px-Army-SVK-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Army-SVK-OF-03.svg/60px-Army-SVK-OF-03.svg.png'},
+      {nato:'OF-4',name:'Podplukovník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Army-SVK-OF-04.svg/60px-Army-SVK-OF-04.svg.png'},
+      {nato:'OF-5',name:'Plukovník',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Army-SVK-OF-05.svg/60px-Army-SVK-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigádny generál',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-SVK-OF-06.svg/60px-Army-SVK-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generálmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Army-SVK-OF-07.svg/60px-Army-SVK-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generálporučík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Army-SVK-OF-08.svg/60px-Army-SVK-OF-08.svg.png'},
+      {nato:'OF-9',name:'Armádny generál',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Army-SVK-OF-09.svg/60px-Army-SVK-OF-09.svg.png'},
+    ],
+  },
+  'Slovenia': {
+    code:'SVN', flag:'🇸🇮',
+    or:[
+      {nato:'OR-2',name:'Vojak',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Army-SVN-OR-02.svg/60px-Army-SVN-OR-02.svg.png'},
+      {nato:'OR-3',name:'Desetnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Army-SVN-OR-03.svg/60px-Army-SVN-OR-03.svg.png'},
+      {nato:'OR-5',name:'Višji vojak',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Army-SVN-OR-05.svg/60px-Army-SVN-OR-05.svg.png'},
+      {nato:'OR-6',name:'Narednik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Army-SVN-OR-06.svg/60px-Army-SVN-OR-06.svg.png'},
+      {nato:'OR-8',name:'Štabni narednik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Army-SVN-OR-08.svg/60px-Army-SVN-OR-08.svg.png'},
+      {nato:'OR-9',name:'Praporščak',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Army-SVN-OR-09.svg/60px-Army-SVN-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Poročnik/Nadporočnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Army-SVN-OF-01.svg/60px-Army-SVN-OF-01.svg.png'},
+      {nato:'OF-2',name:'Stotnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Army-SVN-OF-02.svg/60px-Army-SVN-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Army-SVN-OF-03.svg/60px-Army-SVN-OF-03.svg.png'},
+      {nato:'OF-4',name:'Podpolkovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Army-SVN-OF-04.svg/60px-Army-SVN-OF-04.svg.png'},
+      {nato:'OF-5',name:'Polkovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Army-SVN-OF-05.svg/60px-Army-SVN-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadir',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Army-SVN-OF-06.svg/60px-Army-SVN-OF-06.svg.png'},
+      {nato:'OF-7',name:'Generalmajor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Army-SVN-OF-07.svg/60px-Army-SVN-OF-07.svg.png'},
+      {nato:'OF-8',name:'Generalporočnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Army-SVN-OF-08.svg/60px-Army-SVN-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Army-SVN-OF-09.svg/60px-Army-SVN-OF-09.svg.png'},
+    ],
+  },
+  'Albania': {
+    code:'ALB', flag:'🇦🇱',
+    or:[
+      {nato:'OR-1',name:'Ushtar',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Army-ALB-OR-01.svg/60px-Army-ALB-OR-01.svg.png'},
+      {nato:'OR-2',name:'Ushtar i parë',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Army-ALB-OR-02.svg/60px-Army-ALB-OR-02.svg.png'},
+      {nato:'OR-3',name:'Kaplar',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Army-ALB-OR-03.svg/60px-Army-ALB-OR-03.svg.png'},
+      {nato:'OR-5',name:'Rreshter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Army-ALB-OR-05.svg/60px-Army-ALB-OR-05.svg.png'},
+      {nato:'OR-7',name:'Togër i parë',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Army-ALB-OR-07.svg/60px-Army-ALB-OR-07.svg.png'},
+      {nato:'OR-8',name:'Nëntoger',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Army-ALB-OR-08.svg/60px-Army-ALB-OR-08.svg.png'},
+      {nato:'OR-9',name:'Nëntoger i parë',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Army-ALB-OR-09.svg/60px-Army-ALB-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Toger/Toger i parë',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Army-ALB-OF-01.svg/60px-Army-ALB-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapiten',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Army-ALB-OF-02.svg/60px-Army-ALB-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Army-ALB-OF-03.svg/60px-Army-ALB-OF-03.svg.png'},
+      {nato:'OF-4',name:'Nënkolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Army-ALB-OF-04.svg/60px-Army-ALB-OF-04.svg.png'},
+      {nato:'OF-5',name:'Kolonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Army-ALB-OF-05.svg/60px-Army-ALB-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gjen. brigade',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Army-ALB-OF-06.svg/60px-Army-ALB-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gjen. divizioni',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Army-ALB-OF-07.svg/60px-Army-ALB-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gjen. korpusi',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Army-ALB-OF-08.svg/60px-Army-ALB-OF-08.svg.png'},
+      {nato:'OF-9',name:'Gjen. armate',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Army-ALB-OF-09.svg/60px-Army-ALB-OF-09.svg.png'},
+    ],
+  },
+  'Ireland': {
+    code:'IRL', flag:'🇮🇪',
+    or:[
+      {nato:'OR-2',name:'Private',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Army-IRL-OR-02.svg/60px-Army-IRL-OR-02.svg.png'},
+      {nato:'OR-4',name:'Corporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Army-IRL-OR-04.svg/60px-Army-IRL-OR-04.svg.png'},
+      {nato:'OR-5',name:'Sergeant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Army-IRL-OR-05.svg/60px-Army-IRL-OR-05.svg.png'},
+      {nato:'OR-6',name:'Company Sgt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Army-IRL-OR-06.svg/60px-Army-IRL-OR-06.svg.png'},
+      {nato:'OR-8',name:'Coy Sgt Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Army-IRL-OR-08.svg/60px-Army-IRL-OR-08.svg.png'},
+      {nato:'OR-9',name:'Sergeant Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Army-IRL-OR-09.svg/60px-Army-IRL-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'2nd Lt / Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Army-IRL-OF-01.svg/60px-Army-IRL-OF-01.svg.png'},
+      {nato:'OF-2',name:'Captain',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Army-IRL-OF-02.svg/60px-Army-IRL-OF-02.svg.png'},
+      {nato:'OF-3',name:'Commandant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Army-IRL-OF-03.svg/60px-Army-IRL-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army-IRL-OF-04.svg/60px-Army-IRL-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Army-IRL-OF-05.svg/60px-Army-IRL-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brig. General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Army-IRL-OF-06.svg/60px-Army-IRL-OF-06.svg.png'},
+      {nato:'OF-7',name:'Major General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Army-IRL-OF-07.svg/60px-Army-IRL-OF-07.svg.png'},
+      {nato:'OF-8',name:'Lt General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Army-IRL-OF-08.svg/60px-Army-IRL-OF-08.svg.png'},
+    ],
+  },
+  'Portugal': {
+    code:'PRT', flag:'🇵🇹',
+    or:[
+      {nato:'OR-3',name:'Soldado',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Army-PRT-OR-03.svg/60px-Army-PRT-OR-03.svg.png'},
+      {nato:'OR-4',name:'Cabo',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Army-PRT-OR-04.svg/60px-Army-PRT-OR-04.svg.png'},
+      {nato:'OR-6',name:'Furriel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Army-PRT-OR-06.svg/60px-Army-PRT-OR-06.svg.png'},
+      {nato:'OR-8',name:'Sargento',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Army-PRT-OR-08.svg/60px-Army-PRT-OR-08.svg.png'},
+      {nato:'OR-9',name:'Sargento-ajudante',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Army-PRT-OR-09.svg/60px-Army-PRT-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Aspirante/Alferes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Army-PRT-OF-01.svg/60px-Army-PRT-OF-01.svg.png'},
+      {nato:'OF-2',name:'Tenente',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Army-PRT-OF-02.svg/60px-Army-PRT-OF-02.svg.png'},
+      {nato:'OF-3',name:'Capitão',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Army-PRT-OF-03.svg/60px-Army-PRT-OF-03.svg.png'},
+      {nato:'OF-4',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Army-PRT-OF-04.svg/60px-Army-PRT-OF-04.svg.png'},
+      {nato:'OF-5',name:'Tenente-coronel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Army-PRT-OF-05.svg/60px-Army-PRT-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadeiro',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Army-PRT-OF-06.svg/60px-Army-PRT-OF-06.svg.png'},
+      {nato:'OF-7',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Army-PRT-OF-07.svg/60px-Army-PRT-OF-07.svg.png'},
+      {nato:'OF-8',name:'Ten-general',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Army-PRT-OF-08.svg/60px-Army-PRT-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Army-PRT-OF-09.svg/60px-Army-PRT-OF-09.svg.png'},
+    ],
+  },
+  'North Macedonia': {
+    code:'MKD', flag:'🇲🇰',
+    or:[
+      {nato:'OR-1',name:'Vojnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Army-MKD-OR-01.svg/60px-Army-MKD-OR-01.svg.png'},
+      {nato:'OR-2',name:'Desetar',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Army-MKD-OR-02.svg/60px-Army-MKD-OR-02.svg.png'},
+      {nato:'OR-3',name:'Vodnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Army-MKD-OR-03.svg/60px-Army-MKD-OR-03.svg.png'},
+      {nato:'OR-5',name:'Narednik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Army-MKD-OR-05.svg/60px-Army-MKD-OR-05.svg.png'},
+      {nato:'OR-8',name:'Zastavnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Army-MKD-OR-08.svg/60px-Army-MKD-OR-08.svg.png'},
+      {nato:'OR-9',name:'Štabni zastavnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Army-MKD-OR-09.svg/60px-Army-MKD-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Podporučnik/Poručnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Army-MKD-OF-01.svg/60px-Army-MKD-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapetan',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Army-MKD-OF-02.svg/60px-Army-MKD-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Army-MKD-OF-03.svg/60px-Army-MKD-OF-03.svg.png'},
+      {nato:'OF-4',name:'Potpukovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Army-MKD-OF-04.svg/60px-Army-MKD-OF-04.svg.png'},
+      {nato:'OF-5',name:'Pukovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Army-MKD-OF-05.svg/60px-Army-MKD-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadir',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Army-MKD-OF-06.svg/60px-Army-MKD-OF-06.svg.png'},
+      {nato:'OF-7',name:'General-major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Army-MKD-OF-07.svg/60px-Army-MKD-OF-07.svg.png'},
+      {nato:'OF-8',name:'General-poručnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Army-MKD-OF-08.svg/60px-Army-MKD-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Army-MKD-OF-09.svg/60px-Army-MKD-OF-09.svg.png'},
+    ],
+  },
+  'Bosnia &amp; Herc.': {
+    code:'BIH', flag:'🇧🇦',
+    or:[
+      {nato:'OR-1',name:'Vojnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Army-BIH-OR-01.svg/60px-Army-BIH-OR-01.svg.png'},
+      {nato:'OR-2',name:'Razvodnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Army-BIH-OR-02.svg/60px-Army-BIH-OR-02.svg.png'},
+      {nato:'OR-5',name:'Narednik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Army-BIH-OR-05.svg/60px-Army-BIH-OR-05.svg.png'},
+      {nato:'OR-7',name:'Štabni narednik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Army-BIH-OR-07.svg/60px-Army-BIH-OR-07.svg.png'},
+      {nato:'OR-8',name:'Zastavnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Army-BIH-OR-08.svg/60px-Army-BIH-OR-08.svg.png'},
+      {nato:'OR-9',name:'St. zastavnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Army-BIH-OR-09.svg/60px-Army-BIH-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Potporučnik/Poručnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Army-BIH-OF-01.svg/60px-Army-BIH-OF-01.svg.png'},
+      {nato:'OF-2',name:'Kapetan',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Army-BIH-OF-02.svg/60px-Army-BIH-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Army-BIH-OF-03.svg/60px-Army-BIH-OF-03.svg.png'},
+      {nato:'OF-4',name:'Potpukovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Army-BIH-OF-04.svg/60px-Army-BIH-OF-04.svg.png'},
+      {nato:'OF-5',name:'Pukovnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Army-BIH-OF-05.svg/60px-Army-BIH-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadir',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Army-BIH-OF-06.svg/60px-Army-BIH-OF-06.svg.png'},
+      {nato:'OF-7',name:'General-major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Army-BIH-OF-07.svg/60px-Army-BIH-OF-07.svg.png'},
+      {nato:'OF-8',name:'General-poručnik',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Army-BIH-OF-08.svg/60px-Army-BIH-OF-08.svg.png'},
+    ],
+  },
+  'Moldova': {
+    code:'MDA', flag:'🇲🇩',
+    or:[
+      {nato:'OR-1',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Army-MDA-OR-01.svg/60px-Army-MDA-OR-01.svg.png'},
+      {nato:'OR-3',name:'Caporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Army-MDA-OR-03.svg/60px-Army-MDA-OR-03.svg.png'},
+      {nato:'OR-5',name:'Sergent-major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Army-MDA-OR-05.svg/60px-Army-MDA-OR-05.svg.png'},
+      {nato:'OR-6',name:'Plutonier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Army-MDA-OR-06.svg/60px-Army-MDA-OR-06.svg.png'},
+      {nato:'OR-8',name:'Adjutant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Army-MDA-OR-08.svg/60px-Army-MDA-OR-08.svg.png'},
+      {nato:'OR-9',name:'Adjutant superior',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Army-MDA-OR-09.svg/60px-Army-MDA-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Sublocotenent/Lt',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Army-MDA-OF-01.svg/60px-Army-MDA-OF-01.svg.png'},
+      {nato:'OF-2',name:'Căpitan',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Army-MDA-OF-02.svg/60px-Army-MDA-OF-02.svg.png'},
+      {nato:'OF-3',name:'Maior',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Army-MDA-OF-03.svg/60px-Army-MDA-OF-03.svg.png'},
+      {nato:'OF-4',name:'Lt-colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Army-MDA-OF-04.svg/60px-Army-MDA-OF-04.svg.png'},
+      {nato:'OF-5',name:'Colonel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Army-MDA-OF-05.svg/60px-Army-MDA-OF-05.svg.png'},
+      {nato:'OF-6',name:'Gen. brigadă',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Army-MDA-OF-06.svg/60px-Army-MDA-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. divizie',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Army-MDA-OF-07.svg/60px-Army-MDA-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gen. corp',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Army-MDA-OF-08.svg/60px-Army-MDA-OF-08.svg.png'},
+    ],
+  },
+  'Chile': {
+    code:'CHL', flag:'🇨🇱',
+    or:[
+      {nato:'OR-3',name:'Soldado',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Army-CHL-OR-03.svg/60px-Army-CHL-OR-03.svg.png'},
+      {nato:'OR-4',name:'Cabo 2',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Army-CHL-OR-04.svg/60px-Army-CHL-OR-04.svg.png'},
+      {nato:'OR-5',name:'Cabo 1',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Army-CHL-OR-05.svg/60px-Army-CHL-OR-05.svg.png'},
+      {nato:'OR-7',name:'Sargento 1',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Army-CHL-OR-07.svg/60px-Army-CHL-OR-07.svg.png'},
+      {nato:'OR-8',name:'Sargento mayor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Army-CHL-OR-08.svg/60px-Army-CHL-OR-08.svg.png'},
+      {nato:'OR-9',name:'Suboficial',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Army-CHL-OR-09.svg/60px-Army-CHL-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Alférez/Teniente 2',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Army-CHL-OF-01.svg/60px-Army-CHL-OF-01.svg.png'},
+      {nato:'OF-2',name:'Teniente 1',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Army-CHL-OF-02.svg/60px-Army-CHL-OF-02.svg.png'},
+      {nato:'OF-3',name:'Capitán',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Army-CHL-OF-03.svg/60px-Army-CHL-OF-03.svg.png'},
+      {nato:'OF-4',name:'Mayor',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Army-CHL-OF-04.svg/60px-Army-CHL-OF-04.svg.png'},
+      {nato:'OF-5',name:'Ten. Coronel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Army-CHL-OF-05.svg/60px-Army-CHL-OF-05.svg.png'},
+      {nato:'OF-6',name:'Coronel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Army-CHL-OF-06.svg/60px-Army-CHL-OF-06.svg.png'},
+      {nato:'OF-7',name:'Gen. Brigada',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Army-CHL-OF-07.svg/60px-Army-CHL-OF-07.svg.png'},
+      {nato:'OF-8',name:'Gen. División',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Army-CHL-OF-08.svg/60px-Army-CHL-OF-08.svg.png'},
+      {nato:'OF-9',name:'Gen. Ejército',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Army-CHL-OF-09.svg/60px-Army-CHL-OF-09.svg.png'},
+    ],
+  },
+  'Switzerland': {
+    code:'CHE', flag:'🇨🇭',
+    or:[
+      {nato:'OR-2',name:'Soldat',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Army-CHE-OR-02.svg/60px-Army-CHE-OR-02.svg.png'},
+      {nato:'OR-3',name:'Gefreiter',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Army-CHE-OR-03.svg/60px-Army-CHE-OR-03.svg.png'},
+      {nato:'OR-4',name:'Korporal',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Army-CHE-OR-04.svg/60px-Army-CHE-OR-04.svg.png'},
+      {nato:'OR-6',name:'Wachtmeister',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Army-CHE-OR-06.svg/60px-Army-CHE-OR-06.svg.png'},
+      {nato:'OR-8',name:'Feldweibel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Army-CHE-OR-08.svg/60px-Army-CHE-OR-08.svg.png'},
+      {nato:'OR-9',name:'Hauptfeldweibel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Army-CHE-OR-09.svg/60px-Army-CHE-OR-09.svg.png'},
+    ],
+    of:[
+      {nato:'OF-1',name:'Leutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army-CHE-OF-01.svg/60px-Army-CHE-OF-01.svg.png'},
+      {nato:'OF-2',name:'Oberleutnant/Hptm',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Army-CHE-OF-02.svg/60px-Army-CHE-OF-02.svg.png'},
+      {nato:'OF-3',name:'Major',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Army-CHE-OF-03.svg/60px-Army-CHE-OF-03.svg.png'},
+      {nato:'OF-4',name:'Oberstleutnant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Army-CHE-OF-04.svg/60px-Army-CHE-OF-04.svg.png'},
+      {nato:'OF-5',name:'Oberst',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Army-CHE-OF-05.svg/60px-Army-CHE-OF-05.svg.png'},
+      {nato:'OF-6',name:'Brigadier',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Army-CHE-OF-06.svg/60px-Army-CHE-OF-06.svg.png'},
+      {nato:'OF-7',name:'Divisionär',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Army-CHE-OF-07.svg/60px-Army-CHE-OF-07.svg.png'},
+      {nato:'OF-8',name:'Korpskommandant',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Army-CHE-OF-08.svg/60px-Army-CHE-OF-08.svg.png'},
+      {nato:'OF-9',name:'General',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Army-CHE-OF-09.svg/60px-Army-CHE-OF-09.svg.png'},
+    ],
+  },
+};
+
+let currentRankCountry = Object.keys(ranksData)[0];
+
+function renderRankCountryBtns(){
+  const c = document.getElementById('rankCountryBtns');
+  if(!c) return;
+  c.innerHTML = Object.keys(ranksData).map(k=>`
+    <span class="filter-chip${k===currentRankCountry?' active':''}" 
+      onclick="selectRankCountry('${k}')" style="font-size:11px;white-space:nowrap">
+      ${ranksData[k].flag} ${k}
+    </span>`).join('');
+}
+
+function selectRankCountry(country){
+  currentRankCountry = country;
+  renderRankCountryBtns();
+  renderRanks();
+}
+
+function renderRanks(){
+  const d = document.getElementById('rankDisplay');
+  if(!d) return;
+  const data = ranksData[currentRankCountry];
+  if(!data){d.innerHTML='';return;}
+
+  const makeGrid = (ranks) => ranks.map((r,i)=>`
+    <div class="rank-cell">
+      <img src="${r.img}" alt="${r.nato}" 
+        onerror="this.outerHTML='<div class=\\'rank-img-err\\'>🎖️</div>'"
+        loading="lazy">
+      <div class="rc-nato">${r.nato}</div>
+      <div class="rc-name">${r.name}</div>
+    </div>`).join('');
+
+  d.innerHTML = `
+    <div class="rank-country-header">
+      <span class="rank-flag">${data.flag}</span>
+      <div>
+        <div class="rank-country-name">${currentRankCountry}</div>
+        <div class="rank-country-code">${data.code} · ARMY</div>
+      </div>
+    </div>
+    <div class="rank-section">
+      <div class="rank-section-title">
+        <span style="color:var(--text3)">——</span> Other Ranks (OR)
+      </div>
+      <div class="rank-grid">${makeGrid(data.or)}</div>
+    </div>
+    <div class="rank-section">
+      <div class="rank-section-title">
+        <span style="color:var(--accent)">——</span> Officers (OF)
+      </div>
+      <div class="rank-grid">${makeGrid(data.of)}</div>
+    </div>`;
+}
+
+// init ranks when tab activated
+const _origSwitchSub = switchSub;
+function switchSub(tabId, subId, btn){
+  _origSwitchSub(tabId, subId, btn);
+  if(subId === 'sub-ranks'){
+    renderRankCountryBtns();
+    renderRanks();
+  }
+}
 try{const s=localStorage.getItem('alertState');if(s)setAlert(s);}catch(e){}
 </script>
 </body>
