@@ -1,7 +1,7 @@
-
-const { put, get, list } = require('@vercel/blob');
+const { put, list, del } = require('@vercel/blob');
 
 const ROSTER_KEY = 'imp-roster.json';
+const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,14 +9,14 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // GET — fetch current roster
+  // GET
   if (req.method === 'GET') {
     try {
-      const { blobs } = await list({ prefix: ROSTER_KEY, token: process.env.BLOB_READ_WRITE_TOKEN });
-      if (!blobs.length) return res.status(200).json({ roster: {}, week: null });
-
-      // Get latest blob
-      const latest = blobs.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))[0];
+      const { blobs } = await list({ prefix: ROSTER_KEY, token: TOKEN });
+      if (!blobs || !blobs.length) {
+        return res.status(200).json({ roster: {}, week: null });
+      }
+      const latest = blobs[0];
       const response = await fetch(latest.url);
       const data = await response.json();
       return res.status(200).json(data);
@@ -26,18 +26,35 @@ module.exports = async (req, res) => {
     }
   }
 
-  // POST — save roster
+  // POST
   if (req.method === 'POST') {
     try {
       const { roster, week } = req.body;
-      const data = JSON.stringify({ roster, week, updatedAt: new Date().toISOString() });
-      const blob = new Blob([data], { type: 'application/json' });
+      if (!roster) return res.status(400).json({ error: 'Missing roster' });
 
-      await put(ROSTER_KEY, blob, {
-        access: 'public',
-        token: process.env.BLOB_READ_WRITE_TOKEN,
-        addRandomSuffix: false,
+      const payload = JSON.stringify({
+        roster,
+        week,
+        updatedAt: new Date().toISOString()
       });
+
+      // Delete old blob first
+      try {
+        const { blobs } = await list({ prefix: ROSTER_KEY, token: TOKEN });
+        for (const b of blobs) await del(b.url, { token: TOKEN });
+      } catch(e) {
+        console.warn('Delete old blob failed:', e.message);
+      }
+
+      // Save new blob
+      const { url } = await put(ROSTER_KEY, payload, {
+        access: 'public',
+        token: TOKEN,
+        addRandomSuffix: false,
+        contentType: 'application/json',
+      });
+
+      console.log('Roster saved to:', url);
 
       // Notify via Pusher
       try {
@@ -49,12 +66,15 @@ module.exports = async (req, res) => {
           cluster: process.env.PUSHER_CLUSTER,
           useTLS: true,
         });
-        await pusher.trigger('imp-compass', 'roster-update', { week, updatedAt: new Date().toISOString() });
+        await pusher.trigger('imp-compass', 'roster-update', {
+          week,
+          updatedAt: new Date().toISOString()
+        });
       } catch (e) {
         console.warn('Pusher notify failed:', e.message);
       }
 
-      return res.status(200).json({ ok: true });
+      return res.status(200).json({ ok: true, url });
     } catch (err) {
       console.error('POST error:', err);
       return res.status(500).json({ error: err.message });
