@@ -899,7 +899,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="19" cy="17" r="3"/><path d="M21.5 20.5l-1.5-1.5"/></svg>
     Lookup
   </button>
-  <button class="nav-btn" data-tab="roster" onclick="switchTab('roster',this);loadRoster().then(()=>renderRoster())">
+  <button class="nav-btn" data-tab="roster" onclick="switchTab('roster',this);loadRoster()">
     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/></svg>
     Roster
   </button>
@@ -3337,7 +3337,6 @@ function logout(){
   localStorage.removeItem('imp_session');
   localStorage.removeItem('imp_user_id');
   currentUserId = null;
-  rosterData = {};
   loginSelectedUnit = '';
   loginPinBuffer = '';
   document.getElementById('loginStep1').style.display = 'block';
@@ -3414,13 +3413,10 @@ async function loadRoster(){
     return;
   }
 
-  // Only render if roster tab is visible
-  const tab = document.getElementById('tab-roster');
-  if(tab && tab.classList.contains('active')) renderRoster();
-
-  // Update week label if visible
+  // Always render after successful fetch
   const label = document.getElementById('rosterWeekLabel');
   if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+  renderRoster();
 }
 
 function renderRoster(){
@@ -3566,8 +3562,9 @@ function initRosterPusher(){
 
 // Check session on load
 checkSession();
-initRosterPusher();
 try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
+// Init roster pusher after session
+setTimeout(initRosterPusher, 3000);
 </script>
 
 <!-- RANK MODAL -->
