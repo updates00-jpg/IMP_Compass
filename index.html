@@ -3250,7 +3250,7 @@ function unlockApp(){
   // Update header badge
   const badge = document.getElementById('userBadge');
   if(badge){
-    badge.innerHTML = currentUserId + ' <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+    badge.innerHTML = currentUserId + ' <i class="fa-solid fa-arrow-right-from-bracket" style="font-size:9px"></i>';
     badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
     badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
   }
@@ -3258,6 +3258,8 @@ function unlockApp(){
   if(currentUserId !== 'Admin'){
     navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
   }
+  // Load roster data from server
+  loadRoster();
   // Auto-logout after 2h
   setTimeout(()=>{
     alert('Session expired. Please log in again.');
@@ -3335,6 +3337,7 @@ function logout(){
   localStorage.removeItem('imp_session');
   localStorage.removeItem('imp_user_id');
   currentUserId = null;
+  rosterData = {};
   loginSelectedUnit = '';
   loginPinBuffer = '';
   document.getElementById('loginStep1').style.display = 'block';
