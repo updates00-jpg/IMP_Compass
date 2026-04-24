@@ -393,6 +393,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <button class="login-unit-btn" onclick="loginSelectUnit('IMP-14')">IMP-14</button>
       <button class="login-unit-btn" onclick="loginSelectUnit('IMP-15')">IMP-15</button>
     </div>
+    <div style="margin-top:10px">
+      <button class="login-unit-btn" onclick="loginSelectUnit('Admin')"
+        style="width:100%;background:var(--surface3);border-color:var(--accent);color:var(--accent)">
+        ⚙️ Admin
+      </button>
+    </div>
   </div>
 
   <!-- Step 2: PIN entry -->
@@ -439,9 +445,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <button onclick="openGSearch()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text3);display:flex;align-items:center">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
-    <span id="userBadge" onclick="logout()"
-      style="font-family:var(--mono);font-size:10px;color:var(--text3);cursor:pointer;border:1px solid var(--border);border-radius:3px;padding:2px 6px;letter-spacing:.5px"
-      title="Tap to logout"></span>
+    <span id="userBadge" onclick="confirmLogout()"
+      style="font-family:var(--mono);font-size:10px;color:var(--text3);cursor:pointer;border:1px solid var(--border);border-radius:3px;padding:2px 6px;letter-spacing:.5px;display:flex;align-items:center;gap:4px"
+      title="Tap to logout">
+    </span>
     <span class="alert-badge alert-bravo" id="alertBadge" onclick="openAlertModal()">BRAVO</span>
     <span class="clock" id="clock">--:--</span>
   </div>
@@ -1018,87 +1025,68 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <div class="modal-overlay" id="alertModal" onclick="if(event.target===this)closeAlertModal()">
   <div class="modal-sheet">
     <div class="modal-title">Alert States — Camp Butmir <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
-
-    <div class="alert-row a-bravo">
-      <div class="alert-row-title">BRAVO</div>
-      <div class="alert-row-text">All personnel comply with Dress/Weapon Code, Vehicle movement code, Walking out code.</div>
-      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-        <div style="font-size:10px;font-weight:700;color:#4caf50;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-        <div style="font-size:12px;color:var(--text2)">• Conduct regular patrols inside and around the base ICCW HQ CAMP CMDT.</div>
-      </div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+      <button id="atab-bravo" onclick="switchAlertTab('bravo')" style="flex:1;padding:10px 4px;background:#0d1f0d;border:none;color:#4caf50;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">BRAVO</button>
+      <button id="atab-charlie" onclick="switchAlertTab('charlie')" style="flex:1;padding:10px 4px;background:#1f1000;border:none;color:var(--warn);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">CHARLIE</button>
+      <button id="atab-delta" onclick="switchAlertTab('delta')" style="flex:1;padding:10px 4px;background:#1f0000;border:none;color:var(--danger);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px">DELTA</button>
     </div>
 
-    <div class="alert-row a-charlie">
-      <div class="alert-row-title">CHARLIE</div>
-      <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div>
-      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>
-          • Implement Alternate gate procedure if Main gate closed.
-        </div>
-        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Notify JOC on alert state change for FPG.<br>
-          • Establish HQ CAMP CMDT TOC.<br>
-          • Request JOC to activate MNBN units to reinforce protection CB.<br>
-          • Evacuate Claims Office and close public parking area IVO Claim Office.<br>
-          • Evacuate German NSE to Camp Butmir.
-        </div>
-        <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Comply with Dress/Weapon/Vehicle/Walking out codes.<br>
-          • Direct change G→J/K: fully equipped within <strong style="color:var(--warn)">60 minutes</strong>.<br>
-          • Limit non-essential activities outside Camp Butmir.
+    <div id="acontent-bravo" class="alert-tab-content">
+      <div class="alert-row a-bravo">
+        <div class="alert-row-title">BRAVO</div>
+        <div class="alert-row-text">All personnel comply with Dress/Weapon Code, Vehicle movement code, Walking out code.</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:#4caf50;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2)">• Conduct regular patrols inside and around the base ICCW HQ CAMP CMDT.</div>
         </div>
       </div>
     </div>
 
-    <div class="alert-row a-delta">
-      <div class="alert-row-title">DELTA</div>
-      <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div>
-      <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>
-          • Implement Alternate gate procedure — Main gate closed.
+    <div id="acontent-charlie" class="alert-tab-content" style="display:none">
+      <div class="alert-row a-charlie">
+        <div class="alert-row-title">CHARLIE</div>
+        <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure if Main gate closed.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office and close public parking area IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--warn)">60 minutes</strong>.<br>• Limit non-essential activities outside Camp Butmir.</div>
         </div>
-        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Notify JOC on alert state change for FPG.<br>
-          • Establish HQ CAMP CMDT TOC.<br>
-          • Request JOC to activate MNBN units to reinforce protection CB.<br>
-          • Evacuate Claims Office and close public parking area IVO Claim Office.<br>
-          • Evacuate German NSE to Camp Butmir.<br>
-          • Request surveillance by UAV from MNBN assets (if required).
-        </div>
-        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">MNBN COM will:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Send MNBN LNO to HQ CMDT TOC.<br>
-          • Activate CB protection IAW plan in Annex G.<br>
-          • Provide UAV from MNBN assets (if required).
-        </div>
-        <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7">
-          • Comply with current Dress/Weapon code, Vehicle movement code and Walking out code.<br>
-          • Direct change G→J/K: fully equipped within <strong style="color:var(--danger)">60 minutes</strong>.<br>
-          • EUFOR/NHQ Sa civilian staff follow orders of branch chiefs.<br>
-          • Local civilian staff informed through HQ CAMP CMDT TOC.<br>
-          • Limit all non-essential activities outside Camp Butmir.
+      </div>
+    </div>
+
+    <div id="acontent-delta" class="alert-tab-content" style="display:none">
+      <div class="alert-row a-delta">
+        <div class="alert-row-title">DELTA</div>
+        <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure — Main gate closed.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office, close public parking IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.<br>• Request surveillance by UAV from MNBN assets (if required).</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">MNBN COM will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Send MNBN LNO to HQ CMDT TOC.<br>• Activate CB protection IAW plan in Annex G.<br>• Provide UAV from MNBN assets (if required).</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--danger)">60 minutes</strong>.<br>• EUFOR/NHQ Sa civilian staff follow orders of branch chiefs.<br>• Local civilian staff informed through HQ CAMP CMDT TOC.<br>• Limit all non-essential activities outside Camp Butmir.</div>
         </div>
       </div>
     </div>
 
     <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:13px;color:var(--text2)">Siren: 20s continuous / 20s wavering / 10s continuous — take next bunker, follow JOC orders.</span></div>
     <div class="rule-item mt4"><span class="rule-bullet">›</span><span style="font-size:12px;color:var(--text3)">Reference: SOP 3929 · Camp Butmir Defence Plan Annex D (14 Feb 2025)</span></div>
-    <div class="section-label mt8">Set Active Alert</div>
-    <div class="alert-set-row">
-      <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#0d1f0d;border:1px solid #1f3d1f;color:#4caf50">BRAVO</button>
-      <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#1f1000;border:1px solid #4a3000;color:var(--warn)">CHARLIE</button>
-      <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#1f0000;border:1px solid #4a0000;color:var(--danger)">DELTA</button>
+    <div id="adminAlertControls" style="display:none">
+      <div class="section-label mt8">Set Active Alert</div>
+      <div class="alert-set-row">
+        <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#0d1f0d;border:1px solid #1f3d1f;color:#4caf50">BRAVO</button>
+        <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#1f1000;border:1px solid #4a3000;color:var(--warn)">CHARLIE</button>
+        <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#1f0000;border:1px solid #4a0000;color:var(--danger)">DELTA</button>
+      </div>
     </div>
   </div>
 </div>
+
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -1246,8 +1234,27 @@ function filterRefs(q){renderRefs(q);}
 renderRefs('');
 
 // ── ALERT MODAL ───────────────────────────────────────────────────────────────
-function openAlertModal(){document.getElementById('alertModal').classList.add('open')}
-function closeAlertModal(){document.getElementById('alertModal').classList.remove('open')}
+function openAlertModal(){
+  // Show active tab = current alert state
+  const current = (document.getElementById('alertBadge')?.textContent||'bravo').toLowerCase();
+  switchAlertTab(current);
+  // Show set controls only for Admin
+  const adminCtrl = document.getElementById('adminAlertControls');
+  if(adminCtrl) adminCtrl.style.display = (currentUserId==='Admin') ? 'block' : 'none';
+  document.getElementById('alertModal').classList.add('open');
+}
+function closeAlertModal(){document.getElementById('alertModal').classList.remove('open');}
+
+function switchAlertTab(level){
+  ['bravo','charlie','delta'].forEach(l=>{
+    const content = document.getElementById('acontent-'+l);
+    const tab = document.getElementById('atab-'+l);
+    if(content) content.style.display = l===level ? 'block' : 'none';
+    if(tab) tab.style.opacity = l===level ? '1' : '0.5';
+    if(tab) tab.style.fontWeight = l===level ? '900' : '600';
+  });
+}
+
 function setAlert(level){
   const b=document.getElementById('alertBadge');
   b.textContent=level.toUpperCase();
@@ -2936,7 +2943,8 @@ const impPins = {
   'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
   'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
   'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
-  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515'
+  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515',
+  'Admin':'2685'
 };
 
 let pinSelectedUnit = '';
@@ -3143,7 +3151,7 @@ async function subscribePush(reg){
 window.addEventListener('load', registerSW);
 
 // ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
-const SESSION_DURATION = 12 * 60 * 60 * 1000; // 12 hours
+const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 let loginPinBuffer = '';
 let loginSelectedUnit = '';
 
@@ -3163,11 +3171,22 @@ function checkSession(){
 
 function unlockApp(){
   document.getElementById('loginOverlay').classList.add('hidden');
-  // Update header with user badge
+  // Update header badge
   const badge = document.getElementById('userBadge');
-  if(badge) badge.textContent = currentUserId;
-  // Subscribe push
-  navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
+  if(badge){
+    badge.innerHTML = currentUserId + ' <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+    badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
+    badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
+  }
+  // Subscribe push (only for IMP units, not Admin)
+  if(currentUserId !== 'Admin'){
+    navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
+  }
+  // Auto-logout after 2h
+  setTimeout(()=>{
+    alert('Session expired. Please log in again.');
+    logout();
+  }, SESSION_DURATION);
 }
 
 function loginSelectUnit(id){
@@ -3230,6 +3249,10 @@ function loginPinVerify(){
       document.getElementById('loginPinError').style.display = 'none';
     }, 1400);
   }
+}
+
+function confirmLogout(){
+  if(confirm(`Log out ${currentUserId}?`)) logout();
 }
 
 function logout(){
