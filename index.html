@@ -3346,7 +3346,9 @@ function logout(){
 }
 
 // ── DUTY ROSTER ───────────────────────────────────────────────────────────────
-const ROSTER_URL = 'https://imp-compass.vercel.app/api/roster';
+const SUPABASE_URL = 'https://zqyrgerhyapgggwmovpm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_tb9qpy8kUPlhmPeONIC91g_T44a5IgQ';
+const ROSTER_URL = `${SUPABASE_URL}/rest/v1/roster`;
 const IMP_UNITS = ['IMP-1','IMP-2','IMP-3','IMP-4','IMP-5','IMP-6','IMP-7',
                    'IMP-8','IMP-9','IMP-10','IMP-11','IMP-12','IMP-13','IMP-14','IMP-15'];
 const DAYS = ['MON','TUE','WED','THU','FRI'];
@@ -3391,20 +3393,37 @@ function formatWeekLabel(offset = 0){
 }
 
 async function loadRoster(){
-  // Always fetch data
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+
   try {
-    const r = await fetch(ROSTER_URL);
+    const r = await fetch(`${ROSTER_URL}?select=*`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
     if(!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    if(data.roster) rosterData = data.roster;
-    rosterCurrentWeek = data.week;
+    const rows = await r.json();
+
+    // Convert rows to rosterData object
+    rosterData = {};
+    rows.forEach(row => {
+      rosterData[row.cell_key] = {
+        status: row.status || '',
+        task: row.task || ''
+      };
+    });
 
     const upd = document.getElementById('rosterUpdated');
-    if(upd && data.updatedAt){
-      const d = new Date(data.updatedAt);
-      upd.textContent = 'Updated ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    } else if(upd){
-      upd.textContent = 'No entries yet';
+    if(upd){
+      if(rows.length){
+        const latest = rows.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
+        const d = new Date(latest.updated_at);
+        upd.textContent = 'Updated ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      } else {
+        upd.textContent = 'No entries yet';
+      }
     }
   } catch(e){
     console.warn('Roster load failed:', e);
@@ -3413,9 +3432,8 @@ async function loadRoster(){
     return;
   }
 
-  // Always render after successful fetch
-  const label = document.getElementById('rosterWeekLabel');
-  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+  const label2 = document.getElementById('rosterWeekLabel');
+  if(label2) label2.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
   renderRoster();
 }
 
@@ -3521,6 +3539,7 @@ async function saveRosterCell(){
   const task = document.getElementById('rosterTaskInput').value.trim();
   const cellKey = `${editWeekKey}_${editUnit}_${editDay}`;
 
+  // Update local state immediately
   if(editStatus === '' && !task){
     delete rosterData[cellKey];
   } else {
@@ -3530,13 +3549,43 @@ async function saveRosterCell(){
   closeRosterEdit();
   renderRoster();
 
-  // Save to server
+  // Save to Supabase via upsert
   try {
-    await fetch(ROSTER_URL, {
+    if(editStatus === '' && !task){
+      // Delete row
+      await fetch(`${ROSTER_URL}?cell_key=eq.${encodeURIComponent(cellKey)}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+    } else {
+      // Upsert row
+      await fetch(ROSTER_URL, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({
+          cell_key: cellKey,
+          status: editStatus,
+          task: task,
+          updated_at: new Date().toISOString()
+        })
+      });
+    }
+
+    // Notify via Pusher
+    fetch('https://imp-compass.vercel.app/api/trigger-alarm', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({roster: rosterData, week: editWeekKey})
-    });
+      body: JSON.stringify({type:'roster-update', userId:'Admin', timestamp: new Date().toISOString()})
+    }).catch(()=>{});
+
   } catch(e){
     console.warn('Roster save failed:', e);
   }
@@ -3551,9 +3600,7 @@ function initRosterPusher(){
       if(pusherClient){
         const ch = pusherClient.subscribe('imp-compass');
         ch.bind('roster-update', ()=>{
-          if(document.getElementById('tab-roster')?.classList.contains('active')){
-            loadRoster();
-          }
+          loadRoster();
         });
       }
     }, 2000);
