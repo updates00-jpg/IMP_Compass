@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0a0c0f">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-title" content="IMP Compass">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <title>IMP Compass — Camp Butmir</title>
 <style>
 :root {
@@ -396,7 +397,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div style="margin-top:10px">
       <button class="login-unit-btn" onclick="loginSelectUnit('Admin')"
         style="width:100%;background:var(--surface3);border-color:var(--accent);color:var(--accent)">
-        ⚙️ Admin
+        <i class="fa-solid fa-shield-halved"></i> Admin
       </button>
     </div>
   </div>
@@ -414,7 +415,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="pin-dot" id="lpd4"></div>
     </div>
 
-    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">❌ Wrong PIN — try again</div>
+    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px"><i class="fa-solid fa-circle-xmark"></i> Wrong PIN — try again</div>
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
       <button class="pin-key" onclick="loginPinKey('1')">1</button>
@@ -839,7 +840,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="gsearch-bar">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input class="gsearch-input" id="gsearchInput" placeholder="Search violations, procedures, SOP…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="runGSearch(this.value)">
-    <button class="gsearch-close" onclick="closeGSearch()">✕</button>
+    <button class="gsearch-close" onclick="closeGSearch()"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="gsearch-results" id="gsearchResults">
     <div class="gsearch-empty">Type to search across all content</div>
@@ -858,7 +859,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="qa-btn-icon" style="background:#3a0000;color:var(--danger)">
         <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
-      <div><div class="qa-btn-title" style="color:var(--danger)">🚨 ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
+      <div><div class="qa-btn-title" style="color:var(--danger)"><i class="fa-solid fa-siren-on"></i> ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();switchTab('procedures',document.querySelector('[data-tab=procedures]'));switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1])">
       <div class="qa-btn-icon" style="background:#2a0500;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
@@ -888,7 +889,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div style="font-weight:700;font-size:16px;color:var(--warn);text-transform:uppercase;letter-spacing:1px">DUI Calculator</div>
-      <button onclick="closeDUI()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+      <button onclick="closeDUI()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Breath test result (promille):</div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
@@ -910,8 +911,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <div class="dui-modal" id="alarmModal" onclick="if(event.target===this)closeAlarmModal2()">
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div style="font-weight:700;font-size:16px;color:var(--danger);text-transform:uppercase;letter-spacing:1px">🚨 IMP Alarm</div>
-      <button onclick="closeAlarmModal2()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+      <div style="font-weight:700;font-size:16px;color:var(--danger);text-transform:uppercase;letter-spacing:1px"><i class="fa-solid fa-siren-on"></i> IMP Alarm</div>
+      <button onclick="closeAlarmModal2()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:12px">
       Sending as: <strong id="alarmUserLabel" style="color:var(--accent)"></strong>
@@ -924,7 +925,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </button>
     <button onclick="sendAllClear()"
       style="width:100%;background:var(--surface2);border:1px solid var(--ok);border-radius:8px;padding:12px;color:var(--ok);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">
-      ✅ Send All Clear
+      <i class="fa-solid fa-circle-check"></i> Send All Clear
     </button>
     <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">GPS location will be shared with all 15 IMP units</div>
   </div>
@@ -935,7 +936,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <div style="font-weight:700;font-size:15px;color:var(--accent);text-transform:uppercase;letter-spacing:1px">IMP Unit Login</div>
-      <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+      <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <!-- Step 1: Select unit -->
@@ -977,7 +978,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
 
       <!-- PIN error -->
-      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px">❌ Wrong PIN</div>
+      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px"><i class="fa-solid fa-circle-xmark"></i> Wrong PIN</div>
 
       <!-- Numpad -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
@@ -999,7 +1000,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <div class="log-modal" id="logModal">
   <div class="log-header">
     <div style="font-weight:700;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px">Incident Log — DOB</div>
-    <button onclick="closeLog()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button>
+    <button onclick="closeLog()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="log-body" id="logBody"></div>
   <div class="log-form">
@@ -2870,10 +2871,10 @@ function showIncomingAlarm(data){
   el.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between">
       <div style="font-weight:700;font-size:16px;color:#fff;letter-spacing:1px">
-        🚨 ALARM — ${data.userId}
+        <i class="fa-solid fa-siren-on"></i> ALARM — ${data.userId}
       </div>
       <button onclick="if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}document.getElementById('alarmBanner').remove()" 
-        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px">✕</button>
+        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div style="font-size:13px;color:rgba(255,255,255,.9)">
       ${data.timestamp} ${data.message ? '· ' + data.message : ''}
@@ -2881,7 +2882,7 @@ function showIncomingAlarm(data){
     ${mapsUrl ? `
     <a href="${mapsUrl}" target="_blank"
       style="background:rgba(0,0,0,.3);color:#fff;text-decoration:none;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;display:block">
-      📍 Open Location in Maps
+      <i class="fa-solid fa-location-dot"></i> Open Location in Maps
     </a>` : '<div style="font-size:12px;color:rgba(255,255,255,.7)">No GPS location available</div>'}`;
 
   // Remove existing banner if any
@@ -2895,7 +2896,7 @@ function showIncomingAlarm(data){
 
   // Push notification
   if(Notification.permission === 'granted'){
-    new Notification(`🚨 ALARM — ${data.userId}`, {
+    new Notification(`<i class="fa-solid fa-siren-on"></i> ALARM — ${data.userId}`, {
       body: mapsUrl ? `Location available — tap to open` : 'No GPS',
       icon: 'icon-192.png',
       tag: 'imp-alarm',
@@ -2913,8 +2914,8 @@ function showAllClear(data){
   const el = document.createElement('div');
   el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--ok);padding:12px 14px;display:flex;align-items:center;justify-content:space-between`;
   el.innerHTML = `
-    <div style="font-weight:700;font-size:15px;color:#fff">✅ ALL CLEAR — ${data.userId}</div>
-    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer">✕</button>`;
+    <div style="font-weight:700;font-size:15px;color:#fff"><i class="fa-solid fa-circle-check"></i> ALL CLEAR — ${data.userId}</div>
+    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>`;
   document.body.appendChild(el);
   setTimeout(()=>el.remove(), 8000);
 }
@@ -3050,7 +3051,7 @@ function triggerAlarm(){
     })
     .then(r=>r.json())
     .then(d=>{
-      btn.textContent = `🚨 SENT TO ${d.sent || 'ALL'} UNITS`;
+      btn.textContent = `<i class="fa-solid fa-siren-on"></i> SENT TO ${d.sent || 'ALL'} UNITS`;
       btn.style.background = 'var(--ok)';
       setTimeout(()=>{
         btn.textContent = 'SEND ALARM';
