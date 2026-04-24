@@ -3345,7 +3345,7 @@ function logout(){
   document.getElementById('loginOverlay').classList.remove('hidden');
 }
 
-// ── DUTY ROSTER ───────────────────────────────────────────────────────────────
+// ── DUTY BOARD ───────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://zqyrgerhyapgggwmovpm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_tb9qpy8kUPlhmPeONIC91g_T44a5IgQ';
 const ROSTER_URL = `${SUPABASE_URL}/rest/v1/roster`;
@@ -3568,7 +3568,7 @@ async function saveRosterCell(){
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`,
           'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates'
+          'Prefer': 'resolution=merge-duplicates,return=minimal'
         },
         body: JSON.stringify({
           cell_key: cellKey,
