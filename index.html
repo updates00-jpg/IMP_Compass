@@ -189,6 +189,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+/* ROSTER */
+.roster-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+.roster-table{width:100%;border-collapse:collapse;min-width:420px}
+.roster-table th{font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-align:center;padding:8px 4px;border-bottom:2px solid var(--border);white-space:nowrap}
+.roster-table th.rt-unit{text-align:left;padding-left:8px;min-width:70px}
+.roster-table td{padding:4px 3px;text-align:center;border-bottom:1px solid var(--border);vertical-align:top}
+.roster-table td.rt-unit{text-align:left;padding-left:8px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);white-space:nowrap}
+.roster-table tr.rt-me td{background:rgba(232,160,32,.08)}
+.roster-table tr.rt-me td.rt-unit{color:var(--accent)}
+.roster-cell{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:52px;padding:3px}
+.roster-cell:active{opacity:.7}
+.rs-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 6px;border-radius:4px;min-width:24px;text-align:center}
+.rs-S{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
+.rs-L{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f}
+.rs-D{background:#1f1000;color:var(--warn);border:1px solid #4a3000}
+.rs-empty{background:var(--surface3);color:var(--text3);border:1px solid var(--border)}
+.rs-task{font-size:9px;color:var(--text3);line-height:1.3;max-width:56px;word-break:break-word;text-align:center}
+.roster-week-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0 12px}
+.roster-week-label{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.5px}
+.roster-nav-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text2);cursor:pointer;font-family:var(--body);font-size:13px}
+/* ROSTER EDIT MODAL */
+.roster-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;align-items:flex-end}
+.roster-modal.open{display:flex}
+.roster-modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
+.rs-btn-row{display:flex;gap:8px;margin-bottom:12px}
+.rs-pick-btn{flex:1;padding:14px 8px;border-radius:8px;border:2px solid transparent;font-weight:700;font-size:16px;font-family:var(--mono);cursor:pointer;transition:all .15s}
+.rs-pick-btn.active{border-color:#fff}
 /* LOGIN OVERLAY */
 #loginOverlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
 #loginOverlay.hidden{display:none}
@@ -800,7 +827,51 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
 
+  <!-- ROSTER TAB -->
+  <div class="tab-content" id="tab-roster">
+    <div class="roster-week-nav">
+      <button class="roster-nav-btn" onclick="changeRosterWeek(-1)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <div>
+        <div class="roster-week-label" id="rosterWeekLabel">Loading…</div>
+        <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:2px" id="rosterUpdated"></div>
+      </div>
+      <button class="roster-nav-btn" onclick="changeRosterWeek(1)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+    <div class="roster-wrap">
+      <div id="rosterTable"><div style="text-align:center;padding:40px;color:var(--text3);font-size:13px"><i class="fa-solid fa-spinner fa-spin"></i> Loading roster…</div></div>
+    </div>
+  </div>
+
 </div><!-- /main -->
+
+<!-- ROSTER EDIT MODAL (Admin only) -->
+<div class="roster-modal" id="rosterEditModal" onclick="if(event.target===this)closeRosterEdit()">
+  <div class="roster-modal-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-weight:700;font-size:15px;color:var(--accent)" id="rosterEditTitle">Edit</div>
+      <button onclick="closeRosterEdit()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="rs-btn-row">
+      <button class="rs-pick-btn rs-S" onclick="rosterPickStatus('S')">S</button>
+      <button class="rs-pick-btn rs-D" onclick="rosterPickStatus('D')">D</button>
+      <button class="rs-pick-btn rs-L" onclick="rosterPickStatus('L')">L</button>
+      <button class="rs-pick-btn rs-empty" onclick="rosterPickStatus('')"
+        style="background:var(--surface3);color:var(--text3);border:2px solid var(--border)">—</button>
+    </div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:6px">Additional task (optional):</div>
+    <textarea id="rosterTaskInput" class="log-textarea"
+      placeholder="e.g. Electricity check bldg 200, 09:00-10:00"
+      style="margin-bottom:12px"></textarea>
+    <button onclick="saveRosterCell()"
+      style="width:100%;background:var(--accent);border:none;border-radius:8px;padding:13px;color:#000;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">
+      <i class="fa-solid fa-floppy-disk"></i> Save
+    </button>
+  </div>
+</div>
 
 <!-- BOTTOM NAV -->
 <nav id="nav">
@@ -827,6 +898,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <button class="nav-btn" data-tab="acronyms" onclick="switchTab('acronyms',this)">
     <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="19" cy="17" r="3"/><path d="M21.5 20.5l-1.5-1.5"/></svg>
     Lookup
+  </button>
+  <button class="nav-btn" data-tab="roster" onclick="switchTab('roster',this);loadRoster()">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="16" y1="14" x2="16" y2="14"/></svg>
+    Roster
   </button>
 </nav>
 
@@ -3268,8 +3343,216 @@ function logout(){
   document.getElementById('loginOverlay').classList.remove('hidden');
 }
 
+// ── DUTY ROSTER ───────────────────────────────────────────────────────────────
+const ROSTER_URL = 'https://imp-compass.vercel.app/api/roster';
+const IMP_UNITS = ['IMP-1','IMP-2','IMP-3','IMP-4','IMP-5','IMP-6','IMP-7',
+                   'IMP-8','IMP-9','IMP-10','IMP-11','IMP-12','IMP-13','IMP-14','IMP-15'];
+const DAYS = ['MON','TUE','WED','THU','FRI'];
+const STATUS_COLORS = {S:'rs-S', D:'rs-D', L:'rs-L', '':'rs-empty'};
+
+let rosterData = {}; // { 'IMP-1': { 'MON': {status:'D', task:'...'}, ... }, ... }
+let rosterWeekOffset = 0; // 0 = current week
+let rosterEditCell = null; // {unit, day}
+let rosterCurrentWeek = null;
+
+function getMondayOfWeek(offset = 0){
+  const now = new Date();
+  const day = now.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diff + offset * 7);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function getWeekDates(offset = 0){
+  const mon = getMondayOfWeek(offset);
+  return DAYS.map((d, i) => {
+    const date = new Date(mon);
+    date.setDate(mon.getDate() + i);
+    return {
+      day: d,
+      label: d + ' ' + date.getDate().toString().padStart(2,'0') + '/' + (date.getMonth()+1).toString().padStart(2,'0'),
+      iso: date.toISOString().split('T')[0]
+    };
+  });
+}
+
+function getWeekKey(offset = 0){
+  const mon = getMondayOfWeek(offset);
+  return mon.toISOString().split('T')[0];
+}
+
+function formatWeekLabel(offset = 0){
+  const dates = getWeekDates(offset);
+  return dates[0].label.split(' ')[1] + ' – ' + dates[4].label.split(' ')[1];
+}
+
+async function loadRoster(){
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = formatWeekLabel(rosterWeekOffset);
+
+  try {
+    const r = await fetch(ROSTER_URL);
+    const data = await r.json();
+    if(data.roster) rosterData = data.roster;
+    rosterCurrentWeek = data.week;
+
+    const upd = document.getElementById('rosterUpdated');
+    if(upd && data.updatedAt){
+      const d = new Date(data.updatedAt);
+      upd.textContent = 'Updated ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    }
+  } catch(e){
+    console.warn('Roster load failed:', e);
+  }
+  renderRoster();
+}
+
+function renderRoster(){
+  const container = document.getElementById('rosterTable');
+  if(!container) return;
+
+  const dates = getWeekDates(rosterWeekOffset);
+  const weekKey = getWeekKey(rosterWeekOffset);
+  const isAdmin = currentUserId === 'Admin';
+
+  let html = '<table class="roster-table"><thead><tr>';
+  html += '<th class="rt-unit">Unit</th>';
+  dates.forEach(d => { html += `<th>${d.label}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  IMP_UNITS.forEach(unit => {
+    const isMe = unit === currentUserId;
+    html += `<tr class="${isMe ? 'rt-me' : ''}">`;
+    html += `<td class="rt-unit">${unit}</td>`;
+
+    dates.forEach(d => {
+      const cellKey = `${weekKey}_${unit}_${d.day}`;
+      const cell = rosterData[cellKey] || {status:'', task:''};
+      const statusClass = STATUS_COLORS[cell.status] || 'rs-empty';
+      const statusText = cell.status || '·';
+      const clickable = isAdmin ? `onclick="openRosterEdit('${unit}','${d.day}','${weekKey}')"` : '';
+
+      html += `<td>
+        <div class="roster-cell" ${clickable}>
+          <span class="rs-badge ${statusClass}">${statusText}</span>
+          ${cell.task ? `<span class="rs-task">${cell.task}</span>` : ''}
+        </div>
+      </td>`;
+    });
+
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+
+  // Update week label
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+}
+
+function changeRosterWeek(dir){
+  rosterWeekOffset += dir;
+  renderRoster();
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+}
+
+// Edit modal (Admin only)
+let editWeekKey = '';
+let editUnit = '';
+let editDay = '';
+let editStatus = '';
+
+function openRosterEdit(unit, day, weekKey){
+  if(currentUserId !== 'Admin') return;
+  editUnit = unit;
+  editDay = day;
+  editWeekKey = weekKey;
+
+  const cellKey = `${weekKey}_${unit}_${day}`;
+  const cell = rosterData[cellKey] || {status:'', task:''};
+  editStatus = cell.status || '';
+
+  document.getElementById('rosterEditTitle').textContent = `${unit} — ${day}`;
+  document.getElementById('rosterTaskInput').value = cell.task || '';
+
+  // Highlight active status button
+  document.querySelectorAll('.rs-pick-btn').forEach(btn => btn.classList.remove('active'));
+  updateRosterPickButtons(editStatus);
+
+  document.getElementById('rosterEditModal').classList.add('open');
+}
+
+function closeRosterEdit(){
+  document.getElementById('rosterEditModal').classList.remove('open');
+}
+
+function rosterPickStatus(s){
+  editStatus = s;
+  updateRosterPickButtons(s);
+}
+
+function updateRosterPickButtons(s){
+  document.querySelectorAll('.rs-pick-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if((s === 'S' && btn.classList.contains('rs-S')) ||
+       (s === 'D' && btn.classList.contains('rs-D')) ||
+       (s === 'L' && btn.classList.contains('rs-L')) ||
+       (s === '' && btn.classList.contains('rs-empty'))){
+      btn.classList.add('active');
+    }
+  });
+}
+
+async function saveRosterCell(){
+  const task = document.getElementById('rosterTaskInput').value.trim();
+  const cellKey = `${editWeekKey}_${editUnit}_${editDay}`;
+
+  if(editStatus === '' && !task){
+    delete rosterData[cellKey];
+  } else {
+    rosterData[cellKey] = {status: editStatus, task};
+  }
+
+  closeRosterEdit();
+  renderRoster();
+
+  // Save to server
+  try {
+    await fetch(ROSTER_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({roster: rosterData, week: editWeekKey})
+    });
+  } catch(e){
+    console.warn('Roster save failed:', e);
+  }
+}
+
+// Listen for roster updates via Pusher
+function initRosterPusher(){
+  loadPusher(()=>{
+    if(!pusherClient) initPusher();
+    // Listen on existing channel
+    setTimeout(()=>{
+      if(pusherClient){
+        const ch = pusherClient.subscribe('imp-compass');
+        ch.bind('roster-update', ()=>{
+          if(document.getElementById('tab-roster')?.classList.contains('active')){
+            loadRoster();
+          }
+        });
+      }
+    }, 2000);
+  });
+}
+
 // Check session on load
 checkSession();
+initRosterPusher();
 try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
 </script>
 
