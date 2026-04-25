@@ -511,27 +511,35 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="section-label">Quick Access</div>
       <div class="quick-strip">
         <div class="quick-btn" onclick="openProc('drunk')" style="color:var(--warn)">
-          <svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
           <span class="quick-btn-label">Drunk</span>
         </div>
+        <div class="quick-btn" onclick="openProc('dui')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          <span class="quick-btn-label">DUI</span>
+        </div>
         <div class="quick-btn" onclick="openProc('speeding')" style="color:var(--accent2)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span class="quick-btn-label">Speeding</span>
         </div>
         <div class="quick-btn" onclick="openProc('id')" style="color:var(--ok)">
-          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>
           <span class="quick-btn-label">No ID</span>
         </div>
         <div class="quick-btn" onclick="openProc('weapon')" style="color:var(--danger)">
-          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           <span class="quick-btn-label">Weapons</span>
         </div>
+        <div class="quick-btn" onclick="openProc('parking_warn')" style="color:#e67e22">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+          <span class="quick-btn-label">Parking</span>
+        </div>
         <div class="quick-btn" onclick="openProc('walkout')" style="color:var(--text2)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>
           <span class="quick-btn-label">Walk-out</span>
         </div>
-        <div class="quick-btn" onclick="openProc('altgate')" style="color:#e67e22">
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <div class="quick-btn" onclick="openProc('altgate')" style="color:var(--text3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
           <span class="quick-btn-label">Alt. Gate</span>
         </div>
       </div>
@@ -640,20 +648,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
       </div>
 
-      <div class="section-label mt8">DOB Entry Format</div>
+      <div class="section-label mt8">DOB Entry Format — Annex D SOP 3927</div>
       <div class="contact-full">
         <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.9;font-family:var(--mono)">
-          DATE: ___________________<br>
-          TIME: ___________________<br>
-          LOCATION: _______________<br>
-          PERSONS INVOLVED: _______<br>
-          UNIT / NATION: __________<br>
-          ID NUMBER: ______________<br>
-          VIOLATION / INCIDENT: ___<br>
-          ACTION TAKEN: ___________<br>
-          WARNING ISSUED: YES / NO<br>
-          SNR NOTIFIED: YES / NO<br>
-          IMP OFFICER: ____________
+          DOB# _______ / YEAR ___________<br>
+          FROM: __________  TO: _________<br>
+          IMP DUTY: [Rank] [Name], [Nation]<br>
+          ─────────────────────────────<br>
+          ENTRY TYPE: ________________<br>
+          ENTRY TIME: ________________<br>
+          <span style="color:var(--text3)">— Description —</span><br>
+          Date / Time: _______________<br>
+          Location: __________________<br>
+          Person: [Name] [Rank] [Unit]<br>
+          ID Number: _________________<br>
+          Violation / Incident: _______<br>
+          Action taken: ______________<br>
+          Warning: YES / NO<br>
+          Report: MPR / TVR / PVR / NONE<br>
+          SNR notified: YES / NO<br>
+          FPM notified: YES / NO<br>
+          Result: NSTR / [description]<br>
+          ─────────────────────────────<br>
+          TAKING OVER IMP DUTY: _______
         </div>
       </div>
     </div>
@@ -672,6 +689,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="contact-full">
       <div class="contact-row"><span class="contact-row-label">JOC</span><span class="contact-row-call">HOTEL CTRL</span><span class="contact-row-num">5366–5368</span></div>
       <div class="contact-row"><span class="contact-row-label">HQ CMDT OPS</span><span class="contact-row-call"></span><span class="contact-row-num">2041</span></div>
+      <div class="contact-row"><span class="contact-row-label">IMP CMDR</span><span class="contact-row-call">IPN 5782</span><span class="contact-row-num">+387 61 139 603</span></div>
+      <div class="contact-row"><span class="contact-row-label">IMP Duty</span><span class="contact-row-call">IPN 5783</span><span class="contact-row-num">+387 62 337 661</span></div>
+      <div class="contact-row"><span class="contact-row-label">FPM</span><span class="contact-row-call">IPN 5799</span><span class="contact-row-num">+387 62 337 671</span></div>
       <div class="contact-row"><span class="contact-row-label">Billeting / Help Desk</span><span class="contact-row-call"></span><span class="contact-row-num">921</span></div>
       <div class="contact-row"><span class="contact-row-label">Medic Dispatch</span><span class="contact-row-call">MIKE CTRL</span><span class="contact-row-num">912</span></div>
       <div class="contact-row"><span class="contact-row-label">S3 HH</span><span class="contact-row-call">SIERRA CTRL</span><span class="contact-row-num">5738/5748</span></div>
@@ -774,9 +794,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="subcontent active" id="sub-sop">
       <div class="search-bar">
         <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-        <input type="text" id="refSearch" placeholder="Search SOP rules…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+        <input type="text" id="refSearch" placeholder="Search SOP rules, reports, procedures…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
       </div>
+      <div class="section-label">SOP 3901 — Conduct &amp; Discipline</div>
       <div id="refList"></div>
+      <div class="section-label mt12">SOP 3927 — IMP Reports &amp; Authority</div>
+      <div id="refList3927"></div>
     </div>
     <div class="subcontent" id="sub-routes">
       <div class="search-bar">
@@ -1167,61 +1190,313 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
 const violations=[
-  {id:'v1',cat:'conduct',sev:1,title:'Uncooperative Behaviour to IMP',penalties:[{num:'',text:"Violator's SNR/Branch Chief informed to take disciplinary action. All actions reported to FPM.",points:''}]},
-  {id:'v2',cat:'speeding',sev:1,title:'Speeding: 5–10 km/h over limit',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"Driver's SNR/Branch Chief informed to take disciplinary action.",points:''}]},
-  {id:'v3',cat:'speeding',sev:2,title:'Speeding: 11–20 km/h over limit',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM. Driver's license suspended 2 weeks.",points:'2 pts'}]},
-  {id:'v4',cat:'speeding',sev:3,title:'Speeding: 21+ km/h over limit',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT. Driver's license suspended 2 weeks.",points:'3 pts'}]},
-  {id:'v5',cat:'parking',sev:1,title:'Parking Violation',penalties:[{num:'1st',text:'IMP issues a written warning.',points:''},{num:'2nd',text:'IMP issues a written warning.',points:''},{num:'3rd+',text:"Driver's SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM.",points:''}]},
-  {id:'v6',cat:'parking',sev:2,title:'Parking in front of Bldg 200 / Circle (excl. VIPs, COM EUFOR, COM NHQ Sa)',penalties:[{num:'Any',text:"SNR/Branch Chief informed. Reported to HQ CAMP CMDT and FPM.",points:'3 pts'}]},
-  {id:'v7',cat:'vehicle',sev:2,title:'Smoking in NATO/EUFOR Vehicle',penalties:[{num:'1st',text:'IMP issues a warning.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
-  {id:'v8',cat:'vehicle',sev:1,title:'Failure to Fasten Seatbelts',penalties:[{num:'1st',text:'IMP issues a warning.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
-  {id:'v9',cat:'vehicle',sev:1,title:'Using Cellphone During Operating Vehicle',penalties:[{num:'1st',text:'IMP issues a warning. All action reported to FPM.',points:'2 pts'},{num:'2nd+',text:"Driver's SNR/Branch Chief informed.",points:'2 pts'}]},
-  {id:'v10',cat:'vehicle',sev:3,title:'Operating Vehicle Under Influence of Alcohol (>0.0 promille) or Illegal Substances',penalties:[{num:'Any',text:"Driver's license suspended until EOT. SNR/Branch Chief informed. All action reported to FPM.",points:'EOT'}]},
-  {id:'v11',cat:'vehicle',sev:2,title:'Intentional / Negligent Damage to EUFOR/NATO Vehicle',penalties:[{num:'Any',text:"Driver's license suspended until EOT. SNR/Branch Chief informed. All action reported to FPM.",points:'EOT'}]},
-  {id:'v12',cat:'vehicle',sev:2,title:'Failure to Report to IMP',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v13',cat:'vehicle',sev:2,title:'5 Penalty Points Accumulated on Driver\'s License',penalties:[{num:'',text:"Driver's license suspended for one month.",points:''}]},
-  {id:'v14',cat:'dress',sev:1,title:'Dress Prescription Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"Driver's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v15',cat:'conduct',sev:2,title:'Alcohol Prescription Violation',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to HQ CAMP CMDT and FPM.",points:''}]},
-  {id:'v16',cat:'conduct',sev:3,title:'Weapon Carry Prescription Violation',penalties:[{num:'Any',text:"Violator's SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v17',cat:'conduct',sev:1,title:'Pedestrian Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v18',cat:'vehicle',sev:1,title:'Bicycle / Scooter Violation',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed to take disciplinary action.",points:''}]},
-  {id:'v19',cat:'conduct',sev:1,title:'Quiet Hours Violation (2300–0600 daily)',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v20',cat:'id',sev:1,title:'Not Carrying ID Card in Visible Place',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd',text:'IMP issues a warning.',points:''},{num:'3rd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]},
-  {id:'v21',cat:'id',sev:1,title:'Not Carrying ID Card in Accommodation Block',penalties:[{num:'1st',text:'IMP issues a warning.',points:''},{num:'2nd+',text:"SNR/Branch Chief informed. All action reported to FPM.",points:''}]}
+  // ── SPEEDING ──────────────────────────────────────────────────────────────────
+  {id:'v2',cat:'speeding',sev:1,title:'Speeding: 5–10 km/h over limit (31–40 km/h)',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6b / Annex D</strong>. Speed limit in Camp Butmir: <strong>30 km/h</strong>.',points:''},
+    {num:'SAY',text:'<em>"Stop the vehicle. I am IMP. You have been observed exceeding the speed limit of 30 km/h. Your speed was [X] km/h. Please provide your ID card and vehicle documentation."</em>',points:''},
+    {num:'1st',text:'Issue <strong>verbal warning</strong>. Note full details. DOB entry required.',points:''},
+    {num:'2nd+',text:"Inform driver's <strong>SNR / Branch Chief</strong> to take disciplinary action. Produce <strong>TVR</strong>.",points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Speed measured / Action taken / Warning issued Y/N.',points:''},
+    {num:'DOC',text:'<strong>TVR</strong> (Annex B SOP 3927) — approved by IMP CMDR, sent to SNR. <strong>DOB entry always required.</strong>',points:''}
+  ]},
+  {id:'v3',cat:'speeding',sev:2,title:'Speeding: 11–20 km/h over limit (41–50 km/h)',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6b / Annex D</strong>. Speed limit: 30 km/h.',points:''},
+    {num:'SAY',text:'<em>"Stop the vehicle. I am IMP. Your speed was [X] km/h in a 30 km/h zone. This is a serious violation. Please provide your ID card and vehicle documentation."</em>',points:''},
+    {num:'ANY',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. Report to <strong>HQ CAMP CMDT</strong> and <strong>FPM</strong>. <strong>Suspend driver\'s license for 2 weeks</strong>. Confiscate pass.',points:'2 pts'},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Speed measured / License suspended Y/N / Action taken.',points:''},
+    {num:'DOC',text:'<strong>TVR</strong> mandatory. Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',points:''}
+  ]},
+  {id:'v4',cat:'speeding',sev:3,title:'Speeding: 21+ km/h over limit (51+ km/h)',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6b / Annex D</strong>. Highest speeding category.',points:''},
+    {num:'SAY',text:'<em>"Stop the vehicle immediately. I am IMP. You have been observed driving at [X] km/h in a 30 km/h zone. This is a major violation. Please exit the vehicle and provide ID."</em>',points:''},
+    {num:'ANY',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. Report to <strong>HQ CAMP CMDT</strong> and <strong>FPM</strong>. <strong>Suspend driver\'s license for 2 weeks</strong>.',points:'3 pts'},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Speed measured / License suspended / Reported to HQ CAMP CMDT / Reported to FPM.',points:''},
+    {num:'DOC',text:'<strong>TVR</strong> mandatory. Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',points:''}
+  ]},
+
+  // ── PARKING ───────────────────────────────────────────────────────────────────
+  {id:'v5',cat:'parking',sev:1,title:'Parking Violation — Wrong Zone / Restricted Area',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6a / Annex C (Parking Areas A–X)</strong>. Vehicles must park in their assigned zone.',points:''},
+    {num:'SAY',text:'<em>"Your vehicle [registration] is parked in violation of Camp Butmir parking regulations. This is parking zone [X]. You are not authorized to park here. Please report to IMP Station."</em>',points:''},
+    {num:'1st',text:'Leave <strong>written notice on windshield</strong>. Issue <strong>PVR</strong>. Driver must report to IMP Station. <strong>DOB entry required.</strong>',points:''},
+    {num:'2nd',text:'Leave <strong>written notice on windshield</strong>. Issue <strong>PVR</strong>. DOB entry.',points:''},
+    {num:'3rd+',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. Report to <strong>HQ CAMP CMDT</strong> and <strong>FPM</strong>. PVR mandatory.',points:''},
+    {num:'48h',text:'Driver who received written warning must report to IMP Station within <strong>48 hours</strong>. Failure = disciplinary action.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Vehicle registration / Owner unit / Violation / Notice left Y/N / Action taken.',points:''},
+    {num:'DOC',text:'<strong>PVR</strong> (Annex C SOP 3927) — approved by IMP CMDR, sent to SNR. After SNR disposition → return notice to HQ CAMP CMDT OPS.',points:''}
+  ]},
+  {id:'v6',cat:'parking',sev:2,title:'Parking in Front of Bldg 200 / Circle (excl. VIPs, COM EUFOR, COM NHQ Sa)',penalties:[
+    {num:'BASIS',text:'<strong>SOP Annex D</strong>. Priority parking reserved for VIPs, COM EUFOR and COM NHQ Sa only.',points:''},
+    {num:'SAY',text:'<em>"Your vehicle is parked in a restricted area in front of Building 200 / in the circle. This area is reserved for VIPs and Command Group only. You are required to move immediately."</em>',points:''},
+    {num:'ANY',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. Report to <strong>HQ CAMP CMDT</strong> and <strong>FPM</strong>. PVR mandatory.',points:'3 pts'},
+    {num:'DOB',text:'Entry: Date / Time / Location / Vehicle registration / Unit / Action taken.',points:''},
+    {num:'DOC',text:'<strong>PVR</strong> mandatory. Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',points:''}
+  ]},
+
+  // ── VEHICLE ───────────────────────────────────────────────────────────────────
+  {id:'v7',cat:'vehicle',sev:2,title:'Smoking in NATO/EUFOR Vehicle',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §2e / Annex D</strong>. Smoking in EUFOR/NATO vehicles is prohibited.',points:''},
+    {num:'SAY',text:'<em>"Smoking inside EUFOR/NATO vehicles is strictly prohibited. Please extinguish immediately. I will issue a Traffic Violation Report."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>written warning</strong>. TVR. DOB entry.',points:'2 pts'},
+    {num:'2nd+',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. TVR mandatory.',points:'2 pts'},
+    {num:'DOC',text:'<strong>TVR</strong> mandatory from 1st offence.',points:''}
+  ]},
+  {id:'v8',cat:'vehicle',sev:1,title:'Failure to Fasten Seatbelts',penalties:[
+    {num:'BASIS',text:'<strong>SOP Annex D</strong>. Seatbelts mandatory for all vehicle occupants.',points:''},
+    {num:'SAY',text:'<em>"You are required to fasten your seatbelt at all times while the vehicle is in motion. I am issuing a warning."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>written warning</strong>. TVR. DOB entry.',points:'2 pts'},
+    {num:'2nd+',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. TVR mandatory.',points:'2 pts'},
+    {num:'NOTE',text:'IMP personnel conducting in-base vehicle patrols are exempt from seatbelt requirement (SOP 3927 §6h).',points:''},
+    {num:'DOC',text:'<strong>TVR</strong> from 1st offence.',points:''}
+  ]},
+  {id:'v9',cat:'vehicle',sev:1,title:'Using Cellphone While Driving',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6e / Annex D</strong>. Hands-free kit only authorized.',points:''},
+    {num:'SAY',text:'<em>"Using a mobile phone while driving is prohibited. Hands-free kit only. I am issuing a warning. All action will be reported to FPM."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>written warning</strong>. TVR. All action reported to <strong>FPM</strong>.',points:'2 pts'},
+    {num:'2nd+',text:'Inform driver\'s <strong>SNR / Branch Chief</strong>. TVR mandatory.',points:'2 pts'},
+    {num:'DOC',text:'<strong>TVR</strong> from 1st offence. FPM always informed.',points:''}
+  ]},
+  {id:'v10',cat:'vehicle',sev:3,title:'DUI — Operating Vehicle Under Alcohol (>0.0 ‰) or Illegal Substances',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §3a(3) / Annex A / Annex D</strong>. ZERO TOLERANCE. Any alcohol prior to or during vehicle operation is prohibited.',points:''},
+    {num:'SAY',text:'<em>"I am conducting a mandatory breath test. Please step out of the vehicle. Refusal to submit to testing will be treated as a positive result and will result in administrative consequences."</em>',points:''},
+    {num:'ANY',text:'<strong>Suspend driver\'s license until EOT.</strong> Inform <strong>SNR / Branch Chief</strong> immediately. Report to <strong>FPM</strong>, <strong>HQ CAMP CMDT</strong>. Confiscate vehicle keys if necessary.',points:'EOT'},
+    {num:'REFUSAL',text:'Refusal to test = treated as positive result. Inform IMP CMDR and FPM immediately. Document in MPR.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / BAC result / License suspended / Reported to FPM / Reported to HQ CAMP CMDT.',points:''},
+    {num:'DOC',text:'<strong>MPR</strong> mandatory (Annex A SOP 3927). Distribution: IMP CMDR → FPM → SNR → HQ CAMP CMDT. IMMEDIATE reporting.',points:''}
+  ]},
+  {id:'v11',cat:'vehicle',sev:2,title:'Intentional / Negligent Damage to EUFOR/NATO Vehicle',penalties:[
+    {num:'BASIS',text:'<strong>SOP Annex D</strong>.',points:''},
+    {num:'SAY',text:'<em>"You are involved in an incident resulting in damage to an EUFOR/NATO vehicle. Please do not leave. I will conduct an investigation and produce a Military Police Report."</em>',points:''},
+    {num:'ANY',text:'<strong>Suspend driver\'s license until EOT.</strong> Inform <strong>SNR / Branch Chief</strong>. Report to <strong>FPM</strong>. Secure accident scene. Document damage with photos.',points:'EOT'},
+    {num:'DOB',text:'Entry: Date / Time / Location / Vehicles involved / Persons involved / Description of damage / Action taken.',points:''},
+    {num:'DOC',text:'<strong>MPR</strong> mandatory. Secure scene, take photos, take statements, collect evidence before moving vehicles.',points:''}
+  ]},
+  {id:'v12',cat:'vehicle',sev:2,title:'Failure to Report to IMP After Written Parking Warning',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §6f</strong>. Driver must report within 48 hours of receiving written parking warning.',points:''},
+    {num:'SAY',text:'<em>"You were issued a written parking warning and failed to report to IMP Station within 48 hours as required. This matter will now be referred to your SNR / Branch Chief."</em>',points:''},
+    {num:'ANY',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'DOC',text:'<strong>PVR</strong> update + DOB entry. Note failure to report.',points:''}
+  ]},
+  {id:'v13',cat:'vehicle',sev:2,title:'5+ Penalty Points Accumulated — License Suspended',penalties:[
+    {num:'BASIS',text:'<strong>SOP Annex D</strong>. Accumulation of 5 penalty points triggers automatic suspension.',points:''},
+    {num:'ACTION',text:'<strong>Suspend driver\'s license for one month.</strong> Notify <strong>SNR / Branch Chief</strong> and <strong>FPM</strong>. Confiscate driving pass.',points:'1 month'},
+    {num:'DOB',text:'Entry: Date / Name / ID / Unit / Points accumulated / License suspended from–until.',points:''},
+    {num:'DOC',text:'<strong>TVR</strong> or <strong>MPR</strong> update noting cumulative suspension. FPM informed.',points:''}
+  ]},
+
+  // ── CONDUCT ───────────────────────────────────────────────────────────────────
+  {id:'v1',cat:'conduct',sev:1,title:'Uncooperative Behaviour to IMP',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §11d / SOP 3927 §6c(1)</strong>. All personnel stopped by IMP must cooperate regardless of rank.',points:''},
+    {num:'SAY',text:'<em>"You are required to cooperate with IMP personnel. Failure to comply is a violation of SOP 3901. I am informing your SNR/Branch Chief."</em>',points:''},
+    {num:'ANY',text:'Inform <strong>SNR / Branch Chief</strong> to take disciplinary action. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'FORCE',text:'IMP may use <strong>physical force</strong> if person fails to comply. Other means (handcuffs, batons) authorized if force is insufficient or person endangers others (SOP 3927 §6f).',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Rank / Unit / Description of behaviour / Action taken.',points:''},
+    {num:'DOC',text:'<strong>MPR</strong> if major incident. <strong>DOB entry always required.</strong> FPM informed.',points:''}
+  ]},
+  {id:'v15',cat:'conduct',sev:2,title:'Alcohol Prescription Violation',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §3 / Annex A</strong>. Excessive drinking in or outside Camp Butmir is not tolerated.',points:''},
+    {num:'SAY',text:'<em>"You are in violation of alcohol consumption regulations. I am placing you under IMP supervision and informing your SNR."</em>',points:''},
+    {num:'ANY',text:'<strong>Remove from bar/area immediately.</strong> Place under IMP supervision until released to SNR or SNR representative. Decide: Medical Cell or IMP Station. Inform <strong>SNR</strong>. Report to <strong>HQ CAMP CMDT</strong> and <strong>FPM</strong>.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Behaviour description / Medical Cell Y/N / Handed to SNR name.',points:''},
+    {num:'DOC',text:'<strong>MPR</strong> mandatory (alcohol-related incident). Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',points:''}
+  ]},
+  {id:'v16',cat:'conduct',sev:3,title:'Weapon Carry Prescription Violation',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §5 / SOP 3927 §6c</strong>. No loaded weapons in Camp except FPG Guard, IMP Det, CP details, written permission holders.',points:''},
+    {num:'SAY',text:'<em>"You are carrying a weapon in an unauthorized area. Please stop and do not reach for the weapon. Identify yourself and provide your ID card."</em>',points:''},
+    {num:'ANY',text:'Secure the situation. <strong>Do not approach alone</strong> if threat perceived. Inform <strong>SNR / Branch Chief</strong> immediately. Report all action to <strong>FPM</strong>. Detain if necessary.',points:''},
+    {num:'SEARCH',text:'IMP may conduct non-intimate search of detained person and intermediate property to seize items that may cause harm (SOP 3927 §6c(6)).',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Weapon type / Circumstances / Action taken / FPM notified.',points:''},
+    {num:'DOC',text:'<strong>MPR</strong> mandatory. IMMEDIATE reporting to FPM. Reference SOP HQ EUFOR 5275 Force Protection.',points:''}
+  ]},
+  {id:'v17',cat:'conduct',sev:1,title:'Pedestrian Violation',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §8 / Annex D</strong>. Pedestrians must use footpaths; if none — walk against traffic, max 2 abreast.',points:''},
+    {num:'SAY',text:'<em>"Pedestrians must use the available footpath / must walk on the side of the road facing oncoming traffic. I am issuing a warning."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. DOB entry.',points:''},
+    {num:'2nd',text:'IMP issues a <strong>written warning</strong>. DOB entry.',points:''},
+    {num:'3rd+',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> from 1st. No formal report required until 3rd offence, then notify SNR.',points:''}
+  ]},
+  {id:'v18',cat:'vehicle',sev:1,title:'Bicycle / Scooter Violation',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §7 / Annex D</strong>. Bicycles must be registered with ID Office and have valid vignette. Must have front white light and rear red light.',points:''},
+    {num:'SAY',text:'<em>"Your bicycle/scooter is in violation of Camp Butmir regulations. [No registration sticker / No lights / Traffic violation]. I am issuing a warning."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. DOB entry.',points:''},
+    {num:'2nd',text:'IMP issues a <strong>written warning</strong>. DOB entry.',points:''},
+    {num:'3rd+',text:'Inform <strong>SNR / Branch Chief</strong> to take disciplinary action.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> from 1st. No formal report until 3rd offence.',points:''}
+  ]},
+  {id:'v19',cat:'conduct',sev:1,title:'Quiet Hours Violation (2300–0600 daily)',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §10 / Annex D</strong>. Quiet hours Monday–Sunday 2300–0600 hrs.',points:''},
+    {num:'SAY',text:'<em>"It is currently quiet hours. You are required to reduce noise immediately — music/voices/lights in hallway. Failure to comply will result in a formal report to your SNR."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. DOB entry.',points:''},
+    {num:'2nd+',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Building / Room / Name / Unit / Noise type / Action taken.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> always. SNR notified from 2nd offence.',points:''}
+  ]},
+
+  // ── DRESS ─────────────────────────────────────────────────────────────────────
+  {id:'v14',cat:'dress',sev:1,title:'Dress Prescription Violation',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §1 / Annex D</strong>. Uniform required 0600–1800 hrs (BDU). EUFOR logo mandatory. DFAC has specific dress rules.',points:''},
+    {num:'SAY',text:'<em>"Your dress does not comply with Camp Butmir regulations. [Specify: no head-dress / no EUFOR logo / inappropriate clothing in DFAC / etc.]. I am issuing a warning."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. DOB entry.',points:''},
+    {num:'2nd+',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'DFAC',text:'Specific DFAC rules: no sports gear if tight/sweaty, no sleeveless tops, no head-dress at table, no open-toe sandals, hands washed before entry.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID / Unit / Violation type / Action taken.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> always. SNR notified from 2nd offence.',points:''}
+  ]},
+
+  // ── ID / ACCESS ───────────────────────────────────────────────────────────────
+  {id:'v20',cat:'id',sev:1,title:'Not Displaying ID Card in Visible Location (on Camp)',penalties:[
+    {num:'BASIS',text:'<strong>SOP 3901 §11b / Annex D</strong>. ID/Access cards must be visible at all times on camp, including in civilian clothes. Exception: sport activity.',points:''},
+    {num:'SAY',text:'<em>"You are required to display your EUFOR/NHQ Sa ID card in a visible location at all times while on Camp Butmir. Please produce your ID card now."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. Violation logged in <strong>DOB</strong>.',points:''},
+    {num:'2nd',text:'IMP issues a <strong>written warning</strong>. DOB entry.',points:''},
+    {num:'3rd+',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'NO ID',text:'If person cannot produce any ID — escort to IMP Station to verify identity. Detain if refuses and identity cannot be confirmed.',points:''},
+    {num:'DOB',text:'Entry: Date / Time / Location / Name / ID number / Unit / Action taken / Warning issued.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> mandatory. SNR notified from 3rd offence.',points:''}
+  ]},
+  {id:'v21',cat:'id',sev:1,title:'Not Carrying ID Card in Accommodation Block Area',penalties:[
+    {num:'BASIS',text:'<strong>SOP Annex D</strong>. ID card required even in accommodation areas.',points:''},
+    {num:'SAY',text:'<em>"You are required to carry your ID card even within the accommodation block area. Please report your block and room number. I am logging this in the occurrence book."</em>',points:''},
+    {num:'1st',text:'IMP issues a <strong>verbal warning</strong>. DOB entry.',points:''},
+    {num:'2nd+',text:'Inform <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',points:''},
+    {num:'DOC',text:'<strong>DOB entry</strong> always.',points:''}
+  ]}
 ];
 
 const procIconSvg={
   drunk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
   speeding:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  dui:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
   id:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>',
   weapon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  parking_warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>',
   walkout:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>',
   altgate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>'
 };
 
 const procedures=[
-  {id:'drunk',color:'var(--warn)',bg:'#2a1500',title:'Excessive Drinking / Intoxicated Personnel',steps:['Identify the individual and confirm excessive drinking (obnoxious behaviour, lack of self-control, fighting).','Remove the individual from the bar/drinking establishment immediately.','Place the violator under IMP supervision.','Inform the Senior National Representative (SNR) via IMP Report.','Decide: bring to Medical Cell or IMP Station — case by case basis.','Keep violator under IMP supervision until released to SNR or SNR representative.','File IMP report and document all actions taken.'],note:'Zero tolerance for driving. If any vehicle operation suspected — conduct breath test immediately.'},
-  {id:'speeding',color:'var(--accent2)',bg:'#0d1a2a',title:'Speeding Violation',steps:['Stop the vehicle. Note speed and posted speed limit (30 km/h in CB).','Check driver ID and vehicle documentation.','Determine category: 5–10 / 11–20 / 21+ km/h over limit.','5–10 over: Issue verbal warning (1st). 2nd+: notify SNR/Branch Chief.','11–20 over: Notify SNR/Branch Chief + HQ CAMP CMDT + FPM. Suspend license 2 weeks. Mark 2 pts.','21+ over: Notify SNR/Branch Chief + HQ CAMP CMDT. Suspend license 2 weeks. Mark 3 pts.','5 total penalty points = license suspended for one month.'],note:'Every driver issued a written parking warning must report to IMP Station within 48h or face disciplinary action.'},
-  {id:'id',color:'var(--ok)',bg:'#0d1a0d',title:'No Visible ID / Access Card',steps:['Stop the individual and request ID/Access card.','If no card in visible place: issue warning and log in IMP daily occurrence book.','1st & 2nd offence: IMP issues a warning.','3rd+ offence: Notify SNR/Branch Chief. All action reported to FPM.','Notify all EUFOR/NATO personnel nearby to report non-displaying individuals.'],note:'IMP personnel are exempt from visible display but must produce ID when requested. Exception: sport activity.'},
-  {id:'weapon',color:'var(--danger)',bg:'#2a0000',title:'Unauthorized Weapon Carry',steps:['Identify the individual carrying a loaded or unauthorized weapon in a restricted area.','Authorized exceptions: FPG Guard, IMP Det, CP details, personnel with written permission, ordered by COM EUFOR/NHQ Sa.','If unauthorized: secure the situation and request individual to disarm.','Immediately notify SNR/Branch Chief.','Report all action to FPM.','No weapons in rec/concession areas or DFAC (except IMP and permitted personnel).'],note:'Reference HQ EUFOR SOP 5275 Force Protection for full weapon carry rules and alert state procedures.'},
-  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:['Confirm current ALERT STATE before any walk-out.','ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Issue Force Exemption Card.','DELTA: NO walking out. All personnel remain in Camp Butmir.','Ensure personnel are NOT going to Off-Limits areas (check monthly J2 Off-Limits list — DFAC and Gym boards).','Recall: Branch Supervisors contact their personnel when alert state increases. Return to Camp immediately.'],note:'Off-limits includes brothels, establishments linked to terrorism/crime/narcotics, and any location on the J2 monthly list.'},
-  {id:'altgate',color:'#e67e22',bg:'#1f0e00',title:'Alternate (Back) Gate — Opening Procedure',steps:['Provide and emplace road signs (Stop, Direction, etc.) at the Alternate gate. One-way system becomes operational immediately upon entry.','All traffic ENTERING the camp: via Alternate gate — turns RIGHT onto Dayton Road. This applies if Main gate is closed and Alternate gate supports all traffic.','All traffic LEAVING the camp: via Mostar Road ONLY.','Ensure NO parking outside the Alternate vehicle gate or the Alternate pedestrian gate.','IMP COM coordinates with local police to provide traffic control OUTSIDE the Alternate gate.','Control traffic outside the Alternate gate AND traffic inside camp near the Alternate gate.','All personnel in Camp BUTMIR: follow Alternate gate usage rules (para 2.a and 2.b), follow temporary road reorganization and IMP directions, limit traffic to necessary minimum when Main gate is closed.'],note:'Reference Camp Butmir Defence Plan Annex D. Coordinate with HQ CAMP CMDT and notify JOC when Alternate gate is activated.'}
+  {id:'drunk',color:'var(--warn)',bg:'#2a1500',title:'Excessive Drinking / Intoxicated Personnel',steps:[
+    '<strong>Identify situation.</strong> Observe behaviour: loud/obnoxious, lack of self-control, fighting, or obviously intoxicated. Note time, location, person\'s appearance.',
+    '<strong>Approach and identify yourself.</strong> Say: <em>"I am IMP. I have observed behaviour consistent with excessive alcohol consumption. Please show me your ID card."</em>',
+    '<strong>Remove from establishment/area immediately.</strong> Escort the individual from the bar, DFAC, or recreational area. Do not leave alone.',
+    '<strong>Decide: Medical Cell or IMP Station</strong> — case by case. If person is unresponsive, vomiting, or shows medical risk → call Medical Cell (ext. 912). Otherwise → IMP Station.',
+    '<strong>Place under IMP supervision</strong> until released to SNR or SNR representative. Do not leave unsupervised.',
+    '<strong>Notify SNR immediately</strong> via radio or phone. Say: <em>"This is IMP [unit]. I have detained [Name, Rank, Unit] for excessive drinking at [location] at [time]. Please come to [IMP Station / location] to receive the individual."</em>',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Name / ID / Unit / Behaviour description / Medical Cell Y/N / Handed to SNR (name + time).',
+    '<strong>Produce MPR</strong> (Military Police Report, Annex A SOP 3927). Submit via IMP CMDR to FPM. Distribution: SNR, HQ CAMP CMDT, FPM.',
+    '<strong>If driving was involved or suspected</strong> — conduct breath test immediately. DUI rules apply (zero tolerance).'
+  ],note:'Ref: SOP 3901 §3 / Annex A. Violator remains under IMP supervision until SNR or representative arrives. IMP decides Medical Cell or IMP Station on case-by-case basis.'},
+
+  {id:'speeding',color:'var(--accent2)',bg:'#0d1a2a',title:'Speeding Violation — Traffic Stop',steps:[
+    '<strong>Stop the vehicle.</strong> Use hand signals or lights. Approach driver side. Say: <em>"Stop the vehicle. I am IMP. Please turn off the engine and keep your hands visible."</em>',
+    '<strong>Identify driver.</strong> Request: ID/Access card, vehicle documentation, driving pass. Note registration number.',
+    '<strong>Inform of violation.</strong> Say: <em>"You have been observed driving at [X] km/h. The speed limit in Camp Butmir is 30 km/h. This is a violation of SOP 3901."</em>',
+    '<strong>Determine category:</strong><br>• 5–10 km/h over → verbal warning (1st) / SNR notified (2nd+)<br>• 11–20 km/h over → SNR/Branch Chief + HQ CAMP CMDT + FPM + suspend license 2 weeks (2 pts)<br>• 21+ km/h over → same as above + 3 pts',
+    '<strong>5–10 over, 1st offence:</strong> Issue verbal warning. DOB entry only.',
+    '<strong>5–10 over, 2nd+ / 11–20 / 21+ over:</strong> Produce <strong>TVR</strong> (Traffic Violation Report, Annex B SOP 3927). Approved by IMP CMDR → sent to SNR.',
+    '<strong>License suspension (11+ over):</strong> Confiscate driving pass. Note suspension period in TVR and DOB.',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Name / ID / Unit / Measured speed / Category / License suspended Y/N / TVR number.',
+    '<strong>Report chain (11+ over):</strong> IMP CMDR → SNR → HQ CAMP CMDT → FPM. All actions reported.'
+  ],note:'Ref: SOP 3901 §6b / Annex D. 5 accumulated penalty points = license suspended 1 month automatically. Emergency vehicles (IMP, ambulance, fire, guards, CP teams) may exceed limit in emergencies only.'},
+
+  {id:'dui',color:'var(--danger)',bg:'#2a0000',title:'DUI — Vehicle Under Influence of Alcohol',steps:[
+    '<strong>Initiate breath test.</strong> You may stop any vehicle for random testing. Say: <em>"This is a mandatory IMP breath test. Please step out of the vehicle. The test is required by SOP 3901. Refusal is treated as a positive result."</em>',
+    '<strong>Conduct test.</strong> Record result in promille. If result > 0.0 ‰ — DUI confirmed. Zero tolerance policy applies.',
+    '<strong>If person refuses:</strong> Inform them that refusal = positive result. Say: <em>"Your refusal to submit to testing will be treated as a positive result, resulting in administrative consequences. This will be documented in a Military Police Report."</em>',
+    '<strong>Confiscate driving pass / vehicle keys</strong> if necessary to prevent further vehicle operation.',
+    '<strong>IMMEDIATE notification:</strong> Inform IMP CMDR, SNR/Branch Chief, FPM, and HQ CAMP CMDT without delay.',
+    '<strong>Suspend driver\'s license until EOT</strong> (End of Tour). Document confiscation.',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Name / ID / Unit / BAC result (or refusal noted) / License suspended / Reported to IMP CMDR / FPM / SNR / HQ CAMP CMDT.',
+    '<strong>Produce MPR</strong> (Military Police Report, Annex A SOP 3927). IMMEDIATE distribution: IMP CMDR → FPM → SNR → HQ CAMP CMDT.'
+  ],note:'Ref: SOP 3901 §3a(3) / Annex A / Annex D. ZERO TOLERANCE — any alcohol before or during vehicle operation. Loss of driving privilege and referral to NSE authority. Refusal of testing = assumed DUI.'},
+
+  {id:'id',color:'var(--ok)',bg:'#0d1a0d',title:'No Visible ID / Missing ID Card',steps:[
+    '<strong>Stop the individual.</strong> Say: <em>"I am IMP. Your ID/Access card is not displayed in a visible location as required by SOP 3901. Please show me your card."</em>',
+    '<strong>If card produced but not displayed:</strong> Issue warning. Remind that card must be worn visibly at all times inside Camp Butmir — even in civilian clothes. Exception: sport activity only.',
+    '<strong>If no card at all:</strong> Ask name, rank, unit, building/room. Escort to IMP Station to verify identity. Inform IMP CMDR.',
+    '<strong>1st offence (not visible):</strong> Verbal warning. Log in DOB.',
+    '<strong>2nd offence:</strong> Written warning. DOB entry.',
+    '<strong>3rd+ offence:</strong> Notify <strong>SNR / Branch Chief</strong>. All action reported to <strong>FPM</strong>.',
+    '<strong>Detain if identity cannot be confirmed</strong> and person refuses to cooperate. Inform IMP CMDR immediately.',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Name / ID / Unit / Violation type (not displayed / not carried) / Action taken.',
+    '<strong>Note for SNR:</strong> All EUFOR/NATO personnel should report non-displaying individuals to IMP (SOP 3901 §11b).'
+  ],note:'Ref: SOP 3901 §11 / Annex D. IMP personnel themselves are not required to display ID visibly but must produce when requested. Visitors and Visitor Pass holders: same rules apply.'},
+
+  {id:'weapon',color:'var(--danger)',bg:'#2a0000',title:'Unauthorized Weapon Carry',steps:[
+    '<strong>Identify the situation.</strong> Observe person carrying loaded/visible weapon in unauthorized area (recreational, concession, DFAC).',
+    '<strong>Approach carefully — do not reach for own weapon unless threat imminent.</strong> If alone and person appears threatening — call for backup first (IMP Duty: IPN 5783 / mob +387 62 337 661).',
+    '<strong>Identify yourself.</strong> Say: <em>"I am IMP. Please stop and do not reach for the weapon. Identify yourself and provide your ID card."</em>',
+    '<strong>Verify authorization.</strong> Authorized exceptions: FPG Guard, IMP Det, CP details, written permission holders, ordered by COM EUFOR/NHQ Sa (SOP HQ EUFOR 5275).',
+    '<strong>If unauthorized:</strong> Say: <em>"You are carrying a weapon in an area where it is not authorized. I am placing you under IMP supervision and notifying your SNR/Branch Chief and FPM immediately."</em>',
+    '<strong>Secure the situation.</strong> Do not allow person to leave. IMP may conduct non-intimate search to seize items that may cause harm (SOP 3927 §6c(6)).',
+    '<strong>IMMEDIATE notification:</strong> SNR/Branch Chief + FPM.',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Name / ID / Unit / Weapon type / Circumstances / Authorization checked / Action taken / FPM notified.',
+    '<strong>Produce MPR</strong> (Annex A SOP 3927). IMMEDIATE. Distribution: IMP CMDR → FPM → SNR.'
+  ],note:'Ref: SOP 3901 §5 / SOP 3927. No loaded weapons on Camp BUTMIR except authorized personnel. No weapons in rec/concession areas or DFAC. IMP may use physical force if person fails to comply.'},
+
+  {id:'parking_warn',color:'#e67e22',bg:'#1f0e00',title:'Parking Violation — Field Response',steps:[
+    '<strong>Identify parking violation.</strong> Vehicle parked in wrong zone, restricted area, blocking access road, on grassed area, or in front of Bldg 200/circle without authorization.',
+    '<strong>Check if driver is present.</strong> If present: approach and say: <em>"Your vehicle [registration] is parked in violation of Camp Butmir regulations. This is [zone/restricted area]. Please move the vehicle immediately."</em>',
+    '<strong>If driver absent (1st & 2nd):</strong> Leave written notice on windshield. Produce <strong>PVR</strong> (Parking Violation Report, Annex C SOP 3927).',
+    '<strong>Note on PVR:</strong> Driver must report to IMP Station within <strong>48 hours</strong>. Failure to report = further disciplinary action.',
+    '<strong>If Bldg 200 / Circle (any offence):</strong> Inform SNR/Branch Chief immediately. Report to HQ CAMP CMDT and FPM. Mark 3 penalty points.',
+    '<strong>3rd+ standard violation:</strong> Inform SNR/Branch Chief. Report to HQ CAMP CMDT and FPM.',
+    '<strong>DOB Entry:</strong> Date / Time / Location / Vehicle registration / Unit / Zone violated / Notice left Y/N / PVR number / Action taken.',
+    '<strong>PVR distribution:</strong> Approved by IMP CMDR → sent to SNR. After SNR disposition → return violation notice to HQ CAMP CMDT OPS confirming violation was addressed.'
+  ],note:'Ref: SOP 3901 §6 / Annex C / Annex D. IMP has a copy of assigned parking spaces. Second violations reported to SNR (military) or supervisor (civilian).'},
+
+  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:[
+    '<strong>Check current ALERT STATE</strong> before any walk-out authorization.',
+    '<strong>ALPHA / BRAVO:</strong> Authorized by Branch/Section Chief, National Contingent Cdr, SNR, or MNBN Cdr.',
+    '<strong>CHARLIE (NATO personnel):</strong> Authorized by COS HQ EUFOR or COS NHQ Sa on behalf of COM NHQ Sa. Issue <strong>Force Exemption Card</strong>.',
+    '<strong>DELTA:</strong> <strong>NO walking out. ALL personnel remain in Camp Butmir.</strong>',
+    '<strong>Check Off-Limits list:</strong> Monthly J2 Off-Limits list — posted at DFAC and Gym notice boards, GALAXY, and CHRONOS. Personnel must NOT go to off-limits locations.',
+    '<strong>Off-limits includes:</strong> Brothels, establishments linked to terrorism/organized crime, narcotics, any location on current J2 monthly list.',
+    '<strong>Uniform or civilian:</strong> Personnel may walk out in uniform or civilian clothes. Civilian clothes recommended.',
+    '<strong>Recall procedure:</strong> Branch Supervisors/National Contingent Cdrs contact their personnel when alert state increases. Personnel return immediately to Camp Butmir and report to duty stations.',
+    '<strong>DOB Entry</strong> if any violation or incident during walk-out authorization check.'
+  ],note:'Ref: SOP 3901 §14–18. SNR may impose more restrictive conditions on their national contingents. If alert state changes while personnel are outside — FPG, IMP, or Branch Supervisors may inform them.'},
+
+  {id:'altgate',color:'#e67e22',bg:'#1f0e00',title:'Alternate (Back) Gate — Opening Procedure',steps:[
+    '<strong>Emplace road signs</strong> (Stop, Direction) at the Alternate gate. One-way system becomes operational immediately upon entry.',
+    '<strong>Traffic ENTERING camp:</strong> via Alternate gate → turns RIGHT onto Dayton Road. Applies when Main gate is closed.',
+    '<strong>Traffic LEAVING camp:</strong> via Mostar Road ONLY.',
+    '<strong>No parking</strong> outside the Alternate vehicle gate or Alternate pedestrian gate.',
+    '<strong>IMP COM coordinates with local police</strong> to provide traffic control OUTSIDE the Alternate gate.',
+    '<strong>Control traffic</strong> outside the gate AND inside camp near the Alternate gate simultaneously.',
+    '<strong>Notify JOC</strong> when Alternate gate is activated. Coordinate with HQ CAMP CMDT.',
+    '<strong>Limit traffic</strong> to necessary minimum while Main gate is closed.',
+    '<strong>DOB Entry:</strong> Time activated / Reason / IMP personnel deployed / JOC notified / Local police coordinated.'
+  ],note:'Ref: Camp Butmir Defence Plan Annex D. Coordinate with HQ CAMP CMDT. All personnel follow temporary road reorganization and IMP directions.'}
 ];
 
 const sopRefs=[
-  {tag:'SOP §1',title:'Dress — On Camp Butmir',rules:['All personnel wear appropriate national uniform on Camp BUTMIR.','EUFOR personnel (incl. NSE): BDU dress strongly encouraged 0600–1800 hrs — head-dress worn, jackets closed, no hands in pockets.','Mandatory: EUFOR Logo on uniform per national regulations (see Annex H).','Forbidden: visible signs/graphics considered offensive, obscene or indecent.','All military personnel must have proper haircut per national regulations.','BDU exemptions: en route to Gym; going to gate per walking-out policy; civilian clothing required for duty.']},
-  {tag:'SOP §1f',title:'Dress — Dining Facility (DFAC)',rules:['No sports/gym outfits if too tight or sweaty.','No dining if civilian clothes or uniform are dirty.','No sleeveless t-shirts, tops, vests or short shorts.','Head-dress, tactical glasses, sunglasses must be removed (not placed on table). Religious headgear authorized.','No open-toe sandals, flip-flops or shower shoes.','No large bags or rucksacks.','Hands must be washed and sanitized before entering dining area.','No food or drink taken out — only coffee or fruit allowed.']},
-  {tag:'SOP §2',title:'Smoking Rules',rules:['Smoking only in designated areas (see Annex E).','Smoking materials disposed of in metal receptacle bins — NOT on the ground.','Smoking not permitted inside accommodation blocks at any time.','Smoking not allowed while walking around Camp Butmir.','Smoking not allowed in EUFOR/NATO vehicles.']},
-  {tag:'SOP §3',title:'Alcohol Rules',rules:['Excessive drinking will not be tolerated in or outside Camp BUTMIR. IMP removes and detains. SNR informed via IMP report.','Zero tolerance: No alcohol before/during operation of any EUFOR/NHQ Sa vehicle. IMP conducts random breath tests.','No alcohol in accommodation blocks without COM EUFOR or COM NHQ Sa approval.','Forbidden to serve alcohol to visibly intoxicated individuals. Violations = action through chain of command.','Last call: 15 min before authorized bar closing.','Bar hour extensions: application to HQ CAMP CMDT required (7 days advance for functions).','Individual nations may implement stricter policies upon their service members.']},
-  {tag:'SOP §4',title:'Saluting',rules:['Military personnel salute per national military regulations.','Even if national regs do not require a salute — minimum courtesy is expected.','Officers must return courtesy when saluted.','Other nations\' officers to be saluted if identified.','All personnel should be familiar with the Command Group of HQ EUFOR/NHQ Sa (posters distributed).']},
-  {tag:'SOP §5',title:'Weapons',rules:['No loaded weapons on Camp BUTMIR except: FPG Guard, IMP Det, CP details, concealed weapons permission holders, ordered by COM EUFOR/NHQ Sa.','No weapons in recreation/concession areas except IMP and permitted personnel.','No loaded weapons in DFAC except IMP and permitted personnel.','Reference HQ EUFOR SOP 5275 Force Protection for full regulations and alert state procedures.']},
-  {tag:'SOP §6',title:'Vehicles',rules:['Mandatory: use assigned parking spaces.','Speed limit throughout Camp BUTMIR: 30 km/h.','Drivers may stop outside parking area max 5 min with emergency lights on (no traffic hazard). Must move immediately upon IMP command.','Obey all road signs on Camp Butmir.','Forbidden: use cellphone while driving (hands-free kit only).','Written parking warning: report to IMP Station within 48h or face disciplinary action.','Vehicles not to be driven on grassed areas at any time.']},
-  {tag:'SOP §7',title:'Bicycles & Scooters',rules:['All bicycles must be registered with ID office and have valid vignette/sticker.','Bicycles must have white front light/reflector and red rear light/reflector.','Bicycles and scooters obey all traffic laws as road users.','Scooters, skateboards, roller skates: same traffic regulations as vehicles.','After dusk or in bad weather: front and rear lights must be on.','While operating a bicycle: two hands on handlebar at all times.']},
-  {tag:'SOP §8',title:'Pedestrians',rules:['Where footpath/sidewalk is available — must use it.','Where no footpath — walk on side of road opposite to traffic direction, max 2 abreast.']},
-  {tag:'SOP §10',title:'Quiet Hours',rules:['Quiet hours: Monday–Sunday, 2300 hrs – 0600 hrs.','Hallway lights to be turned out.','Music may be played at low volume — must not be heard outside the room.','Voices kept at low level — includes Skype/FaceTime conversations.','Loud noises (e.g., slamming doors) to be avoided.','Consideration for those trying to sleep.']},
-  {tag:'SOP §11',title:'IMP Cooperation — ID Cards',rules:['ID/Access cardholders and Visitor Pass holders must carry cards at all times on camp and within AOO.','Cards must be worn in visible location inside Camp Butmir or EUFOR/NHQ Sa installations — even in civilian clothes. Exception: sport activity.','All EUFOR/NATO personnel must notify IMP if a person is not visibly displaying their ID.','IMP will give a warning to personnel failing to display ID. Violation logged in IMP daily occurrence book.','IMP personnel: not required to display ID visibly but must produce when requested.','All military personnel stopped by IMP Detachment will cooperate regardless of rank.']},
-  {tag:'SOP §12',title:'Accommodation by Gender',rules:['EUFOR/NHQ Sa does NOT provide mixed gender barrack accommodation (exception: Bldg 201/A with separate shower/toilet).','Male personnel NOT allowed in Female Barrack Accommodation blocks.','Female personnel NOT allowed in Male Barrack Accommodation blocks.','National Property (NSE/NIC): nations must provide separate & secure access zones/toilets/bathrooms for male and female personnel.']},
-  {tag:'SOP §15',title:'Walking Out — Delegated Authority',rules:['ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Force Exemption Card issued.','DELTA: NO walking out.','Personnel may walk out in uniform or civilian clothes to any establishment in BiH not on Off-Limits list. Civilian clothes recommended.','Off-limits list published monthly by J2 — posted on GALAXY, CHRONOS, notice boards at DFAC and Gym.','SNR may impose more restrictive conditions on their national contingents.']}
+  // ── SOP 3901 — CONDUCT & DISCIPLINE ─────────────────────────────────────────
+  {tag:'SOP 3901 §1',title:'Dress — On Camp Butmir',rules:['All personnel wear appropriate national uniform on Camp BUTMIR.','EUFOR personnel (incl. NSE): BDU dress strongly encouraged 0600–1800 hrs — head-dress worn, jackets closed, no hands in pockets.','Mandatory: EUFOR Logo on uniform per national regulations (see Annex H). Badge: 70 mm diameter.','Forbidden: visible signs/graphics considered offensive, obscene or indecent.','All military personnel must have proper haircut per national regulations.','BDU exemptions: en route to Gym; going to gate per walking-out policy; civilian clothing required for duty.']},
+  {tag:'SOP 3901 §1f',title:'Dress — Dining Facility (DFAC)',rules:['No sports/gym outfits if too tight or sweaty.','No dining if civilian clothes or uniform are dirty.','No sleeveless t-shirts, tops, vests or short shorts.','Head-dress, tactical glasses, sunglasses must be removed (not placed on table). Religious headgear authorized.','No open-toe sandals, flip-flops or shower shoes.','No large bags or rucksacks.','Hands must be washed and sanitized before entering dining area.','No food or drink taken out — only coffee or fruit allowed.']},
+  {tag:'SOP 3901 §2',title:'Smoking Rules',rules:['Smoking only in designated areas (see Annex E — Camp Butmir Smoking Areas map).','Smoking materials disposed of in metal receptacle bins — NOT on the ground.','Smoking not permitted inside accommodation blocks at any time.','Smoking not allowed while walking around Camp Butmir.','Smoking not allowed in EUFOR/NATO vehicles.']},
+  {tag:'SOP 3901 §3 / Annex A',title:'Alcohol Rules',rules:['Excessive drinking (obnoxious behaviour, lack of self-control, fighting) will not be tolerated in or outside Camp BUTMIR.','IMP removes personnel from bar/establishment. Violator remains under IMP supervision until released to SNR or SNR representative.','IMP decides: Medical Cell or IMP Station — case by case.','Zero tolerance: No alcohol before or during operation of any EUFOR/NHQ Sa vehicle. IMP conducts random breath tests.','No alcohol in accommodation blocks without COM EUFOR or COM NHQ Sa approval.','Forbidden to serve alcohol to visibly intoxicated individuals. Violations = action through chain of command.','Last call: 15 min before authorized bar closing. Music down, lights on at last call.','Bar hour extensions: written application to HQ CAMP CMDT required — at least 7 days in advance.','Individual nations may implement stricter policies upon their service members.']},
+  {tag:'SOP 3901 §4',title:'Saluting',rules:['Military personnel salute per national military regulations.','Even if national regs do not require a salute — minimum courtesy is expected.','Officers must return courtesy when saluted.','Other nations\' officers to be saluted if identified.','All personnel should be familiar with the Command Group of HQ EUFOR/NHQ Sa (posters distributed).']},
+  {tag:'SOP 3901 §5',title:'Weapons',rules:['No loaded weapons on Camp BUTMIR except: FPG Guard, IMP Det, CP details, concealed weapons permission holders, ordered by COM EUFOR/NHQ Sa.','No weapons in recreation/concession areas except IMP and permitted personnel.','No loaded weapons in DFAC except IMP and permitted personnel.','IMP personnel authorized to carry weapons to any area while on duty tasks (SOP 3927 §6d).','IMP may carry concealed weapons if situation requires — e.g. Off-Limits checks (SOP 3927 §6e).','Reference HQ EUFOR SOP 5275 Force Protection for full regulations and alert state procedures.']},
+  {tag:'SOP 3901 §6 / Annex C+D',title:'Vehicles & Parking',rules:['Mandatory: use assigned parking zones (A–X). Zones assigned per vehicle pass.','Speed limit throughout Camp BUTMIR: 30 km/h.','Drivers may stop outside parking area max 5 min with emergency lights on (no traffic hazard). Must move immediately upon IMP command.','Obey all road signs on Camp Butmir.','Forbidden: use cellphone while driving — hands-free kit only.','Written parking warning: driver must report to IMP Station within 48h or face disciplinary action.','Vehicles not to be driven on grassed areas at any time.','Emergency vehicles (IMP, ambulance, fire, guards, CP teams) may exceed speed limit in emergency only.','IMP has copy of vehicles assigned to parking spaces to verify correct parking.']},
+  {tag:'SOP 3901 §7',title:'Bicycles & Scooters',rules:['All bicycles must be registered with ID office and have valid vignette/sticker.','Bicycles must have white front light/reflector and red rear light/reflector.','Bicycles and scooters obey all traffic laws as road users.','Scooters, skateboards, roller skates: same traffic regulations as vehicles.','After dusk or in bad weather: front and rear lights must be on.','While operating a bicycle: two hands on handlebar at all times.']},
+  {tag:'SOP 3901 §8',title:'Pedestrians',rules:['Where footpath/sidewalk is available — must use it.','Where no footpath — walk on side of road opposite to traffic direction, max 2 abreast.']},
+  {tag:'SOP 3901 §10',title:'Quiet Hours',rules:['Quiet hours: Monday–Sunday, 2300 hrs – 0600 hrs.','Hallway lights to be turned out.','Music may be played at low volume — must not be heard outside the room.','Voices kept at low level — includes Skype/FaceTime conversations.','Loud noises (e.g., slamming doors) to be avoided.','Consideration for those trying to sleep.']},
+  {tag:'SOP 3901 §11',title:'IMP Cooperation — ID Cards',rules:['ID/Access cardholders and Visitor Pass holders must carry cards at all times on camp and within AOO.','Cards must be worn in visible location inside Camp Butmir — even in civilian clothes. Exception: sport activity.','All EUFOR/NATO personnel must notify IMP if a person is not visibly displaying their ID.','IMP will give a warning to personnel failing to display ID. Violation logged in IMP daily occurrence book.','IMP personnel: not required to display ID visibly but must produce when requested.','All military personnel stopped by IMP Detachment will cooperate regardless of rank.']},
+  {tag:'SOP 3901 §12',title:'Accommodation by Gender',rules:['EUFOR/NHQ Sa does NOT provide mixed gender barrack accommodation (exception: Bldg 201/A with separate shower/toilet).','Male personnel NOT allowed in Female Barrack Accommodation blocks.','Female personnel NOT allowed in Male Barrack Accommodation blocks.','National Property (NSE/NIC): nations must provide separate & secure access zones/toilets/bathrooms for male and female personnel.']},
+  {tag:'SOP 3901 §14–18',title:'Walking Out — Delegated Authority & Recall',rules:['Walking Out = leaving Camp BUTMIR by any means for recreational or unofficial purposes.','ALPHA/BRAVO: Authorized by Branch/Section Chief / National Contingent Cdr / SNR / MNBN Cdr.','CHARLIE (NATO): Authorized by COS HQ EUFOR or COS NHQ Sa. Force Exemption Card issued.','DELTA: NO walking out — all personnel remain in Camp Butmir.','Personnel may walk out in uniform or civilian clothes. Civilian clothes recommended.','Off-limits list published monthly by J2 — posted on GALAXY, CHRONOS, DFAC and Gym boards.','Off-limits includes brothels, establishments linked to terrorism/organized crime, narcotics.','SNR may impose more restrictive conditions on their national contingents.','Recall: Branch Supervisors contact personnel when alert state increases. Personnel return immediately and report to duty stations.','Change in alert state: FPG, IMP, or Branch Supervisors may inform personnel outside camp.']},
+  {tag:'SOP 3901 Annex B',title:'Bar Hours for Concessionaires',rules:['Monday–Thursday: Opens 17:00 / Last Call 22:45 / Closed 23:00.','Friday: Opens 17:00 / Last Call 23:45 / Closed 24:00.','Saturday: Opens 12:00 / Last Call 23:45 / Closed 24:00.','Sunday: Opens 12:00 / Last Call 22:45 / Closed 23:00.','Last call = 15 min before authorized closing. At last call: music volume down, lights on.','Extensions: written request through MWA supervisor to HQ CAMP CMDT S1 — at least 7 days in advance.','IMP checks Millennium Bar and other concessionaires are opened/closed per official times and may order closure.']},
+  {tag:'SOP 3901 Annex G',title:'Gymnasium Rules',rules:['Hours: Mon–Fri 0500–2100, Sat–Sun 0800–2000. Closed for cleaning 0830–0900 weekdays.','Sign in/out in logbook at front desk. Use at own risk.','Appropriate sports clothing required. Must be clean and dry.','Towel required at all times. Wipe equipment with disinfectant after use.','No shouting or groaning. No removing footwear.','Return weights to rack. Safety clips on ALL weight lifting bars.','No smoking. No personal equipment without Gym Supervisor permission.','No taking sports equipment outside the facility.','Injuries/emergencies: call Gym Staff immediately + MED CELL ext. 912.']},
+
+  // ── SOP 3927 — IMP DETACHMENT / REPORTS ─────────────────────────────────────
+  {tag:'SOP 3927 §4',title:'IMP Mission',rules:['IMP provides security to EUFOR/NHQ Sa personnel in AOO — particularly Camp Butmir and Sarajevo International Airport (SIA).','Ensures law and order, proper military conduct and discipline.','Provides traffic control and investigates incidents, accidents and crimes.','Operates 24/7: IMP Duty (1 NCO) + IMP Duty Stand-by (1 NCO), both available within 15 min.','IMP Duty Office: Bldg 103, Room 1. After hours: available by mobile within 15 min.']},
+  {tag:'SOP 3927 §6',title:'IMP Jurisdiction & Authority',rules:['IMP has authority over ALL EUFOR/NHQ Sa personnel within AOO and over all personnel while in Camp Butmir — regardless of rank.','IMP may order cooperation, stop and request ID, stop and direct vehicles.','IMP may apprehend/detain if person is committing/has committed an offence, is a danger to themselves or others, or fails to produce ID when requested.','IMP may use physical force if person fails to comply with orders. Handcuffs, batons: authorized if force is insufficient or person endangers life (SOP 3927 §6f).','IMP may search detained persons (non-intimate) and their property. May search EUFOR/NHQ Sa installations. May search vehicles and bags if offence suspected.','IMP may conduct breath test at any time — including on SNR/Branch supervisor request on their personnel.','Refusal of breath test: IMP instructs that refusal = treated as positive result, resulting in administrative consequences.','FPM enjoys the same jurisdiction and authority as IMP personnel.']},
+  {tag:'SOP 3927 §10d',title:'MPR — Military Police Report',rules:['When to produce MPR: crime, major accident, major incident, damage to EUFOR/NHQ Sa property, or when circumstances require (future national investigations, possible claims).','MPR is a product of an official IMP investigation. May be Initial, Preliminary, or Final.','Final MPR: reviewed by IMP CMDR → approved by FPM → sent to violator\'s SNR for disciplinary action.','Distribution list on MPR: SNR, FPM, COM, LEGAD Chief, COS, MAs, EXOs, Claims Office as applicable.','Every MPR must be marked "POLICE IN CONFIDENCE" in header and footer.','MPR hard copies and evidence archived minimum 6 years from completion.','If SNR is under investigation — higher rank of that nation is informed.']},
+  {tag:'SOP 3927 §10e',title:'TVR — Traffic Violation Report',rules:['When to produce TVR: minor traffic violation (exceeding speed limit, no seatbelt, using cellphone, smoking in vehicle) without endangering life or causing damage.','TVR approved by IMP CMDR → sent to violator\'s SNR → FPM and other personnel depending on incident type.','All TVRs marked "POLICE IN CONFIDENCE".','TVR hard copies archived minimum 1 year from completion.','TVR template: Annex B to SOP 3927.','Fields: TVR number / Date of issue / Violation type / DTG of violation / Location / Violator\'s details / Vehicle details / Violation description / Conduct (Cooperative / Uncooperative / Hostile) / Reporting IMP / Approving IMP CMDR / Distribution list.']},
+  {tag:'SOP 3927 §10f',title:'PVR — Parking Violation Report',rules:['When to produce PVR: minor parking violation (wrong parking area, inappropriate location) without endangering life or causing damage.','PVR approved by IMP CMDR → sent to violator\'s SNR → FPM and other personnel depending on incident type.','All PVRs marked "POLICE IN CONFIDENCE".','PVR hard copies archived minimum 1 year from completion.','PVR template: Annex C to SOP 3927.','Fields: PVR number / Date of issue / Violation type / DTG / Location / Violator\'s details / Violation description / Conduct (Cooperative / Uncooperative / Hostile) / Actions taken / Reporting IMP / Approving IMP CMDR / Distribution list.']},
+  {tag:'SOP 3927 §11',title:'DOB — Daily Occurrence Book',rules:['IMP Duty is responsible for registering ALL IMP activities during duty period — immediately as they occur.','DOB entries: all accidents, incidents, offences, violations, or important information.','DOB kept as a computer file. Each completed DOB reviewed by IMP CMDR immediately and sent by email to FPM.','DOB Entry format: Entry number / Date (year) / FROM–TO time / Reporting IMP Duty (name, nationality) / Entry Type / Entry Time / Description.','Standard entry types: Inner patrol, Sobriety check, Escort/BLE, Truck inspection, Concessionaire check, Traffic violation, Parking violation, ID check, Incident response.','NSTR = Nothing Significant To Report — used when patrol/task completed without incident.','DOB template: Annex D to SOP 3927.']},
+  {tag:'SOP 3927 §10 — General',title:'Report Selection Guide',rules:['MPR → Major incident, crime, accident with injury, significant damage to EUFOR/NATO property.','TVR → Minor traffic violation (speeding, seatbelt, cellphone, smoking in vehicle).','PVR → Parking violation (wrong zone, restricted area, Bldg 200 circle).','DOB → Every IMP activity, every warning issued, every patrol, every check. Always required.','When in doubt: produce MPR. Over-reporting is safer than under-reporting.','All reports must be produced in English (SOP 3927 §10c).','Branch Chiefs / SNRs may request releasable copy for insurance/national use — requests to FPM.']}
 ];
 
 // ── CLOCK ────────────────────────────────────────────────────────────────────
@@ -1286,25 +1561,34 @@ function openProc(id){
 
 // ── SOP REFS ─────────────────────────────────────────────────────────────────
 function renderRefs(q){
-  const list=document.getElementById('refList');
   const fq=(q||'').toLowerCase().trim();
-  const items=fq?sopRefs.filter(r=>r.title.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))):sopRefs;
-  if(!items.length){list.innerHTML=`<div class="search-empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>No results for "${q}"</div>`;return;}
-  list.innerHTML=items.map((r,i)=>`
-    <div class="ref-card" id="ref-${i}">
-      <div class="ref-header" onclick="document.getElementById('ref-${i}').classList.toggle('open')">
-        <span class="ref-tag">${r.tag}</span>
-        <span class="ref-title">${r.title}</span>
-        <span class="v-chevron">&#9660;</span>
-      </div>
-      <div class="ref-body">
-        ${r.rules.map(rule=>{
-          const hl=fq?rule.replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):rule;
-          return `<div class="rule-item"><span class="rule-bullet">›</span><span>${hl}</span></div>`;
-        }).join('')}
-      </div>
-    </div>`).join('');
-  if(fq)document.querySelectorAll('.ref-card').forEach(c=>c.classList.add('open'));
+  const sop3901=sopRefs.filter(r=>r.tag.includes('3901')||(!r.tag.includes('3927')));
+  const sop3927=sopRefs.filter(r=>r.tag.includes('3927'));
+
+  function renderList(items, listId){
+    const list=document.getElementById(listId);
+    if(!list)return;
+    const filtered=fq?items.filter(r=>r.title.toLowerCase().includes(fq)||r.tag.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))):items;
+    if(!filtered.length){list.innerHTML=fq?`<div class="search-empty">No results for "${q}"</div>`:'';return;}
+    list.innerHTML=filtered.map((r,i)=>`
+      <div class="ref-card" id="${listId}-${i}">
+        <div class="ref-header" onclick="document.getElementById('${listId}-${i}').classList.toggle('open')">
+          <span class="ref-tag">${r.tag}</span>
+          <span class="ref-title">${r.title}</span>
+          <span class="v-chevron">&#9660;</span>
+        </div>
+        <div class="ref-body">
+          ${filtered[i].rules.map(rule=>{
+            const hl=fq?rule.replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):rule;
+            return `<div class="rule-item"><span class="rule-bullet">›</span><span>${hl}</span></div>`;
+          }).join('')}
+        </div>
+      </div>`).join('');
+    if(fq)list.querySelectorAll('.ref-card').forEach(c=>c.classList.add('open'));
+  }
+
+  renderList(sop3901,'refList');
+  renderList(sop3927,'refList3927');
 }
 function filterRefs(q){renderRefs(q);}
 renderRefs('');
