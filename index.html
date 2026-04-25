@@ -12,30 +12,31 @@
 <title>IMP Compass — Camp Butmir</title>
 <style>
 :root {
-  --bg:#0a0c0f; --surface:#12161c; --surface2:#1a1f28; --surface3:#222831;
-  --border:#2a3040; --accent:#e8a020; --accent2:#3a7bd5;
-  --danger:#d63031; --warn:#f39c12; --ok:#27ae60;
-  --text:#d8dde8; --text2:#8a95a8; --text3:#555f72;
+  --bg:#eef0f3; --surface:#ffffff; --surface2:#e8eaed; --surface3:#d8dce3;
+  --border:#bcc3cc; --accent:#b8620a; --accent2:#1a5cb8;
+  --danger:#b91c1c; --warn:#b45309; --ok:#15803d;
+  --text:#0d1117; --text2:#3a4250; --text3:#6b7280;
   --mono: 'Courier New', Courier, monospace;
   --cond: -apple-system-condensed, 'Arial Narrow', Arial, sans-serif;
   --body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   --nav-h:60px; --header-h:56px;
+  --header-bg:#1a2035; --header-text:#ffffff; --header-sub:#9aa3b8;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;overflow:hidden}
 
 /* HEADER */
-#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--header-bg);border-bottom:1px solid #0d1225;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px}
 .header-logo{display:flex;align-items:center;gap:10px;min-width:0}
-.logo-badge{width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#000;letter-spacing:.5px;flex-shrink:0;font-family:var(--body)}
-.logo-text{font-weight:700;font-size:16px;color:var(--text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
-.logo-sub{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:1.5px;display:block;margin-top:1px;white-space:nowrap}
+.logo-badge{width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;letter-spacing:.5px;flex-shrink:0;font-family:var(--body)}
+.logo-text{font-weight:700;font-size:16px;color:var(--header-text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
+.logo-sub{font-family:var(--mono);font-size:8px;color:var(--header-sub);letter-spacing:1.5px;display:block;margin-top:1px;white-space:nowrap}
 .header-status{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .alert-badge{font-weight:700;font-size:11px;padding:3px 8px;border-radius:3px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;text-transform:uppercase;font-family:var(--body)}
-.alert-bravo{background:#1a3a1a;color:#4caf50;border:1px solid #2d6b2d}
-.alert-charlie{background:#3a2a00;color:var(--warn);border:1px solid #7a5500}
-.alert-delta{background:#3a0000;color:var(--danger);border:1px solid #7a0000}
-.clock{font-family:var(--mono);font-size:12px;color:var(--accent);white-space:nowrap}
+.alert-bravo{background:#14532d;color:#86efac;border:1px solid #16a34a}
+.alert-charlie{background:#78350f;color:#fde68a;border:1px solid #b45309}
+.alert-delta{background:#7f1d1d;color:#fca5a5;border:1px solid #b91c1c}
+.clock{font-family:var(--mono);font-size:12px;color:#fbbf24;white-space:nowrap}
 
 /* MAIN */
 #main{position:fixed;top:var(--header-h);bottom:var(--nav-h);left:0;right:0;overflow:hidden}
@@ -43,11 +44,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .tab-content.active{display:block}
 
 /* BOTTOM NAV */
-#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--surface);border-top:1px solid var(--border);display:flex}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:var(--text3);font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(--body)}
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--header-bg);border-top:1px solid #0d1225;display:flex}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:#6b7a99;font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(--body)}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.nav-btn.active{color:var(--accent)}
-.nav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:0 0 2px 2px}
+.nav-btn.active{color:#fbbf24}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:#fbbf24;border-radius:0 0 2px 2px}
 
 /* SECTION LABEL */
 .section-label{font-weight:700;font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(--body)}
@@ -55,15 +56,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 /* FILTER CHIPS */
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.filter-chip{font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--body)}
-.filter-chip.active{background:var(--accent);border-color:var(--accent);color:#000}
+.filter-chip{font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--body)}
+.filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* VIOLATION CARDS */
-.violation-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.violation-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .violation-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
 .violation-header:active{background:var(--surface2)}
 .sev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sev-1{background:var(--warn)} .sev-2{background:#e67e22} .sev-3{background:var(--danger)}
+.sev-1{background:var(--warn)} .sev-2{background:#c2410c} .sev-3{background:var(--danger)}
 .violation-title{font-weight:700;font-size:14px;color:var(--text);flex:1;letter-spacing:.2px;font-family:var(--body)}
 .v-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0}
 .violation-card.open .v-chevron,.proc-card.open .v-chevron,.ref-card.open .v-chevron{transform:rotate(180deg)}
@@ -71,12 +72,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .violation-card.open .violation-body{display:block}
 .penalty-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .penalty-row:last-child{border-bottom:none}
-.penalty-num{font-family:var(--mono);font-size:11px;color:var(--accent);flex-shrink:0;padding-top:1px;min-width:28px}
+.penalty-num{font-family:var(--mono);font-size:11px;color:var(--accent);flex-shrink:0;padding-top:1px;min-width:36px;font-weight:700}
 .penalty-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
-.penalty-points{font-family:var(--mono);font-size:11px;color:var(--danger);flex-shrink:0;padding-top:1px}
+.penalty-points{font-family:var(--mono);font-size:11px;color:var(--danger);flex-shrink:0;padding-top:1px;font-weight:700}
+
+/* SAY box — special highlight for phrases */
+.penalty-row .penalty-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
 
 /* PROCEDURE CARDS */
-.proc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.proc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .proc-header{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
 .proc-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .proc-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -87,52 +91,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .step-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
 .step-item:last-child{border-bottom:none}
 .step-num{width:22px;height:22px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:#fff;flex-shrink:0;margin-top:2px}
-.step-text{font-size:13px;color:var(--text);line-height:1.5}
-.step-note{font-size:12px;color:var(--warn);margin-top:8px;padding:8px 10px;background:#1f1500;border-radius:4px;border-left:3px solid var(--warn);line-height:1.4}
+.step-text{font-size:13px;color:var(--text);line-height:1.6}
+.step-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
+.step-note{font-size:12px;color:var(--warn);margin-top:8px;padding:8px 10px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);line-height:1.4}
 
 /* QUICK STRIP */
 .quick-strip{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .quick-strip::-webkit-scrollbar{display:none}
-.quick-btn{flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:70px}
+.quick-btn{flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:70px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .quick-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .quick-btn-label{font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);white-space:nowrap;font-family:var(--body)}
 
 /* CONTACTS */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;display:block;transition:border-color .15s}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;display:block;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .contact-card:active{border-color:var(--accent)}
-.contact-label{font-weight:700;font-size:11px;letter-spacing:.5px;color:var(--text2);text-transform:uppercase;margin-bottom:4px;font-family:var(--body)}
+.contact-label{font-weight:700;font-size:11px;letter-spacing:.5px;color:var(--text3);text-transform:uppercase;margin-bottom:4px;font-family:var(--body)}
 .contact-number{font-family:var(--mono);font-size:22px;color:var(--accent);letter-spacing:2px;font-weight:700}
 .contact-ext{font-family:var(--mono);font-size:12px;color:var(--text2);margin-top:2px}
-.contact-full{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.contact-full{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .contact-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);gap:10px}
 .contact-row:last-child{border-bottom:none}
 .contact-row-label{font-weight:600;font-size:13px;color:var(--text);flex:1;font-family:var(--body)}
 .contact-row-call{font-family:var(--mono);font-size:10px;color:var(--accent2);flex-shrink:0}
-.contact-row-num{font-family:var(--mono);font-size:13px;color:var(--accent);flex-shrink:0}
+.contact-row-num{font-family:var(--mono);font-size:13px;color:var(--accent);flex-shrink:0;font-weight:700}
 
 /* RADIO */
 .radio-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
 .radio-row:last-child{border-bottom:none}
 .radio-station{font-size:13px;color:var(--text2);font-family:var(--body)}
 .radio-callsign{font-family:var(--mono);font-size:10px;color:var(--accent2);text-align:right}
-.radio-ipn{font-family:var(--mono);font-size:12px;color:var(--accent);text-align:right;min-width:58px}
+.radio-ipn{font-family:var(--mono);font-size:12px;color:var(--accent);text-align:right;min-width:58px;font-weight:700}
 
 /* REFS / SOP */
-.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .ref-header{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
-.ref-tag{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(--surface3);color:var(--text3);flex-shrink:0;white-space:nowrap}
+.ref-tag{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);flex-shrink:0;white-space:nowrap;font-weight:700}
 .ref-title{font-weight:700;font-size:14px;color:var(--text);flex:1;font-family:var(--body)}
 .ref-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
 .ref-card.open .ref-body{display:block}
 .rule-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
 .rule-item:last-child{border-bottom:none}
-.rule-bullet{color:var(--accent);flex-shrink:0;font-family:var(--mono);font-size:14px;padding-top:0;line-height:1.4}
-.highlight{background:#3a2a00;color:var(--warn);border-radius:2px;padding:0 2px}
+.rule-bullet{color:var(--accent);flex-shrink:0;font-family:var(--mono);font-size:14px;padding-top:0;line-height:1.4;font-weight:700}
+.highlight{background:#fef08a;color:#713f12;border-radius:2px;padding:0 2px}
 
 /* SEARCH */
 .search-bar{position:relative;margin-bottom:12px}
-.search-bar input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--body);font-size:15px;padding:10px 14px 10px 40px;outline:none;-webkit-appearance:none}
+.search-bar input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--body);font-size:15px;padding:10px 14px 10px 40px;outline:none;-webkit-appearance:none;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .search-bar input:focus{border-color:var(--accent2)}
 .search-bar input::placeholder{color:var(--text3)}
 .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3)}
@@ -143,107 +148,113 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 /* MAP */
 .map-container{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:12px;height:calc(100vh - var(--header-h) - var(--nav-h) - 160px);min-height:280px;background:var(--surface2);position:relative}
 .map-container iframe{width:100%;height:100%;border:none}
-.map-info-bar{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:8px}
+.map-info-bar{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:8px}
 .map-info-bar a{color:var(--accent2);text-decoration:none;margin-left:auto;font-weight:600;font-size:12px}
 .map-legend{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
 .parking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
-.parking-zone{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center}
+.parking-zone{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center}
 .zone-letter{font-weight:900;font-size:22px;color:var(--accent);line-height:1;font-family:var(--body)}
 .zone-desc{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.3}
 
 /* BAR TABLE */
 .bar-table{width:100%;border-collapse:collapse;font-size:13px}
-.bar-table th{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-family:var(--body)}
+.bar-table th{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:2px solid var(--border);text-align:left;font-family:var(--body);background:var(--surface2)}
 .bar-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
 .bar-table tr:last-child td{border-bottom:none}
 .bar-table .day-col{font-weight:600;color:var(--text)}
-.bar-table .time-open{color:var(--ok);font-family:var(--mono)}
-.bar-table .time-last{color:var(--warn);font-family:var(--mono)}
-.bar-table .time-closed{color:var(--danger);font-family:var(--mono)}
+.bar-table .time-open{color:var(--ok);font-family:var(--mono);font-weight:700}
+.bar-table .time-last{color:var(--warn);font-family:var(--mono);font-weight:700}
+.bar-table .time-closed{color:var(--danger);font-family:var(--mono);font-weight:700}
 
 /* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);align-items:flex-end}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);align-items:flex-end}
 .modal-overlay.open{display:flex}
-.modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;border-top:1px solid var(--border)}
-.modal-title{font-weight:900;font-size:18px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;font-family:var(--body)}
-.modal-close{background:var(--surface3);border:none;border-radius:50%;width:30px;height:30px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;border-top:2px solid var(--border)}
+.modal-title{font-weight:900;font-size:18px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;font-family:var(--body);color:var(--text)}
+.modal-close{background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .alert-row{border-radius:8px;padding:12px 14px;margin-bottom:8px}
 .alert-row-title{font-weight:900;font-size:16px;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;font-family:var(--body)}
-.alert-row-text{font-size:13px;color:var(--text2);line-height:1.5}
-.a-bravo{background:#0d1f0d;border:1px solid #1f3d1f} .a-charlie{background:#1f1000;border:1px solid #4a3000} .a-delta{background:#1f0000;border:1px solid #4a0000}
-.a-bravo .alert-row-title{color:#4caf50} .a-charlie .alert-row-title{color:var(--warn)} .a-delta .alert-row-title{color:var(--danger)}
+.alert-row-text{font-size:13px;line-height:1.5}
+.a-bravo{background:#dcfce7;border:1.5px solid #86efac} .a-charlie{background:#fef3c7;border:1.5px solid #fcd34d} .a-delta{background:#fee2e2;border:1.5px solid #fca5a5}
+.a-bravo .alert-row-title{color:#15803d} .a-bravo .alert-row-text{color:#166534}
+.a-charlie .alert-row-title{color:#b45309} .a-charlie .alert-row-text{color:#92400e}
+.a-delta .alert-row-title{color:#b91c1c} .a-delta .alert-row-text{color:#991b1b}
 .alert-set-row{display:flex;gap:8px;margin-top:6px}
-.alert-set-btn{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border:none;font-family:var(--body)}
-.asb-bravo{background:#0d1f0d;border:1px solid #1f3d1f!important;color:#4caf50;border:none}
-.asb-charlie{background:#1f1000;border:1px solid #4a3000!important;color:var(--warn);border:none}
-.asb-delta{background:#1f0000;border:1px solid #4a0000!important;color:var(--danger);border:none}
+.alert-set-btn{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:var(--body)}
+.asb-bravo{background:#dcfce7;border:1.5px solid #86efac;color:#15803d}
+.asb-charlie{background:#fef3c7;border:1.5px solid #fcd34d;color:#b45309}
+.asb-delta{background:#fee2e2;border:1.5px solid #fca5a5;color:#b91c1c}
 
 /* ACRONYMS */
 .acro-result{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-bottom:1px solid var(--border)}
 .acro-result:last-child{border-bottom:none}
 .acro-key{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);min-width:72px;flex-shrink:0;letter-spacing:.5px}
 .acro-val{font-size:13px;color:var(--text2);line-height:1.4}
-.acro-list{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.acro-list{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .acro-letter-head{font-weight:700;font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
 .acro-count{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:4px}
 
 ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
+
 /* ROSTER */
 .roster-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
 .roster-table{width:100%;border-collapse:collapse;min-width:420px}
-.roster-table th{font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-align:center;padding:8px 4px;border-bottom:2px solid var(--border);white-space:nowrap}
+.roster-table th{font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-align:center;padding:8px 4px;border-bottom:2px solid var(--border);white-space:nowrap;background:var(--surface2)}
 .roster-table th.rt-unit{text-align:left;padding-left:8px;min-width:70px}
 .roster-table td{padding:4px 3px;text-align:center;border-bottom:1px solid var(--border);vertical-align:top}
 .roster-table td.rt-unit{text-align:left;padding-left:8px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);white-space:nowrap}
-.roster-table tr.rt-me td{background:rgba(232,160,32,.08)}
+.roster-table tr.rt-me td{background:rgba(184,98,10,.07)}
 .roster-table tr.rt-me td.rt-unit{color:var(--accent)}
 .roster-cell{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:52px;padding:3px}
 .roster-cell:active{opacity:.7}
 .rs-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 6px;border-radius:4px;min-width:24px;text-align:center}
-.rs-S{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
-.rs-L{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f}
-.rs-D{background:#1f1000;color:var(--warn);border:1px solid #4a3000}
-.rs-empty{background:var(--surface3);color:var(--text3);border:1px solid var(--border)}
+.rs-S{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.rs-L{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.rs-D{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
+.rs-empty{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
 .rs-task{font-size:9px;color:var(--text3);line-height:1.3;max-width:56px;word-break:break-word;text-align:center}
 .roster-week-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0 12px}
 .roster-week-label{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.5px}
-.roster-nav-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text2);cursor:pointer;font-family:var(--body);font-size:13px}
+.roster-nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text2);cursor:pointer;font-family:var(--body);font-size:13px}
+
 /* ROSTER EDIT MODAL */
-.roster-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;align-items:flex-end}
+.roster-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .roster-modal.open{display:flex}
 .roster-modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
 .rs-btn-row{display:flex;gap:8px;margin-bottom:12px}
 .rs-pick-btn{flex:1;padding:14px 8px;border-radius:8px;border:2px solid transparent;font-weight:700;font-size:16px;font-family:var(--mono);cursor:pointer;transition:all .15s}
-.rs-pick-btn.active{border-color:#fff}
+.rs-pick-btn.active{border-color:var(--text)}
+
 /* LOGIN OVERLAY */
-#loginOverlay{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+#loginOverlay{position:fixed;inset:0;z-index:9000;background:var(--header-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
 #loginOverlay.hidden{display:none}
-.login-logo{width:72px;height:72px;background:var(--accent);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#000;margin-bottom:16px;letter-spacing:1px;font-family:var(--body)}
-.login-title{font-weight:700;font-size:22px;color:var(--text);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
-.login-sub{font-size:11px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.login-logo{width:72px;height:72px;background:var(--accent);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#fff;margin-bottom:16px;letter-spacing:1px;font-family:var(--body)}
+.login-title{font-weight:700;font-size:22px;color:#ffffff;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
+.login-sub{font-size:11px;color:#9aa3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
 .login-step{width:100%;max-width:320px}
-.login-section-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.login-section-label{font-size:11px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;text-align:center}
 .login-unit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
-.login-unit-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 8px;color:var(--text);font-weight:700;font-size:15px;cursor:pointer;font-family:var(--mono);transition:all .15s}
-.login-unit-btn:active,.login-unit-btn.selected{background:var(--accent);color:#000;border-color:var(--accent)}
+.login-unit-btn{background:#2a3350;border:1px solid #3a4460;border-radius:8px;padding:14px 8px;color:#d0d8e8;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--mono);transition:all .15s}
+.login-unit-btn:active,.login-unit-btn.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 /* PIN */
-.pin-unit-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 8px;color:var(--text);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--mono);transition:border-color .15s}
+.pin-unit-btn{background:#2a3350;border:1px solid #3a4460;border-radius:8px;padding:14px 8px;color:#d0d8e8;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--mono);transition:border-color .15s}
 .pin-unit-btn:active{border-color:var(--accent)}
-.pin-key{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px 8px;color:var(--text);font-weight:700;font-size:20px;cursor:pointer;font-family:var(--mono);transition:all .1s}
-.pin-key:active{background:var(--accent);color:#000;border-color:var(--accent)}
-.pin-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:background .15s}
+.pin-key{background:#2a3350;border:1px solid #3a4460;border-radius:10px;padding:18px 8px;color:#d0d8e8;font-weight:700;font-size:20px;cursor:pointer;font-family:var(--mono);transition:all .1s}
+.pin-key:active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pin-dot{width:18px;height:18px;border-radius:50%;border:2px solid #3a4460;background:transparent;transition:background .15s}
 .pin-dot.filled{background:var(--accent);border-color:var(--accent)}
 .pin-dot.error{background:var(--danger);border-color:var(--danger)}
 
 /* GLOBAL SEARCH */
-.gsearch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);display:none;flex-direction:column}
+.gsearch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:none;flex-direction:column}
 .gsearch-overlay.open{display:flex}
 .gsearch-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
-.gsearch-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--body);outline:none}
+.gsearch-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--body);outline:none}
 .gsearch-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px 8px}
 .gsearch-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px}
-.gsearch-result{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;cursor:pointer}
+.gsearch-result{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .gsearch-result:active{border-color:var(--accent)}
 .gsearch-tag{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
 .gsearch-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
@@ -251,12 +262,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .gsearch-empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
 
 /* QUICK ACTION BUTTON */
-.quick-action-fab{position:fixed;bottom:calc(var(--nav-h) + 14px);right:14px;z-index:200;width:54px;height:54px;border-radius:50%;background:var(--danger);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(214,48,49,.5);transition:transform .15s}
+.quick-action-fab{position:fixed;bottom:calc(var(--nav-h) + 14px);right:14px;z-index:200;width:54px;height:54px;border-radius:50%;background:var(--danger);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(185,28,28,.4);transition:transform .15s}
 .quick-action-fab:active{transform:scale(.92)}
 .quick-action-fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
 /* QUICK ACTION MODAL */
-.qa-modal{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.85);display:none;align-items:flex-end}
+.qa-modal{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .qa-modal.open{display:flex}
 .qa-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px;max-height:75vh;overflow-y:auto}
 .qa-title{font-weight:700;font-size:16px;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -268,45 +279,57 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .qa-btn-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
 /* DUI CALCULATOR */
-.dui-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;align-items:flex-end}
+.dui-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .dui-modal.open{display:flex}
 .dui-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
 .dui-result{background:var(--surface2);border-radius:8px;padding:14px;margin-top:12px;border-left:3px solid var(--danger)}
 .dui-slider{width:100%;margin:12px 0;accent-color:var(--danger)}
 
 /* INCIDENT LOG */
-.log-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.9);display:none;flex-direction:column}
+.log-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;flex-direction:column}
 .log-modal.open{display:flex}
 .log-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface);border-bottom:1px solid var(--border)}
 .log-body{flex:1;overflow-y:auto;padding:12px 14px}
 .log-entry{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.log-entry-time{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:4px}
+.log-entry-time{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:700}
 .log-entry-type{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
 .log-entry-note{font-size:12px;color:var(--text2)}
 .log-form{padding:12px 14px;background:var(--surface);border-top:1px solid var(--border)}
-.log-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;margin-bottom:8px;outline:none}
-.log-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;resize:none;height:72px;outline:none}
-.log-submit{width:100%;background:var(--accent);border:none;border-radius:6px;padding:12px;color:#000;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body);margin-top:8px}
+.log-select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;margin-bottom:8px;outline:none}
+.log-textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;resize:none;height:72px;outline:none}
+.log-submit{width:100%;background:var(--accent);border:none;border-radius:6px;padding:12px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body);margin-top:8px}
 
-/* IMPROVED DECISION TREE */
-.dtree-flow{padding:0}
-.dtree-flow-step{display:flex;gap:0;position:relative}
-.dtree-flow-step::before{content:'';position:absolute;left:24px;top:44px;bottom:0;width:2px;background:var(--border);z-index:0}
-.dtree-flow-step:last-child::before{display:none}
-.dtree-flow-num{width:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding-top:12px;z-index:1}
-.dtree-flow-circle{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#000;font-family:var(--mono);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dtree-flow-content{flex:1;padding:10px 14px 16px 0}
-.dtree-flow-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
-.dtree-flow-desc{font-size:12px;color:var(--text2);line-height:1.5}
-.dtree-flow-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--surface3);color:var(--accent);border:1px solid var(--border)}
-.dtree-flow-branch{display:flex;align-items:flex-start;gap:8px;margin:4px 0 4px 48px;padding:7px 10px;border-radius:6px;background:var(--surface3)}
-.cond-yes{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
-.cond-no{background:#1f1000;color:var(--warn);border:1px solid #4a3000;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
-.cond-if{background:#0d1520;color:var(--accent2);border:1px solid #1a3060;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700}
-.dtree-flow-branch-text{font-size:12px;color:var(--text2);line-height:1.4}
+/* DECISION TREE — new flow style */
+.dtree-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.dtree-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.dtree-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dtree-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dtree-title{font-weight:700;font-size:14px;color:var(--text);flex:1}
+.dtree-body{display:none;border-top:1px solid var(--border)}
+.dtree-card.open .dtree-body{display:block}
+.dtree-card.open .v-chevron{transform:rotate(180deg)}
+.dtree-step{display:flex;gap:0;border-bottom:1px solid var(--border);position:relative}
+.dtree-step:last-child{border-bottom:none}
+.dtree-step-num{width:36px;font-family:var(--mono);font-size:11px;color:var(--accent);padding:12px 0 10px 14px;flex-shrink:0;font-weight:700}
+.dtree-step-content{flex:1;padding:10px 14px 10px 0}
+.dtree-step-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.dtree-step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.dtree-step-say{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
+.dtree-step-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);color:var(--accent2);border:1px solid var(--border);font-weight:700}
+.dtree-step-doc.doc-mpr{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.dtree-step-doc.doc-tvr{background:#dbeafe;color:#1a5cb8;border-color:#93c5fd}
+.dtree-step-doc.doc-pvr{background:#fef3c7;color:#b45309;border-color:#fcd34d}
+.dtree-step-doc.doc-dob{background:#dcfce7;color:#15803d;border-color:#86efac}
+.dtree-branch{display:flex;gap:8px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.dtree-branch:last-child{border-bottom:none}
+.dtree-branch-cond{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700;margin-top:1px}
+.cond-yes{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.cond-no{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+.cond-if{background:#dbeafe;color:#1a5cb8;border:1px solid #93c5fd}
+.dtree-branch-text{font-size:13px;color:var(--text2);line-height:1.4}
 
-/* REPORTS HIGHLIGHT */
-.report-day-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex}
+/* REPORT CARDS */
+.report-day-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .report-day-bar{width:4px;flex-shrink:0}
 .report-day-content{flex:1;padding:12px 14px}
 .report-day-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
@@ -318,43 +341,20 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .subnav{display:flex;gap:0;margin-bottom:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;flex-shrink:0}
 .subnav-btn{flex:1;padding:9px 4px;background:none;border:none;color:var(--text3);font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:var(--body);transition:all .15s;border-right:1px solid var(--border)}
 .subnav-btn:last-child{border-right:none}
-.subnav-btn.active{background:var(--accent);color:#000}
+.subnav-btn.active{background:var(--header-bg);color:#fbbf24}
+
 .subcontent{display:none}
 .subcontent.active{display:block}
 
-/* DECISION TREE */
-.dtree-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
-.dtree-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
-.dtree-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dtree-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.dtree-title{font-weight:700;font-size:14px;color:var(--text);flex:1}
-.dtree-body{display:none;border-top:1px solid var(--border)}
-.dtree-card.open .dtree-body{display:block}
-.dtree-card.open .v-chevron{transform:rotate(180deg)}
-.dtree-step{display:flex;gap:0;border-bottom:1px solid var(--border)}
-.dtree-step:last-child{border-bottom:none}
-.dtree-step-num{width:32px;font-family:var(--mono);font-size:11px;color:var(--accent);padding:10px 0 10px 14px;flex-shrink:0;font-weight:700}
-.dtree-step-content{flex:1;padding:10px 14px 10px 0}
-.dtree-step-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
-.dtree-step-desc{font-size:12px;color:var(--text2);line-height:1.5}
-.dtree-step-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;background:var(--surface3);color:var(--accent);border:1px solid var(--border)}
-.dtree-branch{display:flex;gap:8px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
-.dtree-branch:last-child{border-bottom:none}
-.dtree-branch-cond{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700;margin-top:1px}
-.cond-yes{background:#0d1f0d;color:#4caf50;border:1px solid #1f3d1f}
-.cond-no{background:#1f1000;color:var(--warn);border:1px solid #4a3000}
-.cond-if{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
-.dtree-branch-text{font-size:13px;color:var(--text2);line-height:1.4}
-
 /* ROUTES */
-.route-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.route-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .route-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
-.route-name{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0;letter-spacing:1px}
+.route-name{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text);flex-shrink:0;letter-spacing:1px}
 .route-type-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
-.rb-main{background:#1a0d00;color:var(--warn);border:1px solid #4a2500}
-.rb-secondary{background:#0d1a0d;color:var(--ok);border:1px solid #1f3d1f}
-.rb-loc{background:#0d1520;color:var(--accent2);border:1px solid #1a3060}
-.rb-tactical{background:#1f0000;color:var(--danger);border:1px solid #4a0000}
+.rb-main{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
+.rb-secondary{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.rb-loc{background:#dbeafe;color:#1a5cb8;border:1px solid #93c5fd}
+.rb-tactical{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
 .route-body{display:none;padding:0 14px 12px;border-top:1px solid var(--border)}
 .route-card.open .route-body{display:block}
 .route-card.open .v-chevron{transform:rotate(180deg)}
@@ -367,15 +367,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .dipl-num{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);min-width:32px;flex-shrink:0}
 .dipl-country{font-size:13px;color:var(--text2);flex:1}
 
-/* REPORT SCHEDULE */
-.report-schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px}
-
 /* RANKS */
-.rank-country-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.rank-country-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .rank-country-header{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border)}
 .rank-country-flag{font-size:22px;line-height:1}
 .rank-country-name{font-weight:700;font-size:15px;color:var(--text);flex:1}
-.rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px}
+.rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3)}
 .rank-section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 14px 4px}
 .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;padding:8px 14px 12px}
 .rank-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s}
@@ -384,7 +381,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .rank-item-broken{width:48px;height:40px;background:var(--surface2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3)}
 .rank-item-nato{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;text-align:center;letter-spacing:.5px}
 .rank-item-name{font-size:9px;color:var(--text2);text-align:center;line-height:1.3;max-width:64px;word-break:break-word}
-.rank-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center}
+.rank-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center}
 .rank-modal-overlay.open{display:flex}
 .rank-modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;max-width:260px;width:90%;text-align:center}
 .rank-modal img{width:80px;height:auto;margin-bottom:12px}
@@ -392,6 +389,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .rank-modal-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
 .rank-modal-country{font-size:12px;color:var(--text2);margin-bottom:14px}
 .rank-modal-close{width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--body)}
+
 </style>
 </head>
 <body>
@@ -954,29 +952,29 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
     <button class="qa-btn" onclick="closeQA();openAlarmModal();document.getElementById('alarmUserLabel').textContent=currentUserId||'—'"
       style="border-color:var(--danger)">
-      <div class="qa-btn-icon" style="background:#3a0000;color:var(--danger)">
+      <div class="qa-btn-icon" style="background:#fee2e2;color:var(--danger)">
         <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
       <div><div class="qa-btn-title" style="color:var(--danger)"><i class="fa-solid fa-siren-on"></i> ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();switchTab('procedures',document.querySelector('[data-tab=procedures]'));switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1])">
-      <div class="qa-btn-icon" style="background:#2a0500;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="qa-btn-icon" style="background:#fee2e2;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div><div class="qa-btn-title">Decision Tree</div><div class="qa-btn-sub">Step-by-step for any incident</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();openDUI()">
-      <div class="qa-btn-icon" style="background:#1f1000;color:var(--warn)"><svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg></div>
+      <div class="qa-btn-icon" style="background:#fef3c7;color:var(--warn)"><svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg></div>
       <div><div class="qa-btn-title">DUI Calculator</div><div class="qa-btn-sub">Breath test result → procedure</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();openLog()">
-      <div class="qa-btn-icon" style="background:#0d1520;color:var(--accent2)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div class="qa-btn-icon" style="background:#dbeafe;color:var(--accent2)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
       <div><div class="qa-btn-title">Log Incident</div><div class="qa-btn-sub">Quick DOB entry</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();switchTab('contacts',document.querySelector('[data-tab=contacts]'))">
-      <div class="qa-btn-icon" style="background:#0d1f0d;color:#4caf50"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <div class="qa-btn-icon" style="background:#dcfce7;color:var(--ok)"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
       <div><div class="qa-btn-title">Emergency Contacts</div><div class="qa-btn-sub">910 · 911 · 912 · 913</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();openGSearch()">
-      <div class="qa-btn-icon" style="background:#1a1520;color:var(--text2)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="qa-btn-icon" style="background:var(--surface2);color:var(--text2)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <div><div class="qa-btn-title">Global Search</div><div class="qa-btn-sub">Search all content</div></div>
     </button>
   </div>
@@ -1125,9 +1123,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="modal-sheet">
     <div class="modal-title">Alert States — Camp Butmir <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
     <div style="display:flex;gap:0;margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
-      <button id="atab-bravo" onclick="switchAlertTab('bravo')" style="flex:1;padding:10px 4px;background:#0d1f0d;border:none;color:#4caf50;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">BRAVO</button>
-      <button id="atab-charlie" onclick="switchAlertTab('charlie')" style="flex:1;padding:10px 4px;background:#1f1000;border:none;color:var(--warn);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">CHARLIE</button>
-      <button id="atab-delta" onclick="switchAlertTab('delta')" style="flex:1;padding:10px 4px;background:#1f0000;border:none;color:var(--danger);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px">DELTA</button>
+      <button id="atab-bravo" onclick="switchAlertTab('bravo')" style="flex:1;padding:10px 4px;background:#dcfce7;border:none;color:#15803d;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">BRAVO</button>
+      <button id="atab-charlie" onclick="switchAlertTab('charlie')" style="flex:1;padding:10px 4px;background:#fef3c7;border:none;color:var(--warn);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px;border-right:1px solid var(--border)">CHARLIE</button>
+      <button id="atab-delta" onclick="switchAlertTab('delta')" style="flex:1;padding:10px 4px;background:#fee2e2;border:none;color:var(--danger);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px">DELTA</button>
     </div>
 
     <div id="acontent-bravo" class="alert-tab-content">
@@ -1178,9 +1176,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div id="adminAlertControls" style="display:none">
       <div class="section-label mt8">Set Active Alert</div>
       <div class="alert-set-row">
-        <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#0d1f0d;border:1px solid #1f3d1f;color:#4caf50">BRAVO</button>
-        <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#1f1000;border:1px solid #4a3000;color:var(--warn)">CHARLIE</button>
-        <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#1f0000;border:1px solid #4a0000;color:var(--danger)">DELTA</button>
+        <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#dcfce7;border:1.5px solid #86efac;color:#15803d">BRAVO</button>
+        <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#fef3c7;border:1.5px solid #fcd34d;color:var(--warn)">CHARLIE</button>
+        <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#fee2e2;border:1.5px solid #fca5a5;color:var(--danger)">DELTA</button>
       </div>
     </div>
   </div>
@@ -1376,7 +1374,7 @@ const procIconSvg={
 };
 
 const procedures=[
-  {id:'drunk',color:'var(--warn)',bg:'#2a1500',title:'Excessive Drinking / Intoxicated Personnel',steps:[
+  {id:'drunk',color:'var(--warn)',bg:'#fef3c7',title:'Excessive Drinking / Intoxicated Personnel',steps:[
     '<strong>Identify situation.</strong> Observe behaviour: loud/obnoxious, lack of self-control, fighting, or obviously intoxicated. Note time, location, person\'s appearance.',
     '<strong>Approach and identify yourself.</strong> Say: <em>"I am IMP. I have observed behaviour consistent with excessive alcohol consumption. Please show me your ID card."</em>',
     '<strong>Remove from establishment/area immediately.</strong> Escort the individual from the bar, DFAC, or recreational area. Do not leave alone.',
@@ -1388,7 +1386,7 @@ const procedures=[
     '<strong>If driving was involved or suspected</strong> — conduct breath test immediately. DUI rules apply (zero tolerance).'
   ],note:'Ref: SOP 3901 §3 / Annex A. Violator remains under IMP supervision until SNR or representative arrives. IMP decides Medical Cell or IMP Station on case-by-case basis.'},
 
-  {id:'speeding',color:'var(--accent2)',bg:'#0d1a2a',title:'Speeding Violation — Traffic Stop',steps:[
+  {id:'speeding',color:'var(--accent2)',bg:'#dbeafe',title:'Speeding Violation — Traffic Stop',steps:[
     '<strong>Stop the vehicle.</strong> Use hand signals or lights. Approach driver side. Say: <em>"Stop the vehicle. I am IMP. Please turn off the engine and keep your hands visible."</em>',
     '<strong>Identify driver.</strong> Request: ID/Access card, vehicle documentation, driving pass. Note registration number.',
     '<strong>Inform of violation.</strong> Say: <em>"You have been observed driving at [X] km/h. The speed limit in Camp Butmir is 30 km/h. This is a violation of SOP 3901."</em>',
@@ -1400,7 +1398,7 @@ const procedures=[
     '<strong>Report chain (11+ over):</strong> IMP CMDR → SNR → HQ CAMP CMDT → FPM. All actions reported.'
   ],note:'Ref: SOP 3901 §6b / Annex D. 5 accumulated penalty points = license suspended 1 month automatically. Emergency vehicles (IMP, ambulance, fire, guards, CP teams) may exceed limit in emergencies only.'},
 
-  {id:'dui',color:'var(--danger)',bg:'#2a0000',title:'DUI — Vehicle Under Influence of Alcohol',steps:[
+  {id:'dui',color:'var(--danger)',bg:'#fee2e2',title:'DUI — Vehicle Under Influence of Alcohol',steps:[
     '<strong>Initiate breath test.</strong> You may stop any vehicle for random testing. Say: <em>"This is a mandatory IMP breath test. Please step out of the vehicle. The test is required by SOP 3901. Refusal is treated as a positive result."</em>',
     '<strong>Conduct test.</strong> Record result in promille. If result > 0.0 ‰ — DUI confirmed. Zero tolerance policy applies.',
     '<strong>If person refuses:</strong> Inform them that refusal = positive result. Say: <em>"Your refusal to submit to testing will be treated as a positive result, resulting in administrative consequences. This will be documented in a Military Police Report."</em>',
@@ -1411,7 +1409,7 @@ const procedures=[
     '<strong>Produce MPR</strong> (Military Police Report, Annex A SOP 3927). IMMEDIATE distribution: IMP CMDR → FPM → SNR → HQ CAMP CMDT.'
   ],note:'Ref: SOP 3901 §3a(3) / Annex A / Annex D. ZERO TOLERANCE — any alcohol before or during vehicle operation. Loss of driving privilege and referral to NSE authority. Refusal of testing = assumed DUI.'},
 
-  {id:'id',color:'var(--ok)',bg:'#0d1a0d',title:'No Visible ID / Missing ID Card',steps:[
+  {id:'id',color:'var(--ok)',bg:'#dcfce7',title:'No Visible ID / Missing ID Card',steps:[
     '<strong>Stop the individual.</strong> Say: <em>"I am IMP. Your ID/Access card is not displayed in a visible location as required by SOP 3901. Please show me your card."</em>',
     '<strong>If card produced but not displayed:</strong> Issue warning. Remind that card must be worn visibly at all times inside Camp Butmir — even in civilian clothes. Exception: sport activity only.',
     '<strong>If no card at all:</strong> Ask name, rank, unit, building/room. Escort to IMP Station to verify identity. Inform IMP CMDR.',
@@ -1423,7 +1421,7 @@ const procedures=[
     '<strong>Note for SNR:</strong> All EUFOR/NATO personnel should report non-displaying individuals to IMP (SOP 3901 §11b).'
   ],note:'Ref: SOP 3901 §11 / Annex D. IMP personnel themselves are not required to display ID visibly but must produce when requested. Visitors and Visitor Pass holders: same rules apply.'},
 
-  {id:'weapon',color:'var(--danger)',bg:'#2a0000',title:'Unauthorized Weapon Carry',steps:[
+  {id:'weapon',color:'var(--danger)',bg:'#fee2e2',title:'Unauthorized Weapon Carry',steps:[
     '<strong>Identify the situation.</strong> Observe person carrying loaded/visible weapon in unauthorized area (recreational, concession, DFAC).',
     '<strong>Approach carefully — do not reach for own weapon unless threat imminent.</strong> If alone and person appears threatening — call for backup first (IMP Duty: IPN 5783 / mob +387 62 337 661).',
     '<strong>Identify yourself.</strong> Say: <em>"I am IMP. Please stop and do not reach for the weapon. Identify yourself and provide your ID card."</em>',
@@ -1435,7 +1433,7 @@ const procedures=[
     '<strong>Produce MPR</strong> (Annex A SOP 3927). IMMEDIATE. Distribution: IMP CMDR → FPM → SNR.'
   ],note:'Ref: SOP 3901 §5 / SOP 3927. No loaded weapons on Camp BUTMIR except authorized personnel. No weapons in rec/concession areas or DFAC. IMP may use physical force if person fails to comply.'},
 
-  {id:'parking_warn',color:'#e67e22',bg:'#1f0e00',title:'Parking Violation — Field Response',steps:[
+  {id:'parking_warn',color:'#e67e22',bg:'#fef3c7',title:'Parking Violation — Field Response',steps:[
     '<strong>Identify parking violation.</strong> Vehicle parked in wrong zone, restricted area, blocking access road, on grassed area, or in front of Bldg 200/circle without authorization.',
     '<strong>Check if driver is present.</strong> If present: approach and say: <em>"Your vehicle [registration] is parked in violation of Camp Butmir regulations. This is [zone/restricted area]. Please move the vehicle immediately."</em>',
     '<strong>If driver absent (1st & 2nd):</strong> Leave written notice on windshield. Produce <strong>PVR</strong> (Parking Violation Report, Annex C SOP 3927).',
@@ -1446,7 +1444,7 @@ const procedures=[
     '<strong>PVR distribution:</strong> Approved by IMP CMDR → sent to SNR. After SNR disposition → return violation notice to HQ CAMP CMDT OPS confirming violation was addressed.'
   ],note:'Ref: SOP 3901 §6 / Annex C / Annex D. IMP has a copy of assigned parking spaces. Second violations reported to SNR (military) or supervisor (civilian).'},
 
-  {id:'walkout',color:'var(--text2)',bg:'#0d150d',title:'"Walking Out" — Authorization Check',steps:[
+  {id:'walkout',color:'var(--text2)',bg:'#f0f4f0',title:'"Walking Out" — Authorization Check',steps:[
     '<strong>Check current ALERT STATE</strong> before any walk-out authorization.',
     '<strong>ALPHA / BRAVO:</strong> Authorized by Branch/Section Chief, National Contingent Cdr, SNR, or MNBN Cdr.',
     '<strong>CHARLIE (NATO personnel):</strong> Authorized by COS HQ EUFOR or COS NHQ Sa on behalf of COM NHQ Sa. Issue <strong>Force Exemption Card</strong>.',
@@ -1458,7 +1456,7 @@ const procedures=[
     '<strong>DOB Entry</strong> if any violation or incident during walk-out authorization check.'
   ],note:'Ref: SOP 3901 §14–18. SNR may impose more restrictive conditions on their national contingents. If alert state changes while personnel are outside — FPG, IMP, or Branch Supervisors may inform them.'},
 
-  {id:'altgate',color:'#e67e22',bg:'#1f0e00',title:'Alternate (Back) Gate — Opening Procedure',steps:[
+  {id:'altgate',color:'#e67e22',bg:'#fef3c7',title:'Alternate (Back) Gate — Opening Procedure',steps:[
     '<strong>Emplace road signs</strong> (Stop, Direction) at the Alternate gate. One-way system becomes operational immediately upon entry.',
     '<strong>Traffic ENTERING camp:</strong> via Alternate gate → turns RIGHT onto Dayton Road. Applies when Main gate is closed.',
     '<strong>Traffic LEAVING camp:</strong> via Mostar Road ONLY.',
@@ -2511,129 +2509,391 @@ function switchSub(tabId,subId,btn){
 
 // ── DECISION TREES ────────────────────────────────────────────────────────────
 const dtrees=[
-  {id:'dt1',color:'var(--warn)',bg:'#2a1500',title:'Bicycle — No Registration / Missing Lights',
+  {id:'dt-dui',color:'#b91c1c',bg:'#fee2e2',
+   title:'DUI — Breath Test & Alcohol in Vehicle',
    steps:[
-    {num:'1',title:'Stop the cyclist',desc:'Request ID/Access card. Check if bicycle has valid vignette/sticker from ID Office and required lights.',doc:null},
-    {num:'2',title:'Identify violations',desc:'No vignette/sticker → registration violation. No white front light or red rear light → lighting violation.',doc:null},
-    {num:'3',title:'1st or 2nd offence',desc:'Issue verbal warning. Note in DOB: date, time, location, person, ID number, violation, action taken.',doc:'DOB Entry'},
-    {num:'4',title:'3rd+ offence',desc:'Notify SNR / Branch Chief. Report all action to FPM.',doc:'IMP Report'},
-    {num:'5',title:'If uncooperative',desc:'Notify SNR/Branch Chief immediately. All actions reported to FPM.',doc:'IMP Report'}
+    {num:'1',title:'Initiate breath test',
+     desc:'Stop vehicle or approach suspect. Identify yourself.',
+     say:'"I am IMP. I am conducting a mandatory breath test pursuant to SOP 3901 §3. Please step out of the vehicle."',
+     doc:null,docClass:null},
+    {num:'2',title:'Conduct test',
+     desc:'Record result in promille. ANY result > 0.0 ‰ = DUI confirmed. Zero tolerance policy.',
+     say:null,doc:null,docClass:null},
+    {num:'3',title:'If REFUSAL',
+     desc:'Refusal = treated as positive result. Document explicitly.',
+     say:'"Your refusal to submit to testing will be treated as a positive result under SOP 3901 §3. This will be documented in an MPR and reported to FPM."',
+     doc:'MPR',docClass:'doc-mpr'},
+    {num:'4',title:'DUI confirmed → immediate actions',
+     desc:'Confiscate vehicle keys / driving pass. Suspend license until EOT. Do NOT allow vehicle operation.',
+     say:null,doc:null,docClass:null},
+    {num:'5',title:'Notify — IMMEDIATE',
+     desc:'Call IMP CMDR (IPN 5782 / +387 61 139 603), FPM (IPN 5799), SNR/Branch Chief, HQ CAMP CMDT.',
+     say:'"IMP [unit] to IMP CMDR — DUI confirmed: [Name], [Rank], [Unit], BAC [X] ‰, location [X], time [X]. License confiscated. Requesting guidance."',
+     doc:null,docClass:null},
+    {num:'6',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID / Unit / BAC result or REFUSAL noted / License confiscated / IMP CMDR notified / FPM notified / SNR notified.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'7',title:'Produce MPR',
+     desc:'Military Police Report (Annex A SOP 3927). Approved by IMP CMDR → FPM → SNR → HQ CAMP CMDT. Distribution: all parties above.',
+     doc:'MPR',docClass:'doc-mpr'}
    ],
    branches:[
-    {cond:'if','cond-class':'cond-if',text:'After dusk or bad weather — front and rear lights MUST be on.'},
-    {cond:'note','cond-class':'cond-if',text:'Cyclists must obey all traffic laws as road users. Two hands on handlebar at all times.'}
+    {cond:'NO',text:'Not operating vehicle but visibly drunk in camp → proceed to Drunk/Intoxicated Personnel tree.'},
+    {cond:'IF',text:'Random check authorized: IMP may stop any EUFOR/NHQ Sa vehicle at any time for breath test (SOP 3927 §6c(9)).'}
    ]
   },
-  {id:'dt2',color:'var(--text2)',bg:'#0d0d14',title:'Pedestrian Violation',
+
+  {id:'dt-speed',color:'#1a5cb8',bg:'#dbeafe',
+   title:'Speeding Violation — Traffic Stop',
    steps:[
-    {num:'1',title:'Identify violation',desc:'Pedestrian walking on roadway when sidewalk/footpath available, or walking with traffic flow instead of against.',doc:null},
-    {num:'2',title:'1st or 2nd offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
-    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+    {num:'1',title:'Stop the vehicle',
+     desc:'Use hand signal / lights. Approach driver side. Note speed and location.',
+     say:'"Stop the vehicle. I am IMP. Please turn off the engine and keep your hands visible."',
+     doc:null,docClass:null},
+    {num:'2',title:'Identify driver',
+     desc:'Request: ID/Access card, vehicle documentation, driving pass. Note registration number.',
+     doc:null,docClass:null},
+    {num:'3',title:'Inform of violation',
+     desc:'State measured speed and limit.',
+     say:'"You have been observed driving at [X] km/h. The speed limit in Camp Butmir is 30 km/h. This is a violation of SOP 3901 §6b."',
+     doc:null,docClass:null},
+    {num:'4',title:'5–10 km/h over — 1st offence',
+     desc:'Issue verbal warning. DOB entry required.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'5',title:'5–10 km/h over — 2nd+ offence',
+     desc:'Notify SNR/Branch Chief. TVR mandatory.',
+     doc:'TVR',docClass:'doc-tvr'},
+    {num:'6',title:'11–20 km/h over — any offence',
+     desc:'Notify SNR/Branch Chief + HQ CAMP CMDT + FPM. Suspend license 2 weeks. Confiscate driving pass.',
+     doc:'TVR',docClass:'doc-tvr'},
+    {num:'7',title:'21+ km/h over — any offence',
+     desc:'Same as above but 3 penalty points. Suspension 2 weeks. Report identical.',
+     doc:'TVR',docClass:'doc-tvr'},
+    {num:'8',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID / Unit / Speed measured / Category / License suspended Y/N / TVR number.',
+     doc:'DOB',docClass:'doc-dob'}
    ],
    branches:[
-    {cond:'note','cond-class':'cond-if',text:'No footpath available: max 2 persons side-by-side, walking opposite to traffic direction.'}
+    {cond:'IF',text:'5 accumulated penalty points → license suspended 1 month automatically. Notify SNR and FPM.'},
+    {cond:'IF',text:'Emergency vehicles (IMP, ambulance, fire, guards, CP) may exceed limit in emergency only.'}
    ]
   },
-  {id:'dt3',color:'var(--warn)',bg:'#2a1000',title:'Quiet Hours Violation (2300–0600)',
+
+  {id:'dt-parking',color:'#b45309',bg:'#fef3c7',
+   title:'Parking Violation — Field Response',
    steps:[
-    {num:'1',title:'Identify violation',desc:'Excessive noise during quiet hours: loud music, slamming doors, loud voices, Skype/FaceTime calls heard outside room.',doc:null},
-    {num:'2',title:'1st offence',desc:'IMP issues a warning. Log in DOB: time, location, room/building, person involved, nature of noise.',doc:'DOB Entry'},
-    {num:'3',title:'2nd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
-   ],
-   branches:[]
-  },
-  {id:'dt4',color:'var(--accent2)',bg:'#0d1520',title:'Dress Prescription Violation',
-   steps:[
-    {num:'1',title:'Identify violation',desc:'BDU not worn during 0600–1800 (unless exempt), offensive graphics, no EUFOR logo, dirty clothing in DFAC, wrong footwear, head-dress not removed in DFAC.',doc:null},
-    {num:'2',title:'Check for exemption',desc:'Exempt: en route to Gym, at gate for walk-out, civilian clothing required for duty reasons.',doc:null},
-    {num:'3',title:'1st offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
-    {num:'4',title:'2nd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+    {num:'1',title:'Identify violation',
+     desc:'Vehicle in wrong zone, blocking access road, grassed area, restricted area, or Bldg 200/circle without authorization.',
+     doc:null,docClass:null},
+    {num:'2',title:'Driver PRESENT',
+     desc:'Approach and address driver.',
+     say:'"Your vehicle [registration] is parked in violation of Camp Butmir regulations. Zone [X] is restricted. Please move the vehicle immediately."',
+     doc:null,docClass:null},
+    {num:'3',title:'Driver ABSENT — 1st or 2nd offence',
+     desc:'Leave written notice on windshield. Produce PVR. Note: driver must report to IMP Station within 48 hours.',
+     doc:'PVR',docClass:'doc-pvr'},
+    {num:'4',title:'Driver ABSENT — 3rd+ offence',
+     desc:'Leave notice. PVR mandatory. Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM.',
+     doc:'PVR',docClass:'doc-pvr'},
+    {num:'5',title:'Bldg 200 / Circle — ANY offence',
+     desc:'Notify SNR/Branch Chief immediately. Report to HQ CAMP CMDT + FPM. 3 penalty points.',
+     doc:'PVR',docClass:'doc-pvr'},
+    {num:'6',title:'Follow-up — 48h rule',
+     desc:'If driver does not report to IMP Station within 48h → notify SNR/Branch Chief for disciplinary action.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'7',title:'DOB entry',
+     desc:'Date / Time / Location / Vehicle registration / Unit / Zone violated / Notice left Y/N / PVR number / Action taken.',
+     doc:'DOB',docClass:'doc-dob'}
    ],
    branches:[
-    {cond:'note','cond-class':'cond-if',text:'DFAC rules: no tight/sweaty sports clothes, no sleeveless tops, no sandals/flip-flops, no large bags, wash hands before entry, no food removal (coffee/fruit only).'}
+    {cond:'IF',text:'IMP has copy of vehicles assigned to each zone — verify correct parking zone.'},
+    {cond:'IF',text:'2nd parking violation → reported to SNR (military) or supervisor (civilian).'}
    ]
   },
-  {id:'dt5',color:'var(--ok)',bg:'#0d1a0d',title:'ID Card Not Visible / Not Carried',
+
+  {id:'dt-drunk',color:'#b45309',bg:'#fef3c7',
+   title:'Excessive Drinking / Intoxicated Personnel',
    steps:[
-    {num:'1',title:'Stop individual',desc:'Request ID/Access card. Applies to all EUFOR/NHQ Sa personnel and visitors on camp and within AOO.',doc:null},
-    {num:'2',title:'1st or 2nd offence',desc:'IMP issues a warning. Log in DOB.',doc:'DOB Entry'},
-    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. All action reported to FPM.',doc:'IMP Report'}
+    {num:'1',title:'Identify situation',
+     desc:'Observe: obnoxious behaviour, lack of self-control, fighting, or obviously intoxicated. Note time, location, appearance.',
+     doc:null,docClass:null},
+    {num:'2',title:'Approach and identify',
+     say:'"I am IMP. I have observed behaviour consistent with excessive alcohol consumption. Please show me your ID card and come with me."',
+     desc:'Note full name, ID number, unit, time and location.',
+     doc:null,docClass:null},
+    {num:'3',title:'Remove from establishment',
+     desc:'Escort from bar/DFAC/recreational area immediately. Do not leave alone.',
+     doc:null,docClass:null},
+    {num:'4',title:'Decide: Medical Cell or IMP Station',
+     desc:'Medical risk (unresponsive, vomiting, medical symptoms) → call Medical Cell ext. 912. Otherwise → IMP Station.',
+     doc:null,docClass:null},
+    {num:'5',title:'Place under IMP supervision',
+     desc:'Violator stays under IMP supervision until released to SNR or SNR representative.',
+     doc:null,docClass:null},
+    {num:'6',title:'Notify SNR immediately',
+     say:'"This is IMP [unit]. I have detained [Name, Rank, Unit] for excessive drinking at [location], [time]. Please report to [IMP Station / location] to receive the individual."',
+     desc:'SNR must come in person or send representative.',
+     doc:null,docClass:null},
+    {num:'7',title:'Check for vehicle operation',
+     desc:'Was person driving or is about to drive? → Conduct breath test immediately. DUI rules apply.',
+     doc:null,docClass:null},
+    {num:'8',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID / Unit / Behaviour description / Medical Cell Y/N / Handed to SNR: name + time.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'9',title:'Produce MPR',
+     desc:'Military Police Report (Annex A SOP 3927). Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',
+     doc:'MPR',docClass:'doc-mpr'}
    ],
    branches:[
-    {cond:'note','cond-class':'cond-if',text:'IMP personnel: exempt from visible display but must produce ID when requested. Exception for all: sport activity.'},
-    {cond:'note','cond-class':'cond-if',text:'Not carrying ID in accommodation block: 1st = warning, 2nd+ = notify SNR/Branch Chief.'}
+    {cond:'IF',text:'Bar staff serves alcohol to visibly intoxicated person → action through bar management\'s chain of command.'},
+    {cond:'NO',text:'No vehicle involved and first occurrence of minor intoxication → DOB entry may suffice without MPR. IMP CMDR decides.'}
    ]
   },
-  {id:'dt6',color:'#e67e22',bg:'#1f1000',title:'Parking Violation',
+
+  {id:'dt-id',color:'#15803d',bg:'#dcfce7',
+   title:'No Visible ID / Missing ID Card',
    steps:[
-    {num:'1',title:'Identify violation',desc:'Vehicle parked outside assigned zone, blocking access roads, on grassed area, or in restricted zone.',doc:null},
-    {num:'2',title:'1st or 2nd offence',desc:'IMP issues written warning. Leave notice on windshield. Log in DOB.',doc:'Written Warning + DOB'},
-    {num:'3',title:'3rd+ offence',desc:'Notify SNR/Branch Chief. Reported to HQ CAMP CMDT and FPM.',doc:'IMP Report'},
-    {num:'4',title:'Bldg 200 / Circle (non-VIP)',desc:'Immediate: SNR/Branch Chief notified. Reported to HQ CAMP CMDT and FPM. 3 penalty points.',doc:'IMP Report'},
-    {num:'5',title:'Follow-up',desc:'Driver who received written warning MUST report to IMP Station within 48h. Failure = disciplinary action.',doc:null}
-   ],
-   branches:[]
-  },
-  {id:'dt7',color:'var(--danger)',bg:'#1f0000',title:'Alcohol in Accommodation Block',
-   steps:[
-    {num:'1',title:'Identify situation',desc:'Alcohol consumption in accommodation block area without COM EUFOR or COM NHQ Sa approval.',doc:null},
-    {num:'2',title:'Stop consumption',desc:'Remove alcohol from the area.',doc:null},
-    {num:'3',title:'Report',desc:'Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM.',doc:'IMP Report + DOB'}
+    {num:'1',title:'Stop individual and request ID',
+     say:'"I am IMP. Your EUFOR ID/Access card is not displayed in a visible location as required by SOP 3901 §11. Please show me your card now."',
+     desc:'Applies to all EUFOR/NHQ Sa personnel and visitors. Exception: sport activity.',
+     doc:null,docClass:null},
+    {num:'2',title:'Card produced but not displayed',
+     desc:'1st offence: verbal warning + DOB. 2nd offence: written warning + DOB. 3rd+: notify SNR/FPM.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'3',title:'No card at all',
+     desc:'Ask name, rank, unit, building/room number. Escort to IMP Station to verify identity.',
+     say:'"If you are unable to produce ID, I am required to escort you to the IMP Station for identity verification."',
+     doc:null,docClass:null},
+    {num:'4',title:'3rd+ offence',
+     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'5',title:'Person refuses to cooperate / identity unverifiable',
+     desc:'Detain. Inform IMP CMDR immediately. IMP may detain if person fails to produce ID when requested (SOP 3927 §6c(4)).',
+     doc:'MPR',docClass:'doc-mpr'},
+    {num:'6',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID number (if produced) / Unit / Violation type / Action taken.',
+     doc:'DOB',docClass:'doc-dob'}
    ],
    branches:[
-    {cond:'note','cond-class':'cond-if',text:'Serving alcohol to visibly intoxicated person is forbidden. Violation = action through chain of command.'}
+    {cond:'IF',text:'IMP personnel: exempt from visible display but must produce when requested.'},
+    {cond:'IF',text:'All EUFOR/NATO personnel must notify IMP if someone is not displaying ID — SOP 3901 §11b.'}
    ]
   },
-  {id:'dt8',color:'var(--danger)',bg:'#200010',title:'Smoking Violation',
+
+  {id:'dt-weapon',color:'#b91c1c',bg:'#fee2e2',
+   title:'Unauthorized Weapon in Restricted Area',
    steps:[
-    {num:'1',title:'Identify violation',desc:'Smoking outside designated area, inside accommodation block, walking around camp while smoking, or smoking in EUFOR/NATO vehicle.',doc:null},
-    {num:'2',title:'Stop the smoking',desc:'Direct person to nearest designated smoking area (see Annex E).',doc:null},
-    {num:'3',title:'Ensure proper disposal',desc:'Smoking materials must go in metal receptacle bins — NOT on the ground.',doc:null},
-    {num:'4',title:'Log and warn',desc:'Issue warning. Log in DOB.',doc:'DOB Entry'}
-   ],
-   branches:[]
-  },
-  {id:'dt9',color:'var(--accent2)',bg:'#0d1a2a',title:'Vehicle Speed Violation',
-   steps:[
-    {num:'1',title:'Stop vehicle',desc:'Note speed and posted limit (30 km/h throughout Camp Butmir).',doc:null},
-    {num:'2',title:'Check ID and documents',desc:'Driver ID, vehicle documentation.',doc:null},
-    {num:'3',title:'5–10 km/h over — 1st offence',desc:'IMP issues verbal warning. Log in DOB.',doc:'DOB Entry'},
-    {num:'4',title:'5–10 km/h over — 2nd+',desc:"Notify driver's SNR/Branch Chief.",doc:'IMP Report'},
-    {num:'5',title:'11–20 km/h over',desc:"Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM. Suspend license 2 weeks. Add 2 penalty points.",doc:'IMP Report'},
-    {num:'6',title:'21+ km/h over',desc:"Notify SNR/Branch Chief. Report to HQ CAMP CMDT. Suspend license 2 weeks. Add 3 penalty points.",doc:'IMP Report'},
-    {num:'7',title:'5 total penalty points',desc:"Driver's license suspended for 1 month.",doc:null}
-   ],
-   branches:[]
-  },
-  {id:'dt10',color:'var(--warn)',bg:'#1a1500',title:'Cellphone / Seatbelt / Smoking in Vehicle',
-   steps:[
-    {num:'1',title:'Stop vehicle',desc:'Identify violation: cellphone use while driving, failure to fasten seatbelt, or smoking in NATO/EUFOR vehicle.',doc:null},
-    {num:'2',title:'1st offence',desc:'IMP issues a warning. 2 penalty points on driver\'s license.',doc:'DOB Entry'},
-    {num:'3',title:'2nd+ offence',desc:"Notify driver's SNR/Branch Chief. 2 penalty points.",doc:'IMP Report'}
+    {num:'1',title:'Identify situation',
+     desc:'Loaded/visible weapon carried in: recreation area, concession area, or DFAC by person not in authorized category.',
+     doc:null,docClass:null},
+    {num:'2',title:'ASSESS THREAT — DO NOT approach alone if threat imminent',
+     desc:'Call for backup first: IMP Duty IPN 5783 / +387 62 337 661. Wait for backup if threat perceived.',
+     doc:null,docClass:null},
+    {num:'3',title:'Approach when safe',
+     say:'"I am IMP. Please stop and do not reach for the weapon. Identify yourself and provide your ID card."',
+     desc:'Stay calm. Maintain visual on person and weapon at all times.',
+     doc:null,docClass:null},
+    {num:'4',title:'Verify authorization',
+     desc:'Authorized: FPG Guard, IMP Det, CP details, written concealed weapons permit, ordered by COM EUFOR/NHQ Sa.',
+     doc:null,docClass:null},
+    {num:'5',title:'If UNAUTHORIZED',
+     say:'"You are carrying a weapon in an area where it is not authorized per SOP 3901 §5. I am placing you under IMP supervision and notifying SNR and FPM immediately."',
+     desc:'Secure situation. IMP may conduct non-intimate search to seize items that may cause harm (SOP 3927 §6c(6)).',
+     doc:null,docClass:null},
+    {num:'6',title:'IMMEDIATE notification',
+     desc:'SNR/Branch Chief + FPM + IMP CMDR.',
+     doc:null,docClass:null},
+    {num:'7',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID / Unit / Weapon type / Circumstances / Authorization checked / Action taken / FPM notified.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'8',title:'Produce MPR',
+     desc:'IMMEDIATE. Distribution: IMP CMDR → FPM → SNR. Reference SOP HQ EUFOR 5275 Force Protection.',
+     doc:'MPR',docClass:'doc-mpr'}
    ],
    branches:[
-    {cond:'note','cond-class':'cond-if',text:'Cellphone: hands-free kit only permitted. Seatbelt: mandatory for all occupants.'}
+    {cond:'IF',text:'IMP authorized to use physical force if person fails to comply with orders (SOP 3927 §6f).'},
+    {cond:'IF',text:'Handcuffs/baton: only if physical force ineffective or person endangers life/health of themselves or others.'}
    ]
   },
-  {id:'dt11',color:'var(--danger)',bg:'#1f0a00',title:'Unauthorized Weapon in Restricted Area',
+
+  {id:'dt-uncooperative',color:'#b91c1c',bg:'#fee2e2',
+   title:'Uncooperative / Hostile Personnel',
    steps:[
-    {num:'1',title:'Identify situation',desc:'Loaded weapon carried in recreation/concession area or DFAC by non-authorized person.',doc:null},
-    {num:'2',title:'Check authorization',desc:'Authorized: FPG Guard, IMP Det, CP details, concealed weapons permit holders, ordered by COM EUFOR/NHQ Sa.',doc:null},
-    {num:'3',title:'If unauthorized',desc:'Secure the situation. Request individual to disarm.',doc:null},
-    {num:'4',title:'Notify immediately',desc:'Notify SNR/Branch Chief immediately.',doc:null},
-    {num:'5',title:'Report',desc:'All action reported to FPM.',doc:'IMP Report + DOB'}
+    {num:'1',title:'Identify and address',
+     say:'"I am IMP. You are required to cooperate with IMP personnel per SOP 3901 §11d regardless of rank or position."',
+     desc:'Remain calm. Do not escalate. Request ID card.',
+     doc:null,docClass:null},
+    {num:'2',title:'If verbal non-compliance',
+     desc:'Repeat instruction once. Note name, rank, unit.',
+     say:'"I am formally requesting your cooperation. Failure to comply will be reported to your SNR/Branch Chief and FPM."',
+     doc:null,docClass:null},
+    {num:'3',title:'Notify SNR/Branch Chief',
+     desc:'Call SNR immediately. State name, rank, unit, and nature of non-cooperation.',
+     doc:null,docClass:null},
+    {num:'4',title:'If physical resistance or endangerment',
+     desc:'IMP may use physical force if person fails to comply (SOP 3927 §6f). Handcuffs/baton if force insufficient. Call for backup immediately.',
+     doc:null,docClass:null},
+    {num:'5',title:'DOB entry',
+     desc:'Date / Time / Location / Name / ID / Rank / Unit / Description of behaviour / Action taken / SNR notified.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'6',title:'Produce MPR if major incident',
+     desc:'Any physical altercation or major non-compliance → MPR. IMP CMDR + FPM informed.',
+     doc:'MPR',docClass:'doc-mpr'}
    ],
-   branches:[]
+   branches:[
+    {cond:'IF',text:'Verbal warning and DOB may suffice for minor non-cooperation without escalation.'},
+    {cond:'NO',text:'Never engage in argument. State the rule, give one warning, then escalate through chain of command.'}
+   ]
+  },
+
+  {id:'dt-accident',color:'#1a5cb8',bg:'#dbeafe',
+   title:'Traffic Accident Investigation',
+   steps:[
+    {num:'1',title:'Secure accident scene',
+     desc:'Stop all traffic. Position IMP vehicle to protect scene. Turn on lights.',
+     say:'"This is IMP. Please remain at the scene. Do not move vehicles until I give permission."',
+     doc:null,docClass:null},
+    {num:'2',title:'Provide first aid if needed',
+     desc:'Call Medical Cell ext. 912 if injury. Call IMP CMDR. Note exact time of call.',
+     doc:null,docClass:null},
+    {num:'3',title:'Conduct breath test on ALL drivers',
+     desc:'Any driver involved in accident must submit to breath test. Refusal = positive result.',
+     doc:null,docClass:null},
+    {num:'4',title:'Document the scene',
+     desc:'Take photos: vehicle positions, damage, road conditions, signs. Draw sketch of accident site.',
+     doc:null,docClass:null},
+    {num:'5',title:'Identify witnesses',
+     desc:'Get names, IDs, unit, contact info of all witnesses. Keep them separated from each other.',
+     doc:null,docClass:null},
+    {num:'6',title:'Take statements',
+     desc:'Take statements from all drivers, victims, witnesses. Use language assistant if needed.',
+     doc:null,docClass:null},
+    {num:'7',title:'Collect evidence',
+     desc:'Tyre marks, debris, any relevant items at scene.',
+     doc:null,docClass:null},
+    {num:'8',title:'Notify SNR and FPM',
+     desc:'Serious injury or significant damage → immediate notification. Minor accidents → on SNR/FPM request.',
+     doc:null,docClass:null},
+    {num:'9',title:'DOB entry + MPR',
+     desc:'DOB: all details. MPR mandatory for serious injury, damage, or DUI involved.',
+     doc:'MPR',docClass:'doc-mpr'}
+   ],
+   branches:[
+    {cond:'IF',text:'Minor accident without injury → IMP investigates only on SNR/EUFOR staff request and FPM approval (SOP 3927 §8d(4)).'},
+    {cond:'IF',text:'Multi-nation personnel involved → joint investigation of at least 2 IMPs from different nations (SOP 3927 §7a(3)).'}
+   ]
+  },
+
+  {id:'dt-dress',color:'#1a5cb8',bg:'#dbeafe',
+   title:'Dress Prescription Violation',
+   steps:[
+    {num:'1',title:'Identify violation',
+     desc:'BDU not worn 0600–1800 (unless exempt). No EUFOR logo. Offensive graphics. Wrong clothing in DFAC.',
+     doc:null,docClass:null},
+    {num:'2',title:'Check exemptions',
+     desc:'Exempt from BDU: en route to Gym, going to gate for walk-out, civilian clothing required for duty.',
+     doc:null,docClass:null},
+    {num:'3',title:'Address individual',
+     say:'"Your dress does not comply with Camp Butmir SOP 3901 §1. [Specify: no head-dress / no EUFOR logo / inappropriate clothing in DFAC]. I am issuing a warning."',
+     doc:null,docClass:null},
+    {num:'4',title:'1st offence',
+     desc:'Verbal warning. DOB entry.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'5',title:'2nd+ offence',
+     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'DFAC rules: no tight/sweaty sports clothes, no sleeveless tops, no sandals/flip-flops, no large bags, no head-dress at table, hands washed before entry, no food taken out (coffee/fruit only).'},
+    {cond:'IF',text:'EUFOR logo mandatory: 70 mm diameter badge per national regulations (SOP 3901 Annex H).'}
+   ]
+  },
+
+  {id:'dt-quiet',color:'#6b7280',bg:'#e8eaed',
+   title:'Quiet Hours Violation (2300–0600)',
+   steps:[
+    {num:'1',title:'Identify violation',
+     desc:'Excessive noise: loud music, slamming doors, loud voices, Skype/FaceTime audible outside room.',
+     doc:null,docClass:null},
+    {num:'2',title:'Address individual',
+     say:'"It is currently quiet hours (2300–0600). You are required to reduce noise immediately. Failure to comply will result in a formal report to your SNR."',
+     desc:'Quiet hours: Monday–Sunday 2300–0600.',
+     doc:null,docClass:null},
+    {num:'3',title:'1st offence',
+     desc:'Verbal warning. DOB entry.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'4',title:'2nd+ offence',
+     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'Hallway lights must be turned out. Music at low volume. Loud noises (slamming doors) to be avoided.'}
+   ]
+  },
+
+  {id:'dt-bike',color:'#b45309',bg:'#fef3c7',
+   title:'Bicycle / Scooter Violation',
+   steps:[
+    {num:'1',title:'Stop cyclist/scooter user',
+     desc:'Identify violation: no registration vignette, no lights, traffic violation, one hand on handlebar.',
+     say:'"I am IMP. Your bicycle/scooter is in violation of Camp Butmir SOP 3901 §7. Please stop and provide your ID card."',
+     doc:null,docClass:null},
+    {num:'2',title:'Check for lights',
+     desc:'After dusk or bad weather: white front light AND red rear light must be on.',
+     doc:null,docClass:null},
+    {num:'3',title:'1st or 2nd offence',
+     desc:'Verbal warning. DOB entry.',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'4',title:'3rd+ offence',
+     desc:'Notify SNR/Branch Chief for disciplinary action.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'All bicycles must be registered with ID Office and have valid vignette/sticker.'},
+    {cond:'IF',text:'Two hands on handlebar at all times while riding.'}
+   ]
+  },
+
+  {id:'dt-walkout',color:'#6b7280',bg:'#e8eaed',
+   title:'Walking Out — Authorization Check',
+   steps:[
+    {num:'1',title:'Check current ALERT STATE',
+     desc:'Before authorizing any walk-out, confirm current alert level.',
+     doc:null,docClass:null},
+    {num:'2',title:'ALPHA / BRAVO',
+     desc:'Authorized by: Branch/Section Chief, National Contingent Cdr, SNR, or MNBN Cdr.',
+     doc:null,docClass:null},
+    {num:'3',title:'CHARLIE (NATO)',
+     desc:'Authorized by COS HQ EUFOR or COS NHQ Sa. Mandatory: issue Force Exemption Card.',
+     doc:null,docClass:null},
+    {num:'4',title:'DELTA',
+     desc:'NO walking out. ALL personnel remain in Camp Butmir. No exceptions.',
+     say:'"Alert state DELTA is in effect. No walking out is authorized. All personnel must remain in Camp Butmir per SOP 3901 §15c."',
+     doc:null,docClass:null},
+    {num:'5',title:'Check Off-Limits list',
+     desc:'Monthly J2 Off-Limits list — posted at DFAC, Gym, GALAXY, CHRONOS. Off-limits: brothels, terrorism-linked, crime-linked, narcotics.',
+     doc:null,docClass:null},
+    {num:'6',title:'Recall procedure',
+     desc:'Alert state increases: Branch Supervisors contact personnel. Personnel return immediately and report to duty stations.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'Personnel may walk out in uniform or civilian clothes. Civilian clothes recommended.'},
+    {cond:'IF',text:'SNR may impose more restrictive conditions on their national contingents.'}
+   ]
   }
 ];
 
 function renderDtrees(){
   const list=document.getElementById('dtreeList');
   if(!list)return;
+  const docClassMap={
+    'MPR':'doc-mpr','TVR':'doc-tvr','PVR':'doc-pvr','DOB':'doc-dob'
+  };
   list.innerHTML=dtrees.map(d=>`
     <div class="dtree-card" id="dt-${d.id}">
       <div class="dtree-header" onclick="document.getElementById('dt-${d.id}').classList.toggle('open')">
-        <div class="dtree-icon" style="background:${d.bg};color:${d.color}">${getSvgForDtree(d.id)}</div>
+        <div class="dtree-icon" style="background:${d.bg};color:${d.color}">${getDtreeSvg(d.id)}</div>
         <span class="dtree-title">${d.title}</span>
         <span class="v-chevron">&#9660;</span>
       </div>
@@ -2644,35 +2904,39 @@ function renderDtrees(){
             <div class="dtree-step-content">
               <div class="dtree-step-title">${s.title}</div>
               <div class="dtree-step-desc">${s.desc}</div>
-              ${s.doc?`<span class="dtree-step-doc">${s.doc}</span>`:''}
+              ${s.say?`<span class="dtree-step-say">💬 ${s.say}</span>`:''}
+              ${s.doc?`<span class="dtree-step-doc ${s.docClass||''}">${s.doc}</span>`:''}
             </div>
           </div>`).join('')}
-        ${d.branches.length?d.branches.map(b=>`
-          <div class="dtree-branch">
-            <span class="dtree-branch-cond ${b['cond-class']}">${b.cond.toUpperCase()}</span>
-            <span class="dtree-branch-text">${b.text}</span>
-          </div>`).join(''):''}
+        ${d.branches&&d.branches.length?`
+          <div style="border-top:1px solid var(--border)">
+            ${d.branches.map(b=>`
+              <div class="dtree-branch">
+                <span class="dtree-branch-cond ${b.cond==='YES'?'cond-yes':b.cond==='NO'?'cond-no':'cond-if'}">${b.cond}</span>
+                <span class="dtree-branch-text">${b.text}</span>
+              </div>`).join('')}
+          </div>`:''}
       </div>
     </div>`).join('');
 }
 
-function getSvgForDtree(id){
-  const svgs={
-    dt1:'<svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M5 20l2-6h10l2 6"/><path d="M5 14l7-4 7 4"/></svg>',
-    dt2:'<svg viewBox="0 0 24 24"><path d="M17 20H7M12 4v12M8 8l4-4 4 4"/></svg>',
-    dt3:'<svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
-    dt4:'<svg viewBox="0 0 24 24"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
-    dt5:'<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3M14 15h2"/></svg>',
-    dt6:'<svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
-    dt7:'<svg viewBox="0 0 24 24"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
-    dt8:'<svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><line x1="2" y1="2" x2="22" y2="22"/></svg>',
-    dt9:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-    dt10:'<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
-    dt11:'<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
-  };
-  return svgs[id]||svgs.dt11;
+function getDtreeSvg(id){
+  const m={'dt-dui':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
+  'dt-speed':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  'dt-parking':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>',
+  'dt-drunk':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/></svg>',
+  'dt-id':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>',
+  'dt-weapon':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+  'dt-uncooperative':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="11" x2="23" y2="11"/></svg>',
+  'dt-accident':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+  'dt-dress':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
+  'dt-quiet':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/></svg>',
+  'dt-bike':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2h-3l-3 9 2 1h4l1-3"/><path d="M18.5 17.5 12 9"/></svg>',
+  'dt-walkout':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'};
+  return m[id]||m['dt-id'];
 }
 renderDtrees();
+
 
 // ── ROUTES ────────────────────────────────────────────────────────────────────
 const routes=[
