@@ -65,6 +65,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 .violation-header:active{background:var(--surface2)}
 .sev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sev-1{background:var(--warn)} .sev-2{background:#c2410c} .sev-3{background:var(--danger)}
+.v-cat-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+.v-cat-icon.sev-1{color:var(--warn)} .v-cat-icon.sev-2{color:#c2410c} .v-cat-icon.sev-3{color:var(--danger)}
 .violation-title{font-weight:700;font-size:14px;color:var(--text);flex:1;letter-spacing:.2px;font-family:var(--body)}
 .v-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0}
 .violation-card.open .v-chevron,.proc-card.open .v-chevron,.ref-card.open .v-chevron{transform:rotate(180deg)}
@@ -486,13 +488,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="tab-content active" id="tab-violations">
     <div class="section-label">Violation Categories</div>
     <div class="filter-row" id="vFilters">
-      <span class="filter-chip active" data-filter="all">All</span>
-      <span class="filter-chip" data-filter="speeding">Speeding</span>
-      <span class="filter-chip" data-filter="parking">Parking</span>
-      <span class="filter-chip" data-filter="vehicle">Vehicle</span>
-      <span class="filter-chip" data-filter="conduct">Conduct</span>
-      <span class="filter-chip" data-filter="dress">Dress</span>
-      <span class="filter-chip" data-filter="id">ID/Access</span>
+      <span class="filter-chip active" data-filter="all"><i class="fa-solid fa-list"></i> All</span>
+      <span class="filter-chip" data-filter="speeding"><i class="fa-solid fa-gauge-high"></i> Speeding</span>
+      <span class="filter-chip" data-filter="parking"><i class="fa-solid fa-square-parking"></i> Parking</span>
+      <span class="filter-chip" data-filter="vehicle"><i class="fa-solid fa-car"></i> Vehicle</span>
+      <span class="filter-chip" data-filter="conduct"><i class="fa-solid fa-person-circle-exclamation"></i> Conduct</span>
+      <span class="filter-chip" data-filter="dress"><i class="fa-solid fa-shirt"></i> Dress</span>
+      <span class="filter-chip" data-filter="id"><i class="fa-solid fa-id-card"></i> ID/Access</span>
     </div>
     <div id="violationList"></div>
   </div>
@@ -1510,19 +1512,47 @@ function switchTab(id,btn){
 }
 
 // ── VIOLATIONS ───────────────────────────────────────────────────────────────
+const vIcons={
+  speeding:'fa-gauge-high',
+  parking:'fa-square-parking',
+  vehicle:'fa-car',
+  conduct:'fa-person-circle-exclamation',
+  dress:'fa-shirt',
+  id:'fa-id-card'
+};
+// Per-violation overrides for more specific icons
+const vIconOverride={
+  v10:'fa-wine-glass-empty',   // DUI
+  v7:'fa-ban-smoking',         // smoking in vehicle
+  v8:'fa-seatbelt',            // seatbelt — FA pro; fallback to fa-car
+  v9:'fa-mobile-screen',       // cellphone
+  v11:'fa-car-burst',          // damage to vehicle
+  v15:'fa-wine-glass-empty',   // alcohol conduct
+  v16:'fa-gun',                // weapon
+  v17:'fa-person-walking',     // pedestrian
+  v18:'fa-bicycle',            // bicycle
+  v19:'fa-moon',               // quiet hours
+  v1:'fa-hand',                // uncooperative
+  v6:'fa-building',            // bldg 200
+};
+
 function renderViolations(filter){
   const items=filter==='all'?violations:violations.filter(v=>v.cat===filter);
-  document.getElementById('violationList').innerHTML=items.map(v=>`
+  document.getElementById('violationList').innerHTML=items.map(v=>{
+    const icon=vIconOverride[v.id]||vIcons[v.cat]||'fa-circle-exclamation';
+    return `
     <div class="violation-card" id="vc-${v.id}">
       <div class="violation-header" onclick="document.getElementById('vc-${v.id}').classList.toggle('open')">
         <span class="sev-dot sev-${v.sev}"></span>
+        <span class="v-cat-icon sev-${v.sev}"><i class="fa-solid ${icon}"></i></span>
         <span class="violation-title">${v.title}</span>
         <span class="v-chevron">&#9660;</span>
       </div>
       <div class="violation-body">
         ${v.penalties.map(p=>`<div class="penalty-row"><span class="penalty-num">${p.num||'—'}</span><span class="penalty-text">${p.text}</span>${p.points?`<span class="penalty-points">${p.points}</span>`:''}</div>`).join('')}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 document.getElementById('vFilters').addEventListener('click',function(e){
   const chip=e.target.closest('.filter-chip');if(!chip)return;
