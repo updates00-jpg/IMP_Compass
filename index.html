@@ -595,8 +595,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           <span class="quick-btn-label">Ammo</span>
         </div>
-        <div class="quick-btn" onclick="openSIA('medevac')" style="color:var(--danger)">
+        <div class="quick-btn" onclick="open9Liner()" style="color:var(--danger)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span class="quick-btn-label">9-Liner</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('medevac')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
           <span class="quick-btn-label">MEDEVAC</span>
         </div>
         <div class="quick-btn" onclick="openSIA('delay')" style="color:var(--warn)">
@@ -661,6 +665,40 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <button class="modal-close" onclick="closeSIA()">&#x2715;</button>
         </div>
         <div id="siaModalBody"></div>
+      </div>
+    </div>
+
+    <!-- 9-LINER BUILDER MODAL -->
+    <div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
+      <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" style="color:var(--danger)">
+          <span>9-Liner MEDEVAC</span>
+          <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
+        </div>
+
+        <!-- MODE TOGGLE -->
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
+          <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
+        </div>
+
+        <!-- BUILDER MODE -->
+        <div id="ninerBuildMode">
+          <div id="ninerLines"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
+            <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
+          </div>
+          <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
+            <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
+          </div>
+        </div>
+
+        <!-- REFERENCE MODE -->
+        <div id="ninerRefMode" style="display:none">
+          <div id="ninerRefContent"></div>
+        </div>
       </div>
     </div>
 
@@ -3355,6 +3393,258 @@ function getDtreeSvg(id){
 renderDtrees();
 
 
+// ── 9-LINER MEDEVAC BUILDER ───────────────────────────────────────────────────
+const ninerDef=[
+  {
+    line:1, label:'Location',
+    desc:'Grid reference or place name of pick-up site.',
+    type:'text', placeholder:'e.g. SIA E7 Gate / Grid 12345',
+    classified:false
+  },
+  {
+    line:2, label:'Radio Frequency & Call Sign',
+    desc:'Frequency in MHz and call sign of requesting unit.',
+    type:'text', placeholder:'e.g. IMP DUTY / IPN 5783',
+    classified:false
+  },
+  {
+    line:3, label:'Number of Patients by Precedence',
+    desc:'Number + code letter. Multiple categories: separate entries.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — Urgent',note:'Life-threatening. Evac within 1 hour.'},
+      {code:'B',label:'B — Urgent Surgical',note:'Requires surgery within 1h to save life/limb.'},
+      {code:'C',label:'C — Priority',note:'Serious but not immediate threat. Within 4h.'},
+      {code:'D',label:'D — Routine',note:'Evacuation within 24h. Condition stable.'},
+      {code:'E',label:'E — Convenience',note:'Evacuation for administrative reasons.'}
+    ],
+    prefix:'1 '
+  },
+  {
+    line:4, label:'Special Equipment Required',
+    desc:'Equipment needed at pick-up site.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — None',note:'No special equipment needed.'},
+      {code:'B',label:'B — Hoist',note:'Hoist / winch required.'},
+      {code:'C',label:'C — Extraction equipment',note:'Special extraction equipment needed.'},
+      {code:'D',label:'D — Ventilator',note:'Ventilator required during transport.'}
+    ],
+    prefix:''
+  },
+  {
+    line:5, label:'Number of Patients by Type',
+    desc:'Litter (carried on stretcher) or Ambulatory (can walk).',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'L',label:'L — Litter',note:'Patient cannot walk. Carried on stretcher.'},
+      {code:'A',label:'A — Ambulatory',note:'Patient can walk without assistance.'},
+      {code:'LA',label:'L + A',note:'Both litter and ambulatory patients.'}
+    ],
+    prefix:'1 '
+  },
+  {
+    line:6, label:'Security at Pick-Up Site',
+    desc:'Enemy status. Transmitted using NATO phonetic alphabet.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'N',label:'NOVEMBER — No enemy',note:'No enemy troops in area.'},
+      {code:'P',label:'PAPA — Possible enemy',note:'Possible enemy in area. Approach with caution.'},
+      {code:'E',label:'ECHO — Enemy troops',note:'Enemy troops in area. Armed escort required.'},
+      {code:'X',label:'XRAY — Armed escort required',note:'Enemy in area. Armed escort mandatory for extraction.'}
+    ],
+    prefix:'',
+    phoneticNote:true
+  },
+  {
+    line:7, label:'Method of Marking Pick-Up Site',
+    desc:'How the pick-up site is marked for the aircraft.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — Panels',note:'VS-17 panels or similar marking panels.'},
+      {code:'B',label:'B — Pyrotechnic signal',note:'Flare or signal pistol.'},
+      {code:'C',label:'C — Smoke signal',note:'Smoke grenade. Colour transmitted separately after freq check.'},
+      {code:'D',label:'D — None',note:'No marking. Aircraft uses grid only.'},
+      {code:'E',label:'E — Lights',note:'Strobe light or flashlight.'}
+    ],
+    prefix:''
+  },
+  {
+    line:8, label:'Patient Nationality & Status',
+    desc:'Nationality and military/civilian status.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — US Military',note:'US Armed Forces personnel.'},
+      {code:'B',label:'B — US Civilian',note:'US civilian personnel.'},
+      {code:'C',label:'C — Non-US Military',note:'Use with nationality. e.g. C EUFOR, C POL, C AUT'},
+      {code:'D',label:'D — Non-US Civilian',note:'Non-US civilian personnel.'},
+      {code:'E',label:'E — EPW',note:'Enemy Prisoner of War.'}
+    ],
+    prefix:'',
+    euforNote:true
+  },
+  {
+    line:9, label:'NBC Contamination',
+    desc:'Nuclear, Biological, Chemical contamination at site.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'N',label:'N — None',note:'No contamination.'},
+      {code:'C',label:'C — Chemical',note:'Chemical contamination present.'},
+      {code:'B',label:'B — Biological',note:'Biological contamination present.'},
+      {code:'R',label:'R — Radiological',note:'Radiological contamination present.'},
+      {code:'X',label:'X — Nuclear',note:'Nuclear contamination present.'}
+    ],
+    prefix:''
+  }
+];
+
+let ninerValues={};
+
+function open9Liner(){
+  ninerValues={};
+  const modal=document.getElementById('ninerModal');
+  if(modal) modal.classList.add('open');
+  setNinerMode('build');
+  render9LinerLines();
+  document.getElementById('ninerOutput').style.display='none';
+}
+function close9Liner(){
+  const m=document.getElementById('ninerModal');
+  if(m) m.classList.remove('open');
+}
+function setNinerMode(mode){
+  const build=document.getElementById('ninerBuildMode');
+  const ref=document.getElementById('ninerRefMode');
+  const btnB=document.getElementById('ninerModeBuild');
+  const btnR=document.getElementById('ninerModeRef');
+  if(mode==='build'){
+    build.style.display='block'; ref.style.display='none';
+    btnB.style.background='var(--danger)'; btnB.style.color='#fff'; btnB.style.borderColor='var(--danger)';
+    btnR.style.background='var(--surface2)'; btnR.style.color='var(--text2)'; btnR.style.borderColor='var(--border)';
+  } else {
+    build.style.display='none'; ref.style.display='block';
+    btnR.style.background='var(--danger)'; btnR.style.color='#fff'; btnR.style.borderColor='var(--danger)';
+    btnB.style.background='var(--surface2)'; btnB.style.color='var(--text2)'; btnB.style.borderColor='var(--border)';
+    renderNinerRef();
+  }
+}
+
+function render9LinerLines(){
+  const container=document.getElementById('ninerLines');
+  if(!container) return;
+  container.innerHTML=ninerDef.map(l=>{
+    const lineId=`nl${l.line}`;
+    if(l.type==='text'){
+      return `
+        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
+            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
+          <input id="${lineId}" placeholder="${l.placeholder}" oninput="ninerValues[${l.line}]=this.value"
+            style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
+        </div>`;
+    } else {
+      return `
+        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
+            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
+            ${l.classified?'<span style="font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700">CODED</span>':''}
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
+          ${l.phoneticNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">⚠ Transmitted using NATO phonetic alphabet</div>':''}
+          ${l.euforNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">For EUFOR personnel: C EUFOR</div>':''}
+          <div style="display:flex;flex-direction:column;gap:4px">
+            ${l.options.map(o=>`
+              <label style="display:flex;align-items:flex-start;gap:8px;padding:7px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer">
+                <input type="radio" name="${lineId}" value="${o.code}" onchange="ninerValues[${l.line}]='${(l.prefix||'')+o.code}${l.euforNote&&o.code==='C'?' EUFOR':''}';"
+                  style="margin-top:2px;accent-color:var(--danger);flex-shrink:0">
+                <div>
+                  <div style="font-family:var(--mono);font-weight:700;font-size:12px;color:var(--accent)">${o.code}</div>
+                  <div style="font-size:12px;color:var(--text);font-weight:600">${o.label}</div>
+                  <div style="font-size:11px;color:var(--text3)">${o.note}</div>
+                </div>
+              </label>`).join('')}
+          </div>
+        </div>`;
+    }
+  }).join('');
+}
+
+function generate9Liner(){
+  const lines=[];
+  let missing=[];
+  ninerDef.forEach(l=>{
+    const val=ninerValues[l.line];
+    if(!val||val.trim()==='') missing.push('Line '+l.line+' ('+l.label+')');
+    else lines.push(`LINE ${l.line}: ${val.trim()}`);
+  });
+  const out=document.getElementById('ninerOutput');
+  const txt=document.getElementById('ninerText');
+  if(!out||!txt) return;
+  if(missing.length){
+    txt.textContent='⚠ MISSING:\n'+missing.join('\n');
+    txt.style.color='#fca5a5';
+  } else {
+    const ts=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    txt.textContent='=== 9-LINER MEDEVAC ===\n'+ts+' LOCAL\n\n'+lines.join('\n')+'\n\n=== END OF MESSAGE ===';
+    txt.style.color='#86efac';
+  }
+  out.style.display='block';
+  out.scrollIntoView({behavior:'smooth'});
+}
+
+function reset9Liner(){
+  ninerValues={};
+  render9LinerLines();
+  const out=document.getElementById('ninerOutput');
+  if(out) out.style.display='none';
+}
+
+function copy9Liner(){
+  const txt=document.getElementById('ninerText');
+  if(!txt) return;
+  navigator.clipboard?.writeText(txt.textContent).then(()=>alert('9-liner copied.')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('9-liner copied.');
+  });
+}
+
+function renderNinerRef(){
+  const c=document.getElementById('ninerRefContent');
+  if(!c) return;
+  c.innerHTML=ninerDef.map(l=>`
+    <div style="margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)">
+        <span style="font-family:var(--mono);font-weight:700;font-size:14px;color:var(--danger);min-width:24px">L${l.line}</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</div>
+          <div style="font-size:11px;color:var(--text3)">${l.desc}</div>
+        </div>
+        ${l.classified?'<span style="margin-left:auto;font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700;flex-shrink:0">CODED</span>':''}
+      </div>
+      ${l.type==='text'?`<div style="padding:8px 12px;font-size:12px;color:var(--text3)">Free text — ${l.placeholder}</div>`:
+      l.options.map(o=>`
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:6px;padding:6px 12px;border-bottom:1px solid var(--border)">
+          <span style="font-family:var(--mono);font-weight:900;font-size:14px;color:var(--accent)">${o.code}</span>
+          <div>
+            <div style="font-weight:600;font-size:12px;color:var(--text)">${o.label.replace(/^[A-Z] — /,'')}</div>
+            <div style="font-size:11px;color:var(--text3)">${o.note}</div>
+          </div>
+        </div>`).join('')}
+      ${l.phoneticNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">⚠ Use NATO phonetic alphabet: N=NOVEMBER, P=PAPA, E=ECHO, X=XRAY</div>`:''}
+      ${l.euforNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">For EUFOR personnel → C EUFOR</div>`:''}
+    </div>`).join('');
+}
+
 // ── SIA AIRPORT ──────────────────────────────────────────────────────────────
 const siaProcs={
   dep:{
@@ -3421,13 +3711,14 @@ const siaProcs={
     color:'var(--danger)',
     steps:[
       {n:'1',t:'Notification to ALS',d:'Send to ALS: Special Request Form + copy of passenger\'s passport + EUFOR ID card.',say:'"This is ADMP. MEDEVAC request for [Name, Rank, Unit]. Sending Special Request Form and ID documentation to ALS now."'},
-      {n:'2',t:'Arrival timing',d:'MED/NSE team arrives at airport 15 min before aircraft arrival. Vehicles parked at E7 gate, in street near administration building.'},
-      {n:'3',t:'Document check at BPBiH',d:'NSE/MED team shows passenger\'s passport and EUFOR ID card to BiH Border Police. Team waits if aircraft needs to refuel.'},
-      {n:'4',t:'ADMP Red Cards and E7 escort',d:'ADMP issues Red Cards to MED/NSE team and escorts via E7 gate to aircraft.',say:'"Red Cards issued. Follow me to E7 gate. No hats airside. Stay with the group at all times."'},
-      {n:'5',t:'Stretcher patient',d:'If passenger is on stretcher: "Follow Me" car comes to E7 gate. MED/NSE team with vehicles follows "Follow Me" car to aircraft. Vehicles return via E7 gate after patient disembarkation.'},
-      {n:'6',t:'Out of hours',d:'SIA operating hours: 0600–2200. EUFOR may request airport to open OOH for medical emergency. Contact ALS immediately → informal approach to air traffic → formal request signed at highest possible level.',doc:'DOB'}
+      {n:'2',t:'Transmit 9-Liner MEDEVAC request',d:'Before or during notification — transmit 9-liner to Medical Cell (ext. 912) and JOC. Use coded format. Open 9-Liner Builder below → tap "9-Liner" button.',say:'[USE 9-LINER BUILDER — tap button below procedure list]'},
+      {n:'3',t:'Arrival timing',d:'MED/NSE team arrives at airport 15 min before aircraft arrival. Vehicles parked at E7 gate, in street near administration building.'},
+      {n:'4',t:'Document check at BPBiH',d:'NSE/MED team shows passenger\'s passport and EUFOR ID card to BiH Border Police. Team waits if aircraft needs to refuel.'},
+      {n:'5',t:'ADMP Red Cards and E7 escort',d:'ADMP issues Red Cards to MED/NSE team and escorts via E7 gate to aircraft.',say:'"Red Cards issued. Follow me to E7 gate. No hats airside. Stay with the group at all times."'},
+      {n:'6',t:'Stretcher patient',d:'If passenger is on stretcher: "Follow Me" car comes to E7 gate. MED/NSE team with vehicles follows "Follow Me" car to aircraft. Vehicles return via E7 gate after patient disembarkation.'},
+      {n:'7',t:'Out of hours',d:'SIA operating hours: 0600–2200. EUFOR may request airport to open OOH for medical emergency. Contact ALS immediately → informal approach to air traffic → formal request signed at highest possible level.',doc:'DOB'}
     ],
-    note:'Ref: SOP 6240 Annex B §15g. ALS on permanent call: 061 206 134. For out-of-hours: SIA does not have to open but has historically been co-operative.'
+    note:'Ref: SOP 6240 Annex B §15g. Medical Cell: ext. 912. ALS on permanent call: 061 206 134. JOC: 5366–5368.'
   },
   delay:{
     title:'Flight Delay or Cancellation',
