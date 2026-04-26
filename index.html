@@ -794,7 +794,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('refs','sub-sop',this)">SOP</button>
       <button class="subnav-btn" onclick="switchSub('refs','sub-routes',this)">Routes</button>
+      <button class="subnav-btn" onclick="switchSub('refs','sub-convoy',this)">Convoy</button>
     </div>
+
+    <!-- SOP sub-tab -->
     <div class="subcontent active" id="sub-sop">
       <div class="search-bar">
         <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
@@ -804,7 +807,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div id="refList"></div>
       <div class="section-label mt12">SOP 3927 — IMP Reports &amp; Authority</div>
       <div id="refList3927"></div>
+      <div class="section-label mt12">SOP 6240 — Movement &amp; Convoys</div>
+      <div id="refList6240"></div>
     </div>
+
+    <!-- Routes sub-tab -->
     <div class="subcontent" id="sub-routes">
       <div class="search-bar">
         <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
@@ -818,6 +825,85 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
         <span class="filter-chip" data-rfilter="tactical">Tactical</span>
       </div>
       <div id="routeList"></div>
+    </div>
+
+    <!-- Convoy sub-tab -->
+    <div class="subcontent" id="sub-convoy">
+      <!-- CCN DECODER -->
+      <div class="section-label">CCN Decoder — Convoy Credit Number</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div style="padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">FORMAT: DD/EUFOR/SN/SP/NAT/VEH</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <input id="ccnInput" placeholder="e.g. 01/EUFOR/01/B/POL/03" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;outline:none;letter-spacing:1px" oninput="decodeCCN(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+            <button onclick="document.getElementById('ccnInput').value='';document.getElementById('ccnResult').innerHTML=''" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text3);cursor:pointer;font-size:13px;font-family:var(--body)">Clear</button>
+          </div>
+          <div id="ccnResult"></div>
+        </div>
+      </div>
+
+      <!-- CONVOY QUICK REF -->
+      <div class="section-label">Convoy Rules — Quick Reference</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY DEFINITION</div>
+          <div style="font-size:13px;color:var(--text2)">≥ 7 vehicles = convoy. LOG MOV Officer (Cell) controls all convoys of 7+ vehicles, border crossings, tactical moves, oversized vehicles, ammo/explosives.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">MOVEMENT REQUEST DEADLINES</div>
+          <div style="font-size:13px;color:var(--text2)"><strong>Within AOO:</strong> 36 hours in advance to LOG MOV Officer.<br><strong>Cross-border:</strong> 3 working days in advance.<br><strong>Emergency:</strong> by 1800hrs day before minimum.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY SIZE LIMITS</div>
+          <div style="font-size:13px;color:var(--text2)">Max 15 vehicles per packet. Convoys ≥16 vehicles: break into packets ≤15, release interval 15 min between packets. Multiple convoys same SP: 60 min between convoys.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CCN ON VEHICLES</div>
+          <div style="font-size:13px;color:var(--text2)">CCN must be displayed on both sides of leading vehicle AND front and back of trailing vehicle. IMP verifies during escort and on-camp checks.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">DELAY ≥ 30 MIN</div>
+          <div style="font-size:13px;color:var(--text2)">Convoy Commander MUST immediately notify LOG MOV Officer (Cell) to obtain amended start time. LOG MOV notifies border control elements.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">VEHICLE BREAKDOWN IN CONVOY</div>
+          <div style="font-size:13px;color:var(--text2)">Column does NOT halt for single breakdown. Broken down vehicle: yellow flag + warning triangle + flasher lights. Driver stays with vehicle. Same-unit vehicles attempt recovery first. Recovery at rear of convoy.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">OVERSIZED VEHICLES</div>
+          <div style="font-size:13px;color:var(--text2)">Width &gt;2.60m / Length &gt;16.50m / Height &gt;4.00m / Weight &gt;MLC 40 = oversized. Requires LOG MOV approval regardless of convoy size.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">IMP ESCORT TRIGGERS</div>
+          <div style="font-size:13px;color:var(--text2)">IMP escort required when specified in Movement Request. Always required for: ammo/explosives convoys, VIP moves, fuel trucks, media personnel in coord with PAO. Request via FPM Office in advance (emergencies excepted).</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--danger);font-family:var(--mono)">TECHNICAL HALTS</div>
+          <div style="font-size:13px;color:var(--text2)">Technical Halt (TH) every ~2 hours. Rest Halt (RH) after ~8 hours strongly recommended.</div>
+        </div>
+      </div>
+
+      <!-- MOVEMENT REQUEST FIELDS -->
+      <div class="section-label">Movement Request — Required Fields</div>
+      <div class="contact-full">
+        <div style="padding:10px 14px;font-size:12px;color:var(--text2);line-height:2;font-family:var(--mono)">
+          (1) Date of Movement<br>
+          (2) Unit moving (e.g. MNBN/A-COY)<br>
+          (3) Reason: Tactical / Operational / Routine<br>
+          (4) Number of Vehicles<br>
+          (5) Start Point (SP) — name of origin<br>
+          (6) Estimated Time of Departure (ETD)<br>
+          (7) Convoy Route — route code names<br>
+          (8) Border Crossing Points (BXPs) if applicable<br>
+          (9) ETA at BXPs<br>
+          (10) Final Destination<br>
+          (11) ETA at Final Destination<br>
+          (12) Return Details (if same-day)<br>
+          (13) Oversized Vehicles — W/H/L/Weight<br>
+          (14) Remarks: MP escort needed? Croatian police? TCC responsible for co-ord?<br>
+          (15) If &gt;15 vehicles: vehicles per packet
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1150,7 +1236,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           <option value="Patrol">Patrol / Inner Patrol</option>
           <option value="Sobriety Check">Sobriety Check</option>
           <option value="Concessionaire Check">Concessionaire Check</option>
-          <option value="Escort">Escort / BLE</option>
+          <option value="Escort / BLE">Escort / BLE</option>
+          <option value="Convoy Escort">Convoy Escort</option>
+          <option value="Convoy Check — CCN Verification">Convoy Check — CCN Verification</option>
           <option value="Traffic Accident">Traffic Accident</option>
           <option value="Other">Other</option>
         </optgroup>
@@ -1586,7 +1674,14 @@ const sopRefs=[
   {tag:'SOP 3927 §10e',title:'TVR — Traffic Violation Report',rules:['When to produce TVR: minor traffic violation (exceeding speed limit, no seatbelt, using cellphone, smoking in vehicle) without endangering life or causing damage.','TVR approved by IMP CMDR → sent to violator\'s SNR → FPM and other personnel depending on incident type.','All TVRs marked "POLICE IN CONFIDENCE".','TVR hard copies archived minimum 1 year from completion.','TVR template: Annex B to SOP 3927.','Fields: TVR number / Date of issue / Violation type / DTG of violation / Location / Violator\'s details / Vehicle details / Violation description / Conduct (Cooperative / Uncooperative / Hostile) / Reporting IMP / Approving IMP CMDR / Distribution list.']},
   {tag:'SOP 3927 §10f',title:'PVR — Parking Violation Report',rules:['When to produce PVR: minor parking violation (wrong parking area, inappropriate location) without endangering life or causing damage.','PVR approved by IMP CMDR → sent to violator\'s SNR → FPM and other personnel depending on incident type.','All PVRs marked "POLICE IN CONFIDENCE".','PVR hard copies archived minimum 1 year from completion.','PVR template: Annex C to SOP 3927.','Fields: PVR number / Date of issue / Violation type / DTG / Location / Violator\'s details / Violation description / Conduct (Cooperative / Uncooperative / Hostile) / Actions taken / Reporting IMP / Approving IMP CMDR / Distribution list.']},
   {tag:'SOP 3927 §11',title:'DOB — Daily Occurrence Book',rules:['IMP Duty is responsible for registering ALL IMP activities during duty period — immediately as they occur.','DOB entries: all accidents, incidents, offences, violations, or important information.','DOB kept as a computer file. Each completed DOB reviewed by IMP CMDR immediately and sent by email to FPM.','DOB Entry format: Entry number / Date (year) / FROM–TO time / Reporting IMP Duty (name, nationality) / Entry Type / Entry Time / Description.','Standard entry types: Inner patrol, Sobriety check, Escort/BLE, Truck inspection, Concessionaire check, Traffic violation, Parking violation, ID check, Incident response.','NSTR = Nothing Significant To Report — used when patrol/task completed without incident.','DOB template: Annex D to SOP 3927.']},
-  {tag:'SOP 3927 §10 — General',title:'Report Selection Guide',rules:['MPR → Major incident, crime, accident with injury, significant damage to EUFOR/NATO property.','TVR → Minor traffic violation (speeding, seatbelt, cellphone, smoking in vehicle).','PVR → Parking violation (wrong zone, restricted area, Bldg 200 circle).','DOB → Every IMP activity, every warning issued, every patrol, every check. Always required.','When in doubt: produce MPR. Over-reporting is safer than under-reporting.','All reports must be produced in English (SOP 3927 §10c).','Branch Chiefs / SNRs may request releasable copy for insurance/national use — requests to FPM.']}
+  {tag:'SOP 3927 §10 — General',title:'Report Selection Guide',rules:['MPR → Major incident, crime, accident with injury, significant damage to EUFOR/NATO property.','TVR → Minor traffic violation (speeding, seatbelt, cellphone, smoking in vehicle).','PVR → Parking violation (wrong zone, restricted area, Bldg 200 circle).','DOB → Every IMP activity, every warning issued, every patrol, every check. Always required.','When in doubt: produce MPR. Over-reporting is safer than under-reporting.','All reports must be produced in English (SOP 3927 §10c).','Branch Chiefs / SNRs may request releasable copy for insurance/national use — requests to FPM.']},
+  {tag:'SOP 6240 §2',title:'Road Movement — LOG MOV Control',rules:['LOG MOV Officer (Cell) controls: convoys of ≥7 vehicles, all border crossings, tactical moves, oversized vehicles, ammo/explosives movements.','Convoy = packet of ≥7 vehicles (EUFOR definition).','LOG MOV is principal advisor for freedom of movement on air, sea and inland surface in AOO.','In absence of LOG MOV Officer → LOG MOV PLANS Officer acts.']},
+  {tag:'SOP 6240 §6',title:'Road Movement Request — Procedures',rules:['Submit movement request at least 36 hours in advance for movements within AOO.','Cross-border movements: submit at least 3 working days in advance.','Emergency after 1800hrs: telephone LOG MOV Officer first, then follow up in writing.','Convoy cancellations must be immediately reported to LOG MOV Officer (Cell).','Convoy delay ≥30 min: Convoy Commander must immediately notify LOG MOV to obtain amended start time.']},
+  {tag:'SOP 6240 §7',title:'Convoy Credit Number (CCN)',rules:['CCN format: DD/EUFOR/SN/SP/NAT/VEH — example: 01/EUFOR/01/B/POL/03','DD = day of month. EUFOR = controlling authority. SN = movement serial number. SP = Start Point (A=outside theatre, B=in/out BiH, C=in/out Croatia). NAT = nationality (country abbreviation). VEH = number of vehicles.','CCN must be placed on both sides of leading vehicle AND front and back of trailing vehicle.','LOG MOV Officer is the approving and issuing authority for all CCNs.','All units must request CCNs from LOG MOV Officer.']},
+  {tag:'SOP 6240 §8–9',title:'Convoy Control & Breakdown Procedures',rules:['Max 15 vehicles per packet. Convoys ≥16: break into packets ≤15 with 15 min release intervals between packets.','Multiple convoys same Start Point: 60 min release interval between convoys.','Column does NOT halt when a single vehicle breaks down.','Broken down vehicle: display yellow flag, warning triangle, warning flasher lights. Driver remains with vehicle.','Same-unit vehicles attempt recovery first before requesting RPOC assistance.','Recovery vehicle placed at rear of convoy.']},
+  {tag:'SOP 6240 §5',title:'NSE / EUFOR Unit Responsibilities',rules:['All EUFOR units and NSEs co-ordinate movements per SOP 6240.','Request CCN for convoys, exercises, tactical moves, oversized vehicles within BiH.','Establish traffic control and Recovery Points of Contact (RPOCs) as required.','Report road conditions to LOG MOV after approved convoy (EUFOR Road Recce Form).']},
+  {tag:'SOP 6240 Annex A',title:'Route & MLC Requirements',rules:['Ideal route: MLC 80 weight classification, 7.30m wide, minimum 4.2m height clearance.','Oversized vehicle: Width >2.60m / Length >16.50m / Height >4.00m / Weight >MLC 40.','Final route selection by LOG MOV based on technical assessment by Senior Infra & EP Specialist.']},
+  {tag:'SOP 6240 — IMP Escort',title:'IMP Escort — When Required',rules:['All escort requests via FPM Office in advance (except emergencies — via JOC FRAGO).','IMP escort always required for: ammo/explosives, fuel trucks, couriers, press/media (PAO co-ord), VIP/principal staff (JVB co-ord), snow cleaning crews.','Airport (ADMP): minimum 3 IMP per flight. 3–5 for VIP flights.','Blue light escorts may use duty or unmarked vehicles.']}
 ];
 
 // ── CLOCK ────────────────────────────────────────────────────────────────────
@@ -1691,10 +1786,11 @@ function openProc(id){
 // ── SOP REFS ─────────────────────────────────────────────────────────────────
 function renderRefs(q){
   const fq=(q||'').toLowerCase().trim();
-  const sop3901=sopRefs.filter(r=>r.tag.includes('3901')||(!r.tag.includes('3927')));
+  const sop3901=sopRefs.filter(r=>r.tag.includes('3901'));
   const sop3927=sopRefs.filter(r=>r.tag.includes('3927'));
+  const sop6240=sopRefs.filter(r=>r.tag.includes('6240'));
 
-  function renderList(items, listId){
+  function renderList(items,listId){
     const list=document.getElementById(listId);
     if(!list)return;
     const filtered=fq?items.filter(r=>r.title.toLowerCase().includes(fq)||r.tag.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))):items;
@@ -1718,6 +1814,7 @@ function renderRefs(q){
 
   renderList(sop3901,'refList');
   renderList(sop3927,'refList3927');
+  renderList(sop6240,'refList6240');
 }
 function filterRefs(q){renderRefs(q);}
 renderRefs('');
@@ -2985,6 +3082,47 @@ const dtrees=[
    ]
   },
 
+  {id:'dt-convoy',color:'#1a5cb8',bg:'#dbeafe',
+   title:'Convoy Escort — IMP Duties',
+   steps:[
+    {num:'1',title:'Pre-escort check — receive tasking',
+     desc:'Request comes via FPM Office or JOC FRAGO (emergency). Confirm: CCN number, departure time, number of vehicles, route, type of cargo.',
+     doc:null,docClass:null},
+    {num:'2',title:'Verify CCN on vehicles',
+     desc:'CCN must be displayed on both sides of leading vehicle AND on front and back of trailing vehicle. Use CCN Decoder in Refs tab if needed.',
+     say:'"Please confirm your CCN is displayed on leading and trailing vehicles as required by SOP 6240 §7."',
+     doc:null,docClass:null},
+    {num:'3',title:'Check vehicle count',
+     desc:'Count vehicles. ≥16 in convoy? Must be split into packets of ≤15. Release interval 15 min between packets. Multiple convoys same SP: 60 min between convoys.',
+     doc:null,docClass:null},
+    {num:'4',title:'Verify ammo/explosives handling',
+     desc:'If convoy carries ammo or explosives: IMP escort is mandatory. Verify proper packaging and documentation. Notify LOG MOV immediately if discrepancy found.',
+     say:'"This convoy is carrying Class 1 dangerous goods. Confirm all documentation is present and IMP escort authorization from LOG MOV."',
+     doc:null,docClass:null},
+    {num:'5',title:'Escort position',
+     desc:'IMP escort vehicle typically leads or trails depending on type. Blue lights authorized. Weapons carried per duty authorization.',
+     doc:null,docClass:null},
+    {num:'6',title:'En route — convoy delay ≥30 min',
+     desc:'Convoy Commander must notify LOG MOV Officer (Cell) immediately. LOG MOV provides amended start time and notifies border control.',
+     say:'"This is IMP escort [CCN]. Convoy delayed ≥30 min at [location]. Notifying LOG MOV Officer for amended departure time."',
+     doc:null,docClass:null},
+    {num:'7',title:'En route — vehicle breakdown',
+     desc:'Column does NOT halt. Broken down vehicle: yellow flag + warning triangle + flasher lights. Driver stays with vehicle. Unit attempts own recovery first. Recovery vehicle is at rear of convoy.',
+     doc:null,docClass:null},
+    {num:'8',title:'Incident during escort',
+     desc:'Stop convoy if safety requires. Secure scene. Call IMP CMDR and LOG MOV Officer. Provide first aid if needed. DOB entry required.',
+     doc:'MPR',docClass:'doc-mpr'},
+    {num:'9',title:'DOB entry on completion',
+     desc:'Entry: Date / Time / CCN / Route used / Number of vehicles / Cargo type / Start point / Destination / Completion time / Any incidents.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'Ammo/explosives convoy: IMP escort mandatory. All requests via FPM Office 48h in advance for Class 1 dangerous goods.'},
+    {cond:'IF',text:'Emergency escort: IMP may be tasked via JOC FRAGO — early notification essential to ensure assets available.'},
+    {cond:'IF',text:'Technical Halts: approximately every 2 hours. Rest Halts after approximately 8 hours.'}
+   ]
+  },
+
   {id:'dt-walkout',color:'#6b7280',bg:'#e8eaed',
    title:'Walking Out — Authorization Check',
    steps:[
@@ -3063,11 +3201,67 @@ function getDtreeSvg(id){
   'dt-dress':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
   'dt-quiet':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/></svg>',
   'dt-bike':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2h-3l-3 9 2 1h4l1-3"/><path d="M18.5 17.5 12 9"/></svg>',
+  'dt-convoy':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><line x1="8" y1="8" x2="8" y2="13"/><line x1="11" y1="8" x2="11" y2="13"/></svg>',
   'dt-walkout':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'};
   return m[id]||m['dt-id'];
 }
 renderDtrees();
 
+
+// ── CCN DECODER ───────────────────────────────────────────────────────────────
+const ccnNations={
+  'AFG':'Afghanistan','ALB':'Albania','AUT':'Austria','BEL':'Belgium',
+  'BIH':'Bosnia & Herzegovina','BGR':'Bulgaria','HRV':'Croatia','CYP':'Cyprus',
+  'CZE':'Czech Republic','DNK':'Denmark','EST':'Estonia','FIN':'Finland',
+  'FRA':'France','DEU':'Germany','GRC':'Greece','HUN':'Hungary',
+  'IRL':'Ireland','ITA':'Italy','LVA':'Latvia','LTU':'Lithuania',
+  'LUX':'Luxembourg','MLT':'Malta','NLD':'Netherlands','POL':'Poland',
+  'PRT':'Portugal','ROU':'Romania','SVK':'Slovakia','SVN':'Slovenia',
+  'ESP':'Spain','SWE':'Sweden','TUR':'Turkey','GBR':'United Kingdom',
+  'USA':'United States','CAN':'Canada','NOR':'Norway','MKD':'North Macedonia',
+  'CHE':'Switzerland','MNE':'Montenegro','SRB':'Serbia','ALG':'Algeria',
+  'MAR':'Morocco','NZL':'New Zealand','AUS':'Australia'
+};
+const ccnSP={
+  'A':'A — Outside the Theatre',
+  'B':'B — In / Out of Bosnia and Herzegovina',
+  'C':'C — In / Out of Croatia'
+};
+
+function decodeCCN(val){
+  const out=document.getElementById('ccnResult');
+  if(!out) return;
+  const raw=val.trim().toUpperCase().replace(/\s/g,'');
+  if(!raw){out.innerHTML='';return;}
+
+  const parts=raw.split('/');
+  if(parts.length!==6){
+    out.innerHTML=`<div style="font-size:12px;color:var(--text3);margin-top:4px">Format: DD/EUFOR/SN/SP/NAT/VEH (6 parts separated by /)</div>`;
+    return;
+  }
+  const [dd,auth,sn,sp,nat,veh]=parts;
+  const spDesc=ccnSP[sp]||sp+' — unknown';
+  const natDesc=ccnNations[nat]||nat+' — check country codes';
+  const dayNum=parseInt(dd);
+  const snNum=parseInt(sn);
+  const vehNum=parseInt(veh);
+  const packetCount=vehNum>15?Math.ceil(vehNum/15):1;
+  const needsPackets=vehNum>15;
+
+  out.innerHTML=`
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-top:4px">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px">
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${dd}</span><span style="color:var(--text2)">Day of month: <strong>${dayNum}</strong></span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${auth}</span><span style="color:var(--text2)">Controlling authority</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${sn}</span><span style="color:var(--text2)">Movement serial #<strong>${snNum}</strong> of the day</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${sp}</span><span style="color:var(--text2)">${spDesc}</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${nat}</span><span style="color:var(--text2)">${natDesc}</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${veh}</span><span style="color:var(--text2)"><strong>${vehNum} vehicle${vehNum!==1?'s':''}</strong> in convoy</span>
+      </div>
+      ${vehNum>=7?`<div style="margin-top:8px;padding:6px 8px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);font-size:11px;color:var(--warn);font-weight:700">⚠ CONVOY (≥7 vehicles) — LOG MOV control required. CCN must be on leading + trailing vehicle.</div>`:''}
+      ${needsPackets?`<div style="margin-top:6px;padding:6px 8px;background:#fee2e2;border-radius:4px;border-left:3px solid var(--danger);font-size:11px;color:var(--danger);font-weight:700">⚠ PACKETS REQUIRED — ${vehNum} vehicles → break into ${packetCount} packets of max 15, with 15 min intervals between packets.</div>`:''}
+    </div>`;
+}
 
 // ── ROUTES ────────────────────────────────────────────────────────────────────
 const routes=[
