@@ -428,7 +428,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div style="margin-top:10px">
       <button class="login-unit-btn" onclick="loginSelectUnit('Admin')"
         style="width:100%;background:var(--surface3);border-color:var(--accent);color:var(--accent)">
-        <i class="fa-solid fa-gear"></i> Admin
+        ⚙ Admin
       </button>
     </div>
   </div>
@@ -446,7 +446,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="pin-dot" id="lpd4"></div>
     </div>
 
-    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px"><i class="fa-solid fa-circle-xmark"></i> Wrong PIN — try again</div>
+    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong PIN — try again</div>
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
       <button class="pin-key" onclick="loginPinKey('1')">1</button>
@@ -858,18 +858,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="tab-content" id="tab-roster">
     <div class="roster-week-nav">
       <button class="roster-nav-btn" onclick="changeRosterWeek(-1)">
-        <i class="fa-solid fa-chevron-left"></i>
+        &#8249;
       </button>
       <div>
         <div class="roster-week-label" id="rosterWeekLabel">Loading…</div>
         <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:2px" id="rosterUpdated"></div>
       </div>
       <button class="roster-nav-btn" onclick="changeRosterWeek(1)">
-        <i class="fa-solid fa-chevron-right"></i>
+        &#8250;
       </button>
     </div>
     <div class="roster-wrap">
-      <div id="rosterTable"><div style="text-align:center;padding:40px;color:var(--text3);font-size:13px"><i class="fa-solid fa-spinner fa-spin"></i> Loading roster…</div></div>
+      <div id="rosterTable"><div style="text-align:center;padding:40px;color:var(--text3);font-size:13px"> Loading roster…</div></div>
     </div>
   </div>
 
@@ -880,7 +880,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="roster-modal-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div style="font-weight:700;font-size:15px;color:var(--accent)" id="rosterEditTitle">Edit</div>
-      <button onclick="closeRosterEdit()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="closeRosterEdit()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">&#x2715;</button>
     </div>
     <div class="rs-btn-row">
       <button class="rs-pick-btn rs-S" onclick="rosterPickStatus('S')">S</button>
@@ -895,7 +895,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       style="margin-bottom:12px"></textarea>
     <button onclick="saveRosterCell()"
       style="width:100%;background:var(--accent);border:none;border-radius:8px;padding:13px;color:#000;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">
-      <i class="fa-solid fa-floppy-disk"></i> Save
+      💾 Save
     </button>
   </div>
 </div>
@@ -942,7 +942,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="gsearch-bar">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <input class="gsearch-input" id="gsearchInput" placeholder="Search violations, procedures, SOP…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="runGSearch(this.value)">
-    <button class="gsearch-close" onclick="closeGSearch()"><i class="fa-solid fa-xmark"></i></button>
+    <button class="gsearch-close" onclick="closeGSearch()">&#x2715;</button>
   </div>
   <div class="gsearch-results" id="gsearchResults">
     <div class="gsearch-empty">Type to search across all content</div>
@@ -961,7 +961,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <div class="qa-btn-icon" style="background:#fee2e2;color:var(--danger)">
         <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </div>
-      <div><div class="qa-btn-title" style="color:var(--danger)"><i class="fa-solid fa-siren-on"></i> ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
+      <div><div class="qa-btn-title" style="color:var(--danger)">🚨 ALARM</div><div class="qa-btn-sub">Send location to all 15 IMP units</div></div>
     </button>
     <button class="qa-btn" onclick="closeQA();switchTab('procedures',document.querySelector('[data-tab=procedures]'));switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1])">
       <div class="qa-btn-icon" style="background:#fee2e2;color:var(--danger)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
@@ -991,7 +991,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div style="font-weight:700;font-size:16px;color:var(--warn);text-transform:uppercase;letter-spacing:1px">DUI Calculator</div>
-      <button onclick="closeDUI()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="closeDUI()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">&#x2715;</button>
     </div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Breath test result (promille):</div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
@@ -1013,8 +1013,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <div class="dui-modal" id="alarmModal" onclick="if(event.target===this)closeAlarmModal2()">
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div style="font-weight:700;font-size:16px;color:var(--danger);text-transform:uppercase;letter-spacing:1px"><i class="fa-solid fa-siren-on"></i> IMP Alarm</div>
-      <button onclick="closeAlarmModal2()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+      <div style="font-weight:700;font-size:16px;color:var(--danger);text-transform:uppercase;letter-spacing:1px">🚨 IMP Alarm</div>
+      <button onclick="closeAlarmModal2()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">&#x2715;</button>
     </div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:12px">
       Sending as: <strong id="alarmUserLabel" style="color:var(--accent)"></strong>
@@ -1027,7 +1027,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </button>
     <button onclick="sendAllClear()"
       style="width:100%;background:var(--surface2);border:1px solid var(--ok);border-radius:8px;padding:12px;color:var(--ok);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">
-      <i class="fa-solid fa-circle-check"></i> Send All Clear
+      ✓ Send All Clear
     </button>
     <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">GPS location will be shared with all 15 IMP units</div>
   </div>
@@ -1038,7 +1038,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <div style="font-weight:700;font-size:15px;color:var(--accent);text-transform:uppercase;letter-spacing:1px">IMP Unit Login</div>
-      <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+      <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">&#x2715;</button>
     </div>
 
     <!-- Step 1: Select unit -->
@@ -1080,7 +1080,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
 
       <!-- PIN error -->
-      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px"><i class="fa-solid fa-circle-xmark"></i> Wrong PIN</div>
+      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px">&#x2715; Wrong PIN</div>
 
       <!-- Numpad -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
@@ -1101,26 +1101,109 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 </div>
 <div class="log-modal" id="logModal">
   <div class="log-header">
-    <div style="font-weight:700;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px">Incident Log — DOB</div>
-    <button onclick="closeLog()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+    <div style="font-weight:700;font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:1px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      DOB Entry — Incident Log
+    </div>
+    <button onclick="closeLog()" style="background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0">&#x2715;</button>
   </div>
   <div class="log-body" id="logBody"></div>
-  <div class="log-form">
-    <select class="log-select" id="logType">
-      <option value="">— Select Incident Type —</option>
-      <option value="Speeding">Speeding</option>
-      <option value="Parking Violation">Parking Violation</option>
-      <option value="DUI / Alcohol">DUI / Alcohol</option>
-      <option value="No ID">No ID</option>
-      <option value="Dress Violation">Dress Violation</option>
-      <option value="Bicycle Violation">Bicycle Violation</option>
-      <option value="Quiet Hours">Quiet Hours</option>
-      <option value="Unauthorized Weapon">Unauthorized Weapon</option>
-      <option value="Uncooperative Behaviour">Uncooperative Behaviour</option>
-      <option value="Other">Other</option>
+  <!-- NEW ENTRY FORM -->
+  <div class="log-form" id="logForm" style="max-height:60vh;overflow-y:auto">
+    <!-- Row 1: Type + Severity -->
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px">
+      <select class="log-select" id="logType" onchange="logTypeChanged(this.value)" style="margin:0">
+        <option value="">— Incident Type —</option>
+        <optgroup label="Traffic">
+          <option value="Speeding 5-10 km/h">Speeding 5–10 km/h</option>
+          <option value="Speeding 11-20 km/h">Speeding 11–20 km/h</option>
+          <option value="Speeding 21+ km/h">Speeding 21+ km/h</option>
+          <option value="Parking Violation">Parking Violation</option>
+          <option value="Parking — Bldg 200/Circle">Parking — Bldg 200/Circle</option>
+          <option value="DUI / Alcohol">DUI / Alcohol (>0.0‰)</option>
+          <option value="Failure to Fasten Seatbelt">Failure to Fasten Seatbelt</option>
+          <option value="Cellphone While Driving">Cellphone While Driving</option>
+          <option value="Smoking in Vehicle">Smoking in Vehicle</option>
+          <option value="Vehicle Damage">Vehicle Damage</option>
+          <option value="Bicycle/Scooter Violation">Bicycle/Scooter Violation</option>
+        </optgroup>
+        <optgroup label="Conduct">
+          <option value="Uncooperative Behaviour">Uncooperative Behaviour</option>
+          <option value="Excessive Drinking">Excessive Drinking</option>
+          <option value="Alcohol Prescription Violation">Alcohol Prescription Violation</option>
+          <option value="Weapon Carry Violation">Weapon Carry Violation</option>
+          <option value="Dress Violation">Dress Violation</option>
+          <option value="DFAC Dress Violation">DFAC Dress Violation</option>
+          <option value="Quiet Hours Violation">Quiet Hours Violation (2300–0600)</option>
+          <option value="Pedestrian Violation">Pedestrian Violation</option>
+        </optgroup>
+        <optgroup label="ID/Access">
+          <option value="ID Not Displayed">ID Not Displayed (on person)</option>
+          <option value="ID Not Carried">ID Not Carried</option>
+          <option value="No ID — Identity Unverifiable">No ID — Identity Unverifiable</option>
+        </optgroup>
+        <optgroup label="Other">
+          <option value="Alarm / Distress">Alarm / Distress</option>
+          <option value="Patrol">Patrol / Inner Patrol</option>
+          <option value="Sobriety Check">Sobriety Check</option>
+          <option value="Concessionaire Check">Concessionaire Check</option>
+          <option value="Escort">Escort / BLE</option>
+          <option value="Traffic Accident">Traffic Accident</option>
+          <option value="Other">Other</option>
+        </optgroup>
+      </select>
+      <select class="log-select" id="logSev" style="margin:0;min-width:90px">
+        <option value="INFO">INFO</option>
+        <option value="WARNING">WARNING</option>
+        <option value="MAJOR">MAJOR</option>
+      </select>
+    </div>
+    <!-- Row 2: Location -->
+    <select class="log-select" id="logLoc">
+      <option value="">— Location —</option>
+      <option value="Main Gate">Main Gate</option>
+      <option value="Alternate Gate">Alternate Gate</option>
+      <option value="Bldg 200 / Circle">Bldg 200 / Circle</option>
+      <option value="DFAC">DFAC</option>
+      <option value="Gymnasium">Gymnasium</option>
+      <option value="Millennium Bar">Millennium Bar</option>
+      <option value="NSE Area">NSE Area</option>
+      <option value="Accommodation Block">Accommodation Block</option>
+      <option value="Parking Area">Parking Area (specify below)</option>
+      <option value="Tuzla Road">Tuzla Road</option>
+      <option value="Dayton Road">Dayton Road</option>
+      <option value="Sarajevo Airport (SIA)">Sarajevo Airport (SIA)</option>
+      <option value="Off-Camp">Off-Camp / AOO</option>
+      <option value="Other">Other (specify below)</option>
     </select>
-    <textarea class="log-textarea" id="logNote" placeholder="Person, unit, location, action taken…"></textarea>
-    <button class="log-submit" onclick="saveLogEntry()">+ Add to Log</button>
+    <!-- Row 3: Person -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <input class="log-select" id="logName" placeholder="Name (Last, First)" style="font-size:13px">
+      <input class="log-select" id="logUnit" placeholder="Unit / Nation" style="font-size:13px">
+    </div>
+    <!-- Row 4: Actions taken (checkboxes) -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Actions Taken</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_verbal"> Verbal Warning</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_written"> Written Warning</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_tvr"> TVR Issued</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_pvr"> PVR Issued</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_mpr"> MPR Produced</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_snr"> SNR Notified</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_fpm"> FPM Notified</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_med"> Medical (912)</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_lic"> License Suspended</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer"><input type="checkbox" id="act_det"> Detained</label>
+      </div>
+    </div>
+    <!-- Row 5: Free note -->
+    <textarea class="log-textarea" id="logNote" placeholder="Additional details: BAC result, specific parking zone, witness names, etc."></textarea>
+    <!-- Generate DOB + Save -->
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+      <button class="log-submit" onclick="saveLogEntry()">+ Add to DOB Log</button>
+      <button onclick="genDOBText()" style="background:var(--surface2);border:1px solid var(--accent2);border-radius:6px;padding:12px 14px;color:var(--accent2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body);white-space:nowrap">Copy DOB</button>
+    </div>
   </div>
 </div>
 
@@ -3304,55 +3387,80 @@ function runGSearch(q){
   const fq=q.toLowerCase();
   const results=[];
 
+  // Strip HTML helper
+  function strip(html){return html?String(html).replace(/<[^>]+>/g,'').replace(/&[a-z]+;/gi,' ').toLowerCase():'';}
+
   // Search violations
   violations.forEach(v=>{
-    if(v.title.toLowerCase().includes(fq)||v.penalties.some(p=>p.text.toLowerCase().includes(fq))){
-      results.push({tag:'VIOLATION',title:v.title,snippet:v.penalties[0]?.text||'',action:`switchTab('violations',document.querySelector('[data-tab=violations]'));closeGSearch()`});
+    const titleMatch=v.title.toLowerCase().includes(fq);
+    const penaltyMatch=v.penalties.some(p=>strip(p.text).includes(fq)||strip(p.num).includes(fq));
+    if(titleMatch||penaltyMatch){
+      const matchP=v.penalties.find(p=>strip(p.text).includes(fq));
+      const snippet=matchP?strip(matchP.text).substring(0,90):'';
+      results.push({tag:'VIOLATION',title:v.title,snippet,action:`switchTab('violations',document.querySelector('[data-tab=violations]'));closeGSearch()`});
     }
   });
 
-  // Search procedures
+  // Search procedures (steps are strings with HTML)
   procedures.forEach(p=>{
-    if(p.title.toLowerCase().includes(fq)||p.steps.some(s=>s.toLowerCase().includes(fq))){
-      const match=p.steps.find(s=>s.toLowerCase().includes(fq))||p.steps[0];
-      results.push({tag:'PROCEDURE',title:p.title,snippet:match,action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));closeGSearch()`});
+    const titleMatch=p.title.toLowerCase().includes(fq);
+    const stepMatch=p.steps.some(s=>strip(s).includes(fq));
+    const noteMatch=p.note&&strip(p.note).includes(fq);
+    if(titleMatch||stepMatch||noteMatch){
+      const matchStep=p.steps.find(s=>strip(s).includes(fq))||p.steps[0];
+      results.push({tag:'PROCEDURE',title:p.title,snippet:strip(matchStep).substring(0,90),action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-proc',document.querySelectorAll('#tab-procedures .subnav-btn')[0]);setTimeout(()=>openProc('${p.id}'),100);},50);closeGSearch()`});
     }
   });
 
-  // Search decision trees
+  // Search decision trees (steps are objects {num,title,desc,say})
   dtrees.forEach(d=>{
-    if(d.title.toLowerCase().includes(fq)||d.steps.some(s=>s.title.toLowerCase().includes(fq)||s.desc.toLowerCase().includes(fq))){
-      const match=d.steps.find(s=>s.title.toLowerCase().includes(fq)||s.desc.toLowerCase().includes(fq));
-      results.push({tag:'DECISION TREE',title:d.title,snippet:match?match.title:'',action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1]);setTimeout(()=>{const el=document.getElementById('dt-${d.id}');if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open');}},100)},50);closeGSearch()`});
+    const titleMatch=d.title.toLowerCase().includes(fq);
+    const stepMatch=d.steps.some(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq))||(s.say&&s.say.toLowerCase().includes(fq)));
+    const branchMatch=d.branches&&d.branches.some(b=>b.text.toLowerCase().includes(fq));
+    if(titleMatch||stepMatch||branchMatch){
+      const matchStep=d.steps.find(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq)));
+      const snippet=matchStep?(matchStep.title+': '+matchStep.desc).substring(0,90):'';
+      results.push({tag:'DECISION TREE',title:d.title,snippet,action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1]);setTimeout(()=>{const el=document.getElementById('${d.id}');if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open');}},100);},50);closeGSearch()`});
     }
   });
 
-  // Search SOP
+  // Search SOP refs
   sopRefs.forEach(r=>{
-    if(r.title.toLowerCase().includes(fq)||r.rules.some(rule=>rule.toLowerCase().includes(fq))){
-      const match=r.rules.find(rule=>rule.toLowerCase().includes(fq))||r.rules[0];
-      results.push({tag:'SOP',title:r.title,snippet:match.substring(0,80)+'…',action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
+    const titleMatch=r.title.toLowerCase().includes(fq)||r.tag.toLowerCase().includes(fq);
+    const ruleMatch=r.rules.some(rule=>rule.toLowerCase().includes(fq));
+    if(titleMatch||ruleMatch){
+      const matchRule=r.rules.find(rule=>rule.toLowerCase().includes(fq))||r.rules[0];
+      results.push({tag:'SOP '+r.tag,title:r.title,snippet:matchRule.substring(0,90)+'…',action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
     }
   });
 
   // Search acronyms
   const acroHits=acronyms.filter(a=>a[0].toLowerCase().includes(fq)||a[1].toLowerCase().includes(fq)).slice(0,5);
   if(acroHits.length){
-    results.push({tag:'ACRONYMS',title:`${acroHits.length} result(s): ${acroHits.map(a=>a[0]).join(', ')}`,snippet:acroHits.map(a=>`${a[0]} = ${a[1]}`).join(' · ').substring(0,100),action:`switchTab('acronyms',document.querySelector('[data-tab=acronyms]'));setTimeout(()=>filterAcro('${q}'),50);closeGSearch()`});
+    results.push({tag:'ACRONYMS',title:`${acroHits.length} match(es): ${acroHits.map(a=>a[0]).join(', ')}`,snippet:acroHits.map(a=>`${a[0]} = ${a[1]}`).join(' · ').substring(0,100),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
   }
 
   // Search routes
-  const routeHits=routes.filter(r=>r.name.toLowerCase().includes(fq)||r.path.toLowerCase().includes(fq)).slice(0,3);
-  routeHits.forEach(r=>{
-    results.push({tag:'ROUTE',title:r.name,snippet:r.path.substring(0,80),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));setTimeout(()=>{switchSub('refs','sub-routes',document.querySelectorAll('#tab-refs .subnav-btn')[1]);setTimeout(()=>filterRoutes('${r.name}'),100)},50);closeGSearch()`});
-  });
+  if(typeof routes!=='undefined'){
+    const routeHits=routes.filter(r=>r.name.toLowerCase().includes(fq)||(r.path&&r.path.toLowerCase().includes(fq))).slice(0,3);
+    routeHits.forEach(r=>{
+      results.push({tag:'ROUTE',title:r.name,snippet:(r.path||'').substring(0,80),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));setTimeout(()=>switchSub('refs','sub-routes',document.querySelectorAll('#tab-refs .subnav-btn')[1]),50);closeGSearch()`});
+    });
+  }
 
   if(!results.length){out.innerHTML=`<div class="gsearch-empty">No results for "<strong>${q}</strong>"</div>`;return;}
+
+  // Highlight matching text
+  function hl(text){
+    if(!text||!fq)return text||'';
+    return String(text).replace(new RegExp('('+fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark style="background:#fef08a;color:#713f12;border-radius:2px;padding:0 1px">$1</mark>');
+  }
+
   out.innerHTML=results.map(r=>`
     <div class="gsearch-result" onclick="${r.action}">
       <div class="gsearch-tag">${r.tag}</div>
-      <div class="gsearch-title">${r.title}</div>
-      ${r.snippet?`<div class="gsearch-snippet">${r.snippet}</div>`:''}
+      <div class="gsearch-title">${hl(r.title)}</div>
+      ${r.snippet?`<div class="gsearch-snippet">${hl(r.snippet)}</div>`:''}
     </div>`).join('');
 }
 
@@ -3404,18 +3512,45 @@ function openLog(){
 }
 function closeLog(){document.getElementById('logModal').classList.remove('open');}
 
+function logTypeChanged(val){
+  // Auto-set severity based on type
+  const sev=document.getElementById('logSev');
+  if(!sev)return;
+  if(['DUI / Alcohol','Weapon Carry Violation','Traffic Accident','Alarm / Distress','No ID — Identity Unverifiable'].includes(val)) sev.value='MAJOR';
+  else if(['Speeding 11-20 km/h','Speeding 21+ km/h','Uncooperative Behaviour','Excessive Drinking','Parking — Bldg 200/Circle'].includes(val)) sev.value='WARNING';
+  else sev.value='INFO';
+}
+
+function getCheckedActions(){
+  const map={act_verbal:'Verbal Warning',act_written:'Written Warning',act_tvr:'TVR Issued',act_pvr:'PVR Issued',act_mpr:'MPR Produced',act_snr:'SNR Notified',act_fpm:'FPM Notified',act_med:'Medical (912)',act_lic:'License Suspended',act_det:'Detained'};
+  return Object.entries(map).filter(([id])=>document.getElementById(id)?.checked).map(([,v])=>v);
+}
+
+function clearLogForm(){
+  ['logType','logSev','logLoc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='logSev'?'INFO':''});
+  ['logName','logUnit','logNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['act_verbal','act_written','act_tvr','act_pvr','act_mpr','act_snr','act_fpm','act_med','act_lic','act_det'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+}
+
 function renderLog(){
   const body=document.getElementById('logBody');
   let entries=[];
   try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
   if(!entries.length){
-    body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text3);font-size:13px">No entries yet.<br>Add your first incident below.</div>';
+    body.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No entries yet.</div>';
     return;
   }
+  const sevColor={INFO:'var(--accent2)',WARNING:'var(--warn)',MAJOR:'var(--danger)'};
   body.innerHTML=entries.slice().reverse().map((e,i)=>`
-    <div class="log-entry">
-      <div class="log-entry-time">${e.time} &nbsp;|&nbsp; ${e.date}</div>
-      <div class="log-entry-type">${e.type}</div>
+    <div class="log-entry" style="border-left:3px solid ${sevColor[e.sev]||sevColor.INFO}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:700">${e.time} · ${e.date}</span>
+        <span style="font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;background:${sevColor[e.sev]||sevColor.INFO};color:#fff;font-weight:700">${e.sev||'INFO'}</span>
+      </div>
+      <div style="font-weight:700;font-size:13px;color:var(--text)">${e.type}</div>
+      ${e.loc?`<div style="font-size:12px;color:var(--text3)">📍 ${e.loc}</div>`:''}
+      ${e.person?`<div style="font-size:12px;color:var(--text2)">👤 ${e.person}</div>`:''}
+      ${e.actions&&e.actions.length?`<div style="font-size:11px;color:var(--accent2);margin-top:3px">${e.actions.join(' · ')}</div>`:''}
       ${e.note?`<div class="log-entry-note">${e.note}</div>`:''}
       <button onclick="deleteLogEntry(${entries.length-1-i})" style="background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:4px 0 0;font-family:var(--body)">Delete</button>
     </div>`).join('');
@@ -3424,17 +3559,42 @@ function renderLog(){
 function saveLogEntry(){
   const type=document.getElementById('logType').value;
   if(!type){alert('Please select an incident type.');return;}
+  const sev=document.getElementById('logSev').value||'INFO';
+  const loc=document.getElementById('logLoc').value||'';
+  const name=document.getElementById('logName').value.trim();
+  const unit=document.getElementById('logUnit').value.trim();
+  const person=[name,unit].filter(Boolean).join(' / ');
+  const actions=getCheckedActions();
   const note=document.getElementById('logNote').value.trim();
   const now=new Date();
   const date=now.toLocaleDateString('en-GB');
   const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   let entries=[];
   try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
-  entries.push({type,note,date,time});
+  entries.push({type,sev,loc,person,actions,note,date,time,user:currentUserId||'—'});
   localStorage.setItem('imp_log',JSON.stringify(entries));
-  document.getElementById('logType').value='';
-  document.getElementById('logNote').value='';
+  clearLogForm();
   renderLog();
+  // Scroll log body to top
+  const body=document.getElementById('logBody');
+  if(body) body.scrollTop=0;
+}
+
+function genDOBText(){
+  const type=document.getElementById('logType').value||'—';
+  const loc=document.getElementById('logLoc').value||'—';
+  const name=document.getElementById('logName').value.trim()||'—';
+  const unit=document.getElementById('logUnit').value.trim()||'—';
+  const actions=getCheckedActions();
+  const note=document.getElementById('logNote').value.trim();
+  const now=new Date();
+  const date=now.toLocaleDateString('en-GB');
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const text=`ENTRY TYPE: ${type}\nENTRY TIME: ${time} ${date}\nLOCATION: ${loc}\nPERSON: ${name} / ${unit}\nACTION TAKEN: ${actions.length?actions.join(', '):'None'}\n${note?'NOTES: '+note+'\n':''}REPORTING IMP DUTY: ${currentUserId||'—'}\nNSTR: NO`;
+  navigator.clipboard?.writeText(text).then(()=>alert('DOB text copied to clipboard.')).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('DOB text copied.');
+  });
 }
 
 function deleteLogEntry(idx){
@@ -3539,10 +3699,10 @@ function showIncomingAlarm(data){
   el.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between">
       <div style="font-weight:700;font-size:16px;color:#fff;letter-spacing:1px">
-        <i class="fa-solid fa-siren-on"></i> ALARM — ${data.userId}
+        🚨 ALARM — ${data.userId}
       </div>
       <button onclick="if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}document.getElementById('alarmBanner').remove()" 
-        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px"><i class="fa-solid fa-xmark"></i></button>
+        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px">&#x2715;</button>
     </div>
     <div style="font-size:13px;color:rgba(255,255,255,.9)">
       ${data.timestamp} ${data.message ? '· ' + data.message : ''}
@@ -3550,7 +3710,7 @@ function showIncomingAlarm(data){
     ${mapsUrl ? `
     <a href="${mapsUrl}" target="_blank"
       style="background:rgba(0,0,0,.3);color:#fff;text-decoration:none;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;display:block">
-      <i class="fa-solid fa-location-dot"></i> Open Location in Maps
+      📍 Open Location in Maps
     </a>` : '<div style="font-size:12px;color:rgba(255,255,255,.7)">No GPS location available</div>'}`;
 
   // Remove existing banner if any
@@ -3564,7 +3724,7 @@ function showIncomingAlarm(data){
 
   // Push notification
   if(Notification.permission === 'granted'){
-    new Notification(`<i class="fa-solid fa-siren-on"></i> ALARM — ${data.userId}`, {
+    new Notification(`🚨 ALARM — ${data.userId}`, {
       body: mapsUrl ? `Location available — tap to open` : 'No GPS',
       icon: 'icon-192.png',
       tag: 'imp-alarm',
@@ -3582,8 +3742,8 @@ function showAllClear(data){
   const el = document.createElement('div');
   el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--ok);padding:12px 14px;display:flex;align-items:center;justify-content:space-between`;
   el.innerHTML = `
-    <div style="font-weight:700;font-size:15px;color:#fff"><i class="fa-solid fa-circle-check"></i> ALL CLEAR — ${data.userId}</div>
-    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer"><i class="fa-solid fa-xmark"></i></button>`;
+    <div style="font-weight:700;font-size:15px;color:#fff">✓ ALL CLEAR — ${data.userId}</div>
+    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer">&#x2715;</button>`;
   document.body.appendChild(el);
   setTimeout(()=>el.remove(), 8000);
 }
@@ -3719,7 +3879,7 @@ function triggerAlarm(){
     })
     .then(r=>r.json())
     .then(d=>{
-      btn.textContent = `<i class="fa-solid fa-siren-on"></i> SENT TO ${d.sent || 'ALL'} UNITS`;
+      btn.textContent = `🚨 SENT TO ${d.sent || 'ALL'} UNITS`;
       btn.style.background = 'var(--ok)';
       setTimeout(()=>{
         btn.textContent = 'SEND ALARM';
@@ -3843,7 +4003,7 @@ function unlockApp(){
   // Update header badge
   const badge = document.getElementById('userBadge');
   if(badge){
-    badge.innerHTML = currentUserId + ' <i class="fa-solid fa-arrow-right-from-bracket" style="font-size:9px"></i>';
+    badge.innerHTML = currentUserId + ' →';
     badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
     badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
   }
@@ -4021,7 +4181,7 @@ async function loadRoster(){
   } catch(e){
     console.warn('Roster load failed:', e);
     const container = document.getElementById('rosterTable');
-    if(container) container.innerHTML = `<div style="padding:20px;color:var(--danger);font-size:13px;text-align:center"><i class="fa-solid fa-triangle-exclamation"></i> Load error: ${e.message}<br><br><button onclick="loadRoster()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--body)">Retry</button></div>`;
+    if(container) container.innerHTML = `<div style="padding:20px;color:var(--danger);font-size:13px;text-align:center">⚠ Load error: ${e.message}<br><br><button onclick="loadRoster()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--body)">Retry</button></div>`;
     return;
   }
 
