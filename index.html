@@ -657,50 +657,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
     </div>
 
-    <!-- SIA PROCEDURE MODAL -->
-    <div class="modal-overlay" id="siaModal" onclick="if(event.target===this)closeSIA()">
-      <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
-        <div class="modal-title" id="siaModalTitle">
-          SIA Procedure
-          <button class="modal-close" onclick="closeSIA()">&#x2715;</button>
-        </div>
-        <div id="siaModalBody"></div>
-      </div>
-    </div>
-
-    <!-- 9-LINER BUILDER MODAL -->
-    <div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
-      <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
-        <div class="modal-title" style="color:var(--danger)">
-          <span>9-Liner MEDEVAC</span>
-          <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
-        </div>
-
-        <!-- MODE TOGGLE -->
-        <div style="display:flex;gap:8px;margin-bottom:14px">
-          <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
-          <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
-        </div>
-
-        <!-- BUILDER MODE -->
-        <div id="ninerBuildMode">
-          <div id="ninerLines"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-            <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
-            <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
-          </div>
-          <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
-            <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
-            <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
-          </div>
-        </div>
-
-        <!-- REFERENCE MODE -->
-        <div id="ninerRefMode" style="display:none">
-          <div id="ninerRefContent"></div>
-        </div>
-      </div>
-    </div>
+    </div><!-- end sub-airport -->
 
     <div class="subcontent" id="sub-dtree">
       <div class="section-label">IMP Field Decision Trees</div>
@@ -809,6 +766,52 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       </div>
     </div>
   </div>
+
+    <!-- SIA PROCEDURE MODAL -->
+    <div class="modal-overlay" id="siaModal" onclick="if(event.target===this)closeSIA()">
+      <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" id="siaModalTitle">
+          SIA Procedure
+          <button class="modal-close" onclick="closeSIA()">&#x2715;</button>
+        </div>
+        <div id="siaModalBody"></div>
+      </div>
+    </div>
+
+    <!-- 9-LINER BUILDER MODAL -->
+    <div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
+      <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" style="color:var(--danger)">
+          <span>9-Liner MEDEVAC</span>
+          <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
+        </div>
+
+        <!-- MODE TOGGLE -->
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
+          <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
+        </div>
+
+        <!-- BUILDER MODE -->
+        <div id="ninerBuildMode">
+          <div id="ninerLines"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
+            <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
+          </div>
+          <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
+            <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
+          </div>
+        </div>
+
+        <!-- REFERENCE MODE -->
+        <div id="ninerRefMode" style="display:none">
+          <div id="ninerRefContent"></div>
+        </div>
+      </div>
+    </div>
+
 
   <!-- CONTACTS -->
   <div class="tab-content" id="tab-contacts">
