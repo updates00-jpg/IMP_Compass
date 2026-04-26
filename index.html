@@ -509,6 +509,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('procedures','sub-proc',this)">Procedures</button>
       <button class="subnav-btn" onclick="switchSub('procedures','sub-dtree',this)">Dec. Tree</button>
+      <button class="subnav-btn" onclick="switchSub('procedures','sub-airport',this)">SIA</button>
       <button class="subnav-btn" onclick="switchSub('procedures','sub-reports',this)">Reports</button>
     </div>
     <div class="subcontent active" id="sub-proc">
@@ -569,6 +570,97 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
           </table>
           <div class="rule-item mt8"><span class="rule-bullet">›</span><span>Last call 15 min before closing. Music down, lights on at last call.</span></div>
         </div>
+      </div>
+    </div>
+
+    <!-- SIA AIRPORT SUB-TAB -->
+    <div class="subcontent" id="sub-airport">
+
+      <!-- QUICK ACTIONS -->
+      <div class="section-label">SIA Quick Access — ADMP Procedures</div>
+      <div class="quick-strip">
+        <div class="quick-btn" onclick="openSIA('dep')" style="color:var(--accent2)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          <span class="quick-btn-label">Depart</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('arr')" style="color:var(--ok)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.82 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.93 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span class="quick-btn-label">Arrive</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('vip')" style="color:var(--accent)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="quick-btn-label">VIP</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('ammo')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span class="quick-btn-label">Ammo</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('medevac')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span class="quick-btn-label">MEDEVAC</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('delay')" style="color:var(--warn)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="quick-btn-label">Delay</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('redpass')" style="color:#b91c1c">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>
+          <span class="quick-btn-label">Red Pass</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('items')" style="color:var(--text2)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="quick-btn-label">Items</span>
+        </div>
+      </div>
+
+      <!-- SIA PROCEDURE CARDS (rendered by JS) -->
+      <div class="section-label">Step-by-Step — ADMP Duties</div>
+      <div id="siaList"></div>
+
+      <!-- RED PASS TRACKER -->
+      <div class="section-label mt12">Red Pass Tracker</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div style="padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">EUFOR ID collected as collateral when issuing Red Pass (SOP 3945)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px">
+            <input id="rpName" placeholder="Last name, First" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
+            <input id="rpUnit" placeholder="Unit / Nation" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
+            <button onclick="issueRedPass()" style="background:var(--danger);border:none;border-radius:6px;padding:8px 14px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body);white-space:nowrap">+ Issue</button>
+          </div>
+          <div id="rpList"></div>
+        </div>
+      </div>
+
+      <!-- ADMP STAFFING -->
+      <div class="section-label mt12">ADMP Staffing Requirements</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div class="contact-row"><span class="contact-row-label">Any flight (minimum)</span><span class="contact-row-num" style="color:var(--ok)">3 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">VIP / DV flight</span><span class="contact-row-num" style="color:var(--warn)">3–5 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">Commercial VIP flight</span><span class="contact-row-num" style="color:var(--accent)">2 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">ADMP at terminal — 2h before departure</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Required</span></div>
+        <div class="contact-row"><span class="contact-row-label">VIP greeting party at E7 gate</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 5 vehicles / 7 persons</span></div>
+        <div class="contact-row"><span class="contact-row-label">Persons at aircraft (VIP disembark)</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 2 persons</span></div>
+      </div>
+
+      <!-- SIA KEY CONTACTS -->
+      <div class="section-label mt12">SIA Key Contacts</div>
+      <div class="contact-full">
+        <div class="contact-row"><span class="contact-row-label">ALS (Airport Liaison Specialist)</span><span class="contact-row-call">On-call</span><span class="contact-row-num">061 206 134</span></div>
+        <div class="contact-row"><span class="contact-row-label">ALS Office (weekdays)</span><span class="contact-row-call">0800–1630</span><span class="contact-row-num">061 206 134</span></div>
+        <div class="contact-row"><span class="contact-row-label">ADMP Commander (SIA)</span><span class="contact-row-call">IPN 5782</span><span class="contact-row-num">+387 61 139 603</span></div>
+        <div class="contact-row"><span class="contact-row-label">IMP Duty</span><span class="contact-row-call">IPN 5783</span><span class="contact-row-num">+387 62 337 661</span></div>
+        <div class="contact-row"><span class="contact-row-label">LOG MOV Officer</span><span class="contact-row-call">Bldg 200</span><span class="contact-row-num">Via JOC</span></div>
+      </div>
+    </div>
+
+    <!-- SIA PROCEDURE MODAL -->
+    <div class="modal-overlay" id="siaModal" onclick="if(event.target===this)closeSIA()">
+      <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" id="siaModalTitle">
+          SIA Procedure
+          <button class="modal-close" onclick="closeSIA()">&#x2715;</button>
+        </div>
+        <div id="siaModalBody"></div>
       </div>
     </div>
 
@@ -3082,6 +3174,59 @@ const dtrees=[
    ]
   },
 
+  {id:'dt-sia-weapon',color:'#b91c1c',bg:'#fee2e2',
+   title:'SIA — Passenger With Weapon / Ammo',
+   steps:[
+    {num:'1',title:'Passenger arriving with weapon',
+     desc:'Is weapon unloaded? Is it being checked in as hold baggage or is passenger authorized to carry?',
+     doc:null,docClass:null},
+    {num:'2',title:'Weapon: clear and check in',
+     desc:'Passenger clears weapon before entering terminal. Ammunition removed and packed separately by NSE staff.',
+     say:'"Please unload your weapon now before entering the terminal. Ammunition must be handed over to ADMP for transfer to aircraft."',
+     doc:null,docClass:null},
+    {num:'3',title:'Ammunition — seal and tag',
+     desc:'Magazines/ammo containers: sealed with baggage tags, identified. ADMP/ALS escorts ammunition to aircraft. Handed to Load Master.',
+     doc:null,docClass:null},
+    {num:'4',title:'Prohibited sharp item found',
+     desc:'ADMP confiscates item. Mark and identify. Hand to aircraft Loadmaster. Will be returned to passenger at destination.',
+     say:'"I am confiscating this item under SOP 6240 Annex B. It will be handed to the Loadmaster and returned to you at your destination."',
+     doc:'DOB',docClass:'doc-dob'},
+    {num:'5',title:'Passenger refuses to surrender item',
+     desc:'Only ADMP can physically search and confiscate. BPBiH cannot. If passenger refuses: ALS is final authority. Escalate to ALS immediately. Document in DOB and MPR.',
+     doc:'MPR',docClass:'doc-mpr'}
+   ],
+   branches:[
+    {cond:'IF',text:'ADMP/CPT authorized to carry weapons through SIA controls. All others: weapons processed through Cargo Section.'},
+    {cond:'IF',text:'Operational/exercise flights: passengers may travel in fighting order with weapons if specifically authorized.'}
+   ]
+  },
+
+  {id:'dt-sia-search',color:'#1a5cb8',bg:'#dbeafe',
+   title:'SIA — Search Authority & BPBiH',
+   steps:[
+    {num:'1',title:'Who can search EUFOR personnel?',
+     desc:'ONLY ADMP may physically search EUFOR/NHQ Sa personnel, detain them, or confiscate prohibited items.',
+     doc:null,docClass:null},
+    {num:'2',title:'What can BPBiH do?',
+     desc:'BPBiH may: use scanning wand (physical contact with clothing), indicate need to open pockets. BPBiH CANNOT: physically search, detain or remove EUFOR personnel from Terminal.',
+     doc:null,docClass:null},
+    {num:'3',title:'BPBiH attempts to detain EUFOR personnel',
+     desc:'ASS/BPBiH may detain (not arrest) personnel who CANNOT prove EUFOR/NHQ Sa status. In such case BPBiH immediately seeks assistance of ALS or ADMP.',
+     say:'"I am ADMP. This personnel is EUFOR/NHQ Sa. I am the authority here. Please step back and allow me to handle this."',
+     doc:null,docClass:null},
+    {num:'4',title:'Dispute between EUFOR and BPBiH',
+     desc:'ALS is the FINAL authority on all disputes between EUFOR/NHQ Sa personnel and BPBiH. Contact ALS immediately: 061 206 134.',
+     doc:'MPR',docClass:'doc-mpr'},
+    {num:'5',title:'DOB entry for any incident',
+     desc:'All interactions with BPBiH where dispute or issue arose must be logged.',
+     doc:'DOB',docClass:'doc-dob'}
+   ],
+   branches:[
+    {cond:'IF',text:'Personnel unable to prove EUFOR status: ADMP/ALS called immediately to resolve. ALS is final authority.'},
+    {cond:'IF',text:'EUFOR personnel travelling on commercial flights: same legal status as military flight. ALS not normally present — personnel present EUFOR ID and request ALS if problems arise.'}
+   ]
+  },
+
   {id:'dt-convoy',color:'#1a5cb8',bg:'#dbeafe',
    title:'Convoy Escort — IMP Duties',
    steps:[
@@ -3201,12 +3346,229 @@ function getDtreeSvg(id){
   'dt-dress':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
   'dt-quiet':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/></svg>',
   'dt-bike':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2h-3l-3 9 2 1h4l1-3"/><path d="M18.5 17.5 12 9"/></svg>',
+  'dt-sia-weapon':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
+  'dt-sia-search':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
   'dt-convoy':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><line x1="8" y1="8" x2="8" y2="13"/><line x1="11" y1="8" x2="11" y2="13"/></svg>',
   'dt-walkout':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'};
   return m[id]||m['dt-id'];
 }
 renderDtrees();
 
+
+// ── SIA AIRPORT ──────────────────────────────────────────────────────────────
+const siaProcs={
+  dep:{
+    title:'Departing Flight — ADMP Duties',
+    color:'var(--accent2)',
+    steps:[
+      {n:'1',t:'Arrive at terminal 2h before departure',d:'ADMP must be at airport entrance/initial screening area 2 hours before planned departure time.'},
+      {n:'2',t:'Weapon unloading at entrance',d:'Remind EUFOR/NHQ Sa passengers: weapons must be unloaded before entering terminal. If possible, leave weapons outside.',say:'"All EUFOR personnel: unload weapons before entering the terminal. Weapons should be left outside if possible."'},
+      {n:'3',t:'Collect ammunition from passengers',d:'All passengers travelling must hand over ammunition in their possession. Magazines sealed with baggage tags → handed to aircraft Load Master. Knives/sharp implements removed from person and hand luggage → placed in hold luggage.',doc:'DOB'},
+      {n:'4',t:'Check-in supervision',d:'FS/NR checks in at designated desk. ADMP present at Check-In Counter. Flight closed minimum 45 min before departure.'},
+      {n:'5',t:'Security Control — Departure Lounge',d:'ADMP escorts passengers through Security Scanner. Only ADMP may physically search EUFOR/NHQ Sa personnel. BPBiH may use scanning wand but cannot physically search or detain EUFOR personnel.',say:'"EUFOR personnel only. Proceed through security scanner. Any prohibited items must be removed now."'},
+      {n:'6',t:'Passport Control',d:'ADMP assists BPBiH at Passport Control. Dedicated EUFOR/NHQ Sa channel. Personnel present: EUFOR/NHQ Sa ID + National Military ID Card with travel order, or passport.'},
+      {n:'7',t:'Boarding to aircraft',d:'ADMP escorts passengers from Departure Lounge → bus → aircraft. Passengers wait in Departure Lounge until called. Do NOT allow passengers to proceed before being called by ADMP.'},
+      {n:'8',t:'Confiscated items handling',d:'All confiscated items: bagged, identified, taken to aircraft by ADMP, handed to crew for safekeeping until destination. Passenger must ask crew for return at destination.'},
+      {n:'9',t:'DOB entry on completion',d:'Entry: flight number/type, CCN if applicable, number of passengers, departure time, any incidents, confiscated items.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §5–8. ALS has final authority on all disputes between EUFOR/NHQ Sa and BPBiH.'
+  },
+  arr:{
+    title:'Arriving Flight — ADMP Duties',
+    color:'var(--ok)',
+    steps:[
+      {n:'1',t:'Red Pass and E7 Gate preparation',d:'ADMP issues Red Passes in exchange for EUFOR ID cards (SOP 3945). Written request to ALS at least 24h in advance. Access to airside only through Security Door.'},
+      {n:'2',t:'Aircraft on approach (10 min out)',d:'ALS informs ADMP. Escort FS/NR and cargo team to bus. FS/NR ensures Red Pass is visible to Airport Security Service (ASS).',say:'"Aircraft on final approach. All personnel: Red Pass visible. No hats airside. Secure all loose articles."'},
+      {n:'3',t:'Aircraft handling at stand',d:'Receive incoming passenger manifest. Deliver outgoing PAX manifest to crew. Receive cargo. Sign all delivery documents together with Load Master.'},
+      {n:'4',t:'Passenger disembarkation',d:'Sarajevo-bound passengers disembark first. Transit passengers: segregated to rear of bus or separate transport. ADMP escorts to Terminal.'},
+      {n:'5',t:'Passport Control — inbound',d:'Passengers: present EUFOR/NHQ Sa ID, National Military ID (with travel order) or passport to BPBiH. EUFOR personnel exempt customs under SOFA — but must respect customs officials and produce ID if stopped.'},
+      {n:'6',t:'Collect Red Passes',d:'FS/NR must return all Red Passes to ALS office. ADMP returns EUFOR/NHQ Sa ID cards to personnel. FS/NR stays at airport until aircraft has taken off.',doc:'DOB'},
+      {n:'7',t:'DOB entry',d:'Entry: flight type, number of passengers (in/out/transit), any incidents, Red Passes issued/returned.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §5, §15. ADMP stays at airport until aircraft departure. ALS office manned weekdays 0800–1630.'
+  },
+  vip:{
+    title:'VIP Handling — Procedure A & B',
+    color:'var(--accent)',
+    steps:[
+      {n:'⚠',t:'VIP definition',d:'Military VIP = OF-6 (Colonel) or above, or civilian equivalent. Others processed as normal passengers. VIP Lounge booking through JVB. Request: Special Request Form to ALS min 24h in advance.'},
+      {n:'A',t:'Procedure A — small aircraft, VIP party only',d:'Once aircraft lands: SIA OPC Supervisor, ALS and/or ADMP approach aircraft. Once safe to approach ADMP signals greeting party. Max 2 persons at aircraft when VIP disembarks. ADMP escorts VIP + welcome party back through E7 gate to vehicles.'},
+      {n:'B',t:'Procedure B — mixed passengers on same aircraft',d:'All welcome party members board bus outside VIP Lounge. Bus drives to aircraft. ALS, ADMP and FS/NR disembark first to brief Loadmaster. Welcome party then invited to welcome disembarking VIPs. Baggage to trolley → follows bus back to VIP Lounge via E7 gate.',say:'"VIP passengers only step forward. All others remain on the bus."'},
+      {n:'3',t:'Vehicles and access',d:'Max 5 vehicles + max 7 persons (greeting party) at E7 gate. Vehicles parked in street near administration building 30 min before arrival. ADMP escorts personnel via E7 gate to EUFOR VIP Lounge.'},
+      {n:'4',t:'No hats airside',d:'Hats NOT worn beyond the white line (FOD line). Exception: VIP formal greeting — hats allowed up to white line only.'},
+      {n:'5',t:'VIP on commercial flight',d:'Max 1–2 Red Staff Passes per incoming VIP group. ADMP escorts nominees to Arrivals Lounge. Wait at baggage delivery area until VIP through Immigration. Do NOT cross Immigration Line. ADMP escorts VIPs to waiting cars.',doc:'DOB'},
+      {n:'6',t:'DOB entry',d:'Entry: VIP name (rank+position), flight type, procedure used (A/B), greeting party personnel, any incidents.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15b. For VIP flight 3–5 ADMP required. VIP Lounge booked through JVB — not for embassy or outside EUFOR/NATO use.'
+  },
+  ammo:{
+    title:'Ammunition & Explosives at SIA',
+    color:'var(--danger)',
+    steps:[
+      {n:'⚠',t:'SIA is NOT licensed to handle explosives',d:'All responsibility lies with National Explosives Officer. Decisions made by NEO in consultation with SIA Supervisor, ALS and EUFOR/NATO Explosives Officer.',say:'"This aircraft is carrying Class 1 dangerous goods. Confirm National Explosives Officer is present and all documentation is with ALS office."'},
+      {n:'1',t:'Pre-arrival — paperwork to ALS',d:'Full aircraft manifest + total Net Explosives Quantity (NEQ) must reach ALS office minimum 48h before aircraft arrival. Monday/Tuesday aircraft: paperwork by previous Thursday/Friday.'},
+      {n:'2',t:'Guard team',d:'Guard team required for aircraft and loaded vehicles while at SIA. Guard names + name of National Explosives Officer → sent to ALS with paperwork. All guard personnel at airport min 1h before aircraft arrival.'},
+      {n:'3',t:'Aircraft parking position',d:'Aircraft parked at end of runway — furthest point from terminal and civilian areas. Access through Gate E3 only.'},
+      {n:'4',t:'ADMP escorts ammunition',d:'Ammunition removed from passengers, packed by NSE staff → ADMP/ALS escort to aircraft airside. Magazines sealed with baggage tags. Ammunition handed over to Load Master.',doc:'DOB'},
+      {n:'5',t:'Small quantities (≤20kg NEQ 1.4S)',d:'Aircraft parked away from others. DAC unloaded first by NEO. Transported through E7 gate.'},
+      {n:'6',t:'Large quantities',d:'Request for flight approval + notification to ALS 48h in advance + special handling request + transportation ONLY through Gate E3.'},
+      {n:'7',t:'Overnight stay',d:'All dangerous cargo MUST be unloaded if aircraft stays overnight. Cannot be stored at SIA. Must be transported away (TCC responsibility).',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §17c. Weapons with ammunition: cleared before airport terminal. ADMP are the only ones authorized to carry weapons through SIA controls.'
+  },
+  medevac:{
+    title:'MEDEVAC Procedure at SIA',
+    color:'var(--danger)',
+    steps:[
+      {n:'1',t:'Notification to ALS',d:'Send to ALS: Special Request Form + copy of passenger\'s passport + EUFOR ID card.',say:'"This is ADMP. MEDEVAC request for [Name, Rank, Unit]. Sending Special Request Form and ID documentation to ALS now."'},
+      {n:'2',t:'Arrival timing',d:'MED/NSE team arrives at airport 15 min before aircraft arrival. Vehicles parked at E7 gate, in street near administration building.'},
+      {n:'3',t:'Document check at BPBiH',d:'NSE/MED team shows passenger\'s passport and EUFOR ID card to BiH Border Police. Team waits if aircraft needs to refuel.'},
+      {n:'4',t:'ADMP Red Cards and E7 escort',d:'ADMP issues Red Cards to MED/NSE team and escorts via E7 gate to aircraft.',say:'"Red Cards issued. Follow me to E7 gate. No hats airside. Stay with the group at all times."'},
+      {n:'5',t:'Stretcher patient',d:'If passenger is on stretcher: "Follow Me" car comes to E7 gate. MED/NSE team with vehicles follows "Follow Me" car to aircraft. Vehicles return via E7 gate after patient disembarkation.'},
+      {n:'6',t:'Out of hours',d:'SIA operating hours: 0600–2200. EUFOR may request airport to open OOH for medical emergency. Contact ALS immediately → informal approach to air traffic → formal request signed at highest possible level.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15g. ALS on permanent call: 061 206 134. For out-of-hours: SIA does not have to open but has historically been co-operative.'
+  },
+  delay:{
+    title:'Flight Delay or Cancellation',
+    color:'var(--warn)',
+    steps:[
+      {n:'1',t:'Delay announced',d:'FS/NR informs ALS office immediately. ALS advises passengers.',say:'"Attention EUFOR/NHQ Sa passengers. Your flight is delayed. Please remain at [location] and await further instruction from your Flight Sponsor."'},
+      {n:'2',t:'Delay ≤2h — checked in',d:'Passengers remain at SIA and make themselves comfortable. Boarding cards retained.'},
+      {n:'3',t:'Delay >2h — checked in',d:'Passengers proceed through boarding gate handing in boarding cards. Issued EUFOR/NHQ Sa boarding cards → transit through Arrivals Lounge → return to Camp Butmir until further notice. NR/FS co-ordinates transport.'},
+      {n:'4',t:'Flight cancelled',d:'Passengers NOT issued replacement boarding passes. Collect luggage from carousel while transiting Arrivals Lounge. Welfare and onward movement: responsibility of NR/FS (not ALS).'},
+      {n:'5',t:'ADMP duties during delay',d:'Maintain security of sterile areas. Ensure transit passengers remain in Departure Area (security and immigration reasons). May move transit passengers out of Departure Area for refreshments if lengthy delay.'},
+      {n:'6',t:'DOB entry',d:'Entry: flight details, reason for delay/cancellation, number of passengers affected, actions taken, time of return to Camp Butmir if applicable.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15f. NR/FS responsible for keeping passengers informed and organized. ALS not responsible for resolving delay/cancellation issues.'
+  },
+  redpass:{
+    title:'Red Pass — Issue & Control',
+    color:'#b91c1c',
+    steps:[
+      {n:'1',t:'Written request required',d:'Special Request Form to ALS minimum 24 hours in advance. Red Pass is an accountable document — must be tracked.',say:'"Red Pass requires written request to ALS at least 24 hours in advance. Complete Special Request Form first."'},
+      {n:'2',t:'ID collateral',d:'EUFOR/NHQ Sa personnel MUST give ADMP their EUFOR/NHQ Sa ID card as collateral when signing out a Red Pass (SOP 3945 compliance).'},
+      {n:'3',t:'When is Red Pass required?',d:'• Meeting aircraft/escorting passengers from aircraft\n• Escorting passengers through Passport Control (NRs/FSs only)\n• Escorting weapons, ammo, cargo for National Flight\n• Meeting VIPs in Arrivals Lounge (commercial flight)\n• Visiting Operations or Flight Planning pre-flight'},
+      {n:'4',t:'Access rules',d:'Access to airside ONLY through Security Door. No bags/packages through these doors without airport security scanning. Personnel must stay in immediate vicinity of ALS staff or be escorted.'},
+      {n:'5',t:'Return Red Pass',d:'Red Pass must be returned to ALS office or ADMPs on task completion. FS/NR must return all Red Passes before ADMP returns ID cards.',say:'"Please return your Red Pass now. I will return your ID card once all passes are accounted for."'},
+      {n:'6',t:'DOB entry',d:'Log: every Red Pass issued (name, unit, time issued) and every return (time returned). Use Red Pass Tracker below.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §8f, SOP 3945. Red Pass is accountable — every issue and return must be logged. ADMP has ultimate authority for any investigation airside.'
+  },
+  items:{
+    title:'Prohibited Items — Baggage Rules',
+    color:'var(--text2)',
+    steps:[
+      {n:'H',t:'HAND BAGGAGE — Nil sharps',d:'No knives, sharp implements or "sharps" in hand baggage UNLESS specific permission given for troops to travel in fighting order.'},
+      {n:'L',t:'HOLD BAGGAGE — allowed (with conditions)',d:'Aircrew knives, survival knives (if valid operational requirement), Leatherman/Gerber tools, open razors, scalpels, scissors, penknives, bayonets, kukris, machetes (service issue), ice picks, ceremonial swords, tools with blades, ammunition.'},
+      {n:'✕',t:'PROHIBITED — cannot travel at all',d:'Flick knives, butterfly knives, gravity catch knives, stilettos, non-ceremonial swords, swordsticks, harpoons, spears, arrows, other unclassified bladed objects.'},
+      {n:'A',t:'AMMUNITION handling',d:'Passenger clears weapon before airport terminal. Magazines/ammo: sealed with baggage tags, given to aircraft Load Master. Returned to passenger at destination (passenger must request return from crew).'},
+      {n:'L',t:'LIQUIDS',d:'Regulations and bans on liquids apply in hand and hold baggage. Check with NSE for destination airport requirements.'},
+      {n:'⚠',t:'CONFISCATION by ADMP',d:'If prohibited item found on person or in hand baggage: confiscated by ADMP, marked, handed to aircraft Loadmaster. Returned to passenger at destination.',say:'"I am confiscating this item as it is prohibited in hand baggage. It will be handed to the Loadmaster and returned to you at your destination."'}
+    ],
+    note:'Ref: SOP 6240 Annex B §8c. Only ADMP may confiscate items from EUFOR/NHQ Sa personnel. BPBiH authorized to scan but not to physically search or detain EUFOR personnel.'
+  }
+};
+
+function renderSIAList(){
+  const list=document.getElementById('siaList');
+  if(!list) return;
+  const cards=[
+    {id:'dep',icon:'✈',label:'Departing Flight',color:'var(--accent2)'},
+    {id:'arr',icon:'🛬',label:'Arriving Flight',color:'var(--ok)'},
+    {id:'vip',icon:'⭐',label:'VIP Handling (A/B)',color:'var(--accent)'},
+    {id:'ammo',icon:'⚠',label:'Ammo / Explosives',color:'var(--danger)'},
+    {id:'medevac',icon:'🚑',label:'MEDEVAC',color:'var(--danger)'},
+    {id:'delay',icon:'⏱',label:'Delay / Cancellation',color:'var(--warn)'},
+    {id:'redpass',icon:'🪪',label:'Red Pass Control',color:'#b91c1c'},
+    {id:'items',icon:'✕',label:'Prohibited Items',color:'var(--text2)'}
+  ];
+  list.innerHTML=cards.map(c=>`
+    <div class="proc-card" onclick="openSIA('${c.id}')" style="cursor:pointer">
+      <div class="proc-header">
+        <div class="proc-icon" style="background:${c.color}22;color:${c.color}">
+          <span style="font-size:16px">${c.icon}</span>
+        </div>
+        <span class="proc-title">${c.label}</span>
+        <span style="color:var(--text3);font-size:10px">›</span>
+      </div>
+    </div>`).join('');
+}
+
+function openSIA(id){
+  const p=siaProcs[id];
+  if(!p) return;
+  const modal=document.getElementById('siaModal');
+  const title=document.getElementById('siaModalTitle');
+  const body=document.getElementById('siaModalBody');
+  if(!modal||!title||!body) return;
+  title.childNodes[0].textContent=p.title+' ';
+  body.innerHTML=`
+    <ol style="list-style:none;padding:0">
+      ${p.steps.map(s=>`
+        <li style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-family:var(--mono);font-size:11px;color:${p.color};flex-shrink:0;padding-top:2px;font-weight:700;min-width:20px">${s.n}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px">${s.t}</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;white-space:pre-line">${s.d}</div>
+            ${s.say?`<div style="background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-size:12px;color:var(--text);line-height:1.5">💬 ${s.say}</div>`:''}
+            ${s.doc?`<span style="display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:#dcfce7;color:#15803d;border:1px solid #86efac;font-weight:700">${s.doc}</span>`:''}
+          </div>
+        </li>`).join('')}
+    </ol>
+    ${p.note?`<div style="margin-top:10px;padding:8px 12px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);font-size:12px;color:var(--warn);line-height:1.4;font-weight:600">${p.note}</div>`:''}`;
+  modal.classList.add('open');
+}
+function closeSIA(){
+  const m=document.getElementById('siaModal');
+  if(m) m.classList.remove('open');
+}
+
+// RED PASS TRACKER
+function issueRedPass(){
+  const name=document.getElementById('rpName').value.trim();
+  const unit=document.getElementById('rpUnit').value.trim();
+  if(!name){alert('Enter name.');return;}
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  passes.push({name,unit,ts:Date.now(),id:Date.now()});
+  localStorage.setItem('imp_rp',JSON.stringify(passes));
+  document.getElementById('rpName').value='';
+  document.getElementById('rpUnit').value='';
+  renderRedPasses();
+}
+
+function returnRedPass(id){
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  passes=passes.filter(p=>p.id!==id);
+  localStorage.setItem('imp_rp',JSON.stringify(passes));
+  renderRedPasses();
+}
+
+function renderRedPasses(){
+  const list=document.getElementById('rpList');
+  if(!list) return;
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  if(!passes.length){
+    list.innerHTML='<div style="text-align:center;padding:12px;color:var(--text3);font-size:12px">No Red Passes currently issued.</div>';
+    return;
+  }
+  list.innerHTML=passes.map(p=>{
+    const mins=Math.floor((Date.now()-p.ts)/60000);
+    const timeStr=mins<60?`${mins}m ago`:`${Math.floor(mins/60)}h ${mins%60}m ago`;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-weight:700;font-size:13px;color:var(--text)">${p.name}</div>
+        <div style="font-size:11px;color:var(--text3)">${p.unit||'—'} · Issued ${timeStr}</div>
+      </div>
+      <button onclick="returnRedPass(${p.id})" style="background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:6px 12px;color:#15803d;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body)">✓ Return</button>
+    </div>`;
+  }).join('');
+}
+renderSIAList();
+renderRedPasses();
 
 // ── CCN DECODER ───────────────────────────────────────────────────────────────
 const ccnNations={
