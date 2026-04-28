@@ -1,5 +1,4 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -27,208 +26,208 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;overflow:hidden}
 
 /* HEADER */
-#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(–header-h);background:var(–header-bg);border-bottom:1px solid #0d1225;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px;visibility:hidden}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--header-bg);border-bottom:1px solid #0d1225;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px;visibility:hidden}
 .header-logo{display:flex;align-items:center;gap:10px;min-width:0}
-.logo-badge{width:32px;height:32px;background:var(–accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;letter-spacing:.5px;flex-shrink:0;font-family:var(–body)}
-.logo-text{font-weight:700;font-size:16px;color:var(–header-text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
-.logo-sub{font-family:var(–mono);font-size:8px;color:var(–header-sub);letter-spacing:1.5px;display:block;margin-top:1px;white-space:nowrap}
+.logo-badge{width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;letter-spacing:.5px;flex-shrink:0;font-family:var(--body)}
+.logo-text{font-weight:700;font-size:16px;color:var(--header-text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
+.logo-sub{font-family:var(--mono);font-size:8px;color:var(--header-sub);letter-spacing:1.5px;display:block;margin-top:1px;white-space:nowrap}
 .header-status{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.alert-badge{font-weight:700;font-size:11px;padding:3px 8px;border-radius:3px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;text-transform:uppercase;font-family:var(–body)}
+.alert-badge{font-weight:700;font-size:11px;padding:3px 8px;border-radius:3px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;text-transform:uppercase;font-family:var(--body)}
 .alert-bravo{background:#14532d;color:#86efac;border:1px solid #16a34a}
 .alert-charlie{background:#78350f;color:#fde68a;border:1px solid #b45309}
 .alert-delta{background:#7f1d1d;color:#fca5a5;border:1px solid #b91c1c}
-.clock{font-family:var(–mono);font-size:12px;color:#fbbf24;white-space:nowrap}
+.clock{font-family:var(--mono);font-size:12px;color:#fbbf24;white-space:nowrap}
 
 /* MAIN */
-#main{position:fixed;top:var(–header-h);bottom:var(–nav-h);left:0;right:0;overflow:hidden}
+#main{position:fixed;top:var(--header-h);bottom:var(--nav-h);left:0;right:0;overflow:hidden}
 #main.app-ready{visibility:visible}
 #main:not(.app-ready){visibility:hidden}
 .tab-content{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 8px}
 .tab-content.active{display:block}
 
 /* BOTTOM NAV */
-#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(–nav-h);background:var(–header-bg);border-top:1px solid #0d1225;display:flex;visibility:hidden}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:#6b7a99;font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(–body)}
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--header-bg);border-top:1px solid #0d1225;display:flex;visibility:hidden}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:#6b7a99;font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(--body)}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:#fbbf24}
-.nav-btn.active::before{content:’’;position:absolute;top:0;left:20%;right:20%;height:2px;background:#fbbf24;border-radius:0 0 2px 2px}
+.nav-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:#fbbf24;border-radius:0 0 2px 2px}
 
 /* SECTION LABEL */
-.section-label{font-weight:700;font-size:10px;letter-spacing:2px;color:var(–text3);text-transform:uppercase;padding:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(–body)}
-.section-label::after{content:’’;flex:1;height:1px;background:var(–border)}
+.section-label{font-weight:700;font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:4px 0 8px;display:flex;align-items:center;gap:8px;font-family:var(--body)}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* FILTER CHIPS */
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.filter-chip{font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:20px;background:var(–surface);border:1px solid var(–border);color:var(–text2);cursor:pointer;transition:all .15s;font-family:var(–body);display:inline-flex;align-items:center;gap:5px}
-.filter-chip svg{stroke:var(–text2);flex-shrink:0;transition:stroke .15s}
-.filter-chip.active{background:var(–accent);border-color:var(–accent);color:#fff}
+.filter-chip{font-weight:600;font-size:11px;letter-spacing:.5px;text-transform:uppercase;padding:5px 10px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--body);display:inline-flex;align-items:center;gap:5px}
+.filter-chip svg{stroke:var(--text2);flex-shrink:0;transition:stroke .15s}
+.filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .filter-chip.active svg{stroke:#fff}
 
 /* VIOLATION CARDS */
-.violation-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.violation-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .violation-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
-.violation-header:active{background:var(–surface2)}
+.violation-header:active{background:var(--surface2)}
 .sev-dot{display:none}
 .v-cat-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:22px;height:22px}
 .v-cat-icon svg{display:block}
-.v-cat-icon.sev-1 svg{stroke:var(–warn);stroke-width:2.5}
+.v-cat-icon.sev-1 svg{stroke:var(--warn);stroke-width:2.5}
 .v-cat-icon.sev-2 svg{stroke:#c2410c;stroke-width:2.5}
-.v-cat-icon.sev-3 svg{stroke:var(–danger);stroke-width:2.5}
-.violation-title{font-weight:700;font-size:14px;color:var(–text);flex:1;letter-spacing:.2px;font-family:var(–body)}
-.v-chevron{color:var(–text3);font-size:10px;transition:transform .2s;flex-shrink:0}
+.v-cat-icon.sev-3 svg{stroke:var(--danger);stroke-width:2.5}
+.violation-title{font-weight:700;font-size:14px;color:var(--text);flex:1;letter-spacing:.2px;font-family:var(--body)}
+.v-chevron{color:var(--text3);font-size:10px;transition:transform .2s;flex-shrink:0}
 .violation-card.open .v-chevron,.proc-card.open .v-chevron,.ref-card.open .v-chevron{transform:rotate(180deg)}
-.violation-body{display:none;padding:0 14px 14px;border-top:1px solid var(–border)}
+.violation-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
 .violation-card.open .violation-body{display:block}
-.penalty-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(–border)}
+.penalty-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .penalty-row:last-child{border-bottom:none}
-.penalty-num{font-family:var(–mono);font-size:11px;color:var(–accent);flex-shrink:0;padding-top:1px;min-width:36px;font-weight:700}
-.penalty-text{font-size:13px;color:var(–text2);line-height:1.5;flex:1}
-.penalty-points{font-family:var(–mono);font-size:11px;color:var(–danger);flex-shrink:0;padding-top:1px;font-weight:700}
+.penalty-num{font-family:var(--mono);font-size:11px;color:var(--accent);flex-shrink:0;padding-top:1px;min-width:36px;font-weight:700}
+.penalty-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
+.penalty-points{font-family:var(--mono);font-size:11px;color:var(--danger);flex-shrink:0;padding-top:1px;font-weight:700}
 
 /* SAY box — special highlight for phrases */
-.penalty-row .penalty-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(–accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(–text);font-size:12px;line-height:1.6}
+.penalty-row .penalty-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
 
 /* PROCEDURE CARDS */
-.proc-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.proc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .proc-header{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
 .proc-icon{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .proc-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.proc-title{font-weight:700;font-size:15px;color:var(–text);flex:1;font-family:var(–body)}
-.proc-body{display:none;padding:0 14px 14px;border-top:1px solid var(–border)}
+.proc-title{font-weight:700;font-size:15px;color:var(--text);flex:1;font-family:var(--body)}
+.proc-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
 .proc-card.open .proc-body{display:block}
 .step-list{list-style:none}
-.step-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(–border)}
+.step-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
 .step-item:last-child{border-bottom:none}
-.step-num{width:22px;height:22px;border-radius:50%;background:var(–accent2);display:flex;align-items:center;justify-content:center;font-family:var(–mono);font-size:10px;color:#fff;flex-shrink:0;margin-top:2px}
-.step-text{font-size:13px;color:var(–text);line-height:1.6}
-.step-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(–accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(–text);font-size:12px;line-height:1.6}
-.step-note{font-size:12px;color:var(–warn);margin-top:8px;padding:8px 10px;background:#fef3c7;border-radius:4px;border-left:3px solid var(–warn);line-height:1.4}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:#fff;flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:var(--text);line-height:1.6}
+.step-text em{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:4px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
+.step-note{font-size:12px;color:var(--warn);margin-top:8px;padding:8px 10px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);line-height:1.4}
 
 /* QUICK STRIP */
 .quick-strip{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .quick-strip::-webkit-scrollbar{display:none}
-.quick-btn{flex-shrink:0;background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:70px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.quick-btn{flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;min-width:70px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .quick-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.quick-btn-label{font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(–text2);white-space:nowrap;font-family:var(–body)}
+.quick-btn-label{font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);white-space:nowrap;font-family:var(--body)}
 
 /* CONTACTS */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.contact-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:12px;text-decoration:none;display:block;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.contact-card:active{border-color:var(–accent)}
-.contact-label{font-weight:700;font-size:11px;letter-spacing:.5px;color:var(–text3);text-transform:uppercase;margin-bottom:4px;font-family:var(–body)}
-.contact-number{font-family:var(–mono);font-size:22px;color:var(–accent);letter-spacing:2px;font-weight:700}
-.contact-ext{font-family:var(–mono);font-size:12px;color:var(–text2);margin-top:2px}
-.contact-full{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.contact-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(–border);gap:10px}
+.contact-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;text-decoration:none;display:block;transition:border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.contact-card:active{border-color:var(--accent)}
+.contact-label{font-weight:700;font-size:11px;letter-spacing:.5px;color:var(--text3);text-transform:uppercase;margin-bottom:4px;font-family:var(--body)}
+.contact-number{font-family:var(--mono);font-size:22px;color:var(--accent);letter-spacing:2px;font-weight:700}
+.contact-ext{font-family:var(--mono);font-size:12px;color:var(--text2);margin-top:2px}
+.contact-full{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.contact-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);gap:10px}
 .contact-row:last-child{border-bottom:none}
-.contact-row-label{font-weight:600;font-size:13px;color:var(–text);flex:1;font-family:var(–body)}
-.contact-row-call{font-family:var(–mono);font-size:10px;color:var(–accent2);flex-shrink:0}
-.contact-row-num{font-family:var(–mono);font-size:13px;color:var(–accent);flex-shrink:0;font-weight:700}
+.contact-row-label{font-weight:600;font-size:13px;color:var(--text);flex:1;font-family:var(--body)}
+.contact-row-call{font-family:var(--mono);font-size:10px;color:var(--accent2);flex-shrink:0}
+.contact-row-num{font-family:var(--mono);font-size:13px;color:var(--accent);flex-shrink:0;font-weight:700}
 
 /* RADIO */
-.radio-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(–border)}
+.radio-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
 .radio-row:last-child{border-bottom:none}
-.radio-station{font-size:13px;color:var(–text2);font-family:var(–body)}
-.radio-callsign{font-family:var(–mono);font-size:10px;color:var(–accent2);text-align:right}
-.radio-ipn{font-family:var(–mono);font-size:12px;color:var(–accent);text-align:right;min-width:58px;font-weight:700}
+.radio-station{font-size:13px;color:var(--text2);font-family:var(--body)}
+.radio-callsign{font-family:var(--mono);font-size:10px;color:var(--accent2);text-align:right}
+.radio-ipn{font-family:var(--mono);font-size:12px;color:var(--accent);text-align:right;min-width:58px;font-weight:700}
 
 /* REFS / SOP */
-.ref-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .ref-header{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer}
-.ref-tag{font-family:var(–mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(–surface2);color:var(–text3);border:1px solid var(–border);flex-shrink:0;white-space:nowrap;font-weight:700}
-.ref-title{font-weight:700;font-size:14px;color:var(–text);flex:1;font-family:var(–body)}
-.ref-body{display:none;padding:0 14px 14px;border-top:1px solid var(–border)}
+.ref-tag{font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(--surface2);color:var(--text3);border:1px solid var(--border);flex-shrink:0;white-space:nowrap;font-weight:700}
+.ref-title{font-weight:700;font-size:14px;color:var(--text);flex:1;font-family:var(--body)}
+.ref-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
 .ref-card.open .ref-body{display:block}
-.rule-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(–border);font-size:13px;color:var(–text2);line-height:1.5}
+.rule-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
 .rule-item:last-child{border-bottom:none}
-.rule-bullet{color:var(–accent);flex-shrink:0;font-family:var(–mono);font-size:14px;padding-top:0;line-height:1.4;font-weight:700}
+.rule-bullet{color:var(--accent);flex-shrink:0;font-family:var(--mono);font-size:14px;padding-top:0;line-height:1.4;font-weight:700}
 .highlight{background:#fef08a;color:#713f12;border-radius:2px;padding:0 2px}
 
 /* SEARCH */
 .search-bar{position:relative;margin-bottom:12px}
-.search-bar input{width:100%;background:var(–surface);border:1.5px solid var(–border);border-radius:6px;color:var(–text);font-family:var(–body);font-size:15px;padding:10px 14px 10px 40px;outline:none;-webkit-appearance:none;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.search-bar input:focus{border-color:var(–accent2)}
-.search-bar input::placeholder{color:var(–text3)}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(–text3)}
+.search-bar input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--body);font-size:15px;padding:10px 14px 10px 40px;outline:none;-webkit-appearance:none;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.search-bar input:focus{border-color:var(--accent2)}
+.search-bar input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3)}
 .search-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.search-empty{text-align:center;padding:40px 20px;color:var(–text3);font-size:15px;letter-spacing:.5px}
-.search-empty svg{width:32px;height:32px;stroke:var(–text3);fill:none;stroke-width:1.5;margin-bottom:8px;display:block;margin:0 auto 8px}
+.search-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:15px;letter-spacing:.5px}
+.search-empty svg{width:32px;height:32px;stroke:var(--text3);fill:none;stroke-width:1.5;margin-bottom:8px;display:block;margin:0 auto 8px}
 
 /* MAP */
-.map-container{border-radius:8px;overflow:hidden;border:1px solid var(–border);margin-bottom:12px;height:calc(100vh - var(–header-h) - var(–nav-h) - 160px);min-height:280px;background:var(–surface2);position:relative}
+.map-container{border-radius:8px;overflow:hidden;border:1px solid var(--border);margin-bottom:12px;height:calc(100vh - var(--header-h) - var(--nav-h) - 160px);min-height:280px;background:var(--surface2);position:relative}
 .map-container iframe{width:100%;height:100%;border:none}
-.map-info-bar{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:var(–text3);display:flex;align-items:center;gap:8px}
-.map-info-bar a{color:var(–accent2);text-decoration:none;margin-left:auto;font-weight:600;font-size:12px}
-.map-legend{background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:12px 14px}
+.map-info-bar{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:8px}
+.map-info-bar a{color:var(--accent2);text-decoration:none;margin-left:auto;font-weight:600;font-size:12px}
+.map-legend{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
 .parking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
-.parking-zone{background:var(–surface);border:1.5px solid var(–border);border-radius:8px;padding:10px 8px;text-align:center}
-.zone-letter{font-weight:900;font-size:22px;color:var(–accent);line-height:1;font-family:var(–body)}
-.zone-desc{font-size:10px;color:var(–text3);margin-top:4px;line-height:1.3}
+.parking-zone{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center}
+.zone-letter{font-weight:900;font-size:22px;color:var(--accent);line-height:1;font-family:var(--body)}
+.zone-desc{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.3}
 
 /* BAR TABLE */
 .bar-table{width:100%;border-collapse:collapse;font-size:13px}
-.bar-table th{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(–text3);padding:8px 10px;border-bottom:2px solid var(–border);text-align:left;font-family:var(–body);background:var(–surface2)}
-.bar-table td{padding:9px 10px;border-bottom:1px solid var(–border);color:var(–text2)}
+.bar-table th{font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 10px;border-bottom:2px solid var(--border);text-align:left;font-family:var(--body);background:var(--surface2)}
+.bar-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
 .bar-table tr:last-child td{border-bottom:none}
-.bar-table .day-col{font-weight:600;color:var(–text)}
-.bar-table .time-open{color:var(–ok);font-family:var(–mono);font-weight:700}
-.bar-table .time-last{color:var(–warn);font-family:var(–mono);font-weight:700}
-.bar-table .time-closed{color:var(–danger);font-family:var(–mono);font-weight:700}
+.bar-table .day-col{font-weight:600;color:var(--text)}
+.bar-table .time-open{color:var(--ok);font-family:var(--mono);font-weight:700}
+.bar-table .time-last{color:var(--warn);font-family:var(--mono);font-weight:700}
+.bar-table .time-closed{color:var(--danger);font-family:var(--mono);font-weight:700}
 
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);align-items:flex-end}
 .modal-overlay.open{display:flex}
-.modal-sheet{background:var(–surface);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;border-top:2px solid var(–border)}
-.modal-title{font-weight:900;font-size:18px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;font-family:var(–body);color:var(–text)}
-.modal-close{background:var(–surface2);border:1px solid var(–border);border-radius:50%;width:30px;height:30px;color:var(–text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;border-top:2px solid var(--border)}
+.modal-title{font-weight:900;font-size:18px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;font-family:var(--body);color:var(--text)}
+.modal-close{background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .alert-row{border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.alert-row-title{font-weight:900;font-size:16px;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;font-family:var(–body)}
+.alert-row-title{font-weight:900;font-size:16px;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;font-family:var(--body)}
 .alert-row-text{font-size:13px;line-height:1.5}
 .a-bravo{background:#dcfce7;border:1.5px solid #86efac} .a-charlie{background:#fef3c7;border:1.5px solid #fcd34d} .a-delta{background:#fee2e2;border:1.5px solid #fca5a5}
 .a-bravo .alert-row-title{color:#15803d} .a-bravo .alert-row-text{color:#166534}
 .a-charlie .alert-row-title{color:#b45309} .a-charlie .alert-row-text{color:#92400e}
 .a-delta .alert-row-title{color:#b91c1c} .a-delta .alert-row-text{color:#991b1b}
 .alert-set-row{display:flex;gap:8px;margin-top:6px}
-.alert-set-btn{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:var(–body)}
+.alert-set-btn{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;font-family:var(--body)}
 .asb-bravo{background:#dcfce7;border:1.5px solid #86efac;color:#15803d}
 .asb-charlie{background:#fef3c7;border:1.5px solid #fcd34d;color:#b45309}
 .asb-delta{background:#fee2e2;border:1.5px solid #fca5a5;color:#b91c1c}
 
 /* ACRONYMS */
-.acro-result{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-bottom:1px solid var(–border)}
+.acro-result{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-bottom:1px solid var(--border)}
 .acro-result:last-child{border-bottom:none}
-.acro-key{font-family:var(–mono);font-size:13px;font-weight:700;color:var(–accent);min-width:72px;flex-shrink:0;letter-spacing:.5px}
-.acro-val{font-size:13px;color:var(–text2);line-height:1.4}
-.acro-list{background:var(–surface);border:1px solid var(–border);border-radius:8px;overflow:hidden;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.acro-letter-head{font-weight:700;font-size:10px;letter-spacing:2px;color:var(–text3);text-transform:uppercase;padding:6px 12px;background:var(–surface2);border-bottom:1px solid var(–border)}
-.acro-count{font-family:var(–mono);font-size:10px;color:var(–text3);margin-left:4px}
+.acro-key{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);min-width:72px;flex-shrink:0;letter-spacing:.5px}
+.acro-val{font-size:13px;color:var(--text2);line-height:1.4}
+.acro-list{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.acro-letter-head{font-weight:700;font-size:10px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.acro-count{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:4px}
 
 /* SOP BANNERS */
 .sop-banner{
-position:sticky;top:0;z-index:10;
-border-radius:8px;margin:12px 0 6px;
-overflow:hidden;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
+  position:sticky;top:0;z-index:10;
+  border-radius:8px;margin:12px 0 6px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 .sop-banner:first-of-type{margin-top:0}
 .sop-banner-inner{
-display:flex;align-items:center;gap:12px;
-padding:11px 14px;position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;position:relative;overflow:hidden;
 }
 .sop-banner-inner svg{flex-shrink:0;opacity:.9}
 .sop-banner-num{
-font-family:var(–mono);font-size:11px;font-weight:700;
-letter-spacing:2px;opacity:.8;margin-bottom:1px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:2px;opacity:.8;margin-bottom:1px;
 }
 .sop-banner-title{
-font-weight:700;font-size:14px;letter-spacing:.3px;
-font-family:var(–body);
+  font-weight:700;font-size:14px;letter-spacing:.3px;
+  font-family:var(--body);
 }
 .sop-banner-watermark{
-position:absolute;right:10px;top:50%;transform:translateY(-50%);
-font-family:var(–mono);font-size:36px;font-weight:900;
-opacity:.08;letter-spacing:-2px;pointer-events:none;
-user-select:none;
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:36px;font-weight:900;
+  opacity:.08;letter-spacing:-2px;pointer-events:none;
+  user-select:none;
 }
 /* 3901 — Navy/blue */
 .sop-banner-3901{background:linear-gradient(135deg,#1a2035 0%,#1e2d50 100%);color:#e8edf8;border:1px solid #2a3a6a}
@@ -238,240 +237,237 @@ user-select:none;
 .sop-banner-3927 .sop-banner-num{color:#f4a0a0}
 /* 6240 — Dark orange/brown */
 .sop-banner-6240{background:linear-gradient(135deg,#5c3a0a 0%,#7a4d10 100%);color:#fdf0dd;border:1px solid #9a6820}
-.sop-banner-6240 .sop-banner-num{color:#f4c070} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(–border);border-radius:3px}
+.sop-banner-6240 .sop-banner-num{color:#f4c070} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .mt8{margin-top:8px} .mt12{margin-top:12px}
 
 /* ROSTER */
 .roster-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
 .roster-table{width:100%;border-collapse:collapse;min-width:420px}
-.roster-table th{font-family:var(–mono);font-size:10px;color:var(–text3);font-weight:700;letter-spacing:1px;text-align:center;padding:8px 4px;border-bottom:2px solid var(–border);white-space:nowrap;background:var(–surface2)}
+.roster-table th{font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-align:center;padding:8px 4px;border-bottom:2px solid var(--border);white-space:nowrap;background:var(--surface2)}
 .roster-table th.rt-unit{text-align:left;padding-left:8px;min-width:70px}
-.roster-table td{padding:4px 3px;text-align:center;border-bottom:1px solid var(–border);vertical-align:top}
-.roster-table td.rt-unit{text-align:left;padding-left:8px;font-family:var(–mono);font-size:12px;font-weight:700;color:var(–text);white-space:nowrap}
+.roster-table td{padding:4px 3px;text-align:center;border-bottom:1px solid var(--border);vertical-align:top}
+.roster-table td.rt-unit{text-align:left;padding-left:8px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);white-space:nowrap}
 .roster-table tr.rt-me td{background:rgba(184,98,10,.07)}
-.roster-table tr.rt-me td.rt-unit{color:var(–accent)}
+.roster-table tr.rt-me td.rt-unit{color:var(--accent)}
 .roster-cell{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;min-width:52px;padding:3px}
 .roster-cell:active{opacity:.7}
-.rs-badge{font-family:var(–mono);font-size:11px;font-weight:700;padding:3px 6px;border-radius:4px;min-width:24px;text-align:center}
+.rs-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 6px;border-radius:4px;min-width:24px;text-align:center}
 .rs-S{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
 .rs-L{background:#dcfce7;color:#15803d;border:1px solid #86efac}
 .rs-D{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
-.rs-empty{background:var(–surface2);color:var(–text3);border:1px solid var(–border)}
-.rs-task{font-size:9px;color:var(–text3);line-height:1.3;max-width:56px;word-break:break-word;text-align:center}
+.rs-empty{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.rs-task{font-size:9px;color:var(--text3);line-height:1.3;max-width:56px;word-break:break-word;text-align:center}
 .roster-week-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0 12px}
-.roster-week-label{font-family:var(–mono);font-size:12px;color:var(–accent);font-weight:700;letter-spacing:.5px}
-.roster-nav-btn{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:6px 12px;color:var(–text2);cursor:pointer;font-family:var(–body);font-size:13px}
+.roster-week-label{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.5px}
+.roster-nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text2);cursor:pointer;font-family:var(--body);font-size:13px}
 
 /* ROSTER EDIT MODAL */
 .roster-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .roster-modal.open{display:flex}
-.roster-modal-sheet{background:var(–surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
+.roster-modal-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
 .rs-btn-row{display:flex;gap:8px;margin-bottom:12px}
-.rs-pick-btn{flex:1;padding:14px 8px;border-radius:8px;border:2px solid transparent;font-weight:700;font-size:16px;font-family:var(–mono);cursor:pointer;transition:all .15s}
-.rs-pick-btn.active{border-color:var(–text)}
+.rs-pick-btn{flex:1;padding:14px 8px;border-radius:8px;border:2px solid transparent;font-weight:700;font-size:16px;font-family:var(--mono);cursor:pointer;transition:all .15s}
+.rs-pick-btn.active{border-color:var(--text)}
 
-/* LOGIN OVERLAY */
-#loginOverlay{position:fixed;inset:0;z-index:9000;background:var(–header-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+/* LOGIN OVERLAY — intentionally dark, self-contained */
+#loginOverlay{position:fixed;inset:0;z-index:9000;background:#0d1117;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
 #loginOverlay.hidden{display:none}
-.login-logo{width:72px;height:72px;background:var(–accent);border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;color:#fff;margin-bottom:16px;letter-spacing:1px;font-family:var(–body)}
-.login-title{font-weight:700;font-size:22px;color:#ffffff;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px}
-.login-sub{font-size:11px;color:#9aa3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px}
+.login-logo{width:64px;height:64px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#fff;margin:0 auto 16px;letter-spacing:1px;font-family:var(--body)}
+.login-title{font-weight:700;font-size:22px;color:#f0f4ff;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;text-align:center}
+.login-sub{font-size:11px;color:#6b7a99;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;text-align:center}
 .login-step{width:100%;max-width:320px}
-.login-section-label{font-size:11px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.login-section-label{font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;text-align:center}
 .login-unit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
-.login-unit-btn{background:#2a3350;border:1px solid #3a4460;border-radius:8px;padding:14px 8px;color:#d0d8e8;font-weight:700;font-size:15px;cursor:pointer;font-family:var(–mono);transition:all .15s}
-.login-unit-btn:active,.login-unit-btn.selected{background:var(–accent);color:#fff;border-color:var(–accent)}
+.login-unit-btn{background:#1a2540;border:1px solid #2a3a5a;border-radius:8px;padding:14px 8px;color:#c8d4e8;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--mono);transition:all .15s}
+.login-unit-btn:active,.login-unit-btn.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 
 /* PIN */
-.pin-unit-btn{background:#2a3350;border:1px solid #3a4460;border-radius:8px;padding:14px 8px;color:#d0d8e8;font-weight:700;font-size:14px;cursor:pointer;font-family:var(–mono);transition:border-color .15s}
-.pin-unit-btn:active{border-color:var(–accent)}
-.pin-key{background:#2a3350;border:1px solid #3a4460;border-radius:10px;padding:18px 8px;color:#d0d8e8;font-weight:700;font-size:20px;cursor:pointer;font-family:var(–mono);transition:all .1s}
-.pin-key:active{background:var(–accent);color:#fff;border-color:var(–accent)}
-.pin-dot{width:18px;height:18px;border-radius:50%;border:2px solid #3a4460;background:transparent;transition:background .15s}
-.pin-dot.filled{background:var(–accent);border-color:var(–accent)}
-.pin-dot.error{background:var(–danger);border-color:var(–danger)}
+.pin-unit-btn{background:#1a2540;border:1px solid #2a3a5a;border-radius:8px;padding:14px 8px;color:#c8d4e8;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--mono);transition:border-color .15s}
+.pin-unit-btn:active{border-color:var(--accent)}
+.pin-key{background:#1a2540;border:1px solid #2a3a5a;border-radius:10px;padding:18px 8px;color:#e0e8f8;font-weight:700;font-size:20px;cursor:pointer;font-family:var(--mono);transition:all .1s}
+.pin-key:active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #2a3a5a;background:transparent;transition:background .15s}
+.pin-dot.filled{background:var(--accent);border-color:var(--accent)}
+.pin-dot.error{background:#b91c1c;border-color:#b91c1c}
 
 /* GLOBAL SEARCH */
 .gsearch-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:none;flex-direction:column}
 .gsearch-overlay.open{display:flex}
-.gsearch-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(–surface);border-bottom:1px solid var(–border)}
-.gsearch-input{flex:1;background:var(–surface2);border:1.5px solid var(–border);border-radius:8px;padding:10px 14px;color:var(–text);font-size:15px;font-family:var(–body);outline:none}
-.gsearch-close{background:none;border:none;color:var(–text3);font-size:20px;cursor:pointer;padding:4px 8px}
+.gsearch-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.gsearch-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:15px;font-family:var(--body);outline:none}
+.gsearch-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:4px 8px}
 .gsearch-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px}
-.gsearch-result{background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:10px 14px;margin-bottom:6px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.gsearch-result:active{border-color:var(–accent)}
-.gsearch-tag{font-family:var(–mono);font-size:9px;color:var(–accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.gsearch-title{font-size:13px;font-weight:700;color:var(–text);margin-bottom:2px}
-.gsearch-snippet{font-size:11px;color:var(–text3);line-height:1.4}
-.gsearch-empty{text-align:center;padding:40px;color:var(–text3);font-size:13px}
+.gsearch-result{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:6px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.gsearch-result:active{border-color:var(--accent)}
+.gsearch-tag{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.gsearch-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.gsearch-snippet{font-size:11px;color:var(--text3);line-height:1.4}
+.gsearch-empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
 
 /* QUICK ACTION BUTTON */
-.quick-action-fab{position:fixed;bottom:calc(var(–nav-h) + 14px);right:14px;z-index:200;width:54px;height:54px;border-radius:50%;background:var(–danger);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(185,28,28,.4);transition:transform .15s}
+.quick-action-fab{position:fixed;bottom:calc(var(--nav-h) + 14px);right:14px;z-index:200;width:54px;height:54px;border-radius:50%;background:var(--danger);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(185,28,28,.4);transition:transform .15s}
 .quick-action-fab:active{transform:scale(.92)}
 .quick-action-fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
 /* QUICK ACTION MODAL */
 .qa-modal{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .qa-modal.open{display:flex}
-.qa-sheet{background:var(–surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px;max-height:75vh;overflow-y:auto}
-.qa-title{font-weight:700;font-size:16px;color:var(–danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.qa-btn{width:100%;background:var(–surface2);border:1px solid var(–border);border-radius:8px;padding:14px;text-align:left;cursor:pointer;margin-bottom:8px;font-family:var(–body);display:flex;align-items:center;gap:12px}
-.qa-btn:active{border-color:var(–accent)}
+.qa-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px;max-height:75vh;overflow-y:auto}
+.qa-title{font-weight:700;font-size:16px;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.qa-btn{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:left;cursor:pointer;margin-bottom:8px;font-family:var(--body);display:flex;align-items:center;gap:12px}
+.qa-btn:active{border-color:var(--accent)}
 .qa-btn-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .qa-btn-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.qa-btn-title{font-weight:700;font-size:14px;color:var(–text)}
-.qa-btn-sub{font-size:11px;color:var(–text3);margin-top:2px}
+.qa-btn-title{font-weight:700;font-size:14px;color:var(--text)}
+.qa-btn-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
 /* DUI CALCULATOR */
 .dui-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
 .dui-modal.open{display:flex}
-.dui-sheet{background:var(–surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
-.dui-result{background:var(–surface2);border-radius:8px;padding:14px;margin-top:12px;border-left:3px solid var(–danger)}
-.dui-slider{width:100%;margin:12px 0;accent-color:var(–danger)}
+.dui-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;padding:16px 14px 32px}
+.dui-result{background:var(--surface2);border-radius:8px;padding:14px;margin-top:12px;border-left:3px solid var(--danger)}
+.dui-slider{width:100%;margin:12px 0;accent-color:var(--danger)}
 
 /* INCIDENT LOG */
 .log-modal{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.6);display:none;flex-direction:column}
 .log-modal.open{display:flex}
-.log-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(–surface);border-bottom:1px solid var(–border)}
+.log-header{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface);border-bottom:1px solid var(--border)}
 .log-body{flex:1;overflow-y:auto;padding:12px 14px}
-.log-entry{background:var(–surface);border:1px solid var(–border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
-.log-entry-time{font-family:var(–mono);font-size:10px;color:var(–accent);margin-bottom:4px;font-weight:700}
-.log-entry-type{font-weight:700;font-size:13px;color:var(–text);margin-bottom:3px}
-.log-entry-note{font-size:12px;color:var(–text2)}
-.log-form{padding:12px 14px;background:var(–surface);border-top:1px solid var(–border)}
-.log-select{width:100%;background:var(–surface2);border:1.5px solid var(–border);border-radius:6px;padding:9px 12px;color:var(–text);font-family:var(–body);font-size:13px;margin-bottom:8px;outline:none}
-.log-textarea{width:100%;background:var(–surface2);border:1.5px solid var(–border);border-radius:6px;padding:9px 12px;color:var(–text);font-family:var(–body);font-size:13px;resize:none;height:72px;outline:none}
-.log-submit{width:100%;background:var(–accent);border:none;border-radius:6px;padding:12px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(–body);margin-top:8px}
+.log-entry{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.log-entry-time{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:700}
+.log-entry-type{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.log-entry-note{font-size:12px;color:var(--text2)}
+.log-form{padding:12px 14px;background:var(--surface);border-top:1px solid var(--border)}
+.log-select{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;margin-bottom:8px;outline:none}
+.log-textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--body);font-size:13px;resize:none;height:72px;outline:none}
+.log-submit{width:100%;background:var(--accent);border:none;border-radius:6px;padding:12px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body);margin-top:8px}
 
 /* DECISION TREE — new flow style */
-.dtree-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.dtree-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .dtree-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
 .dtree-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dtree-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.dtree-title{font-weight:700;font-size:14px;color:var(–text);flex:1}
-.dtree-body{display:none;border-top:1px solid var(–border)}
+.dtree-title{font-weight:700;font-size:14px;color:var(--text);flex:1}
+.dtree-body{display:none;border-top:1px solid var(--border)}
 .dtree-card.open .dtree-body{display:block}
 .dtree-card.open .v-chevron{transform:rotate(180deg)}
-.dtree-step{display:flex;gap:0;border-bottom:1px solid var(–border);position:relative}
+.dtree-step{display:flex;gap:0;border-bottom:1px solid var(--border);position:relative}
 .dtree-step:last-child{border-bottom:none}
-.dtree-step-num{width:36px;font-family:var(–mono);font-size:11px;color:var(–accent);padding:12px 0 10px 14px;flex-shrink:0;font-weight:700}
+.dtree-step-num{width:36px;font-family:var(--mono);font-size:11px;color:var(--accent);padding:12px 0 10px 14px;flex-shrink:0;font-weight:700}
 .dtree-step-content{flex:1;padding:10px 14px 10px 0}
-.dtree-step-title{font-weight:700;font-size:13px;color:var(–text);margin-bottom:3px}
-.dtree-step-desc{font-size:12px;color:var(–text2);line-height:1.5}
-.dtree-step-say{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(–accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-style:normal;color:var(–text);font-size:12px;line-height:1.6}
-.dtree-step-doc{display:inline-block;margin-top:5px;font-family:var(–mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(–surface2);color:var(–accent2);border:1px solid var(–border);font-weight:700}
+.dtree-step-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.dtree-step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.dtree-step-say{display:block;background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-style:normal;color:var(--text);font-size:12px;line-height:1.6}
+.dtree-step-doc{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);color:var(--accent2);border:1px solid var(--border);font-weight:700}
 .dtree-step-doc.doc-mpr{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
 .dtree-step-doc.doc-tvr{background:#dbeafe;color:#1a5cb8;border-color:#93c5fd}
 .dtree-step-doc.doc-pvr{background:#fef3c7;color:#b45309;border-color:#fcd34d}
 .dtree-step-doc.doc-dob{background:#dcfce7;color:#15803d;border-color:#86efac}
-.dtree-branch{display:flex;gap:8px;padding:8px 14px;background:var(–surface2);border-bottom:1px solid var(–border)}
+.dtree-branch{display:flex;gap:8px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
 .dtree-branch:last-child{border-bottom:none}
-.dtree-branch-cond{font-family:var(–mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700;margin-top:1px}
+.dtree-branch-cond{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;flex-shrink:0;font-weight:700;margin-top:1px}
 .cond-yes{background:#dcfce7;color:#15803d;border:1px solid #86efac}
 .cond-no{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
 .cond-if{background:#dbeafe;color:#1a5cb8;border:1px solid #93c5fd}
-.dtree-branch-text{font-size:13px;color:var(–text2);line-height:1.4}
+.dtree-branch-text{font-size:13px;color:var(--text2);line-height:1.4}
 
 /* REPORT CARDS */
-.report-day-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.report-day-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .report-day-bar{width:4px;flex-shrink:0}
 .report-day-content{flex:1;padding:12px 14px}
-.report-day-label{font-family:var(–mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.report-day-title{font-weight:700;font-size:14px;color:var(–text);margin-bottom:3px}
-.report-day-chain{font-size:12px;color:var(–text2)}
-.report-day-time{font-family:var(–mono);font-size:12px;font-weight:700;text-align:right;padding:12px 14px 12px 0;display:flex;align-items:center}
+.report-day-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.report-day-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px}
+.report-day-chain{font-size:12px;color:var(--text2)}
+.report-day-time{font-family:var(--mono);font-size:12px;font-weight:700;text-align:right;padding:12px 14px 12px 0;display:flex;align-items:center}
 
 /* SUBNAV */
-.subnav{display:flex;gap:0;margin-bottom:12px;background:var(–surface2);border:1px solid var(–border);border-radius:8px;overflow:hidden;flex-shrink:0}
-.subnav-btn{flex:1;padding:9px 4px;background:none;border:none;color:var(–text3);font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:var(–body);transition:all .15s;border-right:1px solid var(–border)}
+.subnav{display:flex;gap:0;margin-bottom:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;flex-shrink:0}
+.subnav-btn{flex:1;padding:9px 4px;background:none;border:none;color:var(--text3);font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;cursor:pointer;font-family:var(--body);transition:all .15s;border-right:1px solid var(--border)}
 .subnav-btn:last-child{border-right:none}
-.subnav-btn.active{background:var(–header-bg);color:#fbbf24}
+.subnav-btn.active{background:var(--header-bg);color:#fbbf24}
 
 .subcontent{display:none}
 .subcontent.active{display:block}
 
 /* ROUTES */
-.route-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.route-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .route-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
-.route-name{font-family:var(–mono);font-weight:700;font-size:14px;color:var(–text);flex-shrink:0;letter-spacing:1px}
+.route-name{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text);flex-shrink:0;letter-spacing:1px}
 .route-type-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
 .rb-main{background:#fef3c7;color:#b45309;border:1px solid #fcd34d}
 .rb-secondary{background:#dcfce7;color:#15803d;border:1px solid #86efac}
 .rb-loc{background:#dbeafe;color:#1a5cb8;border:1px solid #93c5fd}
 .rb-tactical{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
-.route-body{display:none;padding:0 14px 12px;border-top:1px solid var(–border)}
+.route-body{display:none;padding:0 14px 12px;border-top:1px solid var(--border)}
 .route-card.open .route-body{display:block}
 .route-card.open .v-chevron{transform:rotate(180deg)}
-.route-path{font-size:13px;color:var(–text2);line-height:1.7;margin-top:8px}
-.route-path strong{color:var(–text)}
+.route-path{font-size:13px;color:var(--text2);line-height:1.7;margin-top:8px}
+.route-path strong{color:var(--text)}
 
 /* DIPL PLATES */
-.dipl-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(–border)}
+.dipl-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--border)}
 .dipl-row:last-child{border-bottom:none}
-.dipl-num{font-family:var(–mono);font-size:14px;font-weight:700;color:var(–accent);min-width:32px;flex-shrink:0}
-.dipl-country{font-size:13px;color:var(–text2);flex:1}
+.dipl-num{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);min-width:32px;flex-shrink:0}
+.dipl-country{font-size:13px;color:var(--text2);flex:1}
 
 /* RANKS */
-.rank-country-card{background:var(–surface);border:1px solid var(–border);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.rank-country-header{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(–border)}
+.rank-country-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.rank-country-header{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border)}
 .rank-country-flag{font-size:22px;line-height:1}
-.rank-country-name{font-weight:700;font-size:15px;color:var(–text);flex:1}
-.rank-country-code{font-family:var(–mono);font-size:11px;color:var(–text3)}
-.rank-section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(–text3);text-transform:uppercase;padding:8px 14px 4px}
+.rank-country-name{font-weight:700;font-size:15px;color:var(--text);flex:1}
+.rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.rank-section-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 14px 4px}
 .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;padding:8px 14px 12px}
 .rank-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s}
-.rank-item:active{background:var(–surface2)}
+.rank-item:active{background:var(--surface2)}
 .rank-item img{width:48px;height:auto;min-height:30px;object-fit:contain;border-radius:3px}
-.rank-item-broken{width:48px;height:40px;background:var(–surface2);border:1px dashed var(–border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(–text3)}
-.rank-item-nato{font-family:var(–mono);font-size:9px;color:var(–accent);font-weight:700;text-align:center;letter-spacing:.5px}
-.rank-item-name{font-size:9px;color:var(–text2);text-align:center;line-height:1.3;max-width:64px;word-break:break-word}
+.rank-item-broken{width:48px;height:40px;background:var(--surface2);border:1px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--text3)}
+.rank-item-nato{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;text-align:center;letter-spacing:.5px}
+.rank-item-name{font-size:9px;color:var(--text2);text-align:center;line-height:1.3;max-width:64px;word-break:break-word}
 .rank-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center}
 .rank-modal-overlay.open{display:flex}
-.rank-modal{background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:20px;max-width:260px;width:90%;text-align:center}
+.rank-modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;max-width:260px;width:90%;text-align:center}
 .rank-modal img{width:80px;height:auto;margin-bottom:12px}
-.rank-modal-nato{font-family:var(–mono);font-size:13px;color:var(–accent);font-weight:700;letter-spacing:1px;margin-bottom:4px}
-.rank-modal-name{font-size:16px;font-weight:700;color:var(–text);margin-bottom:4px}
-.rank-modal-country{font-size:12px;color:var(–text2);margin-bottom:14px}
-.rank-modal-close{width:100%;padding:10px;background:var(–surface2);border:1px solid var(–border);border-radius:8px;color:var(–text);font-size:14px;font-weight:600;cursor:pointer;font-family:var(–body)}
+.rank-modal-nato{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700;letter-spacing:1px;margin-bottom:4px}
+.rank-modal-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.rank-modal-country{font-size:12px;color:var(--text2);margin-bottom:14px}
+.rank-modal-close{width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--body)}
 
 </style>
 </head>
 <body>
 
 <!-- LOGIN OVERLAY -->
-
 <div id="loginOverlay">
 
   <!-- STEP 0: First-time setup (shown only when no salt configured) -->
-
   <div id="loginStep0" class="login-step" style="display:none;width:100%;max-width:340px">
     <div class="login-logo">IMP</div>
     <div class="login-title">First-Time Setup</div>
     <div class="login-sub">Camp Butmir · EUFOR</div>
-    <div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:10px;padding:16px;margin-bottom:16px;font-size:12px;color:#93b4f0;line-height:1.6;text-align:left">
+    <div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:10px;padding:14px;margin-bottom:20px;font-size:12px;color:#93b4f0;line-height:1.7;text-align:left">
       ⚠ This device has not been configured.<br>
       Enter the <strong style="color:#fbbf24">IMP Salt</strong> provided by IMP CMDR.<br>
-      Admin devices also require the <strong style="color:#fbbf24">Admin Salt</strong>.
+      <span style="color:#6b7a99;font-size:11px">Admin devices also require the Admin Salt.</span>
     </div>
-    <div style="margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Salt (required on all devices)</div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Salt — required on all devices</div>
       <input id="setupImpSalt" type="text" placeholder="e.g. BUTMIR26" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-        style="width:100%;background:#1e2a42;border:1.5px solid #2a3a5a;border-radius:8px;padding:12px 14px;color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:2px;outline:none;text-transform:uppercase">
+        style="width:100%;background:#111827;border:1.5px solid #2a3a5a;border-radius:8px;padding:13px 14px;color:#f0f4ff;font-family:var(--mono);font-size:16px;letter-spacing:3px;outline:none;text-transform:uppercase">
     </div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:10px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Salt (Admin devices only — leave blank otherwise)</div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Salt — Admin device only, leave blank otherwise</div>
       <input id="setupAdminSalt" type="text" placeholder="Leave blank for IMP devices" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-        style="width:100%;background:#1e2a42;border:1.5px solid #2a3a5a;border-radius:8px;padding:12px 14px;color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:2px;outline:none;text-transform:uppercase">
+        style="width:100%;background:#111827;border:1.5px solid #2a3a5a;border-radius:8px;padding:13px 14px;color:#f0f4ff;font-family:var(--mono);font-size:16px;letter-spacing:3px;outline:none;text-transform:uppercase">
     </div>
-    <div id="setupError" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:12px;text-align:center">⚠ IMP Salt cannot be empty</div>
+    <div id="setupError" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin-bottom:12px;text-align:center">⚠ IMP Salt cannot be empty</div>
     <button onclick="setupSave()"
-      style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--body);letter-spacing:1px">
-      CONFIRM &amp; SAVE
+      style="width:100%;padding:15px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--body);letter-spacing:1.5px;text-transform:uppercase">
+      Confirm &amp; Save
     </button>
   </div>
 
   <!-- STEP 1: Select unit -->
-
   <div id="loginStep1" class="login-step">
     <div class="login-logo">IMP</div>
     <div class="login-title">Compass</div>
@@ -496,94 +492,86 @@ user-select:none;
     </div>
     <div style="margin-top:10px">
       <button class="login-unit-btn" onclick="loginSelectUnit('Admin')"
-        style="width:100%;background:var(--surface3);border-color:var(--accent);color:var(--accent)">
+        style="width:100%;background:#1a2540;border:1.5px solid var(--accent);color:var(--accent);margin-top:10px">
         ⚙ Admin
       </button>
     </div>
   </div>
 
   <!-- STEP 2: PIN entry -->
-
   <div id="loginStep2" class="login-step" style="display:none;text-align:center">
     <div class="login-logo">IMP</div>
     <div class="login-title" id="loginUnitLabel"></div>
     <div class="login-sub" id="loginPinSub">Enter PIN</div>
 
-```
-<div id="loginPinDots" style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
-  <div class="pin-dot" id="lpd1"></div>
-  <div class="pin-dot" id="lpd2"></div>
-  <div class="pin-dot" id="lpd3"></div>
-  <div class="pin-dot" id="lpd4"></div>
-  <div class="pin-dot" id="lpd5" style="display:none"></div>
-  <div class="pin-dot" id="lpd6" style="display:none"></div>
-</div>
+    <div id="loginPinDots" style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
+      <div class="pin-dot" id="lpd1"></div>
+      <div class="pin-dot" id="lpd2"></div>
+      <div class="pin-dot" id="lpd3"></div>
+      <div class="pin-dot" id="lpd4"></div>
+      <div class="pin-dot" id="lpd5" style="display:none"></div>
+      <div class="pin-dot" id="lpd6" style="display:none"></div>
+    </div>
 
-<div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong PIN — try again</div>
-<div id="loginLockMsg" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Too many attempts. Wait 30 min.</div>
+    <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong PIN — try again</div>
+    <div id="loginLockMsg" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Too many attempts. Wait 30 min.</div>
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
-  <button class="pin-key" onclick="loginPinKey('1')">1</button>
-  <button class="pin-key" onclick="loginPinKey('2')">2</button>
-  <button class="pin-key" onclick="loginPinKey('3')">3</button>
-  <button class="pin-key" onclick="loginPinKey('4')">4</button>
-  <button class="pin-key" onclick="loginPinKey('5')">5</button>
-  <button class="pin-key" onclick="loginPinKey('6')">6</button>
-  <button class="pin-key" onclick="loginPinKey('7')">7</button>
-  <button class="pin-key" onclick="loginPinKey('8')">8</button>
-  <button class="pin-key" onclick="loginPinKey('9')">9</button>
-  <button class="pin-key" onclick="loginSelectUnit('')" style="color:var(--text3);font-size:13px">←</button>
-  <button class="pin-key" onclick="loginPinKey('0')">0</button>
-  <button class="pin-key" onclick="loginPinDelete()" style="color:var(--danger)">⌫</button>
-</div>
-```
-
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
+      <button class="pin-key" onclick="loginPinKey('1')">1</button>
+      <button class="pin-key" onclick="loginPinKey('2')">2</button>
+      <button class="pin-key" onclick="loginPinKey('3')">3</button>
+      <button class="pin-key" onclick="loginPinKey('4')">4</button>
+      <button class="pin-key" onclick="loginPinKey('5')">5</button>
+      <button class="pin-key" onclick="loginPinKey('6')">6</button>
+      <button class="pin-key" onclick="loginPinKey('7')">7</button>
+      <button class="pin-key" onclick="loginPinKey('8')">8</button>
+      <button class="pin-key" onclick="loginPinKey('9')">9</button>
+      <button class="pin-key" onclick="loginSelectUnit('')" style="color:var(--text3);font-size:13px">←</button>
+      <button class="pin-key" onclick="loginPinKey('0')">0</button>
+      <button class="pin-key" onclick="loginPinDelete()" style="color:var(--danger)">⌫</button>
+    </div>
   </div>
 
   <!-- STEP 3: Daily Code -->
-
   <div id="loginStep3" class="login-step" style="display:none;text-align:center">
     <div class="login-logo" style="background:var(--accent2)">2FA</div>
     <div class="login-title">Daily Code</div>
     <div id="loginDailyDate" class="login-sub"></div>
 
-```
-<div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93b4f0;line-height:1.5">
-  Enter today's 4-digit access code<br>
-  <span style="color:#9aa3b8;font-size:11px">Provided by IMP CMDR at morning briefing</span>
-</div>
+    <div style="background:#111827;border:1px solid #2a3a5a;border-radius:8px;padding:12px 16px;margin-bottom:22px;font-size:12px;color:#93b4f0;line-height:1.6">
+      Enter today's 4-digit access code<br>
+      <span style="color:#6b7a99;font-size:11px">Provided by IMP CMDR at morning briefing</span>
+    </div>
 
-<div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
-  <div class="pin-dot" id="dcd1"></div>
-  <div class="pin-dot" id="dcd2"></div>
-  <div class="pin-dot" id="dcd3"></div>
-  <div class="pin-dot" id="dcd4"></div>
-</div>
+    <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
+      <div class="pin-dot" id="dcd1"></div>
+      <div class="pin-dot" id="dcd2"></div>
+      <div class="pin-dot" id="dcd3"></div>
+      <div class="pin-dot" id="dcd4"></div>
+    </div>
 
-<div id="loginDailyError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong code — try again</div>
-<div id="loginDailyAttemptsMsg" style="display:none;color:var(--warn);font-size:11px;margin-bottom:8px"></div>
-<div id="loginDailyLockMsg" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Max attempts reached. Wait 30 min.</div>
+    <div id="loginDailyError" style="display:none;color:#f87171;font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong code — try again</div>
+    <div id="loginDailyAttemptsMsg" style="display:none;color:#fbbf24;font-size:11px;margin-bottom:8px"></div>
+    <div id="loginDailyLockMsg" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Max attempts reached. Wait 30 min.</div>
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
-  <button class="pin-key" onclick="dailyCodeKey('1')">1</button>
-  <button class="pin-key" onclick="dailyCodeKey('2')">2</button>
-  <button class="pin-key" onclick="dailyCodeKey('3')">3</button>
-  <button class="pin-key" onclick="dailyCodeKey('4')">4</button>
-  <button class="pin-key" onclick="dailyCodeKey('5')">5</button>
-  <button class="pin-key" onclick="dailyCodeKey('6')">6</button>
-  <button class="pin-key" onclick="dailyCodeKey('7')">7</button>
-  <button class="pin-key" onclick="dailyCodeKey('8')">8</button>
-  <button class="pin-key" onclick="dailyCodeKey('9')">9</button>
-  <button class="pin-key" onclick="loginSelectUnit('')" style="color:var(--text3);font-size:13px">←</button>
-  <button class="pin-key" onclick="dailyCodeKey('0')">0</button>
-  <button class="pin-key" onclick="dailyCodeDelete()" style="color:var(--danger)">⌫</button>
-</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
+      <button class="pin-key" onclick="dailyCodeKey('1')">1</button>
+      <button class="pin-key" onclick="dailyCodeKey('2')">2</button>
+      <button class="pin-key" onclick="dailyCodeKey('3')">3</button>
+      <button class="pin-key" onclick="dailyCodeKey('4')">4</button>
+      <button class="pin-key" onclick="dailyCodeKey('5')">5</button>
+      <button class="pin-key" onclick="dailyCodeKey('6')">6</button>
+      <button class="pin-key" onclick="dailyCodeKey('7')">7</button>
+      <button class="pin-key" onclick="dailyCodeKey('8')">8</button>
+      <button class="pin-key" onclick="dailyCodeKey('9')">9</button>
+      <button class="pin-key" onclick="loginSelectUnit('')" style="color:#6b7a99;font-size:13px">←</button>
+      <button class="pin-key" onclick="dailyCodeKey('0')">0</button>
+      <button class="pin-key" onclick="dailyCodeDelete()" style="color:#f87171">⌫</button>
+    </div>
 
-<div style="margin-top:18px;font-size:11px;color:#555f72">
-  Code valid until 00:00 local · <span id="loginDailyExpiry"></span>
-</div>
-```
-
+    <div style="margin-top:18px;font-size:11px;color:#4b5563">
+      Code valid until 00:00 local · <span id="loginDailyExpiry" style="color:#6b7a99"></span>
+    </div>
   </div>
 
 </div>
@@ -615,7 +603,6 @@ user-select:none;
 <div id="main">
 
   <!-- VIOLATIONS -->
-
   <div class="tab-content active" id="tab-violations">
     <div class="section-label">Violation Categories</div>
     <div class="filter-row" id="vFilters">
@@ -630,8 +617,8 @@ user-select:none;
     <div id="violationList"></div>
   </div>
 
-  <!-- ACTION TAB -->
 
+  <!-- ACTION TAB -->
   <div class="tab-content" id="tab-procedures">
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('procedures','sub-proc',this)">Procedures</button>
@@ -700,205 +687,201 @@ user-select:none;
       </div>
     </div>
 
-```
-<!-- SIA AIRPORT SUB-TAB -->
-<div class="subcontent" id="sub-airport">
+    <!-- SIA AIRPORT SUB-TAB -->
+    <div class="subcontent" id="sub-airport">
 
-  <!-- QUICK ACTIONS -->
-  <div class="section-label">SIA Quick Access — ADMP Procedures</div>
-  <div class="quick-strip">
-    <div class="quick-btn" onclick="openSIA('dep')" style="color:var(--accent2)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
-      <span class="quick-btn-label">Depart</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('arr')" style="color:var(--ok)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.82 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.93 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      <span class="quick-btn-label">Arrive</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('vip')" style="color:var(--accent)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      <span class="quick-btn-label">VIP</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('ammo')" style="color:var(--danger)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span class="quick-btn-label">Ammo</span>
-    </div>
-    <div class="quick-btn" onclick="open9Liner()" style="color:var(--danger)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      <span class="quick-btn-label">9-Liner</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('medevac')" style="color:var(--danger)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span class="quick-btn-label">MEDEVAC</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('delay')" style="color:var(--warn)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span class="quick-btn-label">Delay</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('redpass')" style="color:#b91c1c">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>
-      <span class="quick-btn-label">Red Pass</span>
-    </div>
-    <div class="quick-btn" onclick="openSIA('items')" style="color:var(--text2)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span class="quick-btn-label">Items</span>
-    </div>
-  </div>
-
-  <!-- SIA PROCEDURE CARDS (rendered by JS) -->
-  <div class="section-label">Step-by-Step — ADMP Duties</div>
-  <div id="siaList"></div>
-
-  <!-- RED PASS TRACKER -->
-  <div class="section-label mt12">Red Pass Tracker</div>
-  <div class="contact-full" style="margin-bottom:12px">
-    <div style="padding:12px 14px">
-      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">EUFOR ID collected as collateral when issuing Red Pass (SOP 3945)</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px">
-        <input id="rpName" placeholder="Last name, First" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
-        <input id="rpUnit" placeholder="Unit / Nation" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
-        <button onclick="issueRedPass()" style="background:var(--danger);border:none;border-radius:6px;padding:8px 14px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body);white-space:nowrap">+ Issue</button>
+      <!-- QUICK ACTIONS -->
+      <div class="section-label">SIA Quick Access — ADMP Procedures</div>
+      <div class="quick-strip">
+        <div class="quick-btn" onclick="openSIA('dep')" style="color:var(--accent2)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          <span class="quick-btn-label">Depart</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('arr')" style="color:var(--ok)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.82 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.93 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span class="quick-btn-label">Arrive</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('vip')" style="color:var(--accent)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="quick-btn-label">VIP</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('ammo')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span class="quick-btn-label">Ammo</span>
+        </div>
+        <div class="quick-btn" onclick="open9Liner()" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span class="quick-btn-label">9-Liner</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('medevac')" style="color:var(--danger)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span class="quick-btn-label">MEDEVAC</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('delay')" style="color:var(--warn)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="quick-btn-label">Delay</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('redpass')" style="color:#b91c1c">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>
+          <span class="quick-btn-label">Red Pass</span>
+        </div>
+        <div class="quick-btn" onclick="openSIA('items')" style="color:var(--text2)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="quick-btn-label">Items</span>
+        </div>
       </div>
-      <div id="rpList"></div>
+
+      <!-- SIA PROCEDURE CARDS (rendered by JS) -->
+      <div class="section-label">Step-by-Step — ADMP Duties</div>
+      <div id="siaList"></div>
+
+      <!-- RED PASS TRACKER -->
+      <div class="section-label mt12">Red Pass Tracker</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div style="padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">EUFOR ID collected as collateral when issuing Red Pass (SOP 3945)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:8px">
+            <input id="rpName" placeholder="Last name, First" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
+            <input id="rpUnit" placeholder="Unit / Nation" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--body);font-size:13px;outline:none">
+            <button onclick="issueRedPass()" style="background:var(--danger);border:none;border-radius:6px;padding:8px 14px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body);white-space:nowrap">+ Issue</button>
+          </div>
+          <div id="rpList"></div>
+        </div>
+      </div>
+
+      <!-- ADMP STAFFING -->
+      <div class="section-label mt12">ADMP Staffing Requirements</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div class="contact-row"><span class="contact-row-label">Any flight (minimum)</span><span class="contact-row-num" style="color:var(--ok)">3 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">VIP / DV flight</span><span class="contact-row-num" style="color:var(--warn)">3–5 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">Commercial VIP flight</span><span class="contact-row-num" style="color:var(--accent)">2 ADMP</span></div>
+        <div class="contact-row"><span class="contact-row-label">ADMP at terminal — 2h before departure</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Required</span></div>
+        <div class="contact-row"><span class="contact-row-label">VIP greeting party at E7 gate</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 5 vehicles / 7 persons</span></div>
+        <div class="contact-row"><span class="contact-row-label">Persons at aircraft (VIP disembark)</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 2 persons</span></div>
+      </div>
+
+      <!-- SIA KEY CONTACTS -->
+      <div class="section-label mt12">SIA Key Contacts</div>
+      <div class="contact-full">
+        <div class="contact-row"><span class="contact-row-label">ALS (Airport Liaison Specialist)</span><span class="contact-row-call">On-call</span><span class="contact-row-num">061 206 134</span></div>
+        <div class="contact-row"><span class="contact-row-label">ALS Office (weekdays)</span><span class="contact-row-call">0800–1630</span><span class="contact-row-num">061 206 134</span></div>
+        <div class="contact-row"><span class="contact-row-label">ADMP Commander (SIA)</span><span class="contact-row-call">IPN 5782</span><span class="contact-row-num">+387 61 139 603</span></div>
+        <div class="contact-row"><span class="contact-row-label">IMP Duty</span><span class="contact-row-call">IPN 5783</span><span class="contact-row-num">+387 62 337 661</span></div>
+        <div class="contact-row"><span class="contact-row-label">LOG MOV Officer</span><span class="contact-row-call">Bldg 200</span><span class="contact-row-num">Via JOC</span></div>
+      </div>
+    </div><!-- end sub-airport -->
+
+    <div class="subcontent" id="sub-dtree">
+      <div style="padding:10px 14px 4px;font-size:12px;color:var(--text3);line-height:1.5;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px">
+        <strong style="color:var(--text2)">Decision Trees</strong> — interaktywne narzędzia decyzyjne. Wybieraj odpowiedzi lub wpisuj wartości, by uzyskać konkretną kwalifikację i listę działań.
+      </div>
+      <div id="dtreeList"></div>
     </div>
-  </div>
 
-  <!-- ADMP STAFFING -->
-  <div class="section-label mt12">ADMP Staffing Requirements</div>
-  <div class="contact-full" style="margin-bottom:12px">
-    <div class="contact-row"><span class="contact-row-label">Any flight (minimum)</span><span class="contact-row-num" style="color:var(--ok)">3 ADMP</span></div>
-    <div class="contact-row"><span class="contact-row-label">VIP / DV flight</span><span class="contact-row-num" style="color:var(--warn)">3–5 ADMP</span></div>
-    <div class="contact-row"><span class="contact-row-label">Commercial VIP flight</span><span class="contact-row-num" style="color:var(--accent)">2 ADMP</span></div>
-    <div class="contact-row"><span class="contact-row-label">ADMP at terminal — 2h before departure</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Required</span></div>
-    <div class="contact-row"><span class="contact-row-label">VIP greeting party at E7 gate</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 5 vehicles / 7 persons</span></div>
-    <div class="contact-row"><span class="contact-row-label">Persons at aircraft (VIP disembark)</span><span class="contact-row-num" style="color:var(--text2);font-size:11px">Max 2 persons</span></div>
-  </div>
+    <div class="subcontent" id="sub-reports">
+      <div class="section-label">🇵🇱 Polish Chain — DORSZ</div>
 
-  <!-- SIA KEY CONTACTS -->
-  <div class="section-label mt12">SIA Key Contacts</div>
-  <div class="contact-full">
-    <div class="contact-row"><span class="contact-row-label">ALS (Airport Liaison Specialist)</span><span class="contact-row-call">On-call</span><span class="contact-row-num">061 206 134</span></div>
-    <div class="contact-row"><span class="contact-row-label">ALS Office (weekdays)</span><span class="contact-row-call">0800–1630</span><span class="contact-row-num">061 206 134</span></div>
-    <div class="contact-row"><span class="contact-row-label">ADMP Commander (SIA)</span><span class="contact-row-call">IPN 5782</span><span class="contact-row-num">+387 61 139 603</span></div>
-    <div class="contact-row"><span class="contact-row-label">IMP Duty</span><span class="contact-row-call">IPN 5783</span><span class="contact-row-num">+387 62 337 661</span></div>
-    <div class="contact-row"><span class="contact-row-label">LOG MOV Officer</span><span class="contact-row-call">Bldg 200</span><span class="contact-row-num">Via JOC</span></div>
-  </div>
-</div><!-- end sub-airport -->
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:#e8a020"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:#e8a020">Every Monday</div>
+          <div class="report-day-title">Informacja Tygodniowa</div>
+          <div class="report-day-chain">IMP → NSE PL → DORSZ</div>
+        </div>
+        <div class="report-day-time" style="color:#e8a020">08:00</div>
+      </div>
 
-<div class="subcontent" id="sub-dtree">
-  <div style="padding:10px 14px 4px;font-size:12px;color:var(--text3);line-height:1.5;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px">
-    <strong style="color:var(--text2)">Decision Trees</strong> — interaktywne narzędzia decyzyjne. Wybieraj odpowiedzi lub wpisuj wartości, by uzyskać konkretną kwalifikację i listę działań.
-  </div>
-  <div id="dtreeList"></div>
-</div>
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:#3a7bd5"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:#3a7bd5">Every Thursday</div>
+          <div class="report-day-title">Wstawka do Meldunku NSE</div>
+          <div class="report-day-chain">IMP → NSE PL → Dowództwo Operacyjne SZ (DORSZ)</div>
+        </div>
+        <div class="report-day-time" style="color:#3a7bd5">routine</div>
+      </div>
 
-<div class="subcontent" id="sub-reports">
-  <div class="section-label">🇵🇱 Polish Chain — DORSZ</div>
+      <div class="section-label mt8">EUFOR / IMP Chain</div>
 
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:#e8a020"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:#e8a020">Every Monday</div>
-      <div class="report-day-title">Informacja Tygodniowa</div>
-      <div class="report-day-chain">IMP → NSE PL → DORSZ</div>
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--danger)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--danger)">After Incident</div>
+          <div class="report-day-title">IMP Report</div>
+          <div class="report-day-chain">SNR + Branch Chief + FPM</div>
+        </div>
+        <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--warn)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--warn)">Every Incident</div>
+          <div class="report-day-title">DOB Entry</div>
+          <div class="report-day-chain">Daily Occurrence Book</div>
+        </div>
+        <div class="report-day-time" style="color:var(--warn);font-size:10px">SAME DAY</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--ok)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--ok)">Weekly</div>
+          <div class="report-day-title">Weekly Update Report (WUR)</div>
+          <div class="report-day-chain">IMP → JOC → HQ EUFOR</div>
+        </div>
+        <div class="report-day-time" style="color:var(--ok);font-size:10px">WEEKLY</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--warn)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--warn)">Parking Warning</div>
+          <div class="report-day-title">Driver Follow-up</div>
+          <div class="report-day-chain">Driver must report to IMP Station</div>
+        </div>
+        <div class="report-day-time" style="color:var(--warn);font-size:10px">48h</div>
+      </div>
+
+      <div class="report-day-card">
+        <div class="report-day-bar" style="background:var(--danger)"></div>
+        <div class="report-day-content">
+          <div class="report-day-label" style="color:var(--danger)">DUI Confirmed</div>
+          <div class="report-day-title">Breath Test Result</div>
+          <div class="report-day-chain">SNR/Branch Chief + FPM + HQ CAMP CMDT</div>
+        </div>
+        <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
+      </div>
+
+      <div class="section-label mt8">DOB Entry Format — Annex D SOP 3927</div>
+      <div class="contact-full">
+        <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.9;font-family:var(--mono)">
+          DOB# _______ / YEAR ___________<br>
+          FROM: __________  TO: _________<br>
+          IMP DUTY: [Rank] [Name], [Nation]<br>
+          ─────────────────────────────<br>
+          ENTRY TYPE: ________________<br>
+          ENTRY TIME: ________________<br>
+          <span style="color:var(--text3)">— Description —</span><br>
+          Date / Time: _______________<br>
+          Location: __________________<br>
+          Person: [Name] [Rank] [Unit]<br>
+          ID Number: _________________<br>
+          Violation / Incident: _______<br>
+          Action taken: ______________<br>
+          Warning: YES / NO<br>
+          Report: MPR / TVR / PVR / NONE<br>
+          SNR notified: YES / NO<br>
+          FPM notified: YES / NO<br>
+          Result: NSTR / [description]<br>
+          ─────────────────────────────<br>
+          TAKING OVER IMP DUTY: _______
+        </div>
+      </div>
     </div>
-    <div class="report-day-time" style="color:#e8a020">08:00</div>
-  </div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:#3a7bd5"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:#3a7bd5">Every Thursday</div>
-      <div class="report-day-title">Wstawka do Meldunku NSE</div>
-      <div class="report-day-chain">IMP → NSE PL → Dowództwo Operacyjne SZ (DORSZ)</div>
-    </div>
-    <div class="report-day-time" style="color:#3a7bd5">routine</div>
-  </div>
-
-  <div class="section-label mt8">EUFOR / IMP Chain</div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:var(--danger)"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:var(--danger)">After Incident</div>
-      <div class="report-day-title">IMP Report</div>
-      <div class="report-day-chain">SNR + Branch Chief + FPM</div>
-    </div>
-    <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
-  </div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:var(--warn)"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:var(--warn)">Every Incident</div>
-      <div class="report-day-title">DOB Entry</div>
-      <div class="report-day-chain">Daily Occurrence Book</div>
-    </div>
-    <div class="report-day-time" style="color:var(--warn);font-size:10px">SAME DAY</div>
-  </div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:var(--ok)"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:var(--ok)">Weekly</div>
-      <div class="report-day-title">Weekly Update Report (WUR)</div>
-      <div class="report-day-chain">IMP → JOC → HQ EUFOR</div>
-    </div>
-    <div class="report-day-time" style="color:var(--ok);font-size:10px">WEEKLY</div>
-  </div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:var(--warn)"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:var(--warn)">Parking Warning</div>
-      <div class="report-day-title">Driver Follow-up</div>
-      <div class="report-day-chain">Driver must report to IMP Station</div>
-    </div>
-    <div class="report-day-time" style="color:var(--warn);font-size:10px">48h</div>
-  </div>
-
-  <div class="report-day-card">
-    <div class="report-day-bar" style="background:var(--danger)"></div>
-    <div class="report-day-content">
-      <div class="report-day-label" style="color:var(--danger)">DUI Confirmed</div>
-      <div class="report-day-title">Breath Test Result</div>
-      <div class="report-day-chain">SNR/Branch Chief + FPM + HQ CAMP CMDT</div>
-    </div>
-    <div class="report-day-time" style="color:var(--danger);font-size:10px">IMMEDIATE</div>
-  </div>
-
-  <div class="section-label mt8">DOB Entry Format — Annex D SOP 3927</div>
-  <div class="contact-full">
-    <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.9;font-family:var(--mono)">
-      DOB# _______ / YEAR ___________<br>
-      FROM: __________  TO: _________<br>
-      IMP DUTY: [Rank] [Name], [Nation]<br>
-      ─────────────────────────────<br>
-      ENTRY TYPE: ________________<br>
-      ENTRY TIME: ________________<br>
-      <span style="color:var(--text3)">— Description —</span><br>
-      Date / Time: _______________<br>
-      Location: __________________<br>
-      Person: [Name] [Rank] [Unit]<br>
-      ID Number: _________________<br>
-      Violation / Incident: _______<br>
-      Action taken: ______________<br>
-      Warning: YES / NO<br>
-      Report: MPR / TVR / PVR / NONE<br>
-      SNR notified: YES / NO<br>
-      FPM notified: YES / NO<br>
-      Result: NSTR / [description]<br>
-      ─────────────────────────────<br>
-      TAKING OVER IMP DUTY: _______
-    </div>
-  </div>
-</div>
-```
-
   </div>
 
   <!-- CONTACTS -->
-
   <div class="tab-content" id="tab-contacts">
     <div class="section-label">Emergency — Dial 033 49 5000 + EXT</div>
     <div class="contact-grid">
@@ -979,7 +962,6 @@ user-select:none;
   </div>
 
   <!-- MAP -->
-
   <div class="tab-content" id="tab-map">
     <div class="map-info-bar">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -1009,7 +991,6 @@ user-select:none;
   </div>
 
   <!-- REFS TAB -->
-
   <div class="tab-content" id="tab-refs">
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('refs','sub-sop',this)">SOP</button>
@@ -1017,151 +998,147 @@ user-select:none;
       <button class="subnav-btn" onclick="switchSub('refs','sub-convoy',this)">Convoy</button>
     </div>
 
-```
-<!-- SOP sub-tab -->
-<div class="subcontent active" id="sub-sop">
-  <div class="search-bar">
-    <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-    <input type="text" id="refSearch" placeholder="Search SOP rules, reports, procedures…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
-  </div>
-
-  <div class="sop-banner sop-banner-3901">
-    <div class="sop-banner-inner">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <div>
-        <div class="sop-banner-num">SOP 3901</div>
-        <div class="sop-banner-title">Conduct, Appearance &amp; Discipline</div>
+    <!-- SOP sub-tab -->
+    <div class="subcontent active" id="sub-sop">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="refSearch" placeholder="Search SOP rules, reports, procedures…" oninput="filterRefs(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
       </div>
-      <div class="sop-banner-watermark">3901</div>
-    </div>
-  </div>
-  <div id="refList"></div>
 
-  <div class="sop-banner sop-banner-3927">
-    <div class="sop-banner-inner">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <div>
-        <div class="sop-banner-num">SOP 3927</div>
-        <div class="sop-banner-title">IMP Detachment — Reports &amp; Authority</div>
+      <div class="sop-banner sop-banner-3901">
+        <div class="sop-banner-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <div class="sop-banner-num">SOP 3901</div>
+            <div class="sop-banner-title">Conduct, Appearance &amp; Discipline</div>
+          </div>
+          <div class="sop-banner-watermark">3901</div>
+        </div>
       </div>
-      <div class="sop-banner-watermark">3927</div>
-    </div>
-  </div>
-  <div id="refList3927"></div>
+      <div id="refList"></div>
 
-  <div class="sop-banner sop-banner-6240">
-    <div class="sop-banner-inner">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      <div>
-        <div class="sop-banner-num">SOP 6240</div>
-        <div class="sop-banner-title">Movement, Convoys &amp; SIA Airport</div>
+      <div class="sop-banner sop-banner-3927">
+        <div class="sop-banner-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <div>
+            <div class="sop-banner-num">SOP 3927</div>
+            <div class="sop-banner-title">IMP Detachment — Reports &amp; Authority</div>
+          </div>
+          <div class="sop-banner-watermark">3927</div>
+        </div>
       </div>
-      <div class="sop-banner-watermark">6240</div>
-    </div>
-  </div>
-  <div id="refList6240"></div>
-</div>
+      <div id="refList3927"></div>
 
-<!-- Routes sub-tab -->
-<div class="subcontent" id="sub-routes">
-  <div class="search-bar">
-    <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-    <input type="text" id="routeSearch" placeholder="Route name or town…" oninput="filterRoutes(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
-  </div>
-  <div class="filter-row" id="routeFilters">
-    <span class="filter-chip active" data-rfilter="all">All</span>
-    <span class="filter-chip" data-rfilter="main">Main</span>
-    <span class="filter-chip" data-rfilter="secondary">Secondary</span>
-    <span class="filter-chip" data-rfilter="loc">LOC</span>
-    <span class="filter-chip" data-rfilter="tactical">Tactical</span>
-  </div>
-  <div id="routeList"></div>
-</div>
-
-<!-- Convoy sub-tab -->
-<div class="subcontent" id="sub-convoy">
-  <!-- CCN DECODER -->
-  <div class="section-label">CCN Decoder — Convoy Credit Number</div>
-  <div class="contact-full" style="margin-bottom:12px">
-    <div style="padding:12px 14px">
-      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">FORMAT: DD/EUFOR/SN/SP/NAT/VEH</div>
-      <div style="display:flex;gap:8px;margin-bottom:10px">
-        <input id="ccnInput" placeholder="e.g. 01/EUFOR/01/B/POL/03" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;outline:none;letter-spacing:1px" oninput="decodeCCN(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button onclick="document.getElementById('ccnInput').value='';document.getElementById('ccnResult').innerHTML=''" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text3);cursor:pointer;font-size:13px;font-family:var(--body)">Clear</button>
+      <div class="sop-banner sop-banner-6240">
+        <div class="sop-banner-inner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div>
+            <div class="sop-banner-num">SOP 6240</div>
+            <div class="sop-banner-title">Movement, Convoys &amp; SIA Airport</div>
+          </div>
+          <div class="sop-banner-watermark">6240</div>
+        </div>
       </div>
-      <div id="ccnResult"></div>
+      <div id="refList6240"></div>
     </div>
-  </div>
 
-  <!-- CONVOY QUICK REF -->
-  <div class="section-label">Convoy Rules — Quick Reference</div>
-  <div class="contact-full" style="margin-bottom:12px">
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY DEFINITION</div>
-      <div style="font-size:13px;color:var(--text2)">≥ 7 vehicles = convoy. LOG MOV Officer (Cell) controls all convoys of 7+ vehicles, border crossings, tactical moves, oversized vehicles, ammo/explosives.</div>
+    <!-- Routes sub-tab -->
+    <div class="subcontent" id="sub-routes">
+      <div class="search-bar">
+        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="routeSearch" placeholder="Route name or town…" oninput="filterRoutes(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="filter-row" id="routeFilters">
+        <span class="filter-chip active" data-rfilter="all">All</span>
+        <span class="filter-chip" data-rfilter="main">Main</span>
+        <span class="filter-chip" data-rfilter="secondary">Secondary</span>
+        <span class="filter-chip" data-rfilter="loc">LOC</span>
+        <span class="filter-chip" data-rfilter="tactical">Tactical</span>
+      </div>
+      <div id="routeList"></div>
     </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">MOVEMENT REQUEST DEADLINES</div>
-      <div style="font-size:13px;color:var(--text2)"><strong>Within AOO:</strong> 36 hours in advance to LOG MOV Officer.<br><strong>Cross-border:</strong> 3 working days in advance.<br><strong>Emergency:</strong> by 1800hrs day before minimum.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY SIZE LIMITS</div>
-      <div style="font-size:13px;color:var(--text2)">Max 15 vehicles per packet. Convoys ≥16 vehicles: break into packets ≤15, release interval 15 min between packets. Multiple convoys same SP: 60 min between convoys.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CCN ON VEHICLES</div>
-      <div style="font-size:13px;color:var(--text2)">CCN must be displayed on both sides of leading vehicle AND front and back of trailing vehicle. IMP verifies during escort and on-camp checks.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">DELAY ≥ 30 MIN</div>
-      <div style="font-size:13px;color:var(--text2)">Convoy Commander MUST immediately notify LOG MOV Officer (Cell) to obtain amended start time. LOG MOV notifies border control elements.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">VEHICLE BREAKDOWN IN CONVOY</div>
-      <div style="font-size:13px;color:var(--text2)">Column does NOT halt for single breakdown. Broken down vehicle: yellow flag + warning triangle + flasher lights. Driver stays with vehicle. Same-unit vehicles attempt recovery first. Recovery at rear of convoy.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">OVERSIZED VEHICLES</div>
-      <div style="font-size:13px;color:var(--text2)">Width &gt;2.60m / Length &gt;16.50m / Height &gt;4.00m / Weight &gt;MLC 40 = oversized. Requires LOG MOV approval regardless of convoy size.</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">IMP ESCORT TRIGGERS</div>
-      <div style="font-size:13px;color:var(--text2)">IMP escort required when specified in Movement Request. Always required for: ammo/explosives convoys, VIP moves, fuel trucks, media personnel in coord with PAO. Request via FPM Office in advance (emergencies excepted).</div>
-    </div>
-    <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
-      <div style="font-weight:700;font-size:12px;color:var(--danger);font-family:var(--mono)">TECHNICAL HALTS</div>
-      <div style="font-size:13px;color:var(--text2)">Technical Halt (TH) every ~2 hours. Rest Halt (RH) after ~8 hours strongly recommended.</div>
-    </div>
-  </div>
 
-  <!-- MOVEMENT REQUEST FIELDS -->
-  <div class="section-label">Movement Request — Required Fields</div>
-  <div class="contact-full">
-    <div style="padding:10px 14px;font-size:12px;color:var(--text2);line-height:2;font-family:var(--mono)">
-      (1) Date of Movement<br>
-      (2) Unit moving (e.g. MNBN/A-COY)<br>
-      (3) Reason: Tactical / Operational / Routine<br>
-      (4) Number of Vehicles<br>
-      (5) Start Point (SP) — name of origin<br>
-      (6) Estimated Time of Departure (ETD)<br>
-      (7) Convoy Route — route code names<br>
-      (8) Border Crossing Points (BXPs) if applicable<br>
-      (9) ETA at BXPs<br>
-      (10) Final Destination<br>
-      (11) ETA at Final Destination<br>
-      (12) Return Details (if same-day)<br>
-      (13) Oversized Vehicles — W/H/L/Weight<br>
-      (14) Remarks: MP escort needed? Croatian police? TCC responsible for co-ord?<br>
-      (15) If &gt;15 vehicles: vehicles per packet
-    </div>
-  </div>
-</div>
-```
+    <!-- Convoy sub-tab -->
+    <div class="subcontent" id="sub-convoy">
+      <!-- CCN DECODER -->
+      <div class="section-label">CCN Decoder — Convoy Credit Number</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div style="padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:.5px">FORMAT: DD/EUFOR/SN/SP/NAT/VEH</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <input id="ccnInput" placeholder="e.g. 01/EUFOR/01/B/POL/03" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;outline:none;letter-spacing:1px" oninput="decodeCCN(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+            <button onclick="document.getElementById('ccnInput').value='';document.getElementById('ccnResult').innerHTML=''" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text3);cursor:pointer;font-size:13px;font-family:var(--body)">Clear</button>
+          </div>
+          <div id="ccnResult"></div>
+        </div>
+      </div>
 
+      <!-- CONVOY QUICK REF -->
+      <div class="section-label">Convoy Rules — Quick Reference</div>
+      <div class="contact-full" style="margin-bottom:12px">
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY DEFINITION</div>
+          <div style="font-size:13px;color:var(--text2)">≥ 7 vehicles = convoy. LOG MOV Officer (Cell) controls all convoys of 7+ vehicles, border crossings, tactical moves, oversized vehicles, ammo/explosives.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">MOVEMENT REQUEST DEADLINES</div>
+          <div style="font-size:13px;color:var(--text2)"><strong>Within AOO:</strong> 36 hours in advance to LOG MOV Officer.<br><strong>Cross-border:</strong> 3 working days in advance.<br><strong>Emergency:</strong> by 1800hrs day before minimum.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CONVOY SIZE LIMITS</div>
+          <div style="font-size:13px;color:var(--text2)">Max 15 vehicles per packet. Convoys ≥16 vehicles: break into packets ≤15, release interval 15 min between packets. Multiple convoys same SP: 60 min between convoys.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">CCN ON VEHICLES</div>
+          <div style="font-size:13px;color:var(--text2)">CCN must be displayed on both sides of leading vehicle AND front and back of trailing vehicle. IMP verifies during escort and on-camp checks.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">DELAY ≥ 30 MIN</div>
+          <div style="font-size:13px;color:var(--text2)">Convoy Commander MUST immediately notify LOG MOV Officer (Cell) to obtain amended start time. LOG MOV notifies border control elements.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">VEHICLE BREAKDOWN IN CONVOY</div>
+          <div style="font-size:13px;color:var(--text2)">Column does NOT halt for single breakdown. Broken down vehicle: yellow flag + warning triangle + flasher lights. Driver stays with vehicle. Same-unit vehicles attempt recovery first. Recovery at rear of convoy.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">OVERSIZED VEHICLES</div>
+          <div style="font-size:13px;color:var(--text2)">Width &gt;2.60m / Length &gt;16.50m / Height &gt;4.00m / Weight &gt;MLC 40 = oversized. Requires LOG MOV approval regardless of convoy size.</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--accent);font-family:var(--mono)">IMP ESCORT TRIGGERS</div>
+          <div style="font-size:13px;color:var(--text2)">IMP escort required when specified in Movement Request. Always required for: ammo/explosives convoys, VIP moves, fuel trucks, media personnel in coord with PAO. Request via FPM Office in advance (emergencies excepted).</div>
+        </div>
+        <div class="contact-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+          <div style="font-weight:700;font-size:12px;color:var(--danger);font-family:var(--mono)">TECHNICAL HALTS</div>
+          <div style="font-size:13px;color:var(--text2)">Technical Halt (TH) every ~2 hours. Rest Halt (RH) after ~8 hours strongly recommended.</div>
+        </div>
+      </div>
+
+      <!-- MOVEMENT REQUEST FIELDS -->
+      <div class="section-label">Movement Request — Required Fields</div>
+      <div class="contact-full">
+        <div style="padding:10px 14px;font-size:12px;color:var(--text2);line-height:2;font-family:var(--mono)">
+          (1) Date of Movement<br>
+          (2) Unit moving (e.g. MNBN/A-COY)<br>
+          (3) Reason: Tactical / Operational / Routine<br>
+          (4) Number of Vehicles<br>
+          (5) Start Point (SP) — name of origin<br>
+          (6) Estimated Time of Departure (ETD)<br>
+          (7) Convoy Route — route code names<br>
+          (8) Border Crossing Points (BXPs) if applicable<br>
+          (9) ETA at BXPs<br>
+          (10) Final Destination<br>
+          (11) ETA at Final Destination<br>
+          (12) Return Details (if same-day)<br>
+          (13) Oversized Vehicles — W/H/L/Weight<br>
+          (14) Remarks: MP escort needed? Croatian police? TCC responsible for co-ord?<br>
+          (15) If &gt;15 vehicles: vehicles per packet
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- CODES TAB -->
-
   <div class="tab-content" id="tab-acronyms">
     <div class="subnav">
       <button class="subnav-btn active" onclick="switchSub('acronyms','sub-acro',this)">Acronyms</button>
@@ -1186,19 +1163,15 @@ user-select:none;
       <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:12px">Format: <strong style="color:var(--accent)">A</strong> = Embassy &nbsp;|&nbsp; <strong style="color:var(--accent)">M</strong> = Mission.</span></div>
     </div>
 
-```
-<!-- RANKS -->
-<div class="subcontent" id="sub-ranks">
-  <div class="section-label">Ranks in EUFOR</div>
-  <div id="rankCountryBtns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-  <div id="rankDisplay"></div>
-</div>
-```
-
+    <!-- RANKS -->
+    <div class="subcontent" id="sub-ranks">
+      <div class="section-label">Ranks in EUFOR</div>
+      <div id="rankCountryBtns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+      <div id="rankDisplay"></div>
+    </div>
   </div>
 
   <!-- ROSTER TAB -->
-
   <div class="tab-content" id="tab-roster">
     <div class="roster-week-nav">
       <button class="roster-nav-btn" onclick="changeRosterWeek(-1)">
@@ -1220,7 +1193,6 @@ user-select:none;
 </div><!-- /main -->
 
 <!-- ROSTER EDIT MODAL (Admin only) -->
-
 <div class="roster-modal" id="rosterEditModal" onclick="if(event.target===this)closeRosterEdit()">
   <div class="roster-modal-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -1246,7 +1218,6 @@ user-select:none;
 </div>
 
 <!-- BOTTOM NAV -->
-
 <nav id="nav">
   <button class="nav-btn active" data-tab="violations" onclick="switchTab('violations',this)">
     <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -1279,13 +1250,11 @@ user-select:none;
 </nav>
 
 <!-- QUICK ACTION FAB -->
-
 <button class="quick-action-fab" onclick="openQA()" title="Quick Action">
   <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
 </button>
 
 <!-- GLOBAL SEARCH OVERLAY -->
-
 <div class="gsearch-overlay" id="gsearchOverlay">
   <div class="gsearch-bar">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1298,7 +1267,6 @@ user-select:none;
 </div>
 
 <!-- QUICK ACTION MODAL -->
-
 <div class="qa-modal" id="qaModal" onclick="if(event.target===this)closeQA()">
   <div class="qa-sheet">
     <div class="qa-title">
@@ -1336,7 +1304,6 @@ user-select:none;
 </div>
 
 <!-- DUI CALCULATOR MODAL -->
-
 <div class="dui-modal" id="duiModal" onclick="if(event.target===this)closeDUI()">
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -1360,7 +1327,6 @@ user-select:none;
 </div>
 
 <!-- ALARM MODAL -->
-
 <div class="dui-modal" id="alarmModal" onclick="if(event.target===this)closeAlarmModal2()">
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -1385,7 +1351,6 @@ user-select:none;
 </div>
 
 <!-- USER SELECT MODAL -->
-
 <div class="dui-modal" id="userSelectModal" onclick="if(event.target===this)closeUserSelect()">
   <div class="dui-sheet">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -1393,65 +1358,62 @@ user-select:none;
       <button onclick="closeUserSelect()" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">&#x2715;</button>
     </div>
 
-```
-<!-- Step 1: Select unit -->
-<div id="pinStep1">
-  <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Select your unit:</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-    <button onclick="pinSelectUnit('IMP-1')"  class="pin-unit-btn">IMP-1</button>
-    <button onclick="pinSelectUnit('IMP-2')"  class="pin-unit-btn">IMP-2</button>
-    <button onclick="pinSelectUnit('IMP-3')"  class="pin-unit-btn">IMP-3</button>
-    <button onclick="pinSelectUnit('IMP-4')"  class="pin-unit-btn">IMP-4</button>
-    <button onclick="pinSelectUnit('IMP-5')"  class="pin-unit-btn">IMP-5</button>
-    <button onclick="pinSelectUnit('IMP-6')"  class="pin-unit-btn">IMP-6</button>
-    <button onclick="pinSelectUnit('IMP-7')"  class="pin-unit-btn">IMP-7</button>
-    <button onclick="pinSelectUnit('IMP-8')"  class="pin-unit-btn">IMP-8</button>
-    <button onclick="pinSelectUnit('IMP-9')"  class="pin-unit-btn">IMP-9</button>
-    <button onclick="pinSelectUnit('IMP-10')" class="pin-unit-btn">IMP-10</button>
-    <button onclick="pinSelectUnit('IMP-11')" class="pin-unit-btn">IMP-11</button>
-    <button onclick="pinSelectUnit('IMP-12')" class="pin-unit-btn">IMP-12</button>
-    <button onclick="pinSelectUnit('IMP-13')" class="pin-unit-btn">IMP-13</button>
-    <button onclick="pinSelectUnit('IMP-14')" class="pin-unit-btn">IMP-14</button>
-    <button onclick="pinSelectUnit('IMP-15')" class="pin-unit-btn">IMP-15</button>
-  </div>
-</div>
+    <!-- Step 1: Select unit -->
+    <div id="pinStep1">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Select your unit:</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <button onclick="pinSelectUnit('IMP-1')"  class="pin-unit-btn">IMP-1</button>
+        <button onclick="pinSelectUnit('IMP-2')"  class="pin-unit-btn">IMP-2</button>
+        <button onclick="pinSelectUnit('IMP-3')"  class="pin-unit-btn">IMP-3</button>
+        <button onclick="pinSelectUnit('IMP-4')"  class="pin-unit-btn">IMP-4</button>
+        <button onclick="pinSelectUnit('IMP-5')"  class="pin-unit-btn">IMP-5</button>
+        <button onclick="pinSelectUnit('IMP-6')"  class="pin-unit-btn">IMP-6</button>
+        <button onclick="pinSelectUnit('IMP-7')"  class="pin-unit-btn">IMP-7</button>
+        <button onclick="pinSelectUnit('IMP-8')"  class="pin-unit-btn">IMP-8</button>
+        <button onclick="pinSelectUnit('IMP-9')"  class="pin-unit-btn">IMP-9</button>
+        <button onclick="pinSelectUnit('IMP-10')" class="pin-unit-btn">IMP-10</button>
+        <button onclick="pinSelectUnit('IMP-11')" class="pin-unit-btn">IMP-11</button>
+        <button onclick="pinSelectUnit('IMP-12')" class="pin-unit-btn">IMP-12</button>
+        <button onclick="pinSelectUnit('IMP-13')" class="pin-unit-btn">IMP-13</button>
+        <button onclick="pinSelectUnit('IMP-14')" class="pin-unit-btn">IMP-14</button>
+        <button onclick="pinSelectUnit('IMP-15')" class="pin-unit-btn">IMP-15</button>
+      </div>
+    </div>
 
-<!-- Step 2: Enter PIN -->
-<div id="pinStep2" style="display:none">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-    <button onclick="pinBack()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">←</button>
-    <div style="font-weight:700;font-size:15px;color:var(--accent)" id="pinUnitLabel"></div>
-  </div>
-  <div style="font-size:13px;color:var(--text2);margin-bottom:12px;text-align:center">Enter PIN:</div>
+    <!-- Step 2: Enter PIN -->
+    <div id="pinStep2" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <button onclick="pinBack()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">←</button>
+        <div style="font-weight:700;font-size:15px;color:var(--accent)" id="pinUnitLabel"></div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;text-align:center">Enter PIN:</div>
 
-  <!-- PIN display -->
-  <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px">
-    <div class="pin-dot" id="pd1"></div>
-    <div class="pin-dot" id="pd2"></div>
-    <div class="pin-dot" id="pd3"></div>
-    <div class="pin-dot" id="pd4"></div>
-  </div>
+      <!-- PIN display -->
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px">
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd4"></div>
+      </div>
 
-  <!-- PIN error -->
-  <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px">&#x2715; Wrong PIN</div>
+      <!-- PIN error -->
+      <div id="pinError" style="display:none;text-align:center;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:12px">&#x2715; Wrong PIN</div>
 
-  <!-- Numpad -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-    <button class="pin-key" onclick="pinKey('1')">1</button>
-    <button class="pin-key" onclick="pinKey('2')">2</button>
-    <button class="pin-key" onclick="pinKey('3')">3</button>
-    <button class="pin-key" onclick="pinKey('4')">4</button>
-    <button class="pin-key" onclick="pinKey('5')">5</button>
-    <button class="pin-key" onclick="pinKey('6')">6</button>
-    <button class="pin-key" onclick="pinKey('7')">7</button>
-    <button class="pin-key" onclick="pinKey('8')">8</button>
-    <button class="pin-key" onclick="pinKey('9')">9</button>
-    <button class="pin-key" onclick="pinKey('0')" style="grid-column:2">0</button>
-    <button class="pin-key" onclick="pinDelete()" style="color:var(--danger)">⌫</button>
-  </div>
-</div>
-```
-
+      <!-- Numpad -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key" onclick="pinKey('0')" style="grid-column:2">0</button>
+        <button class="pin-key" onclick="pinDelete()" style="color:var(--danger)">⌫</button>
+      </div>
+    </div>
   </div>
 </div>
 <div class="log-modal" id="logModal">
@@ -1568,7 +1530,6 @@ user-select:none;
 </div>
 
 <!-- ALERT MODAL -->
-
 <div class="modal-overlay" id="alertModal" onclick="if(event.target===this)closeAlertModal()">
   <div class="modal-sheet">
     <div class="modal-title">Alert States — Camp Butmir <button class="modal-close" onclick="closeAlertModal()">&#x2715;</button></div>
@@ -1578,64 +1539,62 @@ user-select:none;
       <button id="atab-delta" onclick="switchAlertTab('delta')" style="flex:1;padding:10px 4px;background:#fee2e2;border:none;color:var(--danger);font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body);letter-spacing:1px">DELTA</button>
     </div>
 
-```
-<div id="acontent-bravo" class="alert-tab-content">
-  <div class="alert-row a-bravo">
-    <div class="alert-row-title">BRAVO</div>
-    <div class="alert-row-text">All personnel comply with Dress/Weapon Code, Vehicle movement code, Walking out code.</div>
-    <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-      <div style="font-size:10px;font-weight:700;color:#4caf50;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-      <div style="font-size:12px;color:var(--text2)">• Conduct regular patrols inside and around the base ICCW HQ CAMP CMDT.</div>
+    <div id="acontent-bravo" class="alert-tab-content">
+      <div class="alert-row a-bravo">
+        <div class="alert-row-title">BRAVO</div>
+        <div class="alert-row-text">All personnel comply with Dress/Weapon Code, Vehicle movement code, Walking out code.</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:#4caf50;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2)">• Conduct regular patrols inside and around the base ICCW HQ CAMP CMDT.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="acontent-charlie" class="alert-tab-content" style="display:none">
+      <div class="alert-row a-charlie">
+        <div class="alert-row-title">CHARLIE</div>
+        <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure if Main gate closed.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office and close public parking area IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--warn)">60 minutes</strong>.<br>• Limit non-essential activities outside Camp Butmir.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="acontent-delta" class="alert-tab-content" style="display:none">
+      <div class="alert-row a-delta">
+        <div class="alert-row-title">DELTA</div>
+        <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure — Main gate closed.</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office, close public parking IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.<br>• Request surveillance by UAV from MNBN assets (if required).</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">MNBN COM will:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Send MNBN LNO to HQ CMDT TOC.<br>• Activate CB protection IAW plan in Annex G.<br>• Provide UAV from MNBN assets (if required).</div>
+          <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--danger)">60 minutes</strong>.<br>• EUFOR/NHQ Sa civilian staff follow orders of branch chiefs.<br>• Local civilian staff informed through HQ CAMP CMDT TOC.<br>• Limit all non-essential activities outside Camp Butmir.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:13px;color:var(--text2)">Siren: 20s continuous / 20s wavering / 10s continuous — take next bunker, follow JOC orders.</span></div>
+    <div class="rule-item mt4"><span class="rule-bullet">›</span><span style="font-size:12px;color:var(--text3)">Reference: SOP 3929 · Camp Butmir Defence Plan Annex D (14 Feb 2025)</span></div>
+    <div id="adminAlertControls" style="display:none">
+      <div class="section-label mt8">Set Active Alert</div>
+      <div class="alert-set-row">
+        <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#dcfce7;border:1.5px solid #86efac;color:#15803d">BRAVO</button>
+        <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#fef3c7;border:1.5px solid #fcd34d;color:var(--warn)">CHARLIE</button>
+        <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#fee2e2;border:1.5px solid #fca5a5;color:var(--danger)">DELTA</button>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="acontent-charlie" class="alert-tab-content" style="display:none">
-  <div class="alert-row a-charlie">
-    <div class="alert-row-title">CHARLIE</div>
-    <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code, Walking out code. <strong style="color:var(--warn)">Activities outside CB limited to duty only.</strong></div>
-    <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-      <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure if Main gate closed.</div>
-      <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office and close public parking area IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.</div>
-      <div style="font-size:10px;font-weight:700;color:var(--warn);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--warn)">60 minutes</strong>.<br>• Limit non-essential activities outside Camp Butmir.</div>
-    </div>
-  </div>
-</div>
-
-<div id="acontent-delta" class="alert-tab-content" style="display:none">
-  <div class="alert-row a-delta">
-    <div class="alert-row-title">DELTA</div>
-    <div class="alert-row-text">Dress/Weapon Code, Vehicle movement code. <strong style="color:var(--danger)">NO walking out.</strong></div>
-    <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)">
-      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">IMP will:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Increase patrolling as requested by HQ CAMP CMDT via FPM Office.<br>• Implement Alternate gate procedure — Main gate closed.</div>
-      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">HQ CAMP CMDT will:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Notify JOC on alert state change for FPG.<br>• Establish HQ CAMP CMDT TOC.<br>• Request JOC to activate MNBN units to reinforce protection CB.<br>• Evacuate Claims Office, close public parking IVO Claim Office.<br>• Evacuate German NSE to Camp Butmir.<br>• Request surveillance by UAV from MNBN assets (if required).</div>
-      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">MNBN COM will:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Send MNBN LNO to HQ CMDT TOC.<br>• Activate CB protection IAW plan in Annex G.<br>• Provide UAV from MNBN assets (if required).</div>
-      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1px;text-transform:uppercase;margin:8px 0 5px">All personnel:</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.7">• Comply with Dress/Weapon/Vehicle/Walking out codes.<br>• Direct change G→J/K: fully equipped within <strong style="color:var(--danger)">60 minutes</strong>.<br>• EUFOR/NHQ Sa civilian staff follow orders of branch chiefs.<br>• Local civilian staff informed through HQ CAMP CMDT TOC.<br>• Limit all non-essential activities outside Camp Butmir.</div>
-    </div>
-  </div>
-</div>
-
-<div class="rule-item mt8"><span class="rule-bullet">›</span><span style="font-size:13px;color:var(--text2)">Siren: 20s continuous / 20s wavering / 10s continuous — take next bunker, follow JOC orders.</span></div>
-<div class="rule-item mt4"><span class="rule-bullet">›</span><span style="font-size:12px;color:var(--text3)">Reference: SOP 3929 · Camp Butmir Defence Plan Annex D (14 Feb 2025)</span></div>
-<div id="adminAlertControls" style="display:none">
-  <div class="section-label mt8">Set Active Alert</div>
-  <div class="alert-set-row">
-    <button class="alert-set-btn asb-bravo" onclick="setAlert('bravo')" style="background:#dcfce7;border:1.5px solid #86efac;color:#15803d">BRAVO</button>
-    <button class="alert-set-btn asb-charlie" onclick="setAlert('charlie')" style="background:#fef3c7;border:1.5px solid #fcd34d;color:var(--warn)">CHARLIE</button>
-    <button class="alert-set-btn asb-delta" onclick="setAlert('delta')" style="background:#fee2e2;border:1.5px solid #fca5a5;color:var(--danger)">DELTA</button>
-  </div>
-</div>
-```
-
-  </div>
-</div>
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────────
@@ -5544,9 +5503,7 @@ try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
 // Init roster pusher after session
 setTimeout(initRosterPusher, 3000);
 </script>
-
 <!-- RANK MODAL -->
-
 <div class="rank-modal-overlay" id="rankModal" onclick="if(event.target===this)closeRankModal()">
   <div class="rank-modal">
     <img src="" alt="" style="width:80px;height:auto;margin-bottom:12px">
@@ -5567,42 +5524,39 @@ setTimeout(initRosterPusher, 3000);
       </div>
     </div>
 
-```
-<!-- 9-LINER BUILDER MODAL -->
-<div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
-  <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
-    <div class="modal-title" style="color:var(--danger)">
-      <span>9-Liner MEDEVAC</span>
-      <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
-    </div>
+    <!-- 9-LINER BUILDER MODAL -->
+    <div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
+      <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" style="color:var(--danger)">
+          <span>9-Liner MEDEVAC</span>
+          <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
+        </div>
 
-    <!-- MODE TOGGLE -->
-    <div style="display:flex;gap:8px;margin-bottom:14px">
-      <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
-      <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
-    </div>
+        <!-- MODE TOGGLE -->
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
+          <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
+        </div>
 
-    <!-- BUILDER MODE -->
-    <div id="ninerBuildMode">
-      <div id="ninerLines"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-        <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
-        <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
+        <!-- BUILDER MODE -->
+        <div id="ninerBuildMode">
+          <div id="ninerLines"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
+            <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
+          </div>
+          <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
+            <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
+          </div>
+        </div>
+
+        <!-- REFERENCE MODE -->
+        <div id="ninerRefMode" style="display:none">
+          <div id="ninerRefContent"></div>
+        </div>
       </div>
-      <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
-        <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
-        <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
-      </div>
     </div>
-
-    <!-- REFERENCE MODE -->
-    <div id="ninerRefMode" style="display:none">
-      <div id="ninerRefContent"></div>
-    </div>
-  </div>
-</div>
-```
-
 <script>
 const ccnNations={
   'AFG':'Afghanistan','ALB':'Albania','AUT':'Austria','BEL':'Belgium',
@@ -6081,9 +6035,7 @@ function adminResetDevice(){
 }
 
 </script>
-
 <!-- ADMIN PANEL MODAL -->
-
 <div class="modal-overlay" id="adminPanelModal" onclick="if(event.target===this)closeAdminPanel()">
   <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
     <div class="modal-title" style="color:var(--accent)">
@@ -6091,40 +6043,37 @@ function adminResetDevice(){
       <button class="modal-close" onclick="closeAdminPanel()">&#x2715;</button>
     </div>
 
-```
-<!-- Daily codes -->
-<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-  <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Daily Access Codes</div>
-  <div id="adminCodeRows"></div>
-</div>
+    <!-- Daily codes -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Daily Access Codes</div>
+      <div id="adminCodeRows"></div>
+    </div>
 
-<!-- Salt management -->
-<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-  <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Salt Configuration</div>
-  <div style="font-size:12px;color:var(--text2);margin-bottom:10px">
-    Change salt (all IMP devices must be reconfigured after change).
-  </div>
-  <div style="margin-bottom:8px">
-    <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">IMP Salt (shared)</div>
-    <input id="adminImpSalt" type="text" autocomplete="off" autocapitalize="characters"
-      style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
-  </div>
-  <div style="margin-bottom:10px">
-    <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">Admin Salt (private)</div>
-    <input id="adminAdminSalt" type="text" autocomplete="off" autocapitalize="characters"
-      style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
-  </div>
-  <button onclick="adminSaveSalt()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Save Salt</button>
-</div>
+    <!-- Salt management -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Salt Configuration</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px">
+        Change salt (all IMP devices must be reconfigured after change).
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">IMP Salt (shared)</div>
+        <input id="adminImpSalt" type="text" autocomplete="off" autocapitalize="characters"
+          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">Admin Salt (private)</div>
+        <input id="adminAdminSalt" type="text" autocomplete="off" autocapitalize="characters"
+          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+      </div>
+      <button onclick="adminSaveSalt()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Save Salt</button>
+    </div>
 
-<!-- Reset device -->
-<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:14px">
-  <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Device Reset</div>
-  <div style="font-size:12px;color:var(--danger);margin-bottom:10px">Clears salt from this device. Will require re-setup on next login.</div>
-  <button onclick="adminResetDevice()" style="width:100%;padding:10px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Reset This Device</button>
-</div>
-```
-
+    <!-- Reset device -->
+    <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:14px">
+      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Device Reset</div>
+      <div style="font-size:12px;color:var(--danger);margin-bottom:10px">Clears salt from this device. Will require re-setup on next login.</div>
+      <button onclick="adminResetDevice()" style="width:100%;padding:10px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Reset This Device</button>
+    </div>
   </div>
 </div>
 
