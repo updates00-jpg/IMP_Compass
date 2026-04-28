@@ -693,7 +693,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div><!-- end sub-airport -->
 
     <div class="subcontent" id="sub-dtree">
-      <div class="section-label">IMP Field Decision Trees</div>
+      <div style="padding:10px 14px 4px;font-size:12px;color:var(--text3);line-height:1.5;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:10px">
+        <strong style="color:var(--text2)">Decision Trees</strong> — interaktywne narzędzia decyzyjne. Wybieraj odpowiedzi lub wpisuj wartości, by uzyskać konkretną kwalifikację i listę działań.
+      </div>
       <div id="dtreeList"></div>
     </div>
 
@@ -2886,531 +2888,2376 @@ function switchSub(tabId,subId,btn){
 }
 
 // ── DECISION TREES ────────────────────────────────────────────────────────────
-const dtrees=[
-  {id:'dt-dui',color:'#b91c1c',bg:'#fee2e2',
-   title:'DUI — Breath Test & Alcohol in Vehicle',
-   steps:[
-    {num:'1',title:'Initiate breath test',
-     desc:'Stop vehicle or approach suspect. Identify yourself.',
-     say:'"I am IMP. I am conducting a mandatory breath test pursuant to SOP 3901 §3. Please step out of the vehicle."',
-     doc:null,docClass:null},
-    {num:'2',title:'Conduct test',
-     desc:'Record result in promille. ANY result > 0.0 ‰ = DUI confirmed. Zero tolerance policy.',
-     say:null,doc:null,docClass:null},
-    {num:'3',title:'If REFUSAL',
-     desc:'Refusal = treated as positive result. Document explicitly.',
-     say:'"Your refusal to submit to testing will be treated as a positive result under SOP 3901 §3. This will be documented in an MPR and reported to FPM."',
-     doc:'MPR',docClass:'doc-mpr'},
-    {num:'4',title:'DUI confirmed → immediate actions',
-     desc:'Confiscate vehicle keys / driving pass. Suspend license until EOT. Do NOT allow vehicle operation.',
-     say:null,doc:null,docClass:null},
-    {num:'5',title:'Notify — IMMEDIATE',
-     desc:'Call IMP CMDR (IPN 5782 / +387 61 139 603), FPM (IPN 5799), SNR/Branch Chief, HQ CAMP CMDT.',
-     say:'"IMP [unit] to IMP CMDR — DUI confirmed: [Name], [Rank], [Unit], BAC [X] ‰, location [X], time [X]. License confiscated. Requesting guidance."',
-     doc:null,docClass:null},
-    {num:'6',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID / Unit / BAC result or REFUSAL noted / License confiscated / IMP CMDR notified / FPM notified / SNR notified.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'7',title:'Produce MPR',
-     desc:'Military Police Report (Annex A SOP 3927). Approved by IMP CMDR → FPM → SNR → HQ CAMP CMDT. Distribution: all parties above.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'NO',text:'Not operating vehicle but visibly drunk in camp → proceed to Drunk/Intoxicated Personnel tree.'},
-    {cond:'IF',text:'Random check authorized: IMP may stop any EUFOR/NHQ Sa vehicle at any time for breath test (SOP 3927 §6c(9)).'}
-   ]
-  },
+// ── DECISION TREES — INTERACTIVE ENGINE ──────────────────────────────────────
+// Each tree is a node graph. Each node has:
+//   id, question, detail(optional), options:[{label, color, next, result}]
+//   result nodes have: verdict, color, actions[], docs[], note
 
-  {id:'dt-speed',color:'#1a5cb8',bg:'#dbeafe',
-   title:'Speeding Violation — Traffic Stop',
-   steps:[
-    {num:'1',title:'Stop the vehicle',
-     desc:'Use hand signal / lights. Approach driver side. Note speed and location.',
-     say:'"Stop the vehicle. I am IMP. Please turn off the engine and keep your hands visible."',
-     doc:null,docClass:null},
-    {num:'2',title:'Identify driver',
-     desc:'Request: ID/Access card, vehicle documentation, driving pass. Note registration number.',
-     doc:null,docClass:null},
-    {num:'3',title:'Inform of violation',
-     desc:'State measured speed and limit.',
-     say:'"You have been observed driving at [X] km/h. The speed limit in Camp Butmir is 30 km/h. This is a violation of SOP 3901 §6b."',
-     doc:null,docClass:null},
-    {num:'4',title:'5–10 km/h over — 1st offence',
-     desc:'Issue verbal warning. DOB entry required.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'5',title:'5–10 km/h over — 2nd+ offence',
-     desc:'Notify SNR/Branch Chief. TVR mandatory.',
-     doc:'TVR',docClass:'doc-tvr'},
-    {num:'6',title:'11–20 km/h over — any offence',
-     desc:'Notify SNR/Branch Chief + HQ CAMP CMDT + FPM. Suspend license 2 weeks. Confiscate driving pass.',
-     doc:'TVR',docClass:'doc-tvr'},
-    {num:'7',title:'21+ km/h over — any offence',
-     desc:'Same as above but 3 penalty points. Suspension 2 weeks. Report identical.',
-     doc:'TVR',docClass:'doc-tvr'},
-    {num:'8',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID / Unit / Speed measured / Category / License suspended Y/N / TVR number.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'5 accumulated penalty points → license suspended 1 month automatically. Notify SNR and FPM.'},
-    {cond:'IF',text:'Emergency vehicles (IMP, ambulance, fire, guards, CP) may exceed limit in emergency only.'}
-   ]
+const itrees=[
+  // ─────────────────────────────────────────────────────────────────
+  {id:'report',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+   color:'#1a5cb8', bg:'#dbeafe',
+   title:'Który dokument wystawić?',
+   subtitle:'MPR / TVR / PVR / DOB',
+   start:'q1',
+   nodes:{
+     q1:{q:'Czy zdarzenie dotyczy pojazdu/ruchu drogowego?',
+       opts:[{l:'TAK — pojazd',c:'yes',n:'q2'},{l:'NIE — inne',c:'no',n:'q6'}]},
+     q2:{q:'Czy doszło do wypadku, uszkodzenia pojazdu lub DUI?',
+       opts:[{l:'TAK',c:'yes',n:'r-mpr'},{l:'NIE — drobne naruszenie',c:'no',n:'q3'}]},
+     q3:{q:'Jaki rodzaj naruszenia drogowego?',
+       opts:[{l:'Przekroczenie prędkości',c:'info',n:'r-tvr'},{l:'Parkowanie',c:'warn',n:'q4'},{l:'Palenie/pas/telefon',c:'info',n:'r-tvr'}]},
+     q4:{q:'Ile razy pojazd był już karany za parkowanie?',
+       opts:[{l:'1. lub 2. naruszenie',c:'info',n:'r-pvr'},{l:'3. naruszenie lub więcej',c:'warn',n:'r-pvr-snr'},{l:'Bldg 200 / Krąg VIP',c:'danger',n:'r-pvr-200'}]},
+     q6:{q:'Czy doszło do przestępstwa, poważnego incydentu lub obrażeń?',
+       opts:[{l:'TAK — poważny incydent',c:'danger',n:'r-mpr'},{l:'NIE',c:'no',n:'q7'}]},
+     q7:{q:'Jakiego rodzaju naruszenie?',
+       opts:[{l:'Zachowanie/alkohol/broń',c:'danger',n:'q8'},{l:'Ubiór / cisza / ID',c:'info',n:'r-dob'},{l:'Niekooperatywność',c:'warn',n:'q8'}]},
+     q8:{q:'Czy SNR / Branch Chief musi być powiadomiony?',
+       opts:[{l:'TAK — poważne lub 2.+ naruszenie',c:'warn',n:'r-mpr'},{l:'NIE — 1. naruszenie, ustne ostrzeżenie',c:'info',n:'r-dob'}]},
+     'r-tvr':{result:true, verdict:'TVR — Traffic Violation Report',
+       color:'#1a5cb8', bg:'#dbeafe',
+       actions:['Zatrzymaj pojazd. Wylegitymuj kierowcę.','Wypisz TVR (Annex B SOP 3927).','Zatwierdza: IMP CMDR → wysyłka do SNR.'],
+       docs:['TVR','DOB'],
+       note:'Archiwizacja TVR: minimum 1 rok. Przy 5 pkt karnych → zawieszenie prawa jazdy na 1 miesiąc.'},
+     'r-pvr':{result:true, verdict:'PVR — Parking Violation Report',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Zostaw pisemne ostrzeżenie na szybie.','Wypisz PVR (Annex C SOP 3927).','Kierowca musi zgłosić się do IMP Station w ciągu 48h.'],
+       docs:['PVR','DOB'],
+       note:'Po 3. naruszeniu → SNR/Branch Chief + HQ CAMP CMDT + FPM.'},
+     'r-pvr-snr':{result:true, verdict:'PVR + Powiadomienie SNR',
+       color:'#c2410c', bg:'#ffedd5',
+       actions:['Wypisz PVR.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.'],
+       docs:['PVR','DOB'],
+       note:'3. naruszenie lub więcej. Wszystkie działania raportowane do HQ CAMP CMDT i FPM.'},
+     'r-pvr-200':{result:true, verdict:'PVR + 3 pkt karne — Bldg 200',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Wypisz PVR NATYCHMIAST.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.','3 punkty karne na prawo jazdy.'],
+       docs:['PVR','DOB'],
+       note:'Parkowanie w kręgu Bldg 200 — każde naruszenie = SNR + HQ CAMP CMDT + FPM.'},
+     'r-mpr':{result:true, verdict:'MPR — Military Police Report',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Zabezpiecz miejsce zdarzenia.','Zrób dokumentację (zdjęcia, szkice).','Pobierz zeznania świadków i sprawcy.','Wypisz MPR (Annex A SOP 3927).','Zatwierdza: IMP CMDR → FPM → SNR.'],
+       docs:['MPR','DOB'],
+       note:'Archiwizacja MPR: minimum 6 lat. Dystrybucja: SNR, FPM, HQ CAMP CMDT, ewentualnie COM/COS/LEGAD.'},
+     'r-dob':{result:true, verdict:'Wpis DOB — bez formalnego raportu',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Wydaj ustne ostrzeżenie.','Odnotuj w Daily Occurrence Book.','Przy 2. naruszeniu → pisemne ostrzeżenie.','Przy 3.+ → eskalacja do SNR.'],
+       docs:['DOB'],
+       note:'DOB wymagany przy każdej interwencji, nawet gdy nie wystawia się formalnego raportu.'}
+   }
   },
-
-  {id:'dt-parking',color:'#b45309',bg:'#fef3c7',
-   title:'Parking Violation — Field Response',
-   steps:[
-    {num:'1',title:'Identify violation',
-     desc:'Vehicle in wrong zone, blocking access road, grassed area, restricted area, or Bldg 200/circle without authorization.',
-     doc:null,docClass:null},
-    {num:'2',title:'Driver PRESENT',
-     desc:'Approach and address driver.',
-     say:'"Your vehicle [registration] is parked in violation of Camp Butmir regulations. Zone [X] is restricted. Please move the vehicle immediately."',
-     doc:null,docClass:null},
-    {num:'3',title:'Driver ABSENT — 1st or 2nd offence',
-     desc:'Leave written notice on windshield. Produce PVR. Note: driver must report to IMP Station within 48 hours.',
-     doc:'PVR',docClass:'doc-pvr'},
-    {num:'4',title:'Driver ABSENT — 3rd+ offence',
-     desc:'Leave notice. PVR mandatory. Notify SNR/Branch Chief. Report to HQ CAMP CMDT and FPM.',
-     doc:'PVR',docClass:'doc-pvr'},
-    {num:'5',title:'Bldg 200 / Circle — ANY offence',
-     desc:'Notify SNR/Branch Chief immediately. Report to HQ CAMP CMDT + FPM. 3 penalty points.',
-     doc:'PVR',docClass:'doc-pvr'},
-    {num:'6',title:'Follow-up — 48h rule',
-     desc:'If driver does not report to IMP Station within 48h → notify SNR/Branch Chief for disciplinary action.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'7',title:'DOB entry',
-     desc:'Date / Time / Location / Vehicle registration / Unit / Zone violated / Notice left Y/N / PVR number / Action taken.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'IMP has copy of vehicles assigned to each zone — verify correct parking zone.'},
-    {cond:'IF',text:'2nd parking violation → reported to SNR (military) or supervisor (civilian).'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'speed',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+   color:'#1a5cb8', bg:'#dbeafe',
+   title:'Kwalifikacja naruszenia prędkości',
+   subtitle:'Limit: 30 km/h — Camp Butmir',
+   start:'q1',
+   nodes:{
+     q1:{q:'Jaka prędkość zmierzona (km/h)?', type:'input', inputId:'speedVal', inputPlaceholder:'Wpisz prędkość np. 38',
+       compute:(v)=>{
+         const s=parseInt(v); const over=s-30;
+         if(isNaN(s)||s<=0) return null;
+         if(s<=30) return 'r-ok';
+         if(over<=10) return 'r-s1';
+         if(over<=20) return 'r-s2';
+         return 'r-s3';
+       }
+     },
+     'r-ok':{result:true, verdict:'Brak naruszenia — prędkość w normie',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Prędkość w granicach limitu 30 km/h.','Brak interwencji wymagany.'],
+       docs:[],note:''},
+     'r-s1':{result:true, verdict:'Kategoria I — 5–10 km/h powyżej limitu',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Zatrzymaj pojazd.','Powiedz: "Przekroczył Pan/i prędkość. Limit 30 km/h, zmierzona [X] km/h."','1. naruszenie → ustne ostrzeżenie + DOB.','2.+ naruszenie → TVR + powiadomienie SNR.'],
+       docs:['TVR (2.+)','DOB'],
+       note:'SOP 3901 §6b / Annex D. Przy 1. naruszeniu sam wpis DOB.'},
+     'r-s2':{result:true, verdict:'Kategoria II — 11–20 km/h powyżej limitu',
+       color:'#c2410c', bg:'#ffedd5',
+       actions:['Zatrzymaj pojazd. Wylegitymuj.','TVR obowiązkowy od 1. naruszenia.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.','Zawieś prawo jazdy na 2 tygodnie. Odbierz przepustkę.','2 punkty karne.'],
+       docs:['TVR','DOB'],
+       note:'Zawieszenie dotyczy każdego naruszenia w tej kategorii bez wyjątku.'},
+     'r-s3':{result:true, verdict:'Kategoria III — 21+ km/h powyżej limitu',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Natychmiastowe zatrzymanie pojazdu.','TVR obowiązkowy.','Powiadom SNR/Branch Chief + HQ CAMP CMDT + FPM.','Zawieś prawo jazdy na 2 tygodnie.','3 punkty karne.'],
+       docs:['TVR','DOB'],
+       note:'Najcięższa kategoria. Przy 5 pkt łącznie → zawieszenie prawa jazdy na 1 miesiąc.'}
+   }
   },
-
-  {id:'dt-drunk',color:'#b45309',bg:'#fef3c7',
-   title:'Excessive Drinking / Intoxicated Personnel',
-   steps:[
-    {num:'1',title:'Identify situation',
-     desc:'Observe: obnoxious behaviour, lack of self-control, fighting, or obviously intoxicated. Note time, location, appearance.',
-     doc:null,docClass:null},
-    {num:'2',title:'Approach and identify',
-     say:'"I am IMP. I have observed behaviour consistent with excessive alcohol consumption. Please show me your ID card and come with me."',
-     desc:'Note full name, ID number, unit, time and location.',
-     doc:null,docClass:null},
-    {num:'3',title:'Remove from establishment',
-     desc:'Escort from bar/DFAC/recreational area immediately. Do not leave alone.',
-     doc:null,docClass:null},
-    {num:'4',title:'Decide: Medical Cell or IMP Station',
-     desc:'Medical risk (unresponsive, vomiting, medical symptoms) → call Medical Cell ext. 912. Otherwise → IMP Station.',
-     doc:null,docClass:null},
-    {num:'5',title:'Place under IMP supervision',
-     desc:'Violator stays under IMP supervision until released to SNR or SNR representative.',
-     doc:null,docClass:null},
-    {num:'6',title:'Notify SNR immediately',
-     say:'"This is IMP [unit]. I have detained [Name, Rank, Unit] for excessive drinking at [location], [time]. Please report to [IMP Station / location] to receive the individual."',
-     desc:'SNR must come in person or send representative.',
-     doc:null,docClass:null},
-    {num:'7',title:'Check for vehicle operation',
-     desc:'Was person driving or is about to drive? → Conduct breath test immediately. DUI rules apply.',
-     doc:null,docClass:null},
-    {num:'8',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID / Unit / Behaviour description / Medical Cell Y/N / Handed to SNR: name + time.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'9',title:'Produce MPR',
-     desc:'Military Police Report (Annex A SOP 3927). Distribution: IMP CMDR → SNR → HQ CAMP CMDT → FPM.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'IF',text:'Bar staff serves alcohol to visibly intoxicated person → action through bar management\'s chain of command.'},
-    {cond:'NO',text:'No vehicle involved and first occurrence of minor intoxication → DOB entry may suffice without MPR. IMP CMDR decides.'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'alcohol',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
+   color:'#b45309', bg:'#fef3c7',
+   title:'Kwalifikacja — alkohol',
+   subtitle:'DUI / nadużycie / zachowanie',
+   start:'q1',
+   nodes:{
+     q1:{q:'Osoba prowadzi pojazd lub właśnie prowadziła?',
+       opts:[{l:'TAK — za kierownicą',c:'danger',n:'q2'},{l:'NIE — pieszo/bar',c:'no',n:'q5'}]},
+     q2:{q:'Wynik testu na alkohol (breathalyzer)?',
+       opts:[{l:'>0.0 ‰ — DUI potwierdzone',c:'danger',n:'r-dui'},{l:'Odmowa testu',c:'danger',n:'r-refuse'},{l:'0.0 ‰ — czysty',c:'ok',n:'r-clean'}]},
+     q5:{q:'Jak oceniasz zachowanie osoby?',
+       opts:[{l:'Agresywna / utrata kontroli / bójka',c:'danger',n:'r-drunk-major'},{l:'Pijana ale spokojna',c:'warn',n:'r-drunk-minor'},{l:'Wątpliwe — sprawdzić trzeźwość',c:'info',n:'r-sobriety'}]},
+     'r-dui':{result:true, verdict:'DUI — ZERO TOLERANCJI',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Odbierz klucze / przepustkę kierowcy NATYCHMIAST.','Zawieś prawo jazdy do EOT.','Powiadom IMP CMDR + SNR/Branch Chief + FPM + HQ CAMP CMDT.','Wypisz MPR.','Wpis do DOB z wynikiem ‰.'],
+       docs:['MPR','DOB'],
+       note:'SOP 3901 §3a(3). Odmowa testu = wynik pozytywny. Informuj: "Odmowa traktowana jest jako DUI."'},
+     'r-refuse':{result:true, verdict:'Odmowa testu = DUI',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Powiedz: "Odmowa testu jest traktowana jako wynik pozytywny. Skutki takie jak DUI."','Odbierz klucze / zawieś prawo jazdy do EOT.','Powiadom IMP CMDR + FPM natychmiast.','MPR obowiązkowy.'],
+       docs:['MPR','DOB'],
+       note:'SOP 3927 §6c(10). Odmowa = DUI dla celów administracyjnych EUFOR.'},
+     'r-clean':{result:true, verdict:'Czysty — brak DUI',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Odnotuj kontrolę w DOB.','Puść kierowcę — brak naruszenia alkoholowego.'],
+       docs:['DOB'],note:''},
+     'r-drunk-major':{result:true, verdict:'Nadużycie alkoholu — poważne',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Usuń z baru/strefy natychmiast.','Umieść pod nadzorem IMP.','Decyzja: Medical Cell (912) czy IMP Station?','Powiadom SNR — musi przejąć osobistą pieczę.','Wypisz MPR.'],
+       docs:['MPR','DOB'],
+       note:'SOP 3901 §3 / Annex A. Sprawdź czy prowadziła pojazd → jeśli tak: test trzeźwości + DUI ścieżka.'},
+     'r-drunk-minor':{result:true, verdict:'Nadużycie alkoholu — umiarkowane',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Odprowadź do zakwaterowania lub przekaż SNR.','Wpis do DOB.','Powiadom SNR przez radio/telefon.'],
+       docs:['DOB'],
+       note:'Jeśli zachowanie się pogorszy → eskalacja do MPR.'},
+     'r-sobriety':{result:true, verdict:'Przeprowadź test trzeźwości',
+       color:'#1a5cb8', bg:'#dbeafe',
+       actions:['Powiedz: "Proszę o poddanie się testowi trzeźwości."','Wykonaj test. Odnotuj wynik.','Jeśli >0 ‰ i pojazd → wróć do ścieżki DUI.','Jeśli 0 ‰ → wpis DOB, brak dalszych działań.'],
+       docs:['DOB'],
+       note:'SOP 3927 §6c(9). IMP może zlecić test na każde żądanie SNR lub z własnej inicjatywy.'}
+   }
   },
-
-  {id:'dt-id',color:'#15803d',bg:'#dcfce7',
-   title:'No Visible ID / Missing ID Card',
-   steps:[
-    {num:'1',title:'Stop individual and request ID',
-     say:'"I am IMP. Your EUFOR ID/Access card is not displayed in a visible location as required by SOP 3901 §11. Please show me your card now."',
-     desc:'Applies to all EUFOR/NHQ Sa personnel and visitors. Exception: sport activity.',
-     doc:null,docClass:null},
-    {num:'2',title:'Card produced but not displayed',
-     desc:'1st offence: verbal warning + DOB. 2nd offence: written warning + DOB. 3rd+: notify SNR/FPM.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'3',title:'No card at all',
-     desc:'Ask name, rank, unit, building/room number. Escort to IMP Station to verify identity.',
-     say:'"If you are unable to produce ID, I am required to escort you to the IMP Station for identity verification."',
-     doc:null,docClass:null},
-    {num:'4',title:'3rd+ offence',
-     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'5',title:'Person refuses to cooperate / identity unverifiable',
-     desc:'Detain. Inform IMP CMDR immediately. IMP may detain if person fails to produce ID when requested (SOP 3927 §6c(4)).',
-     doc:'MPR',docClass:'doc-mpr'},
-    {num:'6',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID number (if produced) / Unit / Violation type / Action taken.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'IMP personnel: exempt from visible display but must produce when requested.'},
-    {cond:'IF',text:'All EUFOR/NATO personnel must notify IMP if someone is not displaying ID — SOP 3901 §11b.'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'id-check',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>',
+   color:'#15803d', bg:'#dcfce7',
+   title:'Brak ID / niewidoczna karta',
+   subtitle:'SOP 3901 §11',
+   start:'q1',
+   nodes:{
+     q1:{q:'Czy osoba ma przy sobie kartę ID EUFOR/NHQ Sa?',
+       opts:[{l:'TAK — ma ale niewidoczna',c:'warn',n:'q2'},{l:'NIE — brak karty',c:'danger',n:'q4'}]},
+     q2:{q:'Ile razy ta osoba była już uprzedzana?',
+       opts:[{l:'1. raz',c:'info',n:'r-warn1'},{l:'2. raz',c:'warn',n:'r-warn2'},{l:'3. raz lub więcej',c:'danger',n:'r-id-snr'}]},
+     q4:{q:'Czy osoba może zidentyfikować się innym dokumentem?',
+       opts:[{l:'TAK — inny dokument',c:'info',n:'q5'},{l:'NIE — brak jakiegokolwiek ID',c:'danger',n:'r-detain'}]},
+     q5:{q:'Czy tożsamość można potwierdzić np. przez jednostkę?',
+       opts:[{l:'TAK — potwierdzono',c:'ok',n:'r-nocard-ok'},{l:'NIE / odmowa',c:'danger',n:'r-detain'}]},
+     'r-warn1':{result:true, verdict:'1. naruszenie — ustne ostrzeżenie',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Powiedz: "Karta ID musi być widoczna w każdej chwili na terenie obozu."','Wpis do DOB.'],
+       docs:['DOB'], note:'Wyjątek: aktywność sportowa.'},
+     'r-warn2':{result:true, verdict:'2. naruszenie — pisemne ostrzeżenie',
+       color:'#c2410c', bg:'#ffedd5',
+       actions:['Wydaj pisemne ostrzeżenie.','Wpis do DOB z adnotacją "2. naruszenie".'],
+       docs:['DOB'], note:'Przy 3. naruszeniu → SNR/Branch Chief + FPM.'},
+     'r-id-snr':{result:true, verdict:'3.+ naruszenie — eskalacja SNR',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Powiadom SNR/Branch Chief.','Wszystkie działania raportowane do FPM.','DOB z numerem naruszenia.'],
+       docs:['DOB'], note:'SOP 3901 §11b / Annex D.'},
+     'r-nocard-ok':{result:true, verdict:'Brak karty — tożsamość potwierdzona',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Wpis DOB — brak karty przy sobie.','1. raz: ustne ostrzeżenie.','2.+ raz: pisemne ostrzeżenie.'],
+       docs:['DOB'], note:''},
+     'r-detain':{result:true, verdict:'Zatrzymaj — tożsamości nie można potwierdzić',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Eskortuj do IMP Station.','Powiadom IMP CMDR natychmiast.','Zatrzymaj do potwierdzenia tożsamości.','Wypisz MPR jeśli odmawia współpracy.'],
+       docs:['MPR','DOB'],
+       note:'SOP 3927 §6c(4). IMP może zatrzymać osobę jeśli nie okazuje ID na żądanie.'}
+   }
   },
-
-  {id:'dt-weapon',color:'#b91c1c',bg:'#fee2e2',
-   title:'Unauthorized Weapon in Restricted Area',
-   steps:[
-    {num:'1',title:'Identify situation',
-     desc:'Loaded/visible weapon carried in: recreation area, concession area, or DFAC by person not in authorized category.',
-     doc:null,docClass:null},
-    {num:'2',title:'ASSESS THREAT — DO NOT approach alone if threat imminent',
-     desc:'Call for backup first: IMP Duty IPN 5783 / +387 62 337 661. Wait for backup if threat perceived.',
-     doc:null,docClass:null},
-    {num:'3',title:'Approach when safe',
-     say:'"I am IMP. Please stop and do not reach for the weapon. Identify yourself and provide your ID card."',
-     desc:'Stay calm. Maintain visual on person and weapon at all times.',
-     doc:null,docClass:null},
-    {num:'4',title:'Verify authorization',
-     desc:'Authorized: FPG Guard, IMP Det, CP details, written concealed weapons permit, ordered by COM EUFOR/NHQ Sa.',
-     doc:null,docClass:null},
-    {num:'5',title:'If UNAUTHORIZED',
-     say:'"You are carrying a weapon in an area where it is not authorized per SOP 3901 §5. I am placing you under IMP supervision and notifying SNR and FPM immediately."',
-     desc:'Secure situation. IMP may conduct non-intimate search to seize items that may cause harm (SOP 3927 §6c(6)).',
-     doc:null,docClass:null},
-    {num:'6',title:'IMMEDIATE notification',
-     desc:'SNR/Branch Chief + FPM + IMP CMDR.',
-     doc:null,docClass:null},
-    {num:'7',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID / Unit / Weapon type / Circumstances / Authorization checked / Action taken / FPM notified.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'8',title:'Produce MPR',
-     desc:'IMMEDIATE. Distribution: IMP CMDR → FPM → SNR. Reference SOP HQ EUFOR 5275 Force Protection.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'IF',text:'IMP authorized to use physical force if person fails to comply with orders (SOP 3927 §6f).'},
-    {cond:'IF',text:'Handcuffs/baton: only if physical force ineffective or person endangers life/health of themselves or others.'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'notify',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>',
+   color:'#6b7280', bg:'#e8eaed',
+   title:'Kogo powiadomić?',
+   subtitle:'SNR / IMP CMDR / FPM / HQ CAMP CMDT',
+   start:'q1',
+   nodes:{
+     q1:{q:'Jaki rodzaj incydentu?',
+       opts:[{l:'DUI / broń / poważny incydent',c:'danger',n:'r-all'},{l:'Wypadek drogowy',c:'warn',n:'r-accident'},{l:'Naruszenie dyscypliny (alkohol/ubiór/cisza)',c:'info',n:'q2'},{l:'Drobne naruszenie ruchu',c:'info',n:'q3'}]},
+     q2:{q:'Czy to 1. naruszenie?',
+       opts:[{l:'TAK',c:'ok',n:'r-dob-only'},{l:'NIE — 2. lub więcej',c:'warn',n:'r-snr-only'}]},
+     q3:{q:'Kategoria prędkości / parkowania?',
+       opts:[{l:'Prędkość 5–10 km/h, 1. raz',c:'ok',n:'r-dob-only'},{l:'Prędkość 11+ lub parking 3.+',c:'warn',n:'r-snr-hq'},{l:'DUI / Bldg 200',c:'danger',n:'r-all'}]},
+     'r-all':{result:true, verdict:'Powiadom WSZYSTKICH — natychmiast',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['IMP CMDR (IPN 5782 / +387 61 139 603)','FPM (IPN 5799 / +387 62 337 671)','SNR / Branch Chief sprawcy','HQ CAMP CMDT OPS (ext. 2041)'],
+       docs:['MPR','DOB'],
+       note:'Kolejność: IMP CMDR → FPM → SNR → HQ CAMP CMDT.'},
+     'r-accident':{result:true, verdict:'Wypadek — łańcuch powiadomień',
+       color:'#c2410c', bg:'#ffedd5',
+       actions:['Jeśli obrażenia → Medical Cell 912 NATYCHMIAST.','IMP CMDR + FPM.','SNR obu stron jeśli multi-nation.','HQ CAMP CMDT jeśli poważne szkody.'],
+       docs:['MPR','DOB'],
+       note:'Drobne wypadki bez obrażeń → tylko na żądanie SNR lub FPM.'},
+     'r-snr-only':{result:true, verdict:'Powiadom SNR / Branch Chief',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Powiadom SNR/Branch Chief sprawcy.','FPM jeśli wymagane przez Annex D.'],
+       docs:['TVR lub DOB'],
+       note:''},
+     'r-snr-hq':{result:true, verdict:'SNR + HQ CAMP CMDT + FPM',
+       color:'#c2410c', bg:'#ffedd5',
+       actions:['Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT.','Poinformuj FPM.'],
+       docs:['TVR','DOB'],note:''},
+     'r-dob-only':{result:true, verdict:'Tylko wpis DOB — brak powiadomień',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Wydaj ostrzeżenie (ustne przy 1. raz).','Wpis do DOB.'],
+       docs:['DOB'],note:''}
+   }
   },
-
-  {id:'dt-uncooperative',color:'#b91c1c',bg:'#fee2e2',
-   title:'Uncooperative / Hostile Personnel',
-   steps:[
-    {num:'1',title:'Identify and address',
-     say:'"I am IMP. You are required to cooperate with IMP personnel per SOP 3901 §11d regardless of rank or position."',
-     desc:'Remain calm. Do not escalate. Request ID card.',
-     doc:null,docClass:null},
-    {num:'2',title:'If verbal non-compliance',
-     desc:'Repeat instruction once. Note name, rank, unit.',
-     say:'"I am formally requesting your cooperation. Failure to comply will be reported to your SNR/Branch Chief and FPM."',
-     doc:null,docClass:null},
-    {num:'3',title:'Notify SNR/Branch Chief',
-     desc:'Call SNR immediately. State name, rank, unit, and nature of non-cooperation.',
-     doc:null,docClass:null},
-    {num:'4',title:'If physical resistance or endangerment',
-     desc:'IMP may use physical force if person fails to comply (SOP 3927 §6f). Handcuffs/baton if force insufficient. Call for backup immediately.',
-     doc:null,docClass:null},
-    {num:'5',title:'DOB entry',
-     desc:'Date / Time / Location / Name / ID / Rank / Unit / Description of behaviour / Action taken / SNR notified.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'6',title:'Produce MPR if major incident',
-     desc:'Any physical altercation or major non-compliance → MPR. IMP CMDR + FPM informed.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'IF',text:'Verbal warning and DOB may suffice for minor non-cooperation without escalation.'},
-    {cond:'NO',text:'Never engage in argument. State the rule, give one warning, then escalate through chain of command.'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'convoy-check',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+   color:'#1a5cb8', bg:'#dbeafe',
+   title:'Kontrola konwoju — czy zgodny z SOP?',
+   subtitle:'SOP 6240 Annex A',
+   start:'q1',
+   nodes:{
+     q1:{q:'Ile pojazdów w ruchu/kolumnie?', type:'input', inputId:'convoyCount', inputPlaceholder:'Wpisz liczbę pojazdów np. 12',
+       compute:(v)=>{
+         const n=parseInt(v);
+         if(isNaN(n)||n<=0) return null;
+         if(n<7) return 'r-noconv';
+         if(n<=15) return 'q2';
+         return 'r-packets';
+       }
+     },
+     q2:{q:'Czy kolumna ma CCN widoczny na pojazdach prowadzącym i zamykającym?',
+       opts:[{l:'TAK — CCN widoczny',c:'ok',n:'q3'},{l:'NIE — brak CCN',c:'danger',n:'r-no-ccn'}]},
+     q3:{q:'Czy ruch przekracza granicę BiH lub jest to ruch taktyczny?',
+       opts:[{l:'TAK — granica / taktyczny',c:'warn',n:'r-log-mov'},{l:'NIE — ruch wewnętrzny AOO',c:'ok',n:'r-ok-convoy'}]},
+     'r-noconv':{result:true, verdict:'Nie jest to konwój wg SOP 6240',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Poniżej 7 pojazdów — nie wymaga CCN ani koordynacji LOG MOV.','Standardowa kontrola drogowa jeśli wymagana.'],
+       docs:['DOB jeśli interwencja'],note:'Konwój = ≥7 pojazdów wg definicji EUFOR.'},
+     'r-packets':{result:true, verdict:'Wymagany podział na pakiety!',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Powyżej 15 pojazdów — musi być podzielone na pakiety max 15.','Przerwa między pakietami: 15 minut.','Wiele konwojów z tego samego SP: 60 minut między konwojami.','Sprawdź CCN na pojazdach prowadzącym i zamykającym każdego pakietu.'],
+       docs:['DOB'],
+       note:'SOP 6240 §8a. Inform Convoy Commander natychmiast.'},
+     'r-no-ccn':{result:true, verdict:'BRAK CCN — zatrzymaj konwój',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Zatrzymaj kolumnę.','Powiedz: "CCN musi być widoczny na obu stronach pojazdu prowadzącego i z przodu/tyłu pojazdu zamykającego."','Skontaktuj się z LOG MOV Officer przez JOC.','Wpis DOB.'],
+       docs:['DOB'],
+       note:'CCN jest wydawany przez LOG MOV Officer. Bez CCN ruch nieupoważniony.'},
+     'r-log-mov':{result:true, verdict:'LOG MOV coordination required',
+       color:'#b45309', bg:'#fef3c7',
+       actions:['Weryfikuj czy był złożony Road Movement Request min 36h wcześniej.','Przy przekraczaniu granicy: min 3 dni robocze wcześniej.','Przy wątpliwościach: kontakt z LOG MOV przez JOC.'],
+       docs:['DOB'],note:''},
+     'r-ok-convoy':{result:true, verdict:'Konwój zgodny z SOP',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['CCN widoczny. Liczba pojazdów w normie. Ruch wewnętrzny AOO.','Wpis DOB jeśli była to zaplanowana kontrola.'],
+       docs:['DOB (opcjonalnie)'],note:''}
+   }
   },
-
-  {id:'dt-accident',color:'#1a5cb8',bg:'#dbeafe',
-   title:'Traffic Accident Investigation',
-   steps:[
-    {num:'1',title:'Secure accident scene',
-     desc:'Stop all traffic. Position IMP vehicle to protect scene. Turn on lights.',
-     say:'"This is IMP. Please remain at the scene. Do not move vehicles until I give permission."',
-     doc:null,docClass:null},
-    {num:'2',title:'Provide first aid if needed',
-     desc:'Call Medical Cell ext. 912 if injury. Call IMP CMDR. Note exact time of call.',
-     doc:null,docClass:null},
-    {num:'3',title:'Conduct breath test on ALL drivers',
-     desc:'Any driver involved in accident must submit to breath test. Refusal = positive result.',
-     doc:null,docClass:null},
-    {num:'4',title:'Document the scene',
-     desc:'Take photos: vehicle positions, damage, road conditions, signs. Draw sketch of accident site.',
-     doc:null,docClass:null},
-    {num:'5',title:'Identify witnesses',
-     desc:'Get names, IDs, unit, contact info of all witnesses. Keep them separated from each other.',
-     doc:null,docClass:null},
-    {num:'6',title:'Take statements',
-     desc:'Take statements from all drivers, victims, witnesses. Use language assistant if needed.',
-     doc:null,docClass:null},
-    {num:'7',title:'Collect evidence',
-     desc:'Tyre marks, debris, any relevant items at scene.',
-     doc:null,docClass:null},
-    {num:'8',title:'Notify SNR and FPM',
-     desc:'Serious injury or significant damage → immediate notification. Minor accidents → on SNR/FPM request.',
-     doc:null,docClass:null},
-    {num:'9',title:'DOB entry + MPR',
-     desc:'DOB: all details. MPR mandatory for serious injury, damage, or DUI involved.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'IF',text:'Minor accident without injury → IMP investigates only on SNR/EUFOR staff request and FPM approval (SOP 3927 §8d(4)).'},
-    {cond:'IF',text:'Multi-nation personnel involved → joint investigation of at least 2 IMPs from different nations (SOP 3927 §7a(3)).'}
-   ]
-  },
-
-  {id:'dt-dress',color:'#1a5cb8',bg:'#dbeafe',
-   title:'Dress Prescription Violation',
-   steps:[
-    {num:'1',title:'Identify violation',
-     desc:'BDU not worn 0600–1800 (unless exempt). No EUFOR logo. Offensive graphics. Wrong clothing in DFAC.',
-     doc:null,docClass:null},
-    {num:'2',title:'Check exemptions',
-     desc:'Exempt from BDU: en route to Gym, going to gate for walk-out, civilian clothing required for duty.',
-     doc:null,docClass:null},
-    {num:'3',title:'Address individual',
-     say:'"Your dress does not comply with Camp Butmir SOP 3901 §1. [Specify: no head-dress / no EUFOR logo / inappropriate clothing in DFAC]. I am issuing a warning."',
-     doc:null,docClass:null},
-    {num:'4',title:'1st offence',
-     desc:'Verbal warning. DOB entry.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'5',title:'2nd+ offence',
-     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'DFAC rules: no tight/sweaty sports clothes, no sleeveless tops, no sandals/flip-flops, no large bags, no head-dress at table, hands washed before entry, no food taken out (coffee/fruit only).'},
-    {cond:'IF',text:'EUFOR logo mandatory: 70 mm diameter badge per national regulations (SOP 3901 Annex H).'}
-   ]
-  },
-
-  {id:'dt-quiet',color:'#6b7280',bg:'#e8eaed',
-   title:'Quiet Hours Violation (2300–0600)',
-   steps:[
-    {num:'1',title:'Identify violation',
-     desc:'Excessive noise: loud music, slamming doors, loud voices, Skype/FaceTime audible outside room.',
-     doc:null,docClass:null},
-    {num:'2',title:'Address individual',
-     say:'"It is currently quiet hours (2300–0600). You are required to reduce noise immediately. Failure to comply will result in a formal report to your SNR."',
-     desc:'Quiet hours: Monday–Sunday 2300–0600.',
-     doc:null,docClass:null},
-    {num:'3',title:'1st offence',
-     desc:'Verbal warning. DOB entry.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'4',title:'2nd+ offence',
-     desc:'Notify SNR/Branch Chief. All action reported to FPM.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'Hallway lights must be turned out. Music at low volume. Loud noises (slamming doors) to be avoided.'}
-   ]
-  },
-
-  {id:'dt-bike',color:'#b45309',bg:'#fef3c7',
-   title:'Bicycle / Scooter Violation',
-   steps:[
-    {num:'1',title:'Stop cyclist/scooter user',
-     desc:'Identify violation: no registration vignette, no lights, traffic violation, one hand on handlebar.',
-     say:'"I am IMP. Your bicycle/scooter is in violation of Camp Butmir SOP 3901 §7. Please stop and provide your ID card."',
-     doc:null,docClass:null},
-    {num:'2',title:'Check for lights',
-     desc:'After dusk or bad weather: white front light AND red rear light must be on.',
-     doc:null,docClass:null},
-    {num:'3',title:'1st or 2nd offence',
-     desc:'Verbal warning. DOB entry.',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'4',title:'3rd+ offence',
-     desc:'Notify SNR/Branch Chief for disciplinary action.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'All bicycles must be registered with ID Office and have valid vignette/sticker.'},
-    {cond:'IF',text:'Two hands on handlebar at all times while riding.'}
-   ]
-  },
-
-  {id:'dt-sia-weapon',color:'#b91c1c',bg:'#fee2e2',
-   title:'SIA — Passenger With Weapon / Ammo',
-   steps:[
-    {num:'1',title:'Passenger arriving with weapon',
-     desc:'Is weapon unloaded? Is it being checked in as hold baggage or is passenger authorized to carry?',
-     doc:null,docClass:null},
-    {num:'2',title:'Weapon: clear and check in',
-     desc:'Passenger clears weapon before entering terminal. Ammunition removed and packed separately by NSE staff.',
-     say:'"Please unload your weapon now before entering the terminal. Ammunition must be handed over to ADMP for transfer to aircraft."',
-     doc:null,docClass:null},
-    {num:'3',title:'Ammunition — seal and tag',
-     desc:'Magazines/ammo containers: sealed with baggage tags, identified. ADMP/ALS escorts ammunition to aircraft. Handed to Load Master.',
-     doc:null,docClass:null},
-    {num:'4',title:'Prohibited sharp item found',
-     desc:'ADMP confiscates item. Mark and identify. Hand to aircraft Loadmaster. Will be returned to passenger at destination.',
-     say:'"I am confiscating this item under SOP 6240 Annex B. It will be handed to the Loadmaster and returned to you at your destination."',
-     doc:'DOB',docClass:'doc-dob'},
-    {num:'5',title:'Passenger refuses to surrender item',
-     desc:'Only ADMP can physically search and confiscate. BPBiH cannot. If passenger refuses: ALS is final authority. Escalate to ALS immediately. Document in DOB and MPR.',
-     doc:'MPR',docClass:'doc-mpr'}
-   ],
-   branches:[
-    {cond:'IF',text:'ADMP/CPT authorized to carry weapons through SIA controls. All others: weapons processed through Cargo Section.'},
-    {cond:'IF',text:'Operational/exercise flights: passengers may travel in fighting order with weapons if specifically authorized.'}
-   ]
-  },
-
-  {id:'dt-sia-search',color:'#1a5cb8',bg:'#dbeafe',
-   title:'SIA — Search Authority & BPBiH',
-   steps:[
-    {num:'1',title:'Who can search EUFOR personnel?',
-     desc:'ONLY ADMP may physically search EUFOR/NHQ Sa personnel, detain them, or confiscate prohibited items.',
-     doc:null,docClass:null},
-    {num:'2',title:'What can BPBiH do?',
-     desc:'BPBiH may: use scanning wand (physical contact with clothing), indicate need to open pockets. BPBiH CANNOT: physically search, detain or remove EUFOR personnel from Terminal.',
-     doc:null,docClass:null},
-    {num:'3',title:'BPBiH attempts to detain EUFOR personnel',
-     desc:'ASS/BPBiH may detain (not arrest) personnel who CANNOT prove EUFOR/NHQ Sa status. In such case BPBiH immediately seeks assistance of ALS or ADMP.',
-     say:'"I am ADMP. This personnel is EUFOR/NHQ Sa. I am the authority here. Please step back and allow me to handle this."',
-     doc:null,docClass:null},
-    {num:'4',title:'Dispute between EUFOR and BPBiH',
-     desc:'ALS is the FINAL authority on all disputes between EUFOR/NHQ Sa personnel and BPBiH. Contact ALS immediately: 061 206 134.',
-     doc:'MPR',docClass:'doc-mpr'},
-    {num:'5',title:'DOB entry for any incident',
-     desc:'All interactions with BPBiH where dispute or issue arose must be logged.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'Personnel unable to prove EUFOR status: ADMP/ALS called immediately to resolve. ALS is final authority.'},
-    {cond:'IF',text:'EUFOR personnel travelling on commercial flights: same legal status as military flight. ALS not normally present — personnel present EUFOR ID and request ALS if problems arise.'}
-   ]
-  },
-
-  {id:'dt-convoy',color:'#1a5cb8',bg:'#dbeafe',
-   title:'Convoy Escort — IMP Duties',
-   steps:[
-    {num:'1',title:'Pre-escort check — receive tasking',
-     desc:'Request comes via FPM Office or JOC FRAGO (emergency). Confirm: CCN number, departure time, number of vehicles, route, type of cargo.',
-     doc:null,docClass:null},
-    {num:'2',title:'Verify CCN on vehicles',
-     desc:'CCN must be displayed on both sides of leading vehicle AND on front and back of trailing vehicle. Use CCN Decoder in Refs tab if needed.',
-     say:'"Please confirm your CCN is displayed on leading and trailing vehicles as required by SOP 6240 §7."',
-     doc:null,docClass:null},
-    {num:'3',title:'Check vehicle count',
-     desc:'Count vehicles. ≥16 in convoy? Must be split into packets of ≤15. Release interval 15 min between packets. Multiple convoys same SP: 60 min between convoys.',
-     doc:null,docClass:null},
-    {num:'4',title:'Verify ammo/explosives handling',
-     desc:'If convoy carries ammo or explosives: IMP escort is mandatory. Verify proper packaging and documentation. Notify LOG MOV immediately if discrepancy found.',
-     say:'"This convoy is carrying Class 1 dangerous goods. Confirm all documentation is present and IMP escort authorization from LOG MOV."',
-     doc:null,docClass:null},
-    {num:'5',title:'Escort position',
-     desc:'IMP escort vehicle typically leads or trails depending on type. Blue lights authorized. Weapons carried per duty authorization.',
-     doc:null,docClass:null},
-    {num:'6',title:'En route — convoy delay ≥30 min',
-     desc:'Convoy Commander must notify LOG MOV Officer (Cell) immediately. LOG MOV provides amended start time and notifies border control.',
-     say:'"This is IMP escort [CCN]. Convoy delayed ≥30 min at [location]. Notifying LOG MOV Officer for amended departure time."',
-     doc:null,docClass:null},
-    {num:'7',title:'En route — vehicle breakdown',
-     desc:'Column does NOT halt. Broken down vehicle: yellow flag + warning triangle + flasher lights. Driver stays with vehicle. Unit attempts own recovery first. Recovery vehicle is at rear of convoy.',
-     doc:null,docClass:null},
-    {num:'8',title:'Incident during escort',
-     desc:'Stop convoy if safety requires. Secure scene. Call IMP CMDR and LOG MOV Officer. Provide first aid if needed. DOB entry required.',
-     doc:'MPR',docClass:'doc-mpr'},
-    {num:'9',title:'DOB entry on completion',
-     desc:'Entry: Date / Time / CCN / Route used / Number of vehicles / Cargo type / Start point / Destination / Completion time / Any incidents.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'Ammo/explosives convoy: IMP escort mandatory. All requests via FPM Office 48h in advance for Class 1 dangerous goods.'},
-    {cond:'IF',text:'Emergency escort: IMP may be tasked via JOC FRAGO — early notification essential to ensure assets available.'},
-    {cond:'IF',text:'Technical Halts: approximately every 2 hours. Rest Halts after approximately 8 hours.'}
-   ]
-  },
-
-  {id:'dt-walkout',color:'#6b7280',bg:'#e8eaed',
-   title:'Walking Out — Authorization Check',
-   steps:[
-    {num:'1',title:'Check current ALERT STATE',
-     desc:'Before authorizing any walk-out, confirm current alert level.',
-     doc:null,docClass:null},
-    {num:'2',title:'ALPHA / BRAVO',
-     desc:'Authorized by: Branch/Section Chief, National Contingent Cdr, SNR, or MNBN Cdr.',
-     doc:null,docClass:null},
-    {num:'3',title:'CHARLIE (NATO)',
-     desc:'Authorized by COS HQ EUFOR or COS NHQ Sa. Mandatory: issue Force Exemption Card.',
-     doc:null,docClass:null},
-    {num:'4',title:'DELTA',
-     desc:'NO walking out. ALL personnel remain in Camp Butmir. No exceptions.',
-     say:'"Alert state DELTA is in effect. No walking out is authorized. All personnel must remain in Camp Butmir per SOP 3901 §15c."',
-     doc:null,docClass:null},
-    {num:'5',title:'Check Off-Limits list',
-     desc:'Monthly J2 Off-Limits list — posted at DFAC, Gym, GALAXY, CHRONOS. Off-limits: brothels, terrorism-linked, crime-linked, narcotics.',
-     doc:null,docClass:null},
-    {num:'6',title:'Recall procedure',
-     desc:'Alert state increases: Branch Supervisors contact personnel. Personnel return immediately and report to duty stations.',
-     doc:'DOB',docClass:'doc-dob'}
-   ],
-   branches:[
-    {cond:'IF',text:'Personnel may walk out in uniform or civilian clothes. Civilian clothes recommended.'},
-    {cond:'IF',text:'SNR may impose more restrictive conditions on their national contingents.'}
-   ]
+  // ─────────────────────────────────────────────────────────────────
+  {id:'walkout-check',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>',
+   color:'#6b7280', bg:'#e8eaed',
+   title:'Walking out — czy autoryzowany?',
+   subtitle:'SOP 3901 §14–18',
+   start:'q1',
+   nodes:{
+     q1:{q:'Aktualny stan alarmowy (Alert State)?',
+       opts:[{l:'ALPHA / BRAVO',c:'ok',n:'q2'},{l:'CHARLIE',c:'warn',n:'q3'},{l:'DELTA',c:'danger',n:'r-delta'}]},
+     q2:{q:'Czy osoba ma autoryzację od Branch/Section Chief, SNR lub MNBN Cdr?',
+       opts:[{l:'TAK',c:'ok',n:'q4'},{l:'NIE',c:'danger',n:'r-no-auth'}]},
+     q3:{q:'Czy osoba posiada Force Exemption Card wydaną przez COS HQ EUFOR lub COS NHQ Sa?',
+       opts:[{l:'TAK — ma Force Exemption Card',c:'ok',n:'q4'},{l:'NIE',c:'danger',n:'r-no-fec'}]},
+     q4:{q:'Czy cel wyjścia jest na aktualnej liście Off-Limits (J2)?',
+       opts:[{l:'NIE — lokalizacja dozwolona',c:'ok',n:'r-ok-walkout'},{l:'TAK — Off-Limits',c:'danger',n:'r-offlimits'}]},
+     'r-delta':{result:true, verdict:'DELTA — Zakaz opuszczania obozu',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Powiedz: "Stan DELTA — wyjście z obozu jest zabronione dla wszystkich bez wyjątku."','Skieruj osobę z powrotem do obozu.','Wpis DOB.'],
+       docs:['DOB'],
+       note:'SOP 3901 §15c. Brak wyjątków przy stanie DELTA.'},
+     'r-no-auth':{result:true, verdict:'Brak autoryzacji — zatrzymaj wyjście',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Zatrzymaj osobę przy bramie.','Poinformuj o konieczności uzyskania zgody Branch/Section Chief lub SNR.','Wpis DOB.'],
+       docs:['DOB'],note:''},
+     'r-no-fec':{result:true, verdict:'Brak Force Exemption Card (CHARLIE)',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Zatrzymaj. Przy stanie CHARLIE wymagana Force Exemption Card od COS.','Skieruj do COS HQ EUFOR lub COS NHQ Sa po kartę.'],
+       docs:['DOB'],note:''},
+     'r-offlimits':{result:true, verdict:'Off-Limits — wyjście zabronione do tej lokalizacji',
+       color:'#b91c1c', bg:'#fee2e2',
+       actions:['Poinformuj: "Lokalizacja jest na liście Off-Limits J2. Wejście zabronione."','Lista publikowana przez J2 — GALAXY, CHRONOS, tablice przy DFAC i Gym.'],
+       docs:['DOB'],note:''},
+     'r-ok-walkout':{result:true, verdict:'Walking out — autoryzowany',
+       color:'#15803d', bg:'#dcfce7',
+       actions:['Osoby mogą wyjść w mundurze lub ubraniu cywilnym.','Ubranie cywilne rekomendowane.','Przypomnienie o zakazie odwiedzania miejsc Off-Limits.'],
+       docs:[],note:''}
+   }
   }
 ];
 
-function renderDtrees(){
+// ── INTERACTIVE TREE ENGINE ───────────────────────────────────────────────────
+let itreeState={};
+
+function renderItrees(){
   const list=document.getElementById('dtreeList');
-  if(!list)return;
-  const docClassMap={
-    'MPR':'doc-mpr','TVR':'doc-tvr','PVR':'doc-pvr','DOB':'doc-dob'
-  };
-  list.innerHTML=dtrees.map(d=>`
-    <div class="dtree-card" id="dt-${d.id}">
-      <div class="dtree-header" onclick="document.getElementById('dt-${d.id}').classList.toggle('open')">
-        <div class="dtree-icon" style="background:${d.bg};color:${d.color}">${getDtreeSvg(d.id)}</div>
-        <span class="dtree-title">${d.title}</span>
+  if(!list) return;
+  list.innerHTML=itrees.map(t=>`
+    <div class="dtree-card" id="itree-${t.id}">
+      <div class="dtree-header" onclick="toggleItree('${t.id}')">
+        <div class="dtree-icon" style="background:${t.bg};color:${t.color}">${t.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="dtree-title">${t.title}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px">${t.subtitle}</div>
+        </div>
         <span class="v-chevron">&#9660;</span>
       </div>
-      <div class="dtree-body">
-        ${d.steps.map(s=>`
-          <div class="dtree-step">
-            <span class="dtree-step-num">${s.num}</span>
-            <div class="dtree-step-content">
-              <div class="dtree-step-title">${s.title}</div>
-              <div class="dtree-step-desc">${s.desc}</div>
-              ${s.say?`<span class="dtree-step-say">💬 ${s.say}</span>`:''}
-              ${s.doc?`<span class="dtree-step-doc ${s.docClass||''}">${s.doc}</span>`:''}
-            </div>
+      <div class="dtree-body" id="itree-body-${t.id}">
+        <div id="itree-content-${t.id}" style="padding:0"></div>
+        <div style="padding:8px 14px;border-top:1px solid var(--border)">
+          <button onclick="resetItree('${t.id}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--text3);cursor:pointer;font-family:var(--body);font-weight:600">↺ Reset</button>
+        </div>
+      </div>
+    </div>`).join('');
+  itrees.forEach(t=>{
+    itreeState[t.id]={current:t.start};
+    renderItreeNode(t.id);
+  });
+}
+
+function toggleItree(id){
+  const card=document.getElementById('itree-'+id);
+  if(card) card.classList.toggle('open');
+}
+
+function resetItree(id){
+  const t=itrees.find(x=>x.id===id);
+  if(!t) return;
+  itreeState[id]={current:t.start};
+  renderItreeNode(id);
+}
+
+function renderItreeNode(treeId){
+  const t=itrees.find(x=>x.id===treeId);
+  if(!t) return;
+  const nodeId=itreeState[treeId].current;
+  const node=t.nodes[nodeId];
+  if(!node) return;
+  const container=document.getElementById('itree-content-'+treeId);
+  if(!container) return;
+
+  // Build breadcrumb trail
+  const trail=itreeState[treeId].trail||[];
+
+  if(node.result){
+    // RESULT NODE
+    const docHtml=node.docs.length?node.docs.map(d=>{
+      const cls=d.startsWith('MPR')?'doc-mpr':d.startsWith('TVR')?'doc-tvr':d.startsWith('PVR')?'doc-pvr':'doc-dob';
+      return `<span class="dtree-step-doc ${cls}">${d}</span>`;
+    }).join(' '):'';
+    container.innerHTML=`
+      ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+      <div style="padding:14px;background:${node.bg};border-bottom:3px solid ${node.color}">
+        <div style="font-weight:900;font-size:15px;color:${node.color};margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">▶ ${node.verdict}</div>
+        ${node.actions.map((a,i)=>`
+          <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid ${node.color}22">
+            <span style="font-family:var(--mono);font-size:10px;color:${node.color};font-weight:700;min-width:16px;flex-shrink:0;padding-top:1px">${i+1}</span>
+            <span style="font-size:13px;color:var(--text);line-height:1.4">${a}</span>
           </div>`).join('')}
-        ${d.branches&&d.branches.length?`
-          <div style="border-top:1px solid var(--border)">
-            ${d.branches.map(b=>`
-              <div class="dtree-branch">
-                <span class="dtree-branch-cond ${b.cond==='YES'?'cond-yes':b.cond==='NO'?'cond-no':'cond-if'}">${b.cond}</span>
-                <span class="dtree-branch-text">${b.text}</span>
-              </div>`).join('')}
-          </div>`:''}
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+          ${docHtml}
+        </div>
+        ${node.note?`<div style="margin-top:10px;padding:6px 10px;background:rgba(0,0,0,.07);border-radius:4px;font-size:11px;color:var(--text2);line-height:1.5">${node.note}</div>`:''}
+      </div>`;
+    return;
+  }
+
+  // QUESTION NODE
+  if(node.type==='input'){
+    container.innerHTML=`
+      ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+      <div style="padding:12px 14px">
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px">${node.q}</div>
+        <div style="display:flex;gap:8px">
+          <input id="inp-${treeId}" placeholder="${node.inputPlaceholder}" type="number" min="0"
+            style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:16px;outline:none;font-weight:700"
+            onkeydown="if(event.key==='Enter')submitItreeInput('${treeId}','${nodeId}')">
+          <button onclick="submitItreeInput('${treeId}','${nodeId}')"
+            style="background:var(--accent2);border:none;border-radius:6px;padding:10px 18px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">OK</button>
+        </div>
+      </div>`;
+    setTimeout(()=>{const inp=document.getElementById('inp-'+treeId);if(inp)inp.focus();},50);
+    return;
+  }
+
+  // OPTIONS NODE
+  const colorMap={yes:'#15803d',no:'#b91c1c',warn:'#b45309',danger:'#b91c1c',ok:'#15803d',info:'#1a5cb8'};
+  const bgMap={yes:'#dcfce7',no:'#fee2e2',warn:'#fef3c7',danger:'#fee2e2',ok:'#dcfce7',info:'#dbeafe'};
+  container.innerHTML=`
+    ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+    <div style="padding:12px 14px">
+      <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;line-height:1.4">${node.q}</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${node.opts.map(o=>`
+          <button onclick="advanceItree('${treeId}','${o.n}','${o.l.replace(/'/g,"\\'")}')"
+            style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${bgMap[o.c]||bgMap.info};border:1.5px solid ${colorMap[o.c]||colorMap.info}44;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--body);transition:border-color .15s">
+            <span style="font-weight:700;font-size:13px;color:${colorMap[o.c]||colorMap.info};flex:1;line-height:1.3">${o.l}</span>
+            <span style="color:${colorMap[o.c]||colorMap.info};font-size:14px">›</span>
+          </button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function advanceItree(treeId, nextNodeId, choiceLabel){
+  const state=itreeState[treeId];
+  if(!state.trail) state.trail=[];
+  state.trail.push(choiceLabel);
+  state.current=nextNodeId;
+  renderItreeNode(treeId);
+}
+
+function submitItreeInput(treeId, nodeId){
+  const t=itrees.find(x=>x.id===treeId);
+  if(!t) return;
+  const node=t.nodes[nodeId];
+  const inp=document.getElementById('inp-'+treeId);
+  if(!inp) return;
+  const val=inp.value.trim();
+  if(!val){inp.style.borderColor='var(--danger)';return;}
+  const nextId=node.compute(val);
+  if(!nextId){inp.style.borderColor='var(--danger)';return;}
+  const state=itreeState[treeId];
+  if(!state.trail) state.trail=[];
+  state.trail.push(val);
+  state.current=nextId;
+  renderItreeNode(treeId);
+}
+
+renderItrees();
+
+
+// ── 9-LINER MEDEVAC BUILDER ───────────────────────────────────────────────────
+const ninerDef=[
+  {
+    line:1, label:'Location',
+    desc:'Grid reference or place name of pick-up site.',
+    type:'text', placeholder:'e.g. SIA E7 Gate / Grid 12345',
+    classified:false
+  },
+  {
+    line:2, label:'Radio Frequency & Call Sign',
+    desc:'Frequency in MHz and call sign of requesting unit.',
+    type:'text', placeholder:'e.g. IMP DUTY / IPN 5783',
+    classified:false
+  },
+  {
+    line:3, label:'Number of Patients by Precedence',
+    desc:'Number + code letter. Multiple categories: separate entries.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — Urgent',note:'Life-threatening. Evac within 1 hour.'},
+      {code:'B',label:'B — Urgent Surgical',note:'Requires surgery within 1h to save life/limb.'},
+      {code:'C',label:'C — Priority',note:'Serious but not immediate threat. Within 4h.'},
+      {code:'D',label:'D — Routine',note:'Evacuation within 24h. Condition stable.'},
+      {code:'E',label:'E — Convenience',note:'Evacuation for administrative reasons.'}
+    ],
+    prefix:'1 '
+  },
+  {
+    line:4, label:'Special Equipment Required',
+    desc:'Equipment needed at pick-up site.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — None',note:'No special equipment needed.'},
+      {code:'B',label:'B — Hoist',note:'Hoist / winch required.'},
+      {code:'C',label:'C — Extraction equipment',note:'Special extraction equipment needed.'},
+      {code:'D',label:'D — Ventilator',note:'Ventilator required during transport.'}
+    ],
+    prefix:''
+  },
+  {
+    line:5, label:'Number of Patients by Type',
+    desc:'Litter (carried on stretcher) or Ambulatory (can walk).',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'L',label:'L — Litter',note:'Patient cannot walk. Carried on stretcher.'},
+      {code:'A',label:'A — Ambulatory',note:'Patient can walk without assistance.'},
+      {code:'LA',label:'L + A',note:'Both litter and ambulatory patients.'}
+    ],
+    prefix:'1 '
+  },
+  {
+    line:6, label:'Security at Pick-Up Site',
+    desc:'Enemy status. Transmitted using NATO phonetic alphabet.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'N',label:'NOVEMBER — No enemy',note:'No enemy troops in area.'},
+      {code:'P',label:'PAPA — Possible enemy',note:'Possible enemy in area. Approach with caution.'},
+      {code:'E',label:'ECHO — Enemy troops',note:'Enemy troops in area. Armed escort required.'},
+      {code:'X',label:'XRAY — Armed escort required',note:'Enemy in area. Armed escort mandatory for extraction.'}
+    ],
+    prefix:'',
+    phoneticNote:true
+  },
+  {
+    line:7, label:'Method of Marking Pick-Up Site',
+    desc:'How the pick-up site is marked for the aircraft.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — Panels',note:'VS-17 panels or similar marking panels.'},
+      {code:'B',label:'B — Pyrotechnic signal',note:'Flare or signal pistol.'},
+      {code:'C',label:'C — Smoke signal',note:'Smoke grenade. Colour transmitted separately after freq check.'},
+      {code:'D',label:'D — None',note:'No marking. Aircraft uses grid only.'},
+      {code:'E',label:'E — Lights',note:'Strobe light or flashlight.'}
+    ],
+    prefix:''
+  },
+  {
+    line:8, label:'Patient Nationality & Status',
+    desc:'Nationality and military/civilian status.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'A',label:'A — US Military',note:'US Armed Forces personnel.'},
+      {code:'B',label:'B — US Civilian',note:'US civilian personnel.'},
+      {code:'C',label:'C — Non-US Military',note:'Use with nationality. e.g. C EUFOR, C POL, C AUT'},
+      {code:'D',label:'D — Non-US Civilian',note:'Non-US civilian personnel.'},
+      {code:'E',label:'E — EPW',note:'Enemy Prisoner of War.'}
+    ],
+    prefix:'',
+    euforNote:true
+  },
+  {
+    line:9, label:'NBC Contamination',
+    desc:'Nuclear, Biological, Chemical contamination at site.',
+    type:'select',
+    classified:true,
+    options:[
+      {code:'N',label:'N — None',note:'No contamination.'},
+      {code:'C',label:'C — Chemical',note:'Chemical contamination present.'},
+      {code:'B',label:'B — Biological',note:'Biological contamination present.'},
+      {code:'R',label:'R — Radiological',note:'Radiological contamination present.'},
+      {code:'X',label:'X — Nuclear',note:'Nuclear contamination present.'}
+    ],
+    prefix:''
+  }
+];
+
+let ninerValues={};
+
+function open9Liner(){
+  ninerValues={};
+  const modal=document.getElementById('ninerModal');
+  if(modal) modal.classList.add('open');
+  setNinerMode('build');
+  render9LinerLines();
+  document.getElementById('ninerOutput').style.display='none';
+}
+function close9Liner(){
+  const m=document.getElementById('ninerModal');
+  if(m) m.classList.remove('open');
+}
+function setNinerMode(mode){
+  const build=document.getElementById('ninerBuildMode');
+  const ref=document.getElementById('ninerRefMode');
+  const btnB=document.getElementById('ninerModeBuild');
+  const btnR=document.getElementById('ninerModeRef');
+  if(mode==='build'){
+    build.style.display='block'; ref.style.display='none';
+    btnB.style.background='var(--danger)'; btnB.style.color='#fff'; btnB.style.borderColor='var(--danger)';
+    btnR.style.background='var(--surface2)'; btnR.style.color='var(--text2)'; btnR.style.borderColor='var(--border)';
+  } else {
+    build.style.display='none'; ref.style.display='block';
+    btnR.style.background='var(--danger)'; btnR.style.color='#fff'; btnR.style.borderColor='var(--danger)';
+    btnB.style.background='var(--surface2)'; btnB.style.color='var(--text2)'; btnB.style.borderColor='var(--border)';
+    renderNinerRef();
+  }
+}
+
+function render9LinerLines(){
+  const container=document.getElementById('ninerLines');
+  if(!container) return;
+  container.innerHTML=ninerDef.map(l=>{
+    const lineId=`nl${l.line}`;
+    if(l.type==='text'){
+      return `
+        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
+            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
+          <input id="${lineId}" placeholder="${l.placeholder}" oninput="ninerValues[${l.line}]=this.value"
+            style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
+        </div>`;
+    } else {
+      return `
+        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
+            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
+            ${l.classified?'<span style="font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700">CODED</span>':''}
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
+          ${l.phoneticNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">⚠ Transmitted using NATO phonetic alphabet</div>':''}
+          ${l.euforNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">For EUFOR personnel: C EUFOR</div>':''}
+          <div style="display:flex;flex-direction:column;gap:4px">
+            ${l.options.map(o=>`
+              <label style="display:flex;align-items:flex-start;gap:8px;padding:7px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer">
+                <input type="radio" name="${lineId}" value="${o.code}" onchange="ninerValues[${l.line}]='${(l.prefix||'')+o.code}${l.euforNote&&o.code==='C'?' EUFOR':''}';"
+                  style="margin-top:2px;accent-color:var(--danger);flex-shrink:0">
+                <div>
+                  <div style="font-family:var(--mono);font-weight:700;font-size:12px;color:var(--accent)">${o.code}</div>
+                  <div style="font-size:12px;color:var(--text);font-weight:600">${o.label}</div>
+                  <div style="font-size:11px;color:var(--text3)">${o.note}</div>
+                </div>
+              </label>`).join('')}
+          </div>
+        </div>`;
+    }
+  }).join('');
+}
+
+function generate9Liner(){
+  const lines=[];
+  let missing=[];
+  ninerDef.forEach(l=>{
+    const val=ninerValues[l.line];
+    if(!val||val.trim()==='') missing.push('Line '+l.line+' ('+l.label+')');
+    else lines.push(`LINE ${l.line}: ${val.trim()}`);
+  });
+  const out=document.getElementById('ninerOutput');
+  const txt=document.getElementById('ninerText');
+  if(!out||!txt) return;
+  if(missing.length){
+    txt.textContent='⚠ MISSING:\n'+missing.join('\n');
+    txt.style.color='#fca5a5';
+  } else {
+    const ts=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    txt.textContent='=== 9-LINER MEDEVAC ===\n'+ts+' LOCAL\n\n'+lines.join('\n')+'\n\n=== END OF MESSAGE ===';
+    txt.style.color='#86efac';
+  }
+  out.style.display='block';
+  out.scrollIntoView({behavior:'smooth'});
+}
+
+function reset9Liner(){
+  ninerValues={};
+  render9LinerLines();
+  const out=document.getElementById('ninerOutput');
+  if(out) out.style.display='none';
+}
+
+function copy9Liner(){
+  const txt=document.getElementById('ninerText');
+  if(!txt) return;
+  navigator.clipboard?.writeText(txt.textContent).then(()=>alert('9-liner copied.')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('9-liner copied.');
+  });
+}
+
+function renderNinerRef(){
+  const c=document.getElementById('ninerRefContent');
+  if(!c) return;
+  c.innerHTML=ninerDef.map(l=>`
+    <div style="margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)">
+        <span style="font-family:var(--mono);font-weight:700;font-size:14px;color:var(--danger);min-width:24px">L${l.line}</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</div>
+          <div style="font-size:11px;color:var(--text3)">${l.desc}</div>
+        </div>
+        ${l.classified?'<span style="margin-left:auto;font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700;flex-shrink:0">CODED</span>':''}
+      </div>
+      ${l.type==='text'?`<div style="padding:8px 12px;font-size:12px;color:var(--text3)">Free text — ${l.placeholder}</div>`:
+      l.options.map(o=>`
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:6px;padding:6px 12px;border-bottom:1px solid var(--border)">
+          <span style="font-family:var(--mono);font-weight:900;font-size:14px;color:var(--accent)">${o.code}</span>
+          <div>
+            <div style="font-weight:600;font-size:12px;color:var(--text)">${o.label.replace(/^[A-Z] — /,'')}</div>
+            <div style="font-size:11px;color:var(--text3)">${o.note}</div>
+          </div>
+        </div>`).join('')}
+      ${l.phoneticNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">⚠ Use NATO phonetic alphabet: N=NOVEMBER, P=PAPA, E=ECHO, X=XRAY</div>`:''}
+      ${l.euforNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">For EUFOR personnel → C EUFOR</div>`:''}
+    </div>`).join('');
+}
+
+// ── SIA AIRPORT ──────────────────────────────────────────────────────────────
+const siaProcs={
+  dep:{
+    title:'Departing Flight — ADMP Duties',
+    color:'var(--accent2)',
+    steps:[
+      {n:'1',t:'Arrive at terminal 2h before departure',d:'ADMP must be at airport entrance/initial screening area 2 hours before planned departure time.'},
+      {n:'2',t:'Weapon unloading at entrance',d:'Remind EUFOR/NHQ Sa passengers: weapons must be unloaded before entering terminal. If possible, leave weapons outside.',say:'"All EUFOR personnel: unload weapons before entering the terminal. Weapons should be left outside if possible."'},
+      {n:'3',t:'Collect ammunition from passengers',d:'All passengers travelling must hand over ammunition in their possession. Magazines sealed with baggage tags → handed to aircraft Load Master. Knives/sharp implements removed from person and hand luggage → placed in hold luggage.',doc:'DOB'},
+      {n:'4',t:'Check-in supervision',d:'FS/NR checks in at designated desk. ADMP present at Check-In Counter. Flight closed minimum 45 min before departure.'},
+      {n:'5',t:'Security Control — Departure Lounge',d:'ADMP escorts passengers through Security Scanner. Only ADMP may physically search EUFOR/NHQ Sa personnel. BPBiH may use scanning wand but cannot physically search or detain EUFOR personnel.',say:'"EUFOR personnel only. Proceed through security scanner. Any prohibited items must be removed now."'},
+      {n:'6',t:'Passport Control',d:'ADMP assists BPBiH at Passport Control. Dedicated EUFOR/NHQ Sa channel. Personnel present: EUFOR/NHQ Sa ID + National Military ID Card with travel order, or passport.'},
+      {n:'7',t:'Boarding to aircraft',d:'ADMP escorts passengers from Departure Lounge → bus → aircraft. Passengers wait in Departure Lounge until called. Do NOT allow passengers to proceed before being called by ADMP.'},
+      {n:'8',t:'Confiscated items handling',d:'All confiscated items: bagged, identified, taken to aircraft by ADMP, handed to crew for safekeeping until destination. Passenger must ask crew for return at destination.'},
+      {n:'9',t:'DOB entry on completion',d:'Entry: flight number/type, CCN if applicable, number of passengers, departure time, any incidents, confiscated items.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §5–8. ALS has final authority on all disputes between EUFOR/NHQ Sa and BPBiH.'
+  },
+  arr:{
+    title:'Arriving Flight — ADMP Duties',
+    color:'var(--ok)',
+    steps:[
+      {n:'1',t:'Red Pass and E7 Gate preparation',d:'ADMP issues Red Passes in exchange for EUFOR ID cards (SOP 3945). Written request to ALS at least 24h in advance. Access to airside only through Security Door.'},
+      {n:'2',t:'Aircraft on approach (10 min out)',d:'ALS informs ADMP. Escort FS/NR and cargo team to bus. FS/NR ensures Red Pass is visible to Airport Security Service (ASS).',say:'"Aircraft on final approach. All personnel: Red Pass visible. No hats airside. Secure all loose articles."'},
+      {n:'3',t:'Aircraft handling at stand',d:'Receive incoming passenger manifest. Deliver outgoing PAX manifest to crew. Receive cargo. Sign all delivery documents together with Load Master.'},
+      {n:'4',t:'Passenger disembarkation',d:'Sarajevo-bound passengers disembark first. Transit passengers: segregated to rear of bus or separate transport. ADMP escorts to Terminal.'},
+      {n:'5',t:'Passport Control — inbound',d:'Passengers: present EUFOR/NHQ Sa ID, National Military ID (with travel order) or passport to BPBiH. EUFOR personnel exempt customs under SOFA — but must respect customs officials and produce ID if stopped.'},
+      {n:'6',t:'Collect Red Passes',d:'FS/NR must return all Red Passes to ALS office. ADMP returns EUFOR/NHQ Sa ID cards to personnel. FS/NR stays at airport until aircraft has taken off.',doc:'DOB'},
+      {n:'7',t:'DOB entry',d:'Entry: flight type, number of passengers (in/out/transit), any incidents, Red Passes issued/returned.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §5, §15. ADMP stays at airport until aircraft departure. ALS office manned weekdays 0800–1630.'
+  },
+  vip:{
+    title:'VIP Handling — Procedure A & B',
+    color:'var(--accent)',
+    steps:[
+      {n:'⚠',t:'VIP definition',d:'Military VIP = OF-6 (Colonel) or above, or civilian equivalent. Others processed as normal passengers. VIP Lounge booking through JVB. Request: Special Request Form to ALS min 24h in advance.'},
+      {n:'A',t:'Procedure A — small aircraft, VIP party only',d:'Once aircraft lands: SIA OPC Supervisor, ALS and/or ADMP approach aircraft. Once safe to approach ADMP signals greeting party. Max 2 persons at aircraft when VIP disembarks. ADMP escorts VIP + welcome party back through E7 gate to vehicles.'},
+      {n:'B',t:'Procedure B — mixed passengers on same aircraft',d:'All welcome party members board bus outside VIP Lounge. Bus drives to aircraft. ALS, ADMP and FS/NR disembark first to brief Loadmaster. Welcome party then invited to welcome disembarking VIPs. Baggage to trolley → follows bus back to VIP Lounge via E7 gate.',say:'"VIP passengers only step forward. All others remain on the bus."'},
+      {n:'3',t:'Vehicles and access',d:'Max 5 vehicles + max 7 persons (greeting party) at E7 gate. Vehicles parked in street near administration building 30 min before arrival. ADMP escorts personnel via E7 gate to EUFOR VIP Lounge.'},
+      {n:'4',t:'No hats airside',d:'Hats NOT worn beyond the white line (FOD line). Exception: VIP formal greeting — hats allowed up to white line only.'},
+      {n:'5',t:'VIP on commercial flight',d:'Max 1–2 Red Staff Passes per incoming VIP group. ADMP escorts nominees to Arrivals Lounge. Wait at baggage delivery area until VIP through Immigration. Do NOT cross Immigration Line. ADMP escorts VIPs to waiting cars.',doc:'DOB'},
+      {n:'6',t:'DOB entry',d:'Entry: VIP name (rank+position), flight type, procedure used (A/B), greeting party personnel, any incidents.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15b. For VIP flight 3–5 ADMP required. VIP Lounge booked through JVB — not for embassy or outside EUFOR/NATO use.'
+  },
+  ammo:{
+    title:'Ammunition & Explosives at SIA',
+    color:'var(--danger)',
+    steps:[
+      {n:'⚠',t:'SIA is NOT licensed to handle explosives',d:'All responsibility lies with National Explosives Officer. Decisions made by NEO in consultation with SIA Supervisor, ALS and EUFOR/NATO Explosives Officer.',say:'"This aircraft is carrying Class 1 dangerous goods. Confirm National Explosives Officer is present and all documentation is with ALS office."'},
+      {n:'1',t:'Pre-arrival — paperwork to ALS',d:'Full aircraft manifest + total Net Explosives Quantity (NEQ) must reach ALS office minimum 48h before aircraft arrival. Monday/Tuesday aircraft: paperwork by previous Thursday/Friday.'},
+      {n:'2',t:'Guard team',d:'Guard team required for aircraft and loaded vehicles while at SIA. Guard names + name of National Explosives Officer → sent to ALS with paperwork. All guard personnel at airport min 1h before aircraft arrival.'},
+      {n:'3',t:'Aircraft parking position',d:'Aircraft parked at end of runway — furthest point from terminal and civilian areas. Access through Gate E3 only.'},
+      {n:'4',t:'ADMP escorts ammunition',d:'Ammunition removed from passengers, packed by NSE staff → ADMP/ALS escort to aircraft airside. Magazines sealed with baggage tags. Ammunition handed over to Load Master.',doc:'DOB'},
+      {n:'5',t:'Small quantities (≤20kg NEQ 1.4S)',d:'Aircraft parked away from others. DAC unloaded first by NEO. Transported through E7 gate.'},
+      {n:'6',t:'Large quantities',d:'Request for flight approval + notification to ALS 48h in advance + special handling request + transportation ONLY through Gate E3.'},
+      {n:'7',t:'Overnight stay',d:'All dangerous cargo MUST be unloaded if aircraft stays overnight. Cannot be stored at SIA. Must be transported away (TCC responsibility).',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §17c. Weapons with ammunition: cleared before airport terminal. ADMP are the only ones authorized to carry weapons through SIA controls.'
+  },
+  medevac:{
+    title:'MEDEVAC Procedure at SIA',
+    color:'var(--danger)',
+    steps:[
+      {n:'1',t:'Notification to ALS',d:'Send to ALS: Special Request Form + copy of passenger\'s passport + EUFOR ID card.',say:'"This is ADMP. MEDEVAC request for [Name, Rank, Unit]. Sending Special Request Form and ID documentation to ALS now."'},
+      {n:'2',t:'Transmit 9-Liner MEDEVAC request',d:'Before or during notification — transmit 9-liner to Medical Cell (ext. 912) and JOC. Use coded format. Open 9-Liner Builder below → tap "9-Liner" button.',say:'[USE 9-LINER BUILDER — tap button below procedure list]'},
+      {n:'3',t:'Arrival timing',d:'MED/NSE team arrives at airport 15 min before aircraft arrival. Vehicles parked at E7 gate, in street near administration building.'},
+      {n:'4',t:'Document check at BPBiH',d:'NSE/MED team shows passenger\'s passport and EUFOR ID card to BiH Border Police. Team waits if aircraft needs to refuel.'},
+      {n:'5',t:'ADMP Red Cards and E7 escort',d:'ADMP issues Red Cards to MED/NSE team and escorts via E7 gate to aircraft.',say:'"Red Cards issued. Follow me to E7 gate. No hats airside. Stay with the group at all times."'},
+      {n:'6',t:'Stretcher patient',d:'If passenger is on stretcher: "Follow Me" car comes to E7 gate. MED/NSE team with vehicles follows "Follow Me" car to aircraft. Vehicles return via E7 gate after patient disembarkation.'},
+      {n:'7',t:'Out of hours',d:'SIA operating hours: 0600–2200. EUFOR may request airport to open OOH for medical emergency. Contact ALS immediately → informal approach to air traffic → formal request signed at highest possible level.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15g. Medical Cell: ext. 912. ALS on permanent call: 061 206 134. JOC: 5366–5368.'
+  },
+  delay:{
+    title:'Flight Delay or Cancellation',
+    color:'var(--warn)',
+    steps:[
+      {n:'1',t:'Delay announced',d:'FS/NR informs ALS office immediately. ALS advises passengers.',say:'"Attention EUFOR/NHQ Sa passengers. Your flight is delayed. Please remain at [location] and await further instruction from your Flight Sponsor."'},
+      {n:'2',t:'Delay ≤2h — checked in',d:'Passengers remain at SIA and make themselves comfortable. Boarding cards retained.'},
+      {n:'3',t:'Delay >2h — checked in',d:'Passengers proceed through boarding gate handing in boarding cards. Issued EUFOR/NHQ Sa boarding cards → transit through Arrivals Lounge → return to Camp Butmir until further notice. NR/FS co-ordinates transport.'},
+      {n:'4',t:'Flight cancelled',d:'Passengers NOT issued replacement boarding passes. Collect luggage from carousel while transiting Arrivals Lounge. Welfare and onward movement: responsibility of NR/FS (not ALS).'},
+      {n:'5',t:'ADMP duties during delay',d:'Maintain security of sterile areas. Ensure transit passengers remain in Departure Area (security and immigration reasons). May move transit passengers out of Departure Area for refreshments if lengthy delay.'},
+      {n:'6',t:'DOB entry',d:'Entry: flight details, reason for delay/cancellation, number of passengers affected, actions taken, time of return to Camp Butmir if applicable.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §15f. NR/FS responsible for keeping passengers informed and organized. ALS not responsible for resolving delay/cancellation issues.'
+  },
+  redpass:{
+    title:'Red Pass — Issue & Control',
+    color:'#b91c1c',
+    steps:[
+      {n:'1',t:'Written request required',d:'Special Request Form to ALS minimum 24 hours in advance. Red Pass is an accountable document — must be tracked.',say:'"Red Pass requires written request to ALS at least 24 hours in advance. Complete Special Request Form first."'},
+      {n:'2',t:'ID collateral',d:'EUFOR/NHQ Sa personnel MUST give ADMP their EUFOR/NHQ Sa ID card as collateral when signing out a Red Pass (SOP 3945 compliance).'},
+      {n:'3',t:'When is Red Pass required?',d:'• Meeting aircraft/escorting passengers from aircraft\n• Escorting passengers through Passport Control (NRs/FSs only)\n• Escorting weapons, ammo, cargo for National Flight\n• Meeting VIPs in Arrivals Lounge (commercial flight)\n• Visiting Operations or Flight Planning pre-flight'},
+      {n:'4',t:'Access rules',d:'Access to airside ONLY through Security Door. No bags/packages through these doors without airport security scanning. Personnel must stay in immediate vicinity of ALS staff or be escorted.'},
+      {n:'5',t:'Return Red Pass',d:'Red Pass must be returned to ALS office or ADMPs on task completion. FS/NR must return all Red Passes before ADMP returns ID cards.',say:'"Please return your Red Pass now. I will return your ID card once all passes are accounted for."'},
+      {n:'6',t:'DOB entry',d:'Log: every Red Pass issued (name, unit, time issued) and every return (time returned). Use Red Pass Tracker below.',doc:'DOB'}
+    ],
+    note:'Ref: SOP 6240 Annex B §8f, SOP 3945. Red Pass is accountable — every issue and return must be logged. ADMP has ultimate authority for any investigation airside.'
+  },
+  items:{
+    title:'Prohibited Items — Baggage Rules',
+    color:'var(--text2)',
+    steps:[
+      {n:'H',t:'HAND BAGGAGE — Nil sharps',d:'No knives, sharp implements or "sharps" in hand baggage UNLESS specific permission given for troops to travel in fighting order.'},
+      {n:'L',t:'HOLD BAGGAGE — allowed (with conditions)',d:'Aircrew knives, survival knives (if valid operational requirement), Leatherman/Gerber tools, open razors, scalpels, scissors, penknives, bayonets, kukris, machetes (service issue), ice picks, ceremonial swords, tools with blades, ammunition.'},
+      {n:'✕',t:'PROHIBITED — cannot travel at all',d:'Flick knives, butterfly knives, gravity catch knives, stilettos, non-ceremonial swords, swordsticks, harpoons, spears, arrows, other unclassified bladed objects.'},
+      {n:'A',t:'AMMUNITION handling',d:'Passenger clears weapon before airport terminal. Magazines/ammo: sealed with baggage tags, given to aircraft Load Master. Returned to passenger at destination (passenger must request return from crew).'},
+      {n:'L',t:'LIQUIDS',d:'Regulations and bans on liquids apply in hand and hold baggage. Check with NSE for destination airport requirements.'},
+      {n:'⚠',t:'CONFISCATION by ADMP',d:'If prohibited item found on person or in hand baggage: confiscated by ADMP, marked, handed to aircraft Loadmaster. Returned to passenger at destination.',say:'"I am confiscating this item as it is prohibited in hand baggage. It will be handed to the Loadmaster and returned to you at your destination."'}
+    ],
+    note:'Ref: SOP 6240 Annex B §8c. Only ADMP may confiscate items from EUFOR/NHQ Sa personnel. BPBiH authorized to scan but not to physically search or detain EUFOR personnel.'
+  }
+};
+
+function renderSIAList(){
+  const list=document.getElementById('siaList');
+  if(!list) return;
+  const cards=[
+    {id:'dep',icon:'✈',label:'Departing Flight',color:'var(--accent2)'},
+    {id:'arr',icon:'🛬',label:'Arriving Flight',color:'var(--ok)'},
+    {id:'vip',icon:'⭐',label:'VIP Handling (A/B)',color:'var(--accent)'},
+    {id:'ammo',icon:'⚠',label:'Ammo / Explosives',color:'var(--danger)'},
+    {id:'medevac',icon:'🚑',label:'MEDEVAC',color:'var(--danger)'},
+    {id:'delay',icon:'⏱',label:'Delay / Cancellation',color:'var(--warn)'},
+    {id:'redpass',icon:'🪪',label:'Red Pass Control',color:'#b91c1c'},
+    {id:'items',icon:'✕',label:'Prohibited Items',color:'var(--text2)'}
+  ];
+  list.innerHTML=cards.map(c=>`
+    <div class="proc-card" onclick="openSIA('${c.id}')" style="cursor:pointer">
+      <div class="proc-header">
+        <div class="proc-icon" style="background:${c.color}22;color:${c.color}">
+          <span style="font-size:16px">${c.icon}</span>
+        </div>
+        <span class="proc-title">${c.label}</span>
+        <span style="color:var(--text3);font-size:10px">›</span>
       </div>
     </div>`).join('');
 }
 
-function getDtreeSvg(id){
-  const m={'dt-dui':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
-  'dt-speed':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-  'dt-parking':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>',
-  'dt-drunk':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/></svg>',
-  'dt-id':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>',
-  'dt-weapon':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
-  'dt-uncooperative':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="11" x2="23" y2="11"/></svg>',
-  'dt-accident':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
-  'dt-dress':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44z"/></svg>',
-  'dt-quiet':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/></svg>',
-  'dt-bike':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0 0-2h-3l-3 9 2 1h4l1-3"/><path d="M18.5 17.5 12 9"/></svg>',
-  'dt-sia-weapon':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>',
-  'dt-sia-search':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-  'dt-convoy':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><line x1="8" y1="8" x2="8" y2="13"/><line x1="11" y1="8" x2="11" y2="13"/></svg>',
-  'dt-walkout':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="5" r="1.5"/><path d="M9 10l3-2 3 2M12 8v5l3 3M12 13l-2 4"/></svg>'};
-  return m[id]||m['dt-id'];
+function openSIA(id){
+  const p=siaProcs[id];
+  if(!p) return;
+  const modal=document.getElementById('siaModal');
+  const title=document.getElementById('siaModalTitle');
+  const body=document.getElementById('siaModalBody');
+  if(!modal||!title||!body) return;
+  title.childNodes[0].textContent=p.title+' ';
+  body.innerHTML=`
+    <ol style="list-style:none;padding:0">
+      ${p.steps.map(s=>`
+        <li style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <span style="font-family:var(--mono);font-size:11px;color:${p.color};flex-shrink:0;padding-top:2px;font-weight:700;min-width:20px">${s.n}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px">${s.t}</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;white-space:pre-line">${s.d}</div>
+            ${s.say?`<div style="background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-size:12px;color:var(--text);line-height:1.5">💬 ${s.say}</div>`:''}
+            ${s.doc?`<span style="display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:#dcfce7;color:#15803d;border:1px solid #86efac;font-weight:700">${s.doc}</span>`:''}
+          </div>
+        </li>`).join('')}
+    </ol>
+    ${p.note?`<div style="margin-top:10px;padding:8px 12px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);font-size:12px;color:var(--warn);line-height:1.4;font-weight:600">${p.note}</div>`:''}`;
+  modal.classList.add('open');
 }
-renderDtrees();
+function closeSIA(){
+  const m=document.getElementById('siaModal');
+  if(m) m.classList.remove('open');
+}
+
+// RED PASS TRACKER
+function issueRedPass(){
+  const name=document.getElementById('rpName').value.trim();
+  const unit=document.getElementById('rpUnit').value.trim();
+  if(!name){alert('Enter name.');return;}
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  passes.push({name,unit,ts:Date.now(),id:Date.now()});
+  localStorage.setItem('imp_rp',JSON.stringify(passes));
+  document.getElementById('rpName').value='';
+  document.getElementById('rpUnit').value='';
+  renderRedPasses();
+}
+
+function returnRedPass(id){
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  passes=passes.filter(p=>p.id!==id);
+  localStorage.setItem('imp_rp',JSON.stringify(passes));
+  renderRedPasses();
+}
+
+function renderRedPasses(){
+  const list=document.getElementById('rpList');
+  if(!list) return;
+  let passes=[];
+  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
+  if(!passes.length){
+    list.innerHTML='<div style="text-align:center;padding:12px;color:var(--text3);font-size:12px">No Red Passes currently issued.</div>';
+    return;
+  }
+  list.innerHTML=passes.map(p=>{
+    const mins=Math.floor((Date.now()-p.ts)/60000);
+    const timeStr=mins<60?`${mins}m ago`:`${Math.floor(mins/60)}h ${mins%60}m ago`;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-weight:700;font-size:13px;color:var(--text)">${p.name}</div>
+        <div style="font-size:11px;color:var(--text3)">${p.unit||'—'} · Issued ${timeStr}</div>
+      </div>
+      <button onclick="returnRedPass(${p.id})" style="background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:6px 12px;color:#15803d;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body)">✓ Return</button>
+    </div>`;
+  }).join('');
+}
+renderSIAList();
+renderRedPasses();
+
+// ── CCN DECODER ───────────────────────────────────────────────────────────────
+const ccnNations={
+  'AFG':'Afghanistan','ALB':'Albania','AUT':'Austria','BEL':'Belgium',
+  'BIH':'Bosnia & Herzegovina','BGR':'Bulgaria','HRV':'Croatia','CYP':'Cyprus',
+  'CZE':'Czech Republic','DNK':'Denmark','EST':'Estonia','FIN':'Finland',
+  'FRA':'France','DEU':'Germany','GRC':'Greece','HUN':'Hungary',
+  'IRL':'Ireland','ITA':'Italy','LVA':'Latvia','LTU':'Lithuania',
+  'LUX':'Luxembourg','MLT':'Malta','NLD':'Netherlands','POL':'Poland',
+  'PRT':'Portugal','ROU':'Romania','SVK':'Slovakia','SVN':'Slovenia',
+  'ESP':'Spain','SWE':'Sweden','TUR':'Turkey','GBR':'United Kingdom',
+  'USA':'United States','CAN':'Canada','NOR':'Norway','MKD':'North Macedonia',
+  'CHE':'Switzerland','MNE':'Montenegro','SRB':'Serbia','ALG':'Algeria',
+  'MAR':'Morocco','NZL':'New Zealand','AUS':'Australia'
+};
+const ccnSP={
+  'A':'A — Outside the Theatre',
+  'B':'B — In / Out of Bosnia and Herzegovina',
+  'C':'C — In / Out of Croatia'
+};
+
+function decodeCCN(val){
+  const out=document.getElementById('ccnResult');
+  if(!out) return;
+  const raw=val.trim().toUpperCase().replace(/\s/g,'');
+  if(!raw){out.innerHTML='';return;}
+
+  const parts=raw.split('/');
+  if(parts.length!==6){
+    out.innerHTML=`<div style="font-size:12px;color:var(--text3);margin-top:4px">Format: DD/EUFOR/SN/SP/NAT/VEH (6 parts separated by /)</div>`;
+    return;
+  }
+  const [dd,auth,sn,sp,nat,veh]=parts;
+  const spDesc=ccnSP[sp]||sp+' — unknown';
+  const natDesc=ccnNations[nat]||nat+' — check country codes';
+  const dayNum=parseInt(dd);
+  const snNum=parseInt(sn);
+  const vehNum=parseInt(veh);
+  const packetCount=vehNum>15?Math.ceil(vehNum/15):1;
+  const needsPackets=vehNum>15;
+
+  out.innerHTML=`
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-top:4px">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px">
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${dd}</span><span style="color:var(--text2)">Day of month: <strong>${dayNum}</strong></span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${auth}</span><span style="color:var(--text2)">Controlling authority</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${sn}</span><span style="color:var(--text2)">Movement serial #<strong>${snNum}</strong> of the day</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${sp}</span><span style="color:var(--text2)">${spDesc}</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${nat}</span><span style="color:var(--text2)">${natDesc}</span>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--accent)">${veh}</span><span style="color:var(--text2)"><strong>${vehNum} vehicle${vehNum!==1?'s':''}</strong> in convoy</span>
+      </div>
+      ${vehNum>=7?`<div style="margin-top:8px;padding:6px 8px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);font-size:11px;color:var(--warn);font-weight:700">⚠ CONVOY (≥7 vehicles) — LOG MOV control required. CCN must be on leading + trailing vehicle.</div>`:''}
+      ${needsPackets?`<div style="margin-top:6px;padding:6px 8px;background:#fee2e2;border-radius:4px;border-left:3px solid var(--danger);font-size:11px;color:var(--danger);font-weight:700">⚠ PACKETS REQUIRED — ${vehNum} vehicles → break into ${packetCount} packets of max 15, with 15 min intervals between packets.</div>`:''}
+    </div>`;
+}
+
+// ── ROUTES ────────────────────────────────────────────────────────────────────
+const routes=[
+  {type:'main',name:'ANGELA',path:'BXP Kamensko (HR) – Brnaze – Mravince – Split.'},
+  {type:'main',name:'ARIZONA',path:'BXP Orasje – Srebrenik – Dobmja – 5 km west of Tuzla.'},
+  {type:'main',name:'ARKANSAS',path:'Klasnice – Hrvacani – Prnjavor – Agici – Derventa.'},
+  {type:'main',name:'BERT (HR)',path:'BXP Zupanja (HR) Cross Roads (CR) STEVE – Vinkovci.'},
+  {type:'main',name:'BLUEBIRD',path:'BXP Maljevac – Velika Kladusa – Cazin – Bihac – Bosanski Petrovac – Klujc – Mrkonjic Grad – Jajce.'},
+  {type:'main',name:'CONNECTICUT',path:'BXP Bosanska Gradiska – Laktasi – Doboj (highway).'},
+  {type:'main',name:'CHARLIE (HR highway)',path:'BXP Nova Sela (BiH/HR) – Dugopolje – CR ANGELA – Skradin – Stupica (34km northeast from ZADAR).'},
+  {type:'main',name:'DEVON',path:'part/: Laktasi – Banja Luka.'},
+  {type:'main',name:'DIAMOND',path:'Donji Vakuf – Turbe – Travnik – Vitez – Kaonik and 5 km east.'},
+  {type:'main',name:'ERIC (HR)',path:'BXP Slavonski Brod (HR) – CR STEVE – Nasice – BXP Donji Miholjac – (HR/HU).'},
+  {'type':'main','name':'FLORIDA_highway',path:'Zenica – Sarajevo.'},
+  {type:'main',name:'GULL',path:'BXP Gradiska – Banja Luka – Jajce – Donji Vakuf – Bugojno – Kupres – Tomislavgrad – BXP Kamensko (BiH/HR).'},
+  {type:'main',name:'HORN BLOWER',path:'Mrkoniic Grad – Baljvine.'},
+  {type:'main',name:'HOWDY (HR)',path:'BXP Stara Gradiska (HR) – CR STEVE – Lipik – Daruvar – Virovitica – Zrinj Lukacki.'},
+  {type:'main',name:'KIM (HR)',path:'BXP Metkovic (HR) – Opuzen.'},
+  {type:'main',name:'LADA',path:'Doboj – Maglaj – Zenica and 10 km south.'},
+  {type:'main',name:'MAGPIE',path:'Livno – Sredevici – Raseljka.'},
+  {type:'main',name:'MELANIE (HR)',path:'BXP Maljevac (HR) – Krstinja – Kolaric – Karlovac.'},
+  {type:'main',name:'NEW JERSEY',path:'BXP Bosanski Brod – Derventa – Doboj – Lukavac – Zivinice – Kladanj.'},
+  {type:'main',name:'OPAL',path:'Jablanica – Prozor – Gornji Vakuf – Bugojno.'},
+  {type:'main',name:'OSTRICH',path:'Zivinice – Dubrave – Tojsici.'},
+  {type:'main',name:'PACMAN',path:'part/: Sarajevo – Konjic – Jablanica – Mostar – Capljina – BXP Metkovic.'},
+  {type:'main',name:'PELICAN',path:'Suica (CR GULL) – Livno – Glamoc – Donji Baraci – CR HORN BLOWER (Podbrdo 1,5km – Mrkonjic 7,5km).'},
+  {type:'main',name:'PYTHON',path:'Kladanj – Olovo – Semizovac.'},
+  {type:'main',name:'SANTA (HR)',path:'BXP Slavonski samac (HR) – CR STEVE – Dakovo – Osijek – BXP Udvar (HR/HU).'},
+  {type:'main',name:'STEVE (HR highway)',path:'BXP Lipovac (HR/SR) – CR BERT – CR SANTA – CR ERIC – CR HOWDY – CR MELANIE – Zagreb.'},
+  {type:'secondary',name:'CANARY',path:'Podromanija – Kula – Kovanj – Rogatica – Kukavice – Brcigovo – Ustipraca.'},
+  {type:'secondary',name:'CROW',path:'part/: Siroki Brijeg – Knespolje – Mostar.'},
+  {type:'secondary',name:'DUCK',path:'part/: Zepce – Bistrica – Zavidovici.'},
+  {type:'secondary',name:'FALCON',path:'part/: Teslic – Jelah – Zabljak – Ends 10 km East of Zabljak connection with LADA.'},
+  {type:'secondary',name:'FARMER',path:'part/: Prijedor – Sanski Most.'},
+  {type:'secondary',name:'FINCH',path:'Lasva – Kakanj – Visoko – Ilijas – Semizovac – Sarajevo.'},
+  {type:'secondary',name:'GEORGIA',path:'part/: Simin Han – Pozamica – Priboj – Suho Polje – Hase – Bijeljina.'},
+  {type:'secondary',name:'HAWAII',path:'part/: Modrica – D. Skugric – Gradacac.'},
+  {type:'secondary',name:'HAWK',path:'Starts 12 km west of Tuzla – Simin Han – Tojsici – Prnjavor – Kalesija Caparde – Karakaj.'},
+  {type:'secondary',name:'MARIANNE',path:'part/: Bosanski Petrovac – Drvar.'},
+  {type:'secondary',name:'MICHIGAN',path:'part/: Crcvica – Donjie Ledenice – Gradacac – D. Lukavac – ends 5 km East of Donje Srnice.'},
+  {type:'secondary',name:'OREGON',path:'Konjevici – Kravica – Bratunac.'},
+  {type:'secondary',name:'PEGASUS',path:'part/: Prijedor – Kozarac – Ivanjska – Banja Luka.'},
+  {type:'secondary',name:'PETRUS',path:'part/: Han Derventa – Pale.'},
+  {type:'secondary',name:'RABBIT',path:'Stolac – Ljubinje – Kotezi – Mrkonjici – Lug – Trebinje.'},
+  {type:'secondary',name:'RIESLING',path:'part/: Gorazde – Vitkovici – Ustikolina – Patkovina – Foca.'},
+  {type:'secondary',name:'SPARROW',path:'Starts 5 km North of Zvornik – Devanje – Drinjaca – Konjevici – Carska – Nova Kasaba – Milici – Vlasenica – Han Pijesak – Mrkalji – Margetici – Vridici – Sokolac – Podromanjia – Mokro – Han Derventa – Sarajevo.'},
+  {type:'secondary',name:'TEXAS',path:'part/: Loncari – Gorice – Brcko.'},
+  {type:'secondary',name:'TURKEY',path:'Gorazde – Sopotnica – Ustipraca – Brodar – Orahovci – Visegrad – Dobrun – Ends 1 km West of BXP Kotroman.'},
+  {type:'secondary',name:'VIPER',path:'Capljina – Tasovici – Recice – Berkovici – Bijeljani – Fatrica – Ends 3 km Southeast of Plana.'},
+  {type:'loc',name:'LOC Hub 1 BANJA LUKA — BL 1&2',path:'FLORIDA – LADA – CONNECTICUT – DEVON. or: FLORIDA – DIAMOND – GULL.'},
+  {type:'loc',name:'LOC Hub 1 BANJA LUKA — Cazin',path:'FLORIDA – DIAMOND – GULL – BLUEBIRD.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Brcko',path:'FLORIDA – PYTHON – NEW JERSEY – ARIZONA – TEXAS.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Tuzla',path:'FLORIDA – PYTHON – NEW JERSEY.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Bratunac',path:'SPARROW – OREGON.'},
+  {type:'loc',name:'LOC Hub 2 TUZLA — Doboj',path:'FLORIDA – LADA.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Zenica',path:'FLORIDA – LADA.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Livno',path:'FLORIDA – DIAMOND – GULL – PELICAN.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Travnik',path:'FLORIDA – DIAMOND.'},
+  {type:'loc',name:'LOC Hub 3 ZENICA — Zavidovici',path:'FLORIDA – LADA – DUCK/part.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Mostar',path:'PACMAN.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Jablanica',path:'PACMAN.'},
+  {type:'loc',name:'LOC Hub 4 MOSTAR — Trebinje',path:'PACMAN – VIPER – RABBIT.'},
+  {type:'loc',name:'LOC Hub 5 SARAJEVO — Foca',path:'SPARROW – CANARY – TURKEY – RIESLING.'},
+  {type:'loc',name:'LOC Hub 5 SARAJEVO — Visegrad',path:'SPARROW – CANARY – TURKEY.'},
+  {type:'tactical',name:'FITZROY (via Serbia)',path:'Sarajevo – Tuzla – Orasje/BXP – Zupania (HRV) – BXP Lipovac – Batrovci – Beograd – Nis – Prokuplje – Merdare – Pristina.'},
+  {type:'tactical',name:'HAROLD (via Serbia)',path:'Sarajevo – Rogatica – Visegrad – BXP Vardiste – Cacak – Lesak – Kraljevo – Rudnice – Kosovska Mitrovica – Pristina.'},
+  {type:'tactical',name:'IVAYLO (via Montenegro)',path:'Sarajevo – Jablanica – Mostar – Capljina – Stolac – Ljubinje – Velikani – Trebinje – BXP Klobuk – Niksic – Podgorica – Kolasin – Mojkovac – Ribarevine – Berane – Rozaje – BXP Kula – Pec – Pristina.'},
+  {type:'tactical',name:'STEFAN (via Montenegro, light vehicles only)',path:'Sarajevo – Gorazde – Vitkovici – Cajnice – BXP Metaljka – Pljevlja – Djurdjevica Tara – Mojkovac – Ribarevine – Berane – Rozaje – BXP Kula – Pec – Pristina.'},
+];
+
+function renderRoutes(filter,q){
+  const list=document.getElementById('routeList');
+  if(!list)return;
+  let items=routes;
+  if(filter&&filter!=='all')items=items.filter(r=>r.type===filter);
+  if(q){
+    const fq=q.toLowerCase();
+    items=items.filter(r=>r.name.toLowerCase().includes(fq)||r.path.toLowerCase().includes(fq));
+  }
+  const typeLabels={main:'Main',secondary:'Secondary',loc:'LOC',tactical:'Tactical'};
+  const typeClass={main:'rb-main',secondary:'rb-secondary',loc:'rb-loc',tactical:'rb-tactical'};
+  list.innerHTML=items.map((r,i)=>`
+    <div class="route-card" id="rc-${i}">
+      <div class="route-header" onclick="document.getElementById('rc-${i}').classList.toggle('open')">
+        <span class="route-name">${r.name}</span>
+        <span class="route-type-badge ${typeClass[r.type]}">${typeLabels[r.type]}</span>
+        <span class="v-chevron" style="margin-left:auto">&#9660;</span>
+      </div>
+      <div class="route-body">
+        <div class="route-path">${r.path.replace(/–/g,' <strong>–</strong> ')}</div>
+      </div>
+    </div>`).join('');
+  if(!items.length)list.innerHTML='<div class="search-empty">No routes found.</div>';
+}
+
+let currentRouteFilter='all';
+document.getElementById('routeFilters')&&document.getElementById('routeFilters').addEventListener('click',function(e){
+  const chip=e.target.closest('.filter-chip');if(!chip)return;
+  document.querySelectorAll('#routeFilters .filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  currentRouteFilter=chip.dataset.rfilter;
+  renderRoutes(currentRouteFilter,document.getElementById('routeSearch')?.value||'');
+});
+function filterRoutes(q){renderRoutes(currentRouteFilter,q);}
+renderRoutes('all','');
+
+// ── DIPLOMATIC PLATES ─────────────────────────────────────────────────────────
+const diplPlates=[
+  [10,'France'],[11,'USA'],[12,'Iran'],[13,'Croatia'],[14,'Turkey'],[15,'Germany'],
+  [16,'Austria'],[17,'Saudi Arabia'],[18,'Italy'],[20,'Great Britain'],[23,'Netherlands'],
+  [24,'Libya'],[25,'Switzerland'],[26,'Egypt'],[27,'Ireland'],[28,'Slovenia'],
+  [29,'OSCE — Organisation for Security and Co-operation in Europe'],[30,'Canada'],
+  [32,'Sweden'],[33,'Russian Federation'],[34,'Czech Republic'],[35,'United Nations (UN)'],
+  [36,'Pakistan'],[37,'Office of the High Representative (OHR)'],[38,'Commission for Human Rights'],
+  [39,'Norway'],[40,'Bulgaria'],[41,'World Bank'],[42,'Portugal'],[43,'Malaysia'],
+  [44,'United Nations High Commissioner for Refugees (UNHCR)'],[46,'International Monetary Fund (IMF)'],
+  [47,'Customs and Fiscal Assistant Office (CAFAO)'],[48,'Denmark'],[49,'European Bank'],
+  [50,'European Commission in BiH'],[51,'United Nations Development Program (UNDP)'],
+  [52,'International Organisation for Migration (IOM)'],[53,'Belgium'],[54,'Central Bank'],
+  [55,'Commission for Property Requests of Displaced Persons and Refugees'],[56,'Japan'],
+  [57,'UNESCO — United Nations Educational, Scientific, and Cultural Organisation'],
+  [58,'F.Y.R.O.M. — Former Yugoslav Republic of Macedonia'],[59,'Hungary'],
+  [60,'UNICEF — United Nations Children\'s Fund'],[61,'Spain'],[62,'Palestine'],[63,'Greece'],
+  [64,'EUMM — European Union Monitoring Mission'],[65,'International Monetary Group (IMG)'],
+  [66,'Peoples Republic of China'],[68,'World Health Organisation (WHO)'],[69,'Romania'],
+  [70,'International Centre for Migration Policy Development (ICMPD)'],
+  [71,'International Commission for Missing Person (ICMP)'],[72,'Maltese Sovereign Line'],
+  [73,'International Committee of Red Cross (ICRC)'],[74,'Poland'],[75,'Council of Europe'],
+  [76,'International Trust Fund (ITF)'],[77,'IFRC'],[78,'International Finance Corporation (IFC)'],
+  [79,'Vatican Embassy'],[80,'Serbia and Montenegro'],[81,'UN OHCR'],[82,'Guinea Bissau'],
+  [83,'Refugees Return Foundation'],[84,'EUPM'],[85,'Regional Environmental Centre'],
+  [86,'Stability Pact Anti-corruption Initiative'],[87,'Slovakia'],[88,'The Registry'],
+  [89,'High Judicial and Prosecutorial Council'],[90,'Office of the EU Special Representative'],
+  [91,'Japan International Cooperation Agency'],[92,'Montenegro'],[93,'Australia'],
+  [94,'Qatar'],[95,'Ukraine'],[96,'Regional Cooperation Council'],[97,'PSOTC'],
+];
+
+function renderDipl(q,listId,statsId){
+  const list=document.getElementById(listId);
+  const stats=document.getElementById(statsId);
+  if(!list)return;
+  const fq=(q||'').toLowerCase().trim();
+  const items=fq?diplPlates.filter(([n,c])=>String(n).includes(fq)||c.toLowerCase().includes(fq)):diplPlates;
+  if(stats)stats.textContent=items.length+' / '+diplPlates.length+' ENTRIES';
+  if(!items.length){list.innerHTML='<div class="search-empty">No results.</div>';return;}
+  list.innerHTML='<div class="contact-full">'+items.map(([n,c])=>{
+    const hn=fq?String(n).replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):n;
+    const hc=fq?c.replace(new RegExp(fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),m=>`<span class="highlight">${m}</span>`):c;
+    return `<div class="dipl-row"><span class="dipl-num">${hn}</span><span class="dipl-country">${hc}</span></div>`;
+  }).join('')+'</div>';
+}
+function filterDipl(q){renderDipl(q,'diplList','diplStats');}
+function filterDipl2(q){renderDipl(q,'diplList2','diplStats2');}
+renderDipl('','diplList','diplStats');
+renderDipl('','diplList2','diplStats2');
+
+
+// ── CSS for ranks ─────────────────────────────────────────────────────────────
+// (injected via JS to avoid touching style block)
+(function(){
+  const s=document.createElement('style');
+  s.textContent=`
+  .rank-section{margin-bottom:16px}
+  .rank-section-title{font-weight:700;font-size:11px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:8px 0 6px;display:flex;align-items:center;gap:8px}
+  .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;margin-bottom:4px}
+  .rank-cell{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 4px 8px;text-align:center;cursor:pointer;transition:border-color .15s}
+  .rank-cell:active{border-color:var(--accent)}
+  .rank-cell img{width:40px;height:auto;display:block;margin:0 auto 4px;min-height:40px;object-fit:contain}
+  .rank-cell .rc-nato{font-family:var(--mono);font-size:9px;color:var(--accent);font-weight:700;letter-spacing:.5px}
+  .rank-cell .rc-name{font-size:9px;color:var(--text2);line-height:1.2;margin-top:2px;word-break:break-word}
+  .rank-img-err{width:40px;height:40px;background:var(--surface3);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px;margin:0 auto 4px}
+  .rank-country-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px}
+  .rank-flag{font-size:28px;line-height:1}
+  .rank-country-name{font-weight:700;font-size:16px;color:var(--text);letter-spacing:1px}
+  .rank-country-code{font-family:var(--mono);font-size:11px;color:var(--text3)}
+  `;
+  document.head.appendChild(s);
+})();
+
+
+
+// ── RANKS — PDF.js renderer ───────────────────────────────────────────────────
+const PDF_URL = "https://updates00-jpg.github.io/IMP_Compass/CamScanner%2023.04.2026%2015.57.pdf";
+
+const rankCountries = [
+  {name:"Albania",              flag:"🇦🇱", page:1},
+  {name:"Austria",              flag:"🇦🇹", page:2},
+  {name:"Belgium",              flag:"🇧🇪", page:3},
+  {name:"Bulgaria",             flag:"🇧🇬", page:4},
+  {name:"Chile",                flag:"🇨🇱", page:5},
+  {name:"Czech Republic",       flag:"🇨🇿", page:6},
+  {name:"Denmark",              flag:"🇩🇰", page:7},
+  {name:"France",               flag:"🇫🇷", page:8},
+  {name:"Germany",              flag:"🇩🇪", page:9},
+  {name:"Greece",               flag:"🇬🇷", page:10},
+  {name:"Hungary",              flag:"🇭🇺", page:11},
+  {name:"Ireland",              flag:"🇮🇪", page:12},
+  {name:"Italy",                flag:"🇮🇹", page:13},
+  {name:"Moldova",              flag:"🇲🇩", page:14},
+  {name:"Netherlands",          flag:"🇳🇱", page:15},
+  {name:"Poland",               flag:"🇵🇱", page:16},
+  {name:"Portugal",             flag:"🇵🇹", page:17},
+  {name:"Romania",              flag:"🇷🇴", page:18},
+  {name:"Slovakia",             flag:"🇸🇰", page:19},
+  {name:"Slovenia",             flag:"🇸🇮", page:20},
+  {name:"Spain",                flag:"🇪🇸", page:21},
+  {name:"Sweden",               flag:"🇸🇪", page:22},
+  {name:"Switzerland",          flag:"🇨🇭", page:23},
+  {name:"North Macedonia",      flag:"🇲🇰", page:24},
+  {name:"Turkey",               flag:"🇹🇷", page:25},
+  {name:"United Kingdom",       flag:"🇬🇧", page:26},
+  {name:"USA",                  flag:"🇺🇸", page:27},
+  {name:"Bosnia & Herzegovina", flag:"🇧🇦", page:28},
+];
+
+let currentRankCountry = 'Poland';
+let pdfDoc = null;
+let pdfLoading = false;
+
+function renderRankCountryBtns(){
+  const c = document.getElementById('rankCountryBtns');
+  if(!c) return;
+  c.innerHTML = rankCountries.map(r=>`
+    <button onclick="selectRankCountry('${r.name.replace(/'/g,"\\'")}')"`+
+    ` style="background:${r.name===currentRankCountry?'var(--accent)':'var(--surface2)'};`+
+    `color:${r.name===currentRankCountry?'#000':'var(--text2)'};`+
+    `border:1px solid ${r.name===currentRankCountry?'var(--accent)':'var(--border)'};`+
+    `border-radius:6px;padding:6px 10px;font-size:12px;font-weight:600;`+
+    `cursor:pointer;font-family:var(--body);white-space:nowrap;`+
+    `display:inline-flex;align-items:center;gap:5px">`+
+    `<span style="font-size:18px">${r.flag}</span>${r.name}</button>`
+  ).join('');
+}
+
+function selectRankCountry(name){
+  currentRankCountry = name;
+  renderRankCountryBtns();
+  renderRankPage();
+}
+
+function loadPdfJs(cb){
+  if(window.pdfjsLib){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  s.onload=()=>{
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc=
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    cb();
+  };
+  document.head.appendChild(s);
+}
+
+function renderRankPage(){
+  const d = document.getElementById('rankDisplay');
+  if(!d) return;
+  const r = rankCountries.find(x=>x.name===currentRankCountry);
+  if(!r) return;
+
+  d.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)">
+        <span style="font-size:26px">${r.flag}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:15px;color:var(--text)">${r.name}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">RANKS IN EUFOR</div>
+        </div>
+      </div>
+      <div id="rankCanvasWrap" style="background:#f5f5f0;padding:8px;text-align:center">
+        <div id="rankLoading" style="padding:40px;color:#888;font-size:13px">Loading ranks…</div>
+      </div>
+    </div>`;
+
+  loadPdfJs(()=>{
+    const render = (doc)=>{
+      doc.getPage(r.page).then(page=>{
+        const wrap = document.getElementById('rankCanvasWrap');
+        if(!wrap) return;
+        const vp0 = page.getViewport({scale:1});
+        const scale = (window.innerWidth - 32) / vp0.width;
+        const viewport = page.getViewport({scale});
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.style.cssText = 'width:100%;height:auto;display:block;border-radius:4px';
+        wrap.innerHTML = '';
+        wrap.appendChild(canvas);
+        page.render({canvasContext:canvas.getContext('2d'), viewport});
+      });
+    };
+    if(pdfDoc){render(pdfDoc);return;}
+    if(pdfLoading){
+      const wait=setInterval(()=>{if(pdfDoc){clearInterval(wait);render(pdfDoc);}},200);
+      return;
+    }
+    pdfLoading=true;
+    window.pdfjsLib.getDocument(PDF_URL).promise.then(doc=>{
+      pdfDoc=doc; pdfLoading=false; render(doc);
+    }).catch(()=>{
+      const w=document.getElementById('rankCanvasWrap');
+      if(w) w.innerHTML='<div style="padding:20px;color:#c00;font-size:12px">Error loading PDF. Make sure the file is in your GitHub repo.</div>';
+    });
+  });
+}
+
+
+// ── GLOBAL SEARCH ─────────────────────────────────────────────────────────────
+function openGSearch(){
+  document.getElementById('gsearchOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('gsearchInput').focus(),100);
+}
+function closeGSearch(){
+  document.getElementById('gsearchOverlay').classList.remove('open');
+  document.getElementById('gsearchInput').value='';
+  document.getElementById('gsearchResults').innerHTML='<div class="gsearch-empty">Type to search across all content</div>';
+}
+
+function runGSearch(q){
+  const out=document.getElementById('gsearchResults');
+  if(!q||q.length<2){out.innerHTML='<div class="gsearch-empty">Type at least 2 characters</div>';return;}
+  const fq=q.toLowerCase();
+  const results=[];
+
+  // Strip HTML helper
+  function strip(html){return html?String(html).replace(/<[^>]+>/g,'').replace(/&[a-z]+;/gi,' ').toLowerCase():'';}
+
+  // Search violations
+  violations.forEach(v=>{
+    const titleMatch=v.title.toLowerCase().includes(fq);
+    const penaltyMatch=v.penalties.some(p=>strip(p.text).includes(fq)||strip(p.num).includes(fq));
+    if(titleMatch||penaltyMatch){
+      const matchP=v.penalties.find(p=>strip(p.text).includes(fq));
+      const snippet=matchP?strip(matchP.text).substring(0,90):'';
+      results.push({tag:'VIOLATION',title:v.title,snippet,action:`switchTab('violations',document.querySelector('[data-tab=violations]'));closeGSearch()`});
+    }
+  });
+
+  // Search procedures (steps are strings with HTML)
+  procedures.forEach(p=>{
+    const titleMatch=p.title.toLowerCase().includes(fq);
+    const stepMatch=p.steps.some(s=>strip(s).includes(fq));
+    const noteMatch=p.note&&strip(p.note).includes(fq);
+    if(titleMatch||stepMatch||noteMatch){
+      const matchStep=p.steps.find(s=>strip(s).includes(fq))||p.steps[0];
+      results.push({tag:'PROCEDURE',title:p.title,snippet:strip(matchStep).substring(0,90),action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-proc',document.querySelectorAll('#tab-procedures .subnav-btn')[0]);setTimeout(()=>openProc('${p.id}'),100);},50);closeGSearch()`});
+    }
+  });
+
+  // Search decision trees (steps are objects {num,title,desc,say})
+  dtrees.forEach(d=>{
+    const titleMatch=d.title.toLowerCase().includes(fq);
+    const stepMatch=d.steps.some(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq))||(s.say&&s.say.toLowerCase().includes(fq)));
+    const branchMatch=d.branches&&d.branches.some(b=>b.text.toLowerCase().includes(fq));
+    if(titleMatch||stepMatch||branchMatch){
+      const matchStep=d.steps.find(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq)));
+      const snippet=matchStep?(matchStep.title+': '+matchStep.desc).substring(0,90):'';
+      results.push({tag:'DECISION TREE',title:d.title,snippet,action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1]);setTimeout(()=>{const el=document.getElementById('${d.id}');if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open');}},100);},50);closeGSearch()`});
+    }
+  });
+
+  // Search SOP refs
+  sopRefs.forEach(r=>{
+    const titleMatch=r.title.toLowerCase().includes(fq)||r.tag.toLowerCase().includes(fq);
+    const ruleMatch=r.rules.some(rule=>rule.toLowerCase().includes(fq));
+    if(titleMatch||ruleMatch){
+      const matchRule=r.rules.find(rule=>rule.toLowerCase().includes(fq))||r.rules[0];
+      results.push({tag:'SOP '+r.tag,title:r.title,snippet:matchRule.substring(0,90)+'…',action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
+    }
+  });
+
+  // Search acronyms
+  const acroHits=acronyms.filter(a=>a[0].toLowerCase().includes(fq)||a[1].toLowerCase().includes(fq)).slice(0,5);
+  if(acroHits.length){
+    results.push({tag:'ACRONYMS',title:`${acroHits.length} match(es): ${acroHits.map(a=>a[0]).join(', ')}`,snippet:acroHits.map(a=>`${a[0]} = ${a[1]}`).join(' · ').substring(0,100),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
+  }
+
+  // Search routes
+  if(typeof routes!=='undefined'){
+    const routeHits=routes.filter(r=>r.name.toLowerCase().includes(fq)||(r.path&&r.path.toLowerCase().includes(fq))).slice(0,3);
+    routeHits.forEach(r=>{
+      results.push({tag:'ROUTE',title:r.name,snippet:(r.path||'').substring(0,80),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));setTimeout(()=>switchSub('refs','sub-routes',document.querySelectorAll('#tab-refs .subnav-btn')[1]),50);closeGSearch()`});
+    });
+  }
+
+  if(!results.length){out.innerHTML=`<div class="gsearch-empty">No results for "<strong>${q}</strong>"</div>`;return;}
+
+  // Highlight matching text
+  function hl(text){
+    if(!text||!fq)return text||'';
+    return String(text).replace(new RegExp('('+fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark style="background:#fef08a;color:#713f12;border-radius:2px;padding:0 1px">$1</mark>');
+  }
+
+  out.innerHTML=results.map(r=>`
+    <div class="gsearch-result" onclick="${r.action}">
+      <div class="gsearch-tag">${r.tag}</div>
+      <div class="gsearch-title">${hl(r.title)}</div>
+      ${r.snippet?`<div class="gsearch-snippet">${hl(r.snippet)}</div>`:''}
+    </div>`).join('');
+}
+
+// ── QUICK ACTION ──────────────────────────────────────────────────────────────
+function openQA(){document.getElementById('qaModal').classList.add('open');}
+function closeQA(){document.getElementById('qaModal').classList.remove('open');}
+
+// ── DUI CALCULATOR ────────────────────────────────────────────────────────────
+function openDUI(){document.getElementById('duiModal').classList.add('open');updateDUI(0);}
+function closeDUI(){document.getElementById('duiModal').classList.remove('open');}
+function setDUI(v){document.getElementById('duiSlider').value=v;updateDUI(v);}
+
+function updateDUI(v){
+  v=parseFloat(v);
+  document.getElementById('duiValue').textContent=v.toFixed(2);
+  const res=document.getElementById('duiResult');
+  if(v===0){res.innerHTML='';return;}
+
+  let level,color,actions;
+  if(v>0&&v<0.2){
+    level='TRACE — Below threshold';color='var(--ok)';
+    actions=['No formal violation if not impaired','Note in DOB if behaviour suspicious','Monitor situation'];
+  } else if(v>=0.2&&v<0.5){
+    level='LOW — Positive result';color='var(--warn)';
+    actions=["Notify driver's SNR/Branch Chief","Driver's license suspended until further notice","All action reported to FPM","IMP Report required"];
+  } else if(v>=0.5&&v<1.0){
+    level='MEDIUM — DUI Confirmed';color='#e67e22';
+    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical check recommended"];
+  } else {
+    level='HIGH — Severe DUI';color='var(--danger)';
+    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical Station (912) — consider welfare check","Detain if aggressive or unsafe"];
+  }
+
+  res.innerHTML=`
+    <div class="dui-result" style="border-color:${color}">
+      <div style="font-weight:700;font-size:14px;color:${color};margin-bottom:10px">${level}</div>
+      ${actions.map((a,i)=>`
+        <div style="display:flex;gap:8px;margin-bottom:6px;align-items:flex-start">
+          <span style="font-family:var(--mono);font-size:11px;color:${color};font-weight:700;flex-shrink:0;margin-top:1px">${i+1}.</span>
+          <span style="font-size:13px;color:var(--text2)">${a}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ── INCIDENT LOG ──────────────────────────────────────────────────────────────
+const LOG_TTL = 4 * 60 * 60 * 1000; // 4 hours in ms
+
+function openLog(){
+  purgeExpiredLogs();
+  document.getElementById('logModal').classList.add('open');
+  renderLog();
+}
+function closeLog(){document.getElementById('logModal').classList.remove('open');}
+
+function purgeExpiredLogs(){
+  try{
+    const entries=JSON.parse(localStorage.getItem('imp_log')||'[]');
+    const now=Date.now();
+    const fresh=entries.filter(e=>e.ts&&(now-e.ts)<LOG_TTL);
+    if(fresh.length!==entries.length){
+      localStorage.setItem('imp_log',JSON.stringify(fresh));
+    }
+  }catch(e){}
+}
+
+function logTypeChanged(val){
+  const sev=document.getElementById('logSev');
+  if(!sev)return;
+  if(['DUI / Alcohol','Weapon Carry Violation','Traffic Accident','Alarm / Distress','No ID — Identity Unverifiable'].includes(val)) sev.value='MAJOR';
+  else if(['Speeding 11-20 km/h','Speeding 21+ km/h','Uncooperative Behaviour','Excessive Drinking','Parking — Bldg 200/Circle'].includes(val)) sev.value='WARNING';
+  else sev.value='INFO';
+}
+
+function getCheckedActions(){
+  const map={act_verbal:'Verbal Warning',act_written:'Written Warning',act_tvr:'TVR Issued',act_pvr:'PVR Issued',act_mpr:'MPR Produced',act_snr:'SNR Notified',act_fpm:'FPM Notified',act_med:'Medical (912)',act_lic:'License Suspended',act_det:'Detained'};
+  return Object.entries(map).filter(([id])=>document.getElementById(id)?.checked).map(([,v])=>v);
+}
+
+function clearLogForm(){
+  ['logType','logSev','logLoc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='logSev'?'INFO':''});
+  ['logName','logUnit','logNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['act_verbal','act_written','act_tvr','act_pvr','act_mpr','act_snr','act_fpm','act_med','act_lic','act_det'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+}
+
+function formatExpiry(ts){
+  if(!ts) return '';
+  const remaining=LOG_TTL-(Date.now()-ts);
+  if(remaining<=0) return '<span style="color:var(--danger);font-size:10px">EXPIRED</span>';
+  const mins=Math.floor(remaining/60000);
+  const hrs=Math.floor(mins/60);
+  const m=mins%60;
+  if(hrs>0) return `<span style="color:var(--text3);font-size:10px">⏱ expires in ${hrs}h ${m}m</span>`;
+  return `<span style="color:var(--warn);font-size:10px;font-weight:700">⏱ expires in ${m}m</span>`;
+}
+
+function renderLog(){
+  const body=document.getElementById('logBody');
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+
+  // Update clear-all button visibility
+  const clearBtn=document.getElementById('logClearAll');
+  if(clearBtn) clearBtn.style.display=entries.length?'block':'none';
+
+  if(!entries.length){
+    body.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No entries yet.<br><span style="font-size:11px">Entries auto-delete after 4 hours.</span></div>';
+    return;
+  }
+  const sevColor={INFO:'var(--accent2)',WARNING:'var(--warn)',MAJOR:'var(--danger)'};
+  body.innerHTML=entries.slice().reverse().map((e,i)=>`
+    <div class="log-entry" style="border-left:3px solid ${sevColor[e.sev]||sevColor.INFO}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:700">${e.time} · ${e.date}</span>
+        <span style="font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;background:${sevColor[e.sev]||sevColor.INFO};color:#fff;font-weight:700">${e.sev||'INFO'}</span>
+      </div>
+      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:2px">${e.type}</div>
+      ${e.loc?`<div style="font-size:12px;color:var(--text3)">📍 ${e.loc}</div>`:''}
+      ${e.person?`<div style="font-size:12px;color:var(--text2)">👤 ${e.person}</div>`:''}
+      ${e.actions&&e.actions.length?`<div style="font-size:11px;color:var(--accent2);margin-top:3px">${e.actions.join(' · ')}</div>`:''}
+      ${e.note?`<div class="log-entry-note">${e.note}</div>`:''}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+        ${formatExpiry(e.ts)}
+        <button onclick="deleteLogEntry(${entries.length-1-i})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:var(--body);padding:0;font-weight:600">✕ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function saveLogEntry(){
+  const type=document.getElementById('logType').value;
+  if(!type){alert('Please select an incident type.');return;}
+  purgeExpiredLogs();
+  const sev=document.getElementById('logSev').value||'INFO';
+  const loc=document.getElementById('logLoc').value||'';
+  const name=document.getElementById('logName').value.trim();
+  const unit=document.getElementById('logUnit').value.trim();
+  const person=[name,unit].filter(Boolean).join(' / ');
+  const actions=getCheckedActions();
+  const note=document.getElementById('logNote').value.trim();
+  const now=new Date();
+  const date=now.toLocaleDateString('en-GB');
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const ts=Date.now();
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+  entries.push({type,sev,loc,person,actions,note,date,time,ts,user:currentUserId||'—'});
+  localStorage.setItem('imp_log',JSON.stringify(entries));
+  clearLogForm();
+  renderLog();
+  const body=document.getElementById('logBody');
+  if(body) body.scrollTop=0;
+}
+
+function clearAllLogs(){
+  if(!confirm('Delete ALL log entries? This cannot be undone.')) return;
+  localStorage.removeItem('imp_log');
+  renderLog();
+}
+
+function genDOBText(){
+  const type=document.getElementById('logType').value||'—';
+  const loc=document.getElementById('logLoc').value||'—';
+  const name=document.getElementById('logName').value.trim()||'—';
+  const unit=document.getElementById('logUnit').value.trim()||'—';
+  const actions=getCheckedActions();
+  const note=document.getElementById('logNote').value.trim();
+  const now=new Date();
+  const date=now.toLocaleDateString('en-GB');
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const text=`ENTRY TYPE: ${type}\nENTRY TIME: ${time} ${date}\nLOCATION: ${loc}\nPERSON: ${name} / ${unit}\nACTION TAKEN: ${actions.length?actions.join(', '):'None'}\n${note?'NOTES: '+note+'\n':''}REPORTING IMP DUTY: ${currentUserId||'—'}\nNSTR: NO`;
+  navigator.clipboard?.writeText(text).then(()=>alert('DOB text copied to clipboard.')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('DOB text copied.');
+  });
+}
+
+function deleteLogEntry(idx){
+  let entries=[];
+  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
+  entries.splice(idx,1);
+  localStorage.setItem('imp_log',JSON.stringify(entries));
+  renderLog();
+}
+
+// Auto-purge on startup
+purgeExpiredLogs();
+
+// ── PUSH NOTIFICATIONS ────────────────────────────────────────────────────────
+function requestNotifPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default'){
+    Notification.requestPermission();
+  }
+}
+
+function scheduleReportReminders(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  // Check every minute if it's time for a reminder
+  setInterval(()=>{
+    const now=new Date();
+    const day=now.getDay(); // 0=Sun,1=Mon,...4=Thu
+    const h=now.getHours();
+    const m=now.getMinutes();
+    const key=`notif_${now.toDateString()}`;
+    const sent=JSON.parse(localStorage.getItem(key)||'{}');
+
+    if(day===1&&h===7&&m===45&&!sent.monday){
+      new Notification('IMP Compass — Report Due',{body:'Informacja Tygodniowa must be sent by 08:00',icon:'icon-192.png',tag:'monday-report'});
+      sent.monday=true;localStorage.setItem(key,JSON.stringify(sent));
+    }
+    if(day===4&&h===7&&m===45&&!sent.thursday){
+      new Notification('IMP Compass — Report Due',{body:'Wstawka do Meldunku NSE due today',icon:'icon-192.png',tag:'thursday-report'});
+      sent.thursday=true;localStorage.setItem(key,JSON.stringify(sent));
+    }
+  },60000);
+}
+
+// Init notifications on load
+requestNotifPermission();
+scheduleReportReminders();
+
+// ── PUSHER ALARM SYSTEM ───────────────────────────────────────────────────────
+const PUSHER_KEY = 'e6b466c12fe64811ae86';
+const PUSHER_CLUSTER = 'eu';
+const VERCEL_URL = 'https://imp-compass.vercel.app/api/trigger-alarm';
+const SUBSCRIBE_URL = 'https://imp-compass.vercel.app/api/subscribe';
+const PUSH_URL = 'https://imp-compass.vercel.app/api/send-push';
+const VAPID_PUBLIC = 'BDLVw-wytUwOpQKk2am-lBKYxADb-cUhy7qU0g78B-SUo8q-VxOsiO0iV2wAuGEIB5kSn4HmtRKVlAMlCqwxdzQ';
+
+let pusherClient = null;
+let currentUserId = null;
+
+// Load Pusher JS dynamically
+function loadPusher(cb){
+  if(window.Pusher){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://js.pusher.com/8.3/pusher.min.js';
+  s.onload=cb;
+  document.head.appendChild(s);
+}
+
+function initPusher(){
+  loadPusher(()=>{
+    pusherClient = new Pusher(PUSHER_KEY, {cluster: PUSHER_CLUSTER});
+    const channel = pusherClient.subscribe('imp-compass');
+
+    channel.bind('alarm', data => {
+      showIncomingAlarm(data);
+    });
+
+    channel.bind('all-clear', data => {
+      showAllClear(data);
+    });
+
+    console.log('Pusher connected');
+  });
+}
+
+function showIncomingAlarm(data){
+  // Play alarm sound
+  try {
+    const audio = new Audio('/IMP_Compass/alarm.mp3');
+    audio.loop = true;
+    audio.volume = 1.0;
+    audio.play().catch(()=>{});
+    // Stop after 30 seconds
+    setTimeout(()=>audio.pause(), 30000);
+    // Store reference to stop manually
+    window._alarmAudio = audio;
+  } catch(e){}
+
+  const mapsUrl = data.lat && data.lng
+    ? `https://maps.google.com/?q=${data.lat},${data.lng}`
+    : null;
+
+  const el = document.createElement('div');
+  el.id = 'alarmBanner';
+  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--danger);padding:12px 14px;display:flex;flex-direction:column;gap:6px;animation:flashBanner 1s infinite`;
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-weight:700;font-size:16px;color:#fff;letter-spacing:1px">
+        🚨 ALARM — ${data.userId}
+      </div>
+      <button onclick="if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}document.getElementById('alarmBanner').remove()" 
+        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px">&#x2715;</button>
+    </div>
+    <div style="font-size:13px;color:rgba(255,255,255,.9)">
+      ${data.timestamp} ${data.message ? '· ' + data.message : ''}
+    </div>
+    ${mapsUrl ? `
+    <a href="${mapsUrl}" target="_blank"
+      style="background:rgba(0,0,0,.3);color:#fff;text-decoration:none;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;display:block">
+      📍 Open Location in Maps
+    </a>` : '<div style="font-size:12px;color:rgba(255,255,255,.7)">No GPS location available</div>'}`;
+
+  // Remove existing banner if any
+  const existing = document.getElementById('alarmBanner');
+  if(existing) existing.remove();
+
+  document.body.appendChild(el);
+
+  // Vibrate if supported
+  if(navigator.vibrate) navigator.vibrate([500,200,500,200,500]);
+
+  // Push notification
+  if(Notification.permission === 'granted'){
+    new Notification(`🚨 ALARM — ${data.userId}`, {
+      body: mapsUrl ? `Location available — tap to open` : 'No GPS',
+      icon: 'icon-192.png',
+      tag: 'imp-alarm',
+      requireInteraction: true
+    });
+  }
+}
+
+function showAllClear(data){
+  // Stop alarm sound
+  if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}
+  const existing = document.getElementById('alarmBanner');
+  if(existing) existing.remove();
+
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--ok);padding:12px 14px;display:flex;align-items:center;justify-content:space-between`;
+  el.innerHTML = `
+    <div style="font-weight:700;font-size:15px;color:#fff">✓ ALL CLEAR — ${data.userId}</div>
+    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer">&#x2715;</button>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 8000);
+}
+
+// ALARM MODAL
+function openAlarmModal(){
+  if(!currentUserId){
+    openUserSelect();
+    return;
+  }
+  document.getElementById('alarmModal').classList.add('open');
+}
+function closeAlarmModal2(){document.getElementById('alarmModal').classList.remove('open');}
+
+function openUserSelect(){
+  document.getElementById('userSelectModal').classList.add('open');
+  pinReset();
+}
+function closeUserSelect(){
+  document.getElementById('userSelectModal').classList.remove('open');
+  pinReset();
+}
+
+// PIN data
+const impPins = {
+  'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
+  'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
+  'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
+  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515',
+  'Admin':'2685'
+};
+
+let pinSelectedUnit = '';
+let pinEntered = '';
+
+function pinReset(){
+  pinSelectedUnit = '';
+  pinEntered = '';
+  document.getElementById('pinStep1').style.display = 'block';
+  document.getElementById('pinStep2').style.display = 'none';
+  document.getElementById('pinError').style.display = 'none';
+  updatePinDots();
+}
+
+function pinSelectUnit(id){
+  pinSelectedUnit = id;
+  pinEntered = '';
+  document.getElementById('pinStep1').style.display = 'none';
+  document.getElementById('pinStep2').style.display = 'block';
+  document.getElementById('pinUnitLabel').textContent = id;
+  document.getElementById('pinError').style.display = 'none';
+  updatePinDots();
+}
+
+function pinBack(){
+  pinReset();
+}
+
+function pinKey(digit){
+  if(pinEntered.length >= 4) return;
+  pinEntered += digit;
+  updatePinDots();
+  if(pinEntered.length === 4) pinVerify();
+}
+
+function pinDelete(){
+  pinEntered = pinEntered.slice(0,-1);
+  updatePinDots();
+}
+
+function updatePinDots(){
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('pd'+i);
+    if(!dot) return;
+    dot.classList.toggle('filled', i <= pinEntered.length);
+    dot.classList.remove('error');
+  }
+}
+
+function pinVerify(){
+  const correct = impPins[pinSelectedUnit];
+  if(pinEntered === correct){
+    // Success
+    currentUserId = pinSelectedUnit;
+    localStorage.setItem('imp_user_id', pinSelectedUnit);
+    closeUserSelect();
+    // Update alarm modal label
+    const lbl = document.getElementById('alarmUserLabel');
+    if(lbl) lbl.textContent = currentUserId;
+    // Subscribe Web Push with new userId
+    navigator.serviceWorker.ready.then(reg => subscribePush(reg)).catch(()=>{});
+    // Open alarm modal
+    document.getElementById('alarmModal').classList.add('open');
+  } else {
+    // Wrong PIN
+    for(let i=1;i<=4;i++){
+      const dot = document.getElementById('pd'+i);
+      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
+    }
+    document.getElementById('pinError').style.display = 'block';
+    setTimeout(()=>{
+      pinEntered = '';
+      updatePinDots();
+      document.getElementById('pinError').style.display = 'none';
+    }, 1200);
+  }
+}
+
+function triggerAlarm(){
+  if(!currentUserId) return;
+  const btn = document.getElementById('triggerAlarmBtn');
+  btn.textContent = 'Getting GPS…';
+  btn.disabled = true;
+
+  const send = (lat, lng) => {
+    const now = new Date();
+    const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
+    const message = document.getElementById('alarmMessage').value.trim();
+    const payload = {userId:currentUserId, lat, lng, timestamp, message};
+
+    // Send Pusher (for open apps)
+    fetch(VERCEL_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'alarm', ...payload})
+    });
+
+    // Send Web Push (for closed/background apps)
+    fetch(PUSH_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({type:'alarm', ...payload})
+    })
+    .then(r=>r.json())
+    .then(d=>{
+      btn.textContent = `🚨 SENT TO ${d.sent || 'ALL'} UNITS`;
+      btn.style.background = 'var(--ok)';
+      setTimeout(()=>{
+        btn.textContent = 'SEND ALARM';
+        btn.style.background = '';
+        btn.disabled = false;
+        closeAlarmModal2();
+        document.getElementById('alarmMessage').value = '';
+      }, 2000);
+    })
+    .catch(()=>{
+      btn.textContent = 'ERROR — Retry';
+      btn.disabled = false;
+    });
+  };
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      pos => send(pos.coords.latitude, pos.coords.longitude),
+      ()  => send(null, null),
+      {timeout:6000, enableHighAccuracy:true}
+    );
+  } else {
+    send(null, null);
+  }
+}
+
+function sendAllClear(){
+  const now = new Date();
+  const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
+  const payload = {type:'all-clear', userId:currentUserId, timestamp, message:'Situation resolved'};
+  fetch(VERCEL_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  fetch(PUSH_URL,   {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  closeAlarmModal2();
+}
+
+// Flash animation
+const flashStyle = document.createElement('style');
+flashStyle.textContent = `@keyframes flashBanner{0%,100%{opacity:1}50%{opacity:.7}}`;
+document.head.appendChild(flashStyle);
+
+// Init Pusher and restore user
+loadPusher(()=>{
+  initPusher();
+  const saved = localStorage.getItem('imp_user_id');
+  if(saved) currentUserId = saved;
+});
+
+// ── SERVICE WORKER + WEB PUSH ─────────────────────────────────────────────────
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for(let i=0;i<rawData.length;++i) outputArray[i] = rawData.charCodeAt(i);
+  return outputArray;
+}
+
+async function registerSW(){
+  if(!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.register('/IMP_Compass/sw.js');
+    console.log('SW registered');
+    await subscribePush(reg);
+  } catch(e) {
+    console.warn('SW registration failed:', e);
+  }
+}
+
+async function subscribePush(reg){
+  if(!('PushManager' in window)) return;
+  if(!currentUserId) return;
+
+  try {
+    const permission = await Notification.requestPermission();
+    if(permission !== 'granted') return;
+
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub){
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
+      });
+    }
+
+    // Save subscription to server
+    await fetch(SUBSCRIBE_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ userId: currentUserId, subscription: sub.toJSON() })
+    });
+    console.log('Push subscription saved for', currentUserId);
+  } catch(e) {
+    console.warn('Push subscription failed:', e);
+  }
+}
+
+// Register SW on load
+window.addEventListener('load', registerSW);
+
+// ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
+const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
+let loginPinBuffer = '';
+let loginSelectedUnit = '';
+
+function checkSession(){
+  try {
+    const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
+    if(session && session.userId && (Date.now() - session.ts) < SESSION_DURATION){
+      // Valid session — unlock app
+      currentUserId = session.userId;
+      unlockApp();
+      return;
+    }
+  } catch(e){}
+  // No valid session — show login
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+function unlockApp(){
+  document.getElementById('loginOverlay').classList.add('hidden');
+  // Update header badge
+  const badge = document.getElementById('userBadge');
+  if(badge){
+    badge.innerHTML = currentUserId + ' →';
+    badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
+    badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
+  }
+  // Subscribe push (only for IMP units, not Admin)
+  if(currentUserId !== 'Admin'){
+    navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
+  }
+  // Load roster data from server
+  loadRoster().catch(()=>{});
+  // Auto-logout after 2h
+  setTimeout(()=>{
+    alert('Session expired. Please log in again.');
+    logout();
+  }, SESSION_DURATION);
+}
+
+function loginSelectUnit(id){
+  if(!id){
+    // Back to step 1
+    loginSelectedUnit = '';
+    loginPinBuffer = '';
+    document.getElementById('loginStep1').style.display = 'block';
+    document.getElementById('loginStep2').style.display = 'none';
+    return;
+  }
+  loginSelectedUnit = id;
+  loginPinBuffer = '';
+  document.getElementById('loginUnitLabel').textContent = id;
+  document.getElementById('loginStep1').style.display = 'none';
+  document.getElementById('loginStep2').style.display = 'block';
+  document.getElementById('loginPinError').style.display = 'none';
+  updateLoginDots();
+}
+
+function loginPinKey(digit){
+  if(loginPinBuffer.length >= 4) return;
+  loginPinBuffer += digit;
+  updateLoginDots();
+  if(loginPinBuffer.length === 4) loginPinVerify();
+}
+
+function loginPinDelete(){
+  loginPinBuffer = loginPinBuffer.slice(0,-1);
+  updateLoginDots();
+}
+
+function updateLoginDots(){
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('lpd'+i);
+    if(!dot) return;
+    dot.classList.toggle('filled', i <= loginPinBuffer.length);
+    dot.classList.remove('error');
+  }
+}
+
+function loginPinVerify(){
+  const correct = impPins[loginSelectedUnit];
+  if(loginPinBuffer === correct){
+    // Save session
+    currentUserId = loginSelectedUnit;
+    localStorage.setItem('imp_user_id', loginSelectedUnit);
+    localStorage.setItem('imp_session', JSON.stringify({userId: loginSelectedUnit, ts: Date.now()}));
+    unlockApp();
+  } else {
+    // Wrong PIN
+    for(let i=1;i<=4;i++){
+      const dot = document.getElementById('lpd'+i);
+      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
+    }
+    document.getElementById('loginPinError').style.display = 'block';
+    setTimeout(()=>{
+      loginPinBuffer = '';
+      updateLoginDots();
+      document.getElementById('loginPinError').style.display = 'none';
+    }, 1400);
+  }
+}
+
+function confirmLogout(){
+  if(confirm(`Log out ${currentUserId}?`)) logout();
+}
+
+function logout(){
+  localStorage.removeItem('imp_session');
+  localStorage.removeItem('imp_user_id');
+  currentUserId = null;
+  loginSelectedUnit = '';
+  loginPinBuffer = '';
+  document.getElementById('loginStep1').style.display = 'block';
+  document.getElementById('loginStep2').style.display = 'none';
+  updateLoginDots();
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+// ── DUTY BOARD ───────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://zqyrgerhyapgggwmovpm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_tb9qpy8kUPlhmPeONIC91g_T44a5IgQ';
+const ROSTER_URL = `${SUPABASE_URL}/rest/v1/roster`;
+const IMP_UNITS = ['IMP-1','IMP-2','IMP-3','IMP-4','IMP-5','IMP-6','IMP-7',
+                   'IMP-8','IMP-9','IMP-10','IMP-11','IMP-12','IMP-13','IMP-14','IMP-15'];
+const DAYS = ['MON','TUE','WED','THU','FRI'];
+const STATUS_COLORS = {S:'rs-S', D:'rs-D', L:'rs-L', '':'rs-empty'};
+
+let rosterData = {}; // { 'IMP-1': { 'MON': {status:'D', task:'...'}, ... }, ... }
+let rosterWeekOffset = 0; // 0 = current week
+let rosterEditCell = null; // {unit, day}
+let rosterCurrentWeek = null;
+
+function getMondayOfWeek(offset = 0){
+  const now = new Date();
+  const day = now.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diff + offset * 7);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function getWeekDates(offset = 0){
+  const mon = getMondayOfWeek(offset);
+  return DAYS.map((d, i) => {
+    const date = new Date(mon);
+    date.setDate(mon.getDate() + i);
+    return {
+      day: d,
+      label: d + ' ' + date.getDate().toString().padStart(2,'0') + '/' + (date.getMonth()+1).toString().padStart(2,'0'),
+      iso: date.toISOString().split('T')[0]
+    };
+  });
+}
+
+function getWeekKey(offset = 0){
+  const mon = getMondayOfWeek(offset);
+  return mon.toISOString().split('T')[0];
+}
+
+function formatWeekLabel(offset = 0){
+  const dates = getWeekDates(offset);
+  return dates[0].label.split(' ')[1] + ' – ' + dates[4].label.split(' ')[1];
+}
+
+async function loadRoster(){
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+
+  try {
+    const r = await fetch(`${ROSTER_URL}?select=*`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const rows = await r.json();
+
+    // Convert rows to rosterData object
+    rosterData = {};
+    rows.forEach(row => {
+      rosterData[row.cell_key] = {
+        status: row.status || '',
+        task: row.task || ''
+      };
+    });
+
+    const upd = document.getElementById('rosterUpdated');
+    if(upd){
+      if(rows.length){
+        const latest = rows.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
+        const d = new Date(latest.updated_at);
+        upd.textContent = 'Updated ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      } else {
+        upd.textContent = 'No entries yet';
+      }
+    }
+  } catch(e){
+    console.warn('Roster load failed:', e);
+    const container = document.getElementById('rosterTable');
+    if(container) container.innerHTML = `<div style="padding:20px;color:var(--danger);font-size:13px;text-align:center">⚠ Load error: ${e.message}<br><br><button onclick="loadRoster()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--body)">Retry</button></div>`;
+    return;
+  }
+
+  const label2 = document.getElementById('rosterWeekLabel');
+  if(label2) label2.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+  renderRoster();
+}
+
+function renderRoster(){
+  const container = document.getElementById('rosterTable');
+  if(!container) return;
+
+  const dates = getWeekDates(rosterWeekOffset);
+  const weekKey = getWeekKey(rosterWeekOffset);
+  const isAdmin = currentUserId === 'Admin';
+
+  let html = '<table class="roster-table"><thead><tr>';
+  html += '<th class="rt-unit">Unit</th>';
+  dates.forEach(d => { html += `<th>${d.label}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  IMP_UNITS.forEach(unit => {
+    const isMe = unit === currentUserId;
+    html += `<tr class="${isMe ? 'rt-me' : ''}">`;
+    html += `<td class="rt-unit">${unit}</td>`;
+
+    dates.forEach(d => {
+      const cellKey = `${weekKey}_${unit}_${d.day}`;
+      const cell = rosterData[cellKey] || {status:'', task:''};
+      const statusClass = STATUS_COLORS[cell.status] || 'rs-empty';
+      const statusText = cell.status || '·';
+      const clickable = isAdmin ? `onclick="openRosterEdit('${unit}','${d.day}','${weekKey}')"` : '';
+
+      html += `<td>
+        <div class="roster-cell" ${clickable}>
+          <span class="rs-badge ${statusClass}">${statusText}</span>
+          ${cell.task ? `<span class="rs-task">${cell.task}</span>` : ''}
+        </div>
+      </td>`;
+    });
+
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+
+  // Update week label
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+}
+
+function changeRosterWeek(dir){
+  rosterWeekOffset += dir;
+  renderRoster();
+  const label = document.getElementById('rosterWeekLabel');
+  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
+}
+
+// Edit modal (Admin only)
+let editWeekKey = '';
+let editUnit = '';
+let editDay = '';
+let editStatus = '';
+
+function openRosterEdit(unit, day, weekKey){
+  if(currentUserId !== 'Admin') return;
+  editUnit = unit;
+  editDay = day;
+  editWeekKey = weekKey;
+
+  const cellKey = `${weekKey}_${unit}_${day}`;
+  const cell = rosterData[cellKey] || {status:'', task:''};
+  editStatus = cell.status || '';
+
+  document.getElementById('rosterEditTitle').textContent = `${unit} — ${day}`;
+  document.getElementById('rosterTaskInput').value = cell.task || '';
+
+  // Highlight active status button
+  document.querySelectorAll('.rs-pick-btn').forEach(btn => btn.classList.remove('active'));
+  updateRosterPickButtons(editStatus);
+
+  document.getElementById('rosterEditModal').classList.add('open');
+}
+
+function closeRosterEdit(){
+  document.getElementById('rosterEditModal').classList.remove('open');
+}
+
+function rosterPickStatus(s){
+  editStatus = s;
+  updateRosterPickButtons(s);
+}
+
+function updateRosterPickButtons(s){
+  document.querySelectorAll('.rs-pick-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if((s === 'S' && btn.classList.contains('rs-S')) ||
+       (s === 'D' && btn.classList.contains('rs-D')) ||
+       (s === 'L' && btn.classList.contains('rs-L')) ||
+       (s === '' && btn.classList.contains('rs-empty'))){
+      btn.classList.add('active');
+    }
+  });
+}
+
+async function saveRosterCell(){
+  const task = document.getElementById('rosterTaskInput').value.trim();
+  const cellKey = `${editWeekKey}_${editUnit}_${editDay}`;
+
+  // Update local state immediately
+  if(editStatus === '' && !task){
+    delete rosterData[cellKey];
+  } else {
+    rosterData[cellKey] = {status: editStatus, task};
+  }
+
+  closeRosterEdit();
+  renderRoster();
+
+  // Save to Supabase via upsert
+  try {
+    if(editStatus === '' && !task){
+      // Delete row
+      await fetch(`${ROSTER_URL}?cell_key=eq.${encodeURIComponent(cellKey)}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      });
+    } else {
+      // Upsert row
+      await fetch(ROSTER_URL, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({
+          cell_key: cellKey,
+          status: editStatus,
+          task: task,
+          updated_at: new Date().toISOString()
+        })
+      });
+    }
+
+    // Notify via Pusher
+    fetch('https://imp-compass.vercel.app/api/trigger-alarm', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({type:'roster-update', userId:'Admin', timestamp: new Date().toISOString()})
+    }).catch(()=>{});
+
+  } catch(e){
+    console.warn('Roster save failed:', e);
+  }
+}
+
+// Listen for roster updates via Pusher
+function initRosterPusher(){
+  loadPusher(()=>{
+    if(!pusherClient) initPusher();
+    // Listen on existing channel
+    setTimeout(()=>{
+      if(pusherClient){
+        const ch = pusherClient.subscribe('imp-compass');
+        ch.bind('roster-update', ()=>{
+          loadRoster();
+        });
+      }
+    }, 2000);
+  });
+}
+
+// Check session on load
+checkSession();
+try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
+// Init roster pusher after session
+setTimeout(initRosterPusher, 3000);
+</script>
+
+<!-- RANK MODAL -->
+<div class="rank-modal-overlay" id="rankModal" onclick="if(event.target===this)closeRankModal()">
+  <div class="rank-modal">
+    <img src="" alt="" style="width:80px;height:auto;margin-bottom:12px">
+    <div class="rank-modal-nato"></div>
+    <div class="rank-modal-name"></div>
+    <div class="rank-modal-country"></div>
+    <button class="rank-modal-close" onclick="closeRankModal()">Close</button>
+  </div>
+</div>
+    <!-- SIA PROCEDURE MODAL -->
+    <div class="modal-overlay" id="siaModal" onclick="if(event.target===this)closeSIA()">
+      <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" id="siaModalTitle">
+          SIA Procedure
+          <button class="modal-close" onclick="closeSIA()">&#x2715;</button>
+        </div>
+        <div id="siaModalBody"></div>
+      </div>
+    </div>
+
+    <!-- 9-LINER BUILDER MODAL -->
+    <div class="modal-overlay" id="ninerModal" onclick="if(event.target===this)close9Liner()">
+      <div class="modal-sheet" style="max-height:92vh;overflow-y:auto;padding-bottom:40px">
+        <div class="modal-title" style="color:var(--danger)">
+          <span>9-Liner MEDEVAC</span>
+          <button class="modal-close" onclick="close9Liner()">&#x2715;</button>
+        </div>
+
+        <!-- MODE TOGGLE -->
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button id="ninerModeBuild" onclick="setNinerMode('build')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--danger);background:var(--danger);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Builder</button>
+          <button id="ninerModeRef" onclick="setNinerMode('ref')" style="flex:1;padding:9px;border-radius:6px;border:2px solid var(--border);background:var(--surface2);color:var(--text2);font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Code Reference</button>
+        </div>
+
+        <!-- BUILDER MODE -->
+        <div id="ninerBuildMode">
+          <div id="ninerLines"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <button onclick="generate9Liner()" style="padding:12px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Generate</button>
+            <button onclick="reset9Liner()" style="padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">Reset</button>
+          </div>
+          <div id="ninerOutput" style="display:none;margin-top:12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-family:var(--mono);font-size:12px;color:#86efac;line-height:2;white-space:pre-wrap" id="ninerText"></div>
+            <button onclick="copy9Liner()" style="width:100%;margin-top:10px;padding:10px;background:var(--ok);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Copy for Radio Transmission</button>
+          </div>
+        </div>
+
+        <!-- REFERENCE MODE -->
+        <div id="ninerRefMode" style="display:none">
+          <div id="ninerRefContent"></div>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>
 
 
 // ── 9-LINER MEDEVAC BUILDER ───────────────────────────────────────────────────
