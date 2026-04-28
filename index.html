@@ -439,7 +439,35 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 <!-- LOGIN OVERLAY -->
 <div id="loginOverlay">
-  <!-- Step 1: select unit -->
+
+  <!-- STEP 0: First-time setup (shown only when no salt configured) -->
+  <div id="loginStep0" class="login-step" style="display:none;width:100%;max-width:340px">
+    <div class="login-logo">IMP</div>
+    <div class="login-title">First-Time Setup</div>
+    <div class="login-sub">Camp Butmir · EUFOR</div>
+    <div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:10px;padding:16px;margin-bottom:16px;font-size:12px;color:#93b4f0;line-height:1.6;text-align:left">
+      ⚠ This device has not been configured.<br>
+      Enter the <strong style="color:#fbbf24">IMP Salt</strong> provided by IMP CMDR.<br>
+      Admin devices also require the <strong style="color:#fbbf24">Admin Salt</strong>.
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Salt (required on all devices)</div>
+      <input id="setupImpSalt" type="text" placeholder="e.g. BUTMIR26" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+        style="width:100%;background:#1e2a42;border:1.5px solid #2a3a5a;border-radius:8px;padding:12px 14px;color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:2px;outline:none;text-transform:uppercase">
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;color:#9aa3b8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Salt (Admin devices only — leave blank otherwise)</div>
+      <input id="setupAdminSalt" type="text" placeholder="Leave blank for IMP devices" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+        style="width:100%;background:#1e2a42;border:1.5px solid #2a3a5a;border-radius:8px;padding:12px 14px;color:#fff;font-family:var(--mono);font-size:16px;letter-spacing:2px;outline:none;text-transform:uppercase">
+    </div>
+    <div id="setupError" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:12px;text-align:center">⚠ IMP Salt cannot be empty</div>
+    <button onclick="setupSave()"
+      style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--body);letter-spacing:1px">
+      CONFIRM &amp; SAVE
+    </button>
+  </div>
+
+  <!-- STEP 1: Select unit -->
   <div id="loginStep1" class="login-step">
     <div class="login-logo">IMP</div>
     <div class="login-title">Compass</div>
@@ -470,20 +498,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
 
-  <!-- Step 2: PIN entry -->
+  <!-- STEP 2: PIN entry -->
   <div id="loginStep2" class="login-step" style="display:none;text-align:center">
     <div class="login-logo">IMP</div>
     <div class="login-title" id="loginUnitLabel"></div>
-    <div class="login-sub">Enter PIN</div>
+    <div class="login-sub" id="loginPinSub">Enter PIN</div>
 
-    <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
+    <div id="loginPinDots" style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
       <div class="pin-dot" id="lpd1"></div>
       <div class="pin-dot" id="lpd2"></div>
       <div class="pin-dot" id="lpd3"></div>
       <div class="pin-dot" id="lpd4"></div>
+      <div class="pin-dot" id="lpd5" style="display:none"></div>
+      <div class="pin-dot" id="lpd6" style="display:none"></div>
     </div>
 
     <div id="loginPinError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong PIN — try again</div>
+    <div id="loginLockMsg" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Too many attempts. Wait 30 min.</div>
 
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
       <button class="pin-key" onclick="loginPinKey('1')">1</button>
@@ -500,6 +531,49 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
       <button class="pin-key" onclick="loginPinDelete()" style="color:var(--danger)">⌫</button>
     </div>
   </div>
+
+  <!-- STEP 3: Daily Code -->
+  <div id="loginStep3" class="login-step" style="display:none;text-align:center">
+    <div class="login-logo" style="background:var(--accent2)">2FA</div>
+    <div class="login-title">Daily Code</div>
+    <div id="loginDailyDate" class="login-sub"></div>
+
+    <div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93b4f0;line-height:1.5">
+      Enter today's 4-digit access code<br>
+      <span style="color:#9aa3b8;font-size:11px">Provided by IMP CMDR at morning briefing</span>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
+      <div class="pin-dot" id="dcd1"></div>
+      <div class="pin-dot" id="dcd2"></div>
+      <div class="pin-dot" id="dcd3"></div>
+      <div class="pin-dot" id="dcd4"></div>
+    </div>
+
+    <div id="loginDailyError" style="display:none;color:var(--danger);font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong code — try again</div>
+    <div id="loginDailyAttemptsMsg" style="display:none;color:var(--warn);font-size:11px;margin-bottom:8px"></div>
+    <div id="loginDailyLockMsg" style="display:none;color:var(--danger);font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Max attempts reached. Wait 30 min.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
+      <button class="pin-key" onclick="dailyCodeKey('1')">1</button>
+      <button class="pin-key" onclick="dailyCodeKey('2')">2</button>
+      <button class="pin-key" onclick="dailyCodeKey('3')">3</button>
+      <button class="pin-key" onclick="dailyCodeKey('4')">4</button>
+      <button class="pin-key" onclick="dailyCodeKey('5')">5</button>
+      <button class="pin-key" onclick="dailyCodeKey('6')">6</button>
+      <button class="pin-key" onclick="dailyCodeKey('7')">7</button>
+      <button class="pin-key" onclick="dailyCodeKey('8')">8</button>
+      <button class="pin-key" onclick="dailyCodeKey('9')">9</button>
+      <button class="pin-key" onclick="loginSelectUnit('')" style="color:var(--text3);font-size:13px">←</button>
+      <button class="pin-key" onclick="dailyCodeKey('0')">0</button>
+      <button class="pin-key" onclick="dailyCodeDelete()" style="color:var(--danger)">⌫</button>
+    </div>
+
+    <div style="margin-top:18px;font-size:11px;color:#555f72">
+      Code valid until 00:00 local · <span id="loginDailyExpiry"></span>
+    </div>
+  </div>
+
 </div>
 
 <div id="header">
@@ -511,6 +585,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     </div>
   </div>
   <div class="header-status">
+    <div id="adminCtrl" style="display:none">
+      <button onclick="openAdminPanel()" style="background:#b8620a22;border:1px solid var(--accent);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;color:var(--accent);cursor:pointer;font-family:var(--mono);letter-spacing:.5px">ADMIN</button>
+    </div>
     <button onclick="openGSearch()" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text3);display:flex;align-items:center">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
@@ -4600,16 +4677,8 @@ function closeUserSelect(){
 }
 
 // PIN data
-const impPins = {
-  'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
-  'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
-  'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
-  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515',
-  'Admin':'2685'
-};
+// PIN system replaced by 2FA — see loginSelectUnit, loginPinKey etc. above
 
-let pinSelectedUnit = '';
-let pinEntered = '';
 
 function pinReset(){
   pinSelectedUnit = '';
@@ -4813,103 +4882,189 @@ window.addEventListener('load', registerSW);
 
 // ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
 const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
-let loginPinBuffer = '';
+// ── 2FA LOGIN SYSTEM ─────────────────────────────────────────────────────────
+const impPins = {
+  'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
+  'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
+  'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
+  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515',
+  'Admin':'268585'
+};
+
+const PIN_LENGTH = { Admin: 6, default: 4 };
+const DAILY_CODE_LENGTH = 4;
+const MAX_PIN_ATTEMPTS = 5;
+const MAX_DAILY_ATTEMPTS = 3;
+const LOCK_DURATION = 30 * 60 * 1000; // 30 min
+
 let loginSelectedUnit = '';
+let loginPinBuffer = '';
+let dailyCodeBuffer = '';
 
-function checkSession(){
-  try {
-    const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
-    if(session && session.userId && (Date.now() - session.ts) < SESSION_DURATION){
-      // Valid session — unlock app
-      currentUserId = session.userId;
-      unlockApp();
-      return;
-    }
-  } catch(e){}
-  // No valid session — show login
-  document.getElementById('loginOverlay').classList.remove('hidden');
+// ── DAILY CODE ALGORITHM ──────────────────────────────────────────────────────
+function getTodayStr() {
+  const d = new Date();
+  return d.getFullYear()
+    + String(d.getMonth()+1).padStart(2,'0')
+    + String(d.getDate()).padStart(2,'0');
 }
 
-function unlockApp(){
-  document.getElementById('loginOverlay').classList.add('hidden');
-  document.getElementById('main').classList.add('app-ready');
-  document.getElementById('header').style.visibility='visible';
-  document.getElementById('nav').style.visibility='visible';
-  // Update header badge
-  const badge = document.getElementById('userBadge');
-  if(badge){
-    badge.innerHTML = currentUserId + ' →';
-    badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
-    badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
+function getDailyCode(salt) {
+  const input = getTodayStr() + salt;
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    hash = Math.imul(hash, 31) + input.charCodeAt(i);
+    hash = hash | 0;
   }
-  // Subscribe push (only for IMP units, not Admin)
-  if(currentUserId !== 'Admin'){
-    navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
-  }
-  // Load roster data from server
-  loadRoster().catch(()=>{});
-  // Auto-logout after 2h
-  setTimeout(()=>{
-    alert('Session expired. Please log in again.');
-    logout();
-  }, SESSION_DURATION);
+  return String(Math.abs(hash) % 10000).padStart(4, '0');
 }
 
-function loginSelectUnit(id){
-  if(!id){
-    // Back to step 1
-    loginSelectedUnit = '';
-    loginPinBuffer = '';
-    document.getElementById('loginStep1').style.display = 'block';
-    document.getElementById('loginStep2').style.display = 'none';
-    return;
-  }
+function getSalt(type) {
+  // type: 'imp' or 'admin'
+  const key = type === 'admin' ? 'imp_salt_admin' : 'imp_salt';
+  return localStorage.getItem(key) || '';
+}
+
+function hasSalt() {
+  return !!localStorage.getItem('imp_salt');
+}
+
+// ── SETUP ─────────────────────────────────────────────────────────────────────
+function setupSave() {
+  const impSalt = document.getElementById('setupImpSalt').value.trim().toUpperCase();
+  const adminSalt = document.getElementById('setupAdminSalt').value.trim().toUpperCase();
+  const err = document.getElementById('setupError');
+  if (!impSalt) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  localStorage.setItem('imp_salt', impSalt);
+  if (adminSalt) localStorage.setItem('imp_salt_admin', adminSalt);
+  // Proceed to login
+  document.getElementById('loginStep0').style.display = 'none';
+  document.getElementById('loginStep1').style.display = 'block';
+}
+
+// ── BRUTE-FORCE PROTECTION ────────────────────────────────────────────────────
+function getAttempts(key) {
+  try { return JSON.parse(localStorage.getItem(key) || '{"count":0,"lockUntil":0}'); }
+  catch(e) { return {count:0,lockUntil:0}; }
+}
+function saveAttempts(key, obj) {
+  localStorage.setItem(key, JSON.stringify(obj));
+}
+function isLocked(key) {
+  const a = getAttempts(key);
+  if (a.lockUntil && Date.now() < a.lockUntil) return a.lockUntil;
+  return false;
+}
+function recordFailedAttempt(key, max) {
+  const a = getAttempts(key);
+  a.count = (a.count || 0) + 1;
+  if (a.count >= max) { a.lockUntil = Date.now() + LOCK_DURATION; a.count = 0; }
+  saveAttempts(key, a);
+  return a;
+}
+function clearAttempts(key) {
+  localStorage.removeItem(key);
+}
+
+// ── STEP NAVIGATION ───────────────────────────────────────────────────────────
+function showStep(n) {
+  [0,1,2,3].forEach(i => {
+    const el = document.getElementById('loginStep'+i);
+    if (el) el.style.display = i===n ? 'block' : 'none';
+  });
+}
+
+function loginSelectUnit(id) {
+  if (!id) { showStep(1); loginSelectedUnit=''; loginPinBuffer=''; return; }
   loginSelectedUnit = id;
   loginPinBuffer = '';
+
+  // Check PIN lock
+  const lockUntil = isLocked('pin_attempts_'+id);
+  if (lockUntil) {
+    const mins = Math.ceil((lockUntil - Date.now()) / 60000);
+    alert(`Too many failed attempts. Try again in ${mins} minute(s).`);
+    return;
+  }
+
+  // Show PIN step
+  const isAdmin = id === 'Admin';
+  const pinLen = isAdmin ? 6 : 4;
   document.getElementById('loginUnitLabel').textContent = id;
-  document.getElementById('loginStep1').style.display = 'none';
-  document.getElementById('loginStep2').style.display = 'block';
+  document.getElementById('loginPinSub').textContent = `Enter ${pinLen}-digit PIN`;
+
+  // Show/hide extra dots for Admin 6-digit PIN
+  for (let i = 5; i <= 6; i++) {
+    const dot = document.getElementById('lpd'+i);
+    if (dot) dot.style.display = isAdmin ? 'block' : 'none';
+  }
+
   document.getElementById('loginPinError').style.display = 'none';
+  document.getElementById('loginLockMsg').style.display = 'none';
   updateLoginDots();
+  showStep(2);
 }
 
-function loginPinKey(digit){
-  if(loginPinBuffer.length >= 4) return;
+// ── PIN STEP ──────────────────────────────────────────────────────────────────
+function loginPinKey(digit) {
+  const isAdmin = loginSelectedUnit === 'Admin';
+  const maxLen = isAdmin ? 6 : 4;
+  if (loginPinBuffer.length >= maxLen) return;
   loginPinBuffer += digit;
   updateLoginDots();
-  if(loginPinBuffer.length === 4) loginPinVerify();
+  if (loginPinBuffer.length === maxLen) loginPinVerify();
 }
 
-function loginPinDelete(){
+function loginPinDelete() {
   loginPinBuffer = loginPinBuffer.slice(0,-1);
   updateLoginDots();
 }
 
-function updateLoginDots(){
-  for(let i=1;i<=4;i++){
+function updateLoginDots() {
+  const isAdmin = loginSelectedUnit === 'Admin';
+  const maxLen = isAdmin ? 6 : 4;
+  for (let i = 1; i <= 6; i++) {
     const dot = document.getElementById('lpd'+i);
-    if(!dot) return;
+    if (!dot) continue;
+    if (i > maxLen) { dot.style.display = 'none'; continue; }
+    dot.style.display = 'block';
     dot.classList.toggle('filled', i <= loginPinBuffer.length);
     dot.classList.remove('error');
   }
 }
 
-function loginPinVerify(){
+function loginPinVerify() {
   const correct = impPins[loginSelectedUnit];
-  if(loginPinBuffer === correct){
-    // Save session
-    currentUserId = loginSelectedUnit;
-    localStorage.setItem('imp_user_id', loginSelectedUnit);
-    localStorage.setItem('imp_session', JSON.stringify({userId: loginSelectedUnit, ts: Date.now()}));
-    unlockApp();
-  } else {
-    // Wrong PIN
-    for(let i=1;i<=4;i++){
-      const dot = document.getElementById('lpd'+i);
-      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
+  const attemptKey = 'pin_attempts_' + loginSelectedUnit;
+
+  if (loginPinBuffer === correct) {
+    clearAttempts(attemptKey);
+    document.getElementById('loginPinError').style.display = 'none';
+    // Check if salt is set for daily code
+    const saltOk = hasSalt();
+    if (!saltOk) {
+      // No salt — skip 2FA (shouldn't happen after setup but failsafe)
+      finalizeLogin();
+      return;
     }
-    document.getElementById('loginPinError').style.display = 'block';
-    setTimeout(()=>{
+    // Proceed to daily code step
+    showDailyCodeStep();
+  } else {
+    const a = recordFailedAttempt(attemptKey, MAX_PIN_ATTEMPTS);
+    for (let i = 1; i <= 6; i++) {
+      const dot = document.getElementById('lpd'+i);
+      if (dot && dot.style.display !== 'none') {
+        dot.classList.remove('filled'); dot.classList.add('error');
+      }
+    }
+    if (a.lockUntil) {
+      document.getElementById('loginPinError').style.display = 'none';
+      document.getElementById('loginLockMsg').style.display = 'block';
+    } else {
+      document.getElementById('loginPinError').style.display = 'block';
+    }
+    setTimeout(() => {
       loginPinBuffer = '';
       updateLoginDots();
       document.getElementById('loginPinError').style.display = 'none';
@@ -4917,20 +5072,167 @@ function loginPinVerify(){
   }
 }
 
-function confirmLogout(){
-  if(confirm(`Log out ${currentUserId}?`)) logout();
+// ── DAILY CODE STEP ───────────────────────────────────────────────────────────
+function showDailyCodeStep() {
+  dailyCodeBuffer = '';
+  updateDailyDots();
+
+  // Date display
+  const d = new Date();
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const dateStr = String(d.getDate()).padStart(2,'0') + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  document.getElementById('loginDailyDate').textContent = dateStr;
+
+  // Expiry countdown
+  const midnight = new Date(); midnight.setHours(24,0,0,0);
+  const minsLeft = Math.floor((midnight - Date.now()) / 60000);
+  const hLeft = Math.floor(minsLeft / 60);
+  const mLeft = minsLeft % 60;
+  document.getElementById('loginDailyExpiry').textContent = `expires in ${hLeft}h ${mLeft}m`;
+
+  document.getElementById('loginDailyError').style.display = 'none';
+  document.getElementById('loginDailyLockMsg').style.display = 'none';
+  document.getElementById('loginDailyAttemptsMsg').style.display = 'none';
+
+  showStep(3);
 }
 
-function logout(){
+function dailyCodeKey(digit) {
+  if (dailyCodeBuffer.length >= DAILY_CODE_LENGTH) return;
+  dailyCodeBuffer += digit;
+  updateDailyDots();
+  if (dailyCodeBuffer.length === DAILY_CODE_LENGTH) dailyCodeVerify();
+}
+
+function dailyCodeDelete() {
+  dailyCodeBuffer = dailyCodeBuffer.slice(0,-1);
+  updateDailyDots();
+}
+
+function updateDailyDots() {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dcd'+i);
+    if (!dot) continue;
+    dot.classList.toggle('filled', i <= dailyCodeBuffer.length);
+    dot.classList.remove('error');
+  }
+}
+
+function dailyCodeVerify() {
+  const isAdmin = loginSelectedUnit === 'Admin';
+  const saltType = isAdmin ? 'admin' : 'imp';
+  const salt = getSalt(saltType);
+
+  // If Admin has no admin salt, fall back to IMP salt
+  const effectiveSalt = salt || getSalt('imp');
+  const correct = getDailyCode(effectiveSalt);
+  const attemptKey = 'daily_attempts_' + getTodayStr();
+
+  if (dailyCodeBuffer === correct) {
+    clearAttempts(attemptKey);
+    finalizeLogin();
+  } else {
+    const a = recordFailedAttempt(attemptKey, MAX_DAILY_ATTEMPTS);
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.getElementById('dcd'+i);
+      if (dot) { dot.classList.remove('filled'); dot.classList.add('error'); }
+    }
+    if (a.lockUntil) {
+      document.getElementById('loginDailyError').style.display = 'none';
+      document.getElementById('loginDailyLockMsg').style.display = 'block';
+    } else {
+      const remaining = MAX_DAILY_ATTEMPTS - (a.count || 0);
+      document.getElementById('loginDailyError').style.display = 'block';
+      const attMsg = document.getElementById('loginDailyAttemptsMsg');
+      if (remaining > 0) {
+        attMsg.textContent = `${remaining} attempt(s) remaining before 30-min lockout`;
+        attMsg.style.display = 'block';
+      }
+    }
+    setTimeout(() => {
+      dailyCodeBuffer = '';
+      updateDailyDots();
+      document.getElementById('loginDailyError').style.display = 'none';
+    }, 1400);
+  }
+}
+
+// ── FINALIZE LOGIN ────────────────────────────────────────────────────────────
+function finalizeLogin() {
+  currentUserId = loginSelectedUnit;
+  localStorage.setItem('imp_user_id', loginSelectedUnit);
+  localStorage.setItem('imp_session', JSON.stringify({
+    userId: loginSelectedUnit,
+    ts: Date.now(),
+    date: getTodayStr()
+  }));
+  unlockApp();
+}
+
+function unlockApp(){
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('main').classList.add('app-ready');
+  document.getElementById('header').style.visibility='visible';
+  document.getElementById('nav').style.visibility='visible';
+  const badge = document.getElementById('userBadge');
+  if(badge){
+    badge.innerHTML = currentUserId + ' →';
+    badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
+    badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
+  }
+  const adminCtrl = document.getElementById('adminCtrl');
+  if(adminCtrl) adminCtrl.style.display = currentUserId==='Admin' ? 'block' : 'none';
+  if(currentUserId !== 'Admin'){
+    navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
+  }
+  loadRoster().catch(()=>{});
+  // Auto-logout at midnight (daily code expires)
+  const midnight = new Date(); midnight.setHours(24,0,0,0);
+  setTimeout(()=>{
+    alert('Daily code expired. Please log in again with today\'s new code.');
+    logout();
+  }, midnight - Date.now());
+}
+
+// ── SESSION CHECK ─────────────────────────────────────────────────────────────
+function checkSession() {
+  // First-time setup check
+  if (!hasSalt()) {
+    showStep(0);
+    return;
+  }
+
+  try {
+    const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
+    if (session && session.userId && session.date === getTodayStr()) {
+      // Valid session from today — unlock
+      currentUserId = session.userId;
+      unlockApp();
+      return;
+    }
+  } catch(e) {}
+  // No valid session — show login
+  showStep(1);
+  document.getElementById('loginOverlay').classList.remove('hidden');
+}
+
+function logout() {
   localStorage.removeItem('imp_session');
   localStorage.removeItem('imp_user_id');
   currentUserId = null;
   loginSelectedUnit = '';
   loginPinBuffer = '';
-  document.getElementById('loginStep1').style.display = 'block';
-  document.getElementById('loginStep2').style.display = 'none';
+  dailyCodeBuffer = '';
+  showStep(1);
   updateLoginDots();
   document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('main').classList.remove('app-ready');
+  document.getElementById('header').style.visibility = 'hidden';
+  document.getElementById('nav').style.visibility = 'hidden';
+}
+
+function confirmLogout() {
+  if (confirm(`Log out ${currentUserId}?`)) logout();
 }
 
 // ── DUTY BOARD ───────────────────────────────────────────────────────────────
@@ -5613,7 +5915,167 @@ function renderRankPage(){
   });
 }
 
+// ── ADMIN PANEL ───────────────────────────────────────────────────────────────
+function openAdminPanel(){
+  if(currentUserId !== 'Admin') return;
+  // Populate current salt values
+  const impSalt = localStorage.getItem('imp_salt') || '';
+  const adminSalt = localStorage.getItem('imp_salt_admin') || '';
+  document.getElementById('adminImpSalt').value = impSalt;
+  document.getElementById('adminAdminSalt').value = adminSalt;
+  // Generate code rows
+  renderAdminCodes();
+  document.getElementById('adminPanelModal').classList.add('open');
+}
+
+function closeAdminPanel(){
+  document.getElementById('adminPanelModal').classList.remove('open');
+}
+
+function renderAdminCodes(){
+  const container = document.getElementById('adminCodeRows');
+  if(!container) return;
+  const impSalt = localStorage.getItem('imp_salt') || '';
+  const adminSalt = localStorage.getItem('imp_salt_admin') || impSalt;
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  const rows = [];
+  for(let offset = 0; offset <= 2; offset++){
+    const d = new Date(); d.setDate(d.getDate() + offset);
+    const dateStr = d.getFullYear()
+      + String(d.getMonth()+1).padStart(2,'0')
+      + String(d.getDate()).padStart(2,'0');
+    const label = offset === 0 ? 'TODAY' : offset === 1 ? 'TOMORROW' : 'DAY +2';
+    const dispDate = String(d.getDate()).padStart(2,'0') + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+    let hash = 0;
+    const input = dateStr + impSalt;
+    for(let i = 0; i < input.length; i++){
+      hash = Math.imul(hash, 31) + input.charCodeAt(i);
+      hash = hash | 0;
+    }
+    const impCode = String(Math.abs(hash) % 10000).padStart(4,'0');
+
+    let ahash = 0;
+    const ainput = dateStr + adminSalt;
+    for(let i = 0; i < ainput.length; i++){
+      ahash = Math.imul(ahash, 31) + ainput.charCodeAt(i);
+      ahash = ahash | 0;
+    }
+    const adminCode = String(Math.abs(ahash) % 10000).padStart(4,'0');
+
+    rows.push({label, dispDate, impCode, adminCode, isToday: offset===0});
+  }
+
+  container.innerHTML = rows.map(r=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:${r.isToday?'var(--accent)':'var(--text3)'};font-weight:700;letter-spacing:1px">${r.label}</div>
+        <div style="font-size:12px;color:var(--text2)">${r.dispDate}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;color:var(--text3)">IMP</span>
+          <span id="code-imp-${r.label}" style="font-family:var(--mono);font-size:22px;font-weight:900;color:${r.isToday?'var(--danger)':'var(--text3)'};letter-spacing:4px;filter:blur(4px);cursor:pointer"
+            onclick="toggleCodeVis('code-imp-${r.label}')">${r.impCode}</span>
+        </div>
+        ${r.adminCode !== r.impCode ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <span style="font-size:10px;color:var(--text3)">ADM</span>
+          <span id="code-adm-${r.label}" style="font-family:var(--mono);font-size:18px;font-weight:900;color:var(--text3);letter-spacing:4px;filter:blur(4px);cursor:pointer"
+            onclick="toggleCodeVis('code-adm-${r.label}')">${r.adminCode}</span>
+        </div>` : ''}
+      </div>
+    </div>`).join('');
+
+  // Copy for briefing button
+  const todayRow = rows[0];
+  container.innerHTML += `
+    <button onclick="copyBriefingCode()" style="width:100%;margin-top:12px;padding:10px;background:var(--accent2);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">
+      Copy Today's IMP Code for Briefing
+    </button>`;
+}
+
+function toggleCodeVis(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.filter = el.style.filter === 'none' ? 'blur(4px)' : 'none';
+}
+
+function copyBriefingCode(){
+  const impSalt = localStorage.getItem('imp_salt') || '';
+  const code = getDailyCode(impSalt);
+  const d = new Date();
+  const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const dateStr = String(d.getDate()).padStart(2,'0')+' '+months[d.getMonth()]+' '+d.getFullYear();
+  const text = `IMP COMPASS — DAILY ACCESS CODE\n${dateStr}\nCode: ${code}\nValid until 00:00 local`;
+  navigator.clipboard?.writeText(text).then(()=>alert('Code copied to clipboard.')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Code copied.');
+  });
+}
+
+function adminSaveSalt(){
+  const impSalt = document.getElementById('adminImpSalt').value.trim().toUpperCase();
+  const adminSalt = document.getElementById('adminAdminSalt').value.trim().toUpperCase();
+  if(!impSalt){ alert('IMP Salt cannot be empty.'); return; }
+  localStorage.setItem('imp_salt', impSalt);
+  if(adminSalt) localStorage.setItem('imp_salt_admin', adminSalt);
+  else localStorage.removeItem('imp_salt_admin');
+  renderAdminCodes();
+  alert('Salt saved. Inform all IMP devices to reconfigure.');
+}
+
+function adminResetDevice(){
+  if(!confirm('Reset this device? You will need to re-enter the salt on next login.')) return;
+  localStorage.removeItem('imp_salt');
+  localStorage.removeItem('imp_salt_admin');
+  localStorage.removeItem('imp_session');
+  closeAdminPanel();
+  logout();
+}
+
 </script>
+<!-- ADMIN PANEL MODAL -->
+<div class="modal-overlay" id="adminPanelModal" onclick="if(event.target===this)closeAdminPanel()">
+  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;padding-bottom:40px">
+    <div class="modal-title" style="color:var(--accent)">
+      ⚙ Admin Panel
+      <button class="modal-close" onclick="closeAdminPanel()">&#x2715;</button>
+    </div>
+
+    <!-- Daily codes -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Daily Access Codes</div>
+      <div id="adminCodeRows"></div>
+    </div>
+
+    <!-- Salt management -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Salt Configuration</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px">
+        Change salt (all IMP devices must be reconfigured after change).
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">IMP Salt (shared)</div>
+        <input id="adminImpSalt" type="text" autocomplete="off" autocapitalize="characters"
+          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">Admin Salt (private)</div>
+        <input id="adminAdminSalt" type="text" autocomplete="off" autocapitalize="characters"
+          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+      </div>
+      <button onclick="adminSaveSalt()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Save Salt</button>
+    </div>
+
+    <!-- Reset device -->
+    <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:14px">
+      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Device Reset</div>
+      <div style="font-size:12px;color:var(--danger);margin-bottom:10px">Clears salt from this device. Will require re-setup on next login.</div>
+      <button onclick="adminResetDevice()" style="width:100%;padding:10px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Reset This Device</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
