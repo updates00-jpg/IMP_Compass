@@ -26,7 +26,7 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;overflow:hidden}
 
 /* HEADER */
-#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--header-bg);border-bottom:1px solid #0d1225;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);background:var(--header-bg);border-bottom:1px solid #0d1225;display:flex;align-items:center;justify-content:space-between;padding:0 12px;gap:8px;visibility:hidden}
 .header-logo{display:flex;align-items:center;gap:10px;min-width:0}
 .logo-badge{width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;letter-spacing:.5px;flex-shrink:0;font-family:var(--body)}
 .logo-text{font-weight:700;font-size:16px;color:var(--header-text);letter-spacing:2px;white-space:nowrap;text-transform:uppercase}
@@ -40,11 +40,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 
 /* MAIN */
 #main{position:fixed;top:var(--header-h);bottom:var(--nav-h);left:0;right:0;overflow:hidden}
+#main.app-ready{visibility:visible}
+#main:not(.app-ready){visibility:hidden}
 .tab-content{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 8px}
 .tab-content.active{display:block}
 
 /* BOTTOM NAV */
-#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--header-bg);border-top:1px solid #0d1225;display:flex}
+#nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:var(--header-bg);border-top:1px solid #0d1225;display:flex;visibility:hidden}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;color:#6b7a99;font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:color .15s;position:relative;font-family:var(--body)}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:#fbbf24}
@@ -4830,6 +4832,9 @@ function checkSession(){
 
 function unlockApp(){
   document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('main').classList.add('app-ready');
+  document.getElementById('header').style.visibility='visible';
+  document.getElementById('nav').style.visibility='visible';
   // Update header badge
   const badge = document.getElementById('userBadge');
   if(badge){
