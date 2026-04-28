@@ -2894,303 +2894,294 @@ function switchSub(tabId,subId,btn){
 //   result nodes have: verdict, color, actions[], docs[], note
 
 const itrees=[
-  // ─────────────────────────────────────────────────────────────────
   {id:'report',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
    color:'#1a5cb8', bg:'#dbeafe',
-   title:'Który dokument wystawić?',
+   title:'Which document to produce?',
    subtitle:'MPR / TVR / PVR / DOB',
    start:'q1',
    nodes:{
-     q1:{q:'Czy zdarzenie dotyczy pojazdu/ruchu drogowego?',
-       opts:[{l:'TAK — pojazd',c:'yes',n:'q2'},{l:'NIE — inne',c:'no',n:'q6'}]},
-     q2:{q:'Czy doszło do wypadku, uszkodzenia pojazdu lub DUI?',
-       opts:[{l:'TAK',c:'yes',n:'r-mpr'},{l:'NIE — drobne naruszenie',c:'no',n:'q3'}]},
-     q3:{q:'Jaki rodzaj naruszenia drogowego?',
-       opts:[{l:'Przekroczenie prędkości',c:'info',n:'r-tvr'},{l:'Parkowanie',c:'warn',n:'q4'},{l:'Palenie/pas/telefon',c:'info',n:'r-tvr'}]},
-     q4:{q:'Ile razy pojazd był już karany za parkowanie?',
-       opts:[{l:'1. lub 2. naruszenie',c:'info',n:'r-pvr'},{l:'3. naruszenie lub więcej',c:'warn',n:'r-pvr-snr'},{l:'Bldg 200 / Krąg VIP',c:'danger',n:'r-pvr-200'}]},
-     q6:{q:'Czy doszło do przestępstwa, poważnego incydentu lub obrażeń?',
-       opts:[{l:'TAK — poważny incydent',c:'danger',n:'r-mpr'},{l:'NIE',c:'no',n:'q7'}]},
-     q7:{q:'Jakiego rodzaju naruszenie?',
-       opts:[{l:'Zachowanie/alkohol/broń',c:'danger',n:'q8'},{l:'Ubiór / cisza / ID',c:'info',n:'r-dob'},{l:'Niekooperatywność',c:'warn',n:'q8'}]},
-     q8:{q:'Czy SNR / Branch Chief musi być powiadomiony?',
-       opts:[{l:'TAK — poważne lub 2.+ naruszenie',c:'warn',n:'r-mpr'},{l:'NIE — 1. naruszenie, ustne ostrzeżenie',c:'info',n:'r-dob'}]},
-     'r-tvr':{result:true, verdict:'TVR — Traffic Violation Report',
-       color:'#1a5cb8', bg:'#dbeafe',
-       actions:['Zatrzymaj pojazd. Wylegitymuj kierowcę.','Wypisz TVR (Annex B SOP 3927).','Zatwierdza: IMP CMDR → wysyłka do SNR.'],
+     q1:{q:'Does the incident involve a vehicle or traffic?',
+       opts:[{l:'YES — vehicle/traffic',c:'yes',n:'q2'},{l:'NO — other incident',c:'no',n:'q6'}]},
+     q2:{q:'Was there an accident, vehicle damage or DUI?',
+       opts:[{l:'YES',c:'yes',n:'r-mpr'},{l:'NO — minor violation',c:'no',n:'q3'}]},
+     q3:{q:'Type of traffic violation?',
+       opts:[{l:'Speeding',c:'info',n:'r-tvr'},{l:'Parking',c:'warn',n:'q4'},{l:'Smoking / seatbelt / phone',c:'info',n:'r-tvr'}]},
+     q4:{q:'Number of previous parking offences for this vehicle/person?',
+       opts:[{l:'1st or 2nd offence',c:'info',n:'r-pvr'},{l:'3rd offence or more',c:'warn',n:'r-pvr-snr'},{l:'Bldg 200 / VIP Circle',c:'danger',n:'r-pvr-200'}]},
+     q6:{q:'Was there a crime, serious incident or personal injury?',
+       opts:[{l:'YES — serious incident',c:'danger',n:'r-mpr'},{l:'NO',c:'no',n:'q7'}]},
+     q7:{q:'Type of conduct violation?',
+       opts:[{l:'Conduct / alcohol / weapon',c:'danger',n:'q8'},{l:'Dress / quiet hours / ID',c:'info',n:'r-dob'},{l:'Uncooperative behaviour',c:'warn',n:'q8'}]},
+     q8:{q:'Must SNR / Branch Chief be notified?',
+       opts:[{l:'YES — serious or 2nd+ offence',c:'warn',n:'r-mpr'},{l:'NO — 1st offence, verbal warning sufficient',c:'info',n:'r-dob'}]},
+     'r-tvr':{result:true,verdict:'TVR — Traffic Violation Report',
+       color:'#1a5cb8',bg:'#dbeafe',
+       actions:['Stop vehicle. Check driver ID and vehicle documentation.','Produce TVR (Annex B SOP 3927).','Approved by IMP CMDR → sent to violator\'s SNR.'],
        docs:['TVR','DOB'],
-       note:'Archiwizacja TVR: minimum 1 rok. Przy 5 pkt karnych → zawieszenie prawa jazdy na 1 miesiąc.'},
-     'r-pvr':{result:true, verdict:'PVR — Parking Violation Report',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Zostaw pisemne ostrzeżenie na szybie.','Wypisz PVR (Annex C SOP 3927).','Kierowca musi zgłosić się do IMP Station w ciągu 48h.'],
+       note:'TVR archive: minimum 1 year. At 5 penalty points → licence suspended 1 month.'},
+     'r-pvr':{result:true,verdict:'PVR — Parking Violation Report',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Leave written notice on windshield.','Produce PVR (Annex C SOP 3927).','Driver must report to IMP Station within 48 hours.'],
        docs:['PVR','DOB'],
-       note:'Po 3. naruszeniu → SNR/Branch Chief + HQ CAMP CMDT + FPM.'},
-     'r-pvr-snr':{result:true, verdict:'PVR + Powiadomienie SNR',
-       color:'#c2410c', bg:'#ffedd5',
-       actions:['Wypisz PVR.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.'],
+       note:'From 3rd offence → notify SNR/Branch Chief + HQ CAMP CMDT + FPM.'},
+     'r-pvr-snr':{result:true,verdict:'PVR + Notify SNR',
+       color:'#c2410c',bg:'#ffedd5',
+       actions:['Produce PVR.','Notify SNR/Branch Chief.','Report to HQ CAMP CMDT and FPM.'],
        docs:['PVR','DOB'],
-       note:'3. naruszenie lub więcej. Wszystkie działania raportowane do HQ CAMP CMDT i FPM.'},
-     'r-pvr-200':{result:true, verdict:'PVR + 3 pkt karne — Bldg 200',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Wypisz PVR NATYCHMIAST.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.','3 punkty karne na prawo jazdy.'],
+       note:'3rd offence or more. All actions reported to HQ CAMP CMDT and FPM.'},
+     'r-pvr-200':{result:true,verdict:'PVR + 3 penalty points — Bldg 200/Circle',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Produce PVR IMMEDIATELY.','Notify SNR/Branch Chief.','Report to HQ CAMP CMDT and FPM.','3 penalty points on driving licence.'],
        docs:['PVR','DOB'],
-       note:'Parkowanie w kręgu Bldg 200 — każde naruszenie = SNR + HQ CAMP CMDT + FPM.'},
-     'r-mpr':{result:true, verdict:'MPR — Military Police Report',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Zabezpiecz miejsce zdarzenia.','Zrób dokumentację (zdjęcia, szkice).','Pobierz zeznania świadków i sprawcy.','Wypisz MPR (Annex A SOP 3927).','Zatwierdza: IMP CMDR → FPM → SNR.'],
+       note:'Parking at Bldg 200 circle — every offence triggers SNR + HQ CAMP CMDT + FPM notification.'},
+     'r-mpr':{result:true,verdict:'MPR — Military Police Report',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Secure the scene.','Document evidence (photos, sketch of scene).','Take statements from witnesses and suspect.','Produce MPR (Annex A SOP 3927).','Approval chain: IMP CMDR → FPM → SNR.'],
        docs:['MPR','DOB'],
-       note:'Archiwizacja MPR: minimum 6 lat. Dystrybucja: SNR, FPM, HQ CAMP CMDT, ewentualnie COM/COS/LEGAD.'},
-     'r-dob':{result:true, verdict:'Wpis DOB — bez formalnego raportu',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Wydaj ustne ostrzeżenie.','Odnotuj w Daily Occurrence Book.','Przy 2. naruszeniu → pisemne ostrzeżenie.','Przy 3.+ → eskalacja do SNR.'],
+       note:'MPR archive: minimum 6 years. Distribution: SNR, FPM, HQ CAMP CMDT; COM/COS/LEGAD as applicable.'},
+     'r-dob':{result:true,verdict:'DOB entry only — no formal report',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Issue verbal warning.','Log in Daily Occurrence Book.','2nd offence → written warning.','3rd+ offence → escalate to SNR.'],
        docs:['DOB'],
-       note:'DOB wymagany przy każdej interwencji, nawet gdy nie wystawia się formalnego raportu.'}
+       note:'DOB entry required for every IMP interaction, even without a formal report.'}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'speed',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-   color:'#1a5cb8', bg:'#dbeafe',
-   title:'Kwalifikacja naruszenia prędkości',
-   subtitle:'Limit: 30 km/h — Camp Butmir',
+   color:'#1a5cb8',bg:'#dbeafe',
+   title:'Speeding — classification',
+   subtitle:'Speed limit: 30 km/h — Camp Butmir',
    start:'q1',
    nodes:{
-     q1:{q:'Jaka prędkość zmierzona (km/h)?', type:'input', inputId:'speedVal', inputPlaceholder:'Wpisz prędkość np. 38',
+     q1:{q:'Enter measured speed (km/h):',type:'input',inputId:'speedVal',inputPlaceholder:'e.g. 38',
        compute:(v)=>{
-         const s=parseInt(v); const over=s-30;
-         if(isNaN(s)||s<=0) return null;
-         if(s<=30) return 'r-ok';
-         if(over<=10) return 'r-s1';
-         if(over<=20) return 'r-s2';
+         const s=parseInt(v),over=s-30;
+         if(isNaN(s)||s<=0)return null;
+         if(s<=30)return 'r-ok';
+         if(over<=10)return 'r-s1';
+         if(over<=20)return 'r-s2';
          return 'r-s3';
        }
      },
-     'r-ok':{result:true, verdict:'Brak naruszenia — prędkość w normie',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Prędkość w granicach limitu 30 km/h.','Brak interwencji wymagany.'],
-       docs:[],note:''},
-     'r-s1':{result:true, verdict:'Kategoria I — 5–10 km/h powyżej limitu',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Zatrzymaj pojazd.','Powiedz: "Przekroczył Pan/i prędkość. Limit 30 km/h, zmierzona [X] km/h."','1. naruszenie → ustne ostrzeżenie + DOB.','2.+ naruszenie → TVR + powiadomienie SNR.'],
-       docs:['TVR (2.+)','DOB'],
-       note:'SOP 3901 §6b / Annex D. Przy 1. naruszeniu sam wpis DOB.'},
-     'r-s2':{result:true, verdict:'Kategoria II — 11–20 km/h powyżej limitu',
-       color:'#c2410c', bg:'#ffedd5',
-       actions:['Zatrzymaj pojazd. Wylegitymuj.','TVR obowiązkowy od 1. naruszenia.','Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT i FPM.','Zawieś prawo jazdy na 2 tygodnie. Odbierz przepustkę.','2 punkty karne.'],
+     'r-ok':{result:true,verdict:'No violation — within speed limit',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Speed within 30 km/h limit. No action required.'],docs:[],note:''},
+     'r-s1':{result:true,verdict:'Category I — 5–10 km/h over limit',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Stop vehicle. Identify driver.','Say: "You have been observed driving at [X] km/h. The speed limit in Camp Butmir is 30 km/h."','1st offence: verbal warning + DOB entry only.','2nd+ offence: TVR + notify SNR/Branch Chief.'],
+       docs:['TVR (2nd+)','DOB'],
+       note:'SOP 3901 §6b / Annex D. 1st offence requires DOB entry only.'},
+     'r-s2':{result:true,verdict:'Category II — 11–20 km/h over limit',
+       color:'#c2410c',bg:'#ffedd5',
+       actions:['Stop vehicle. Identify driver.','TVR mandatory from 1st offence.','Notify SNR/Branch Chief.','Report to HQ CAMP CMDT and FPM.','Suspend driving licence 2 weeks. Confiscate pass.','2 penalty points.'],
        docs:['TVR','DOB'],
-       note:'Zawieszenie dotyczy każdego naruszenia w tej kategorii bez wyjątku.'},
-     'r-s3':{result:true, verdict:'Kategoria III — 21+ km/h powyżej limitu',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Natychmiastowe zatrzymanie pojazdu.','TVR obowiązkowy.','Powiadom SNR/Branch Chief + HQ CAMP CMDT + FPM.','Zawieś prawo jazdy na 2 tygodnie.','3 punkty karne.'],
+       note:'Licence suspension applies to every offence in this category without exception.'},
+     'r-s3':{result:true,verdict:'Category III — 21+ km/h over limit',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Immediate vehicle stop.','TVR mandatory.','Notify SNR/Branch Chief + HQ CAMP CMDT + FPM.','Suspend driving licence 2 weeks.','3 penalty points.'],
        docs:['TVR','DOB'],
-       note:'Najcięższa kategoria. Przy 5 pkt łącznie → zawieszenie prawa jazdy na 1 miesiąc.'}
+       note:'Highest category. 5 cumulative penalty points → licence suspended 1 month automatically.'}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'alcohol',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 8 5 11"/><path d="M17 9c0 5-2 8-5 11"/><line x1="5" y1="15" x2="19" y2="15"/></svg>',
-   color:'#b45309', bg:'#fef3c7',
-   title:'Kwalifikacja — alkohol',
-   subtitle:'DUI / nadużycie / zachowanie',
+   color:'#b45309',bg:'#fef3c7',
+   title:'Alcohol — DUI or conduct?',
+   subtitle:'Zero tolerance for vehicle operation',
    start:'q1',
    nodes:{
-     q1:{q:'Osoba prowadzi pojazd lub właśnie prowadziła?',
-       opts:[{l:'TAK — za kierownicą',c:'danger',n:'q2'},{l:'NIE — pieszo/bar',c:'no',n:'q5'}]},
-     q2:{q:'Wynik testu na alkohol (breathalyzer)?',
-       opts:[{l:'>0.0 ‰ — DUI potwierdzone',c:'danger',n:'r-dui'},{l:'Odmowa testu',c:'danger',n:'r-refuse'},{l:'0.0 ‰ — czysty',c:'ok',n:'r-clean'}]},
-     q5:{q:'Jak oceniasz zachowanie osoby?',
-       opts:[{l:'Agresywna / utrata kontroli / bójka',c:'danger',n:'r-drunk-major'},{l:'Pijana ale spokojna',c:'warn',n:'r-drunk-minor'},{l:'Wątpliwe — sprawdzić trzeźwość',c:'info',n:'r-sobriety'}]},
-     'r-dui':{result:true, verdict:'DUI — ZERO TOLERANCJI',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Odbierz klucze / przepustkę kierowcy NATYCHMIAST.','Zawieś prawo jazdy do EOT.','Powiadom IMP CMDR + SNR/Branch Chief + FPM + HQ CAMP CMDT.','Wypisz MPR.','Wpis do DOB z wynikiem ‰.'],
+     q1:{q:'Is the person operating or has just operated a vehicle?',
+       opts:[{l:'YES — driver',c:'danger',n:'q2'},{l:'NO — on foot / at bar',c:'no',n:'q5'}]},
+     q2:{q:'Breathalyzer result?',
+       opts:[{l:'>0.0 ‰ — DUI confirmed',c:'danger',n:'r-dui'},{l:'Refuses to test',c:'danger',n:'r-refuse'},{l:'0.0 ‰ — clear',c:'ok',n:'r-clean'}]},
+     q5:{q:"How would you describe the person's behaviour?",
+       opts:[{l:'Aggressive / loss of control / fighting',c:'danger',n:'r-drunk-major'},{l:'Intoxicated but calm',c:'warn',n:'r-drunk-minor'},{l:'Uncertain — conduct sobriety check',c:'info',n:'r-sobriety'}]},
+     'r-dui':{result:true,verdict:'DUI — ZERO TOLERANCE',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Confiscate vehicle keys / driving pass IMMEDIATELY.','Suspend driving licence until EOT.','Notify: IMP CMDR + SNR/Branch Chief + FPM + HQ CAMP CMDT.','Produce MPR.','DOB entry with BAC result in ‰.'],
        docs:['MPR','DOB'],
-       note:'SOP 3901 §3a(3). Odmowa testu = wynik pozytywny. Informuj: "Odmowa traktowana jest jako DUI."'},
-     'r-refuse':{result:true, verdict:'Odmowa testu = DUI',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Powiedz: "Odmowa testu jest traktowana jako wynik pozytywny. Skutki takie jak DUI."','Odbierz klucze / zawieś prawo jazdy do EOT.','Powiadom IMP CMDR + FPM natychmiast.','MPR obowiązkowy.'],
+       note:'SOP 3901 §3a(3). Refusal = positive result. Say: "Refusal is treated as a positive DUI result with the same consequences."'},
+     'r-refuse':{result:true,verdict:'Refusal = DUI',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Say: "Refusal to submit to testing is treated as a positive result. Consequences are identical to DUI."','Confiscate keys. Suspend licence until EOT.','Notify IMP CMDR + FPM immediately.','MPR mandatory.'],
        docs:['MPR','DOB'],
-       note:'SOP 3927 §6c(10). Odmowa = DUI dla celów administracyjnych EUFOR.'},
-     'r-clean':{result:true, verdict:'Czysty — brak DUI',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Odnotuj kontrolę w DOB.','Puść kierowcę — brak naruszenia alkoholowego.'],
+       note:'SOP 3927 §6c(10). Refusal = DUI for all EUFOR administrative purposes.'},
+     'r-clean':{result:true,verdict:'Clear — no DUI',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Log sobriety check in DOB.','Release driver — no alcohol violation.'],
        docs:['DOB'],note:''},
-     'r-drunk-major':{result:true, verdict:'Nadużycie alkoholu — poważne',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Usuń z baru/strefy natychmiast.','Umieść pod nadzorem IMP.','Decyzja: Medical Cell (912) czy IMP Station?','Powiadom SNR — musi przejąć osobistą pieczę.','Wypisz MPR.'],
+     'r-drunk-major':{result:true,verdict:'Excessive drinking — serious',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Remove from bar/area immediately.','Place under IMP supervision.','Decision: Medical Cell (ext. 912) or IMP Station?','Notify SNR — must take personal responsibility for individual.','Produce MPR.'],
        docs:['MPR','DOB'],
-       note:'SOP 3901 §3 / Annex A. Sprawdź czy prowadziła pojazd → jeśli tak: test trzeźwości + DUI ścieżka.'},
-     'r-drunk-minor':{result:true, verdict:'Nadużycie alkoholu — umiarkowane',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Odprowadź do zakwaterowania lub przekaż SNR.','Wpis do DOB.','Powiadom SNR przez radio/telefon.'],
+       note:'SOP 3901 §3 / Annex A. Check if person operated a vehicle → if yes: breathalyzer + follow DUI path.'},
+     'r-drunk-minor':{result:true,verdict:'Excessive drinking — moderate',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Escort to accommodation or hand over to SNR.','DOB entry.','Notify SNR by radio/phone.'],
        docs:['DOB'],
-       note:'Jeśli zachowanie się pogorszy → eskalacja do MPR.'},
-     'r-sobriety':{result:true, verdict:'Przeprowadź test trzeźwości',
-       color:'#1a5cb8', bg:'#dbeafe',
-       actions:['Powiedz: "Proszę o poddanie się testowi trzeźwości."','Wykonaj test. Odnotuj wynik.','Jeśli >0 ‰ i pojazd → wróć do ścieżki DUI.','Jeśli 0 ‰ → wpis DOB, brak dalszych działań.'],
+       note:'If behaviour deteriorates → escalate to MPR.'},
+     'r-sobriety':{result:true,verdict:'Conduct sobriety check',
+       color:'#1a5cb8',bg:'#dbeafe',
+       actions:['Say: "I am conducting a mandatory sobriety check."','Conduct test. Record result in ‰.','If >0 ‰ and vehicle involved → follow DUI path.','If 0 ‰ → DOB entry, no further action.'],
        docs:['DOB'],
-       note:'SOP 3927 §6c(9). IMP może zlecić test na każde żądanie SNR lub z własnej inicjatywy.'}
+       note:'SOP 3927 §6c(9). IMP may conduct sobriety check on own initiative or at SNR request.'}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'id-check',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M14 9h4M14 12h3"/></svg>',
-   color:'#15803d', bg:'#dcfce7',
-   title:'Brak ID / niewidoczna karta',
+   color:'#15803d',bg:'#dcfce7',
+   title:'No ID / card not visible',
    subtitle:'SOP 3901 §11',
    start:'q1',
    nodes:{
-     q1:{q:'Czy osoba ma przy sobie kartę ID EUFOR/NHQ Sa?',
-       opts:[{l:'TAK — ma ale niewidoczna',c:'warn',n:'q2'},{l:'NIE — brak karty',c:'danger',n:'q4'}]},
-     q2:{q:'Ile razy ta osoba była już uprzedzana?',
-       opts:[{l:'1. raz',c:'info',n:'r-warn1'},{l:'2. raz',c:'warn',n:'r-warn2'},{l:'3. raz lub więcej',c:'danger',n:'r-id-snr'}]},
-     q4:{q:'Czy osoba może zidentyfikować się innym dokumentem?',
-       opts:[{l:'TAK — inny dokument',c:'info',n:'q5'},{l:'NIE — brak jakiegokolwiek ID',c:'danger',n:'r-detain'}]},
-     q5:{q:'Czy tożsamość można potwierdzić np. przez jednostkę?',
-       opts:[{l:'TAK — potwierdzono',c:'ok',n:'r-nocard-ok'},{l:'NIE / odmowa',c:'danger',n:'r-detain'}]},
-     'r-warn1':{result:true, verdict:'1. naruszenie — ustne ostrzeżenie',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Powiedz: "Karta ID musi być widoczna w każdej chwili na terenie obozu."','Wpis do DOB.'],
-       docs:['DOB'], note:'Wyjątek: aktywność sportowa.'},
-     'r-warn2':{result:true, verdict:'2. naruszenie — pisemne ostrzeżenie',
-       color:'#c2410c', bg:'#ffedd5',
-       actions:['Wydaj pisemne ostrzeżenie.','Wpis do DOB z adnotacją "2. naruszenie".'],
-       docs:['DOB'], note:'Przy 3. naruszeniu → SNR/Branch Chief + FPM.'},
-     'r-id-snr':{result:true, verdict:'3.+ naruszenie — eskalacja SNR',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Powiadom SNR/Branch Chief.','Wszystkie działania raportowane do FPM.','DOB z numerem naruszenia.'],
-       docs:['DOB'], note:'SOP 3901 §11b / Annex D.'},
-     'r-nocard-ok':{result:true, verdict:'Brak karty — tożsamość potwierdzona',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Wpis DOB — brak karty przy sobie.','1. raz: ustne ostrzeżenie.','2.+ raz: pisemne ostrzeżenie.'],
-       docs:['DOB'], note:''},
-     'r-detain':{result:true, verdict:'Zatrzymaj — tożsamości nie można potwierdzić',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Eskortuj do IMP Station.','Powiadom IMP CMDR natychmiast.','Zatrzymaj do potwierdzenia tożsamości.','Wypisz MPR jeśli odmawia współpracy.'],
+     q1:{q:'Does the person have their EUFOR/NHQ Sa ID card on them?',
+       opts:[{l:'YES — has card but not visibly displayed',c:'warn',n:'q2'},{l:'NO — no card at all',c:'danger',n:'q4'}]},
+     q2:{q:'How many previous warnings for this person?',
+       opts:[{l:'1st offence',c:'info',n:'r-warn1'},{l:'2nd offence',c:'warn',n:'r-warn2'},{l:'3rd offence or more',c:'danger',n:'r-id-snr'}]},
+     q4:{q:'Can the person identify themselves with another document?',
+       opts:[{l:'YES — other document available',c:'info',n:'q5'},{l:'NO — no identification whatsoever',c:'danger',n:'r-detain'}]},
+     q5:{q:'Can identity be confirmed (e.g. through their unit)?',
+       opts:[{l:'YES — confirmed',c:'ok',n:'r-nocard-ok'},{l:'NO / refuses to cooperate',c:'danger',n:'r-detain'}]},
+     'r-warn1':{result:true,verdict:'1st offence — verbal warning',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Say: "Your ID card must be worn in a visible location at all times on camp."','DOB entry.'],
+       docs:['DOB'],note:'Exception from display requirement: sport activity only.'},
+     'r-warn2':{result:true,verdict:'2nd offence — written warning',
+       color:'#c2410c',bg:'#ffedd5',
+       actions:['Issue written warning.','DOB entry noting "2nd offence".'],
+       docs:['DOB'],note:'3rd offence → notify SNR/Branch Chief + all action reported to FPM.'},
+     'r-id-snr':{result:true,verdict:'3rd+ offence — escalate to SNR',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Notify SNR/Branch Chief.','All actions reported to FPM.','DOB entry noting offence count.'],
+       docs:['DOB'],note:'SOP 3901 §11b / Annex D.'},
+     'r-nocard-ok':{result:true,verdict:'No card — identity confirmed',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['DOB entry — no ID card carried.','1st time: verbal warning.','2nd+ time: written warning.'],
+       docs:['DOB'],note:''},
+     'r-detain':{result:true,verdict:'Detain — identity cannot be confirmed',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Escort to IMP Station.','Notify IMP CMDR immediately.','Detain until identity is confirmed.','Produce MPR if person refuses to cooperate.'],
        docs:['MPR','DOB'],
-       note:'SOP 3927 §6c(4). IMP może zatrzymać osobę jeśli nie okazuje ID na żądanie.'}
+       note:'SOP 3927 §6c(4). IMP may detain any person who fails to produce ID when requested.'}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'notify',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>',
-   color:'#6b7280', bg:'#e8eaed',
-   title:'Kogo powiadomić?',
+   color:'#6b7280',bg:'#e8eaed',
+   title:'Who to notify?',
    subtitle:'SNR / IMP CMDR / FPM / HQ CAMP CMDT',
    start:'q1',
    nodes:{
-     q1:{q:'Jaki rodzaj incydentu?',
-       opts:[{l:'DUI / broń / poważny incydent',c:'danger',n:'r-all'},{l:'Wypadek drogowy',c:'warn',n:'r-accident'},{l:'Naruszenie dyscypliny (alkohol/ubiór/cisza)',c:'info',n:'q2'},{l:'Drobne naruszenie ruchu',c:'info',n:'q3'}]},
-     q2:{q:'Czy to 1. naruszenie?',
-       opts:[{l:'TAK',c:'ok',n:'r-dob-only'},{l:'NIE — 2. lub więcej',c:'warn',n:'r-snr-only'}]},
-     q3:{q:'Kategoria prędkości / parkowania?',
-       opts:[{l:'Prędkość 5–10 km/h, 1. raz',c:'ok',n:'r-dob-only'},{l:'Prędkość 11+ lub parking 3.+',c:'warn',n:'r-snr-hq'},{l:'DUI / Bldg 200',c:'danger',n:'r-all'}]},
-     'r-all':{result:true, verdict:'Powiadom WSZYSTKICH — natychmiast',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['IMP CMDR (IPN 5782 / +387 61 139 603)','FPM (IPN 5799 / +387 62 337 671)','SNR / Branch Chief sprawcy','HQ CAMP CMDT OPS (ext. 2041)'],
+     q1:{q:'What type of incident?',
+       opts:[{l:'DUI / weapon / serious incident',c:'danger',n:'r-all'},{l:'Traffic accident',c:'warn',n:'r-accident'},{l:'Conduct violation (alcohol/dress/quiet hours)',c:'info',n:'q2'},{l:'Minor traffic violation',c:'info',n:'q3'}]},
+     q2:{q:'Is this the 1st offence?',
+       opts:[{l:'YES — 1st offence',c:'ok',n:'r-dob-only'},{l:'NO — 2nd or more',c:'warn',n:'r-snr-only'}]},
+     q3:{q:'Speeding / parking category?',
+       opts:[{l:'Speeding 5–10 km/h, 1st offence',c:'ok',n:'r-dob-only'},{l:'Speeding 11+ km/h or parking 3rd+',c:'warn',n:'r-snr-hq'},{l:'DUI / Bldg 200',c:'danger',n:'r-all'}]},
+     'r-all':{result:true,verdict:'Notify ALL — immediately',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['IMP CMDR — IPN 5782 / +387 61 139 603','FPM — IPN 5799 / +387 62 337 671','SNR / Branch Chief of suspect','HQ CAMP CMDT OPS — ext. 2041'],
        docs:['MPR','DOB'],
-       note:'Kolejność: IMP CMDR → FPM → SNR → HQ CAMP CMDT.'},
-     'r-accident':{result:true, verdict:'Wypadek — łańcuch powiadomień',
-       color:'#c2410c', bg:'#ffedd5',
-       actions:['Jeśli obrażenia → Medical Cell 912 NATYCHMIAST.','IMP CMDR + FPM.','SNR obu stron jeśli multi-nation.','HQ CAMP CMDT jeśli poważne szkody.'],
+       note:'Notification order: IMP CMDR → FPM → SNR → HQ CAMP CMDT.'},
+     'r-accident':{result:true,verdict:'Accident — notification chain',
+       color:'#c2410c',bg:'#ffedd5',
+       actions:['Injury present → Medical Cell ext. 912 IMMEDIATELY.','Notify IMP CMDR + FPM.','Notify SNR of both parties if multi-nation.','Notify HQ CAMP CMDT if serious damage.'],
        docs:['MPR','DOB'],
-       note:'Drobne wypadki bez obrażeń → tylko na żądanie SNR lub FPM.'},
-     'r-snr-only':{result:true, verdict:'Powiadom SNR / Branch Chief',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Powiadom SNR/Branch Chief sprawcy.','FPM jeśli wymagane przez Annex D.'],
-       docs:['TVR lub DOB'],
-       note:''},
-     'r-snr-hq':{result:true, verdict:'SNR + HQ CAMP CMDT + FPM',
-       color:'#c2410c', bg:'#ffedd5',
-       actions:['Powiadom SNR/Branch Chief.','Zgłoś do HQ CAMP CMDT.','Poinformuj FPM.'],
+       note:'Minor accidents without injury → on SNR or FPM request only.'},
+     'r-snr-only':{result:true,verdict:'Notify SNR / Branch Chief',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Notify SNR/Branch Chief of offender.','FPM if required per Annex D SOP 3901.'],
+       docs:['TVR or DOB'],note:''},
+     'r-snr-hq':{result:true,verdict:'SNR + HQ CAMP CMDT + FPM',
+       color:'#c2410c',bg:'#ffedd5',
+       actions:['Notify SNR/Branch Chief.','Report to HQ CAMP CMDT.','Inform FPM.'],
        docs:['TVR','DOB'],note:''},
-     'r-dob-only':{result:true, verdict:'Tylko wpis DOB — brak powiadomień',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Wydaj ostrzeżenie (ustne przy 1. raz).','Wpis do DOB.'],
+     'r-dob-only':{result:true,verdict:'DOB entry only — no notifications required',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Issue verbal warning.','DOB entry.'],
        docs:['DOB'],note:''}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'convoy-check',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
-   color:'#1a5cb8', bg:'#dbeafe',
-   title:'Kontrola konwoju — czy zgodny z SOP?',
+   color:'#1a5cb8',bg:'#dbeafe',
+   title:'Convoy check — SOP compliant?',
    subtitle:'SOP 6240 Annex A',
    start:'q1',
    nodes:{
-     q1:{q:'Ile pojazdów w ruchu/kolumnie?', type:'input', inputId:'convoyCount', inputPlaceholder:'Wpisz liczbę pojazdów np. 12',
+     q1:{q:'Number of vehicles in the movement/column?',type:'input',inputId:'convoyCount',inputPlaceholder:'Enter vehicle count e.g. 12',
        compute:(v)=>{
          const n=parseInt(v);
-         if(isNaN(n)||n<=0) return null;
-         if(n<7) return 'r-noconv';
-         if(n<=15) return 'q2';
+         if(isNaN(n)||n<=0)return null;
+         if(n<7)return 'r-noconv';
+         if(n<=15)return 'q2';
          return 'r-packets';
        }
      },
-     q2:{q:'Czy kolumna ma CCN widoczny na pojazdach prowadzącym i zamykającym?',
-       opts:[{l:'TAK — CCN widoczny',c:'ok',n:'q3'},{l:'NIE — brak CCN',c:'danger',n:'r-no-ccn'}]},
-     q3:{q:'Czy ruch przekracza granicę BiH lub jest to ruch taktyczny?',
-       opts:[{l:'TAK — granica / taktyczny',c:'warn',n:'r-log-mov'},{l:'NIE — ruch wewnętrzny AOO',c:'ok',n:'r-ok-convoy'}]},
-     'r-noconv':{result:true, verdict:'Nie jest to konwój wg SOP 6240',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Poniżej 7 pojazdów — nie wymaga CCN ani koordynacji LOG MOV.','Standardowa kontrola drogowa jeśli wymagana.'],
-       docs:['DOB jeśli interwencja'],note:'Konwój = ≥7 pojazdów wg definicji EUFOR.'},
-     'r-packets':{result:true, verdict:'Wymagany podział na pakiety!',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Powyżej 15 pojazdów — musi być podzielone na pakiety max 15.','Przerwa między pakietami: 15 minut.','Wiele konwojów z tego samego SP: 60 minut między konwojami.','Sprawdź CCN na pojazdach prowadzącym i zamykającym każdego pakietu.'],
+     q2:{q:'Is the CCN displayed on the leading AND trailing vehicles?',
+       opts:[{l:'YES — CCN visible on both',c:'ok',n:'q3'},{l:'NO — CCN missing',c:'danger',n:'r-no-ccn'}]},
+     q3:{q:'Does the movement cross a BiH border or is it a tactical move?',
+       opts:[{l:'YES — border crossing / tactical',c:'warn',n:'r-log-mov'},{l:'NO — internal AOO movement',c:'ok',n:'r-ok-convoy'}]},
+     'r-noconv':{result:true,verdict:'Not a convoy per SOP 6240',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Fewer than 7 vehicles — no CCN or LOG MOV coordination required.','Standard traffic controls apply if warranted.'],
+       docs:['DOB if any action taken'],note:'Convoy definition: ≥7 vehicles (EUFOR SOP 6240).'},
+     'r-packets':{result:true,verdict:'PACKETS REQUIRED — column too large',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['More than 15 vehicles — must be split into packets of max 15.','Release interval between packets: 15 minutes.','Multiple convoys from same Start Point: 60 minutes between convoys.','Verify CCN on leading and trailing vehicle of EACH packet.'],
        docs:['DOB'],
-       note:'SOP 6240 §8a. Inform Convoy Commander natychmiast.'},
-     'r-no-ccn':{result:true, verdict:'BRAK CCN — zatrzymaj konwój',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Zatrzymaj kolumnę.','Powiedz: "CCN musi być widoczny na obu stronach pojazdu prowadzącego i z przodu/tyłu pojazdu zamykającego."','Skontaktuj się z LOG MOV Officer przez JOC.','Wpis DOB.'],
+       note:'SOP 6240 §8a. Inform Convoy Commander immediately.'},
+     'r-no-ccn':{result:true,verdict:'NO CCN — halt the convoy',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Halt the column.','Say: "CCN must be displayed on both sides of the leading vehicle and on the front and rear of the trailing vehicle."','Contact LOG MOV Officer via JOC (ext. 5366–5368).','DOB entry.'],
        docs:['DOB'],
-       note:'CCN jest wydawany przez LOG MOV Officer. Bez CCN ruch nieupoważniony.'},
-     'r-log-mov':{result:true, verdict:'LOG MOV coordination required',
-       color:'#b45309', bg:'#fef3c7',
-       actions:['Weryfikuj czy był złożony Road Movement Request min 36h wcześniej.','Przy przekraczaniu granicy: min 3 dni robocze wcześniej.','Przy wątpliwościach: kontakt z LOG MOV przez JOC.'],
+       note:'CCN issued exclusively by LOG MOV Officer. Movement without CCN is unauthorised.'},
+     'r-log-mov':{result:true,verdict:'LOG MOV coordination required',
+       color:'#b45309',bg:'#fef3c7',
+       actions:['Verify Road Movement Request was submitted at least 36h in advance.','Border crossings: minimum 3 working days in advance.','If uncertain: contact LOG MOV Officer via JOC.'],
        docs:['DOB'],note:''},
-     'r-ok-convoy':{result:true, verdict:'Konwój zgodny z SOP',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['CCN widoczny. Liczba pojazdów w normie. Ruch wewnętrzny AOO.','Wpis DOB jeśli była to zaplanowana kontrola.'],
-       docs:['DOB (opcjonalnie)'],note:''}
+     'r-ok-convoy':{result:true,verdict:'Convoy compliant with SOP 6240',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['CCN visible. Vehicle count within packet limits. Internal AOO movement.','DOB entry if this was a scheduled convoy check.'],
+       docs:['DOB (if scheduled check)'],note:''}
    }
   },
-  // ─────────────────────────────────────────────────────────────────
   {id:'walkout-check',
    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>',
-   color:'#6b7280', bg:'#e8eaed',
-   title:'Walking out — czy autoryzowany?',
+   color:'#6b7280',bg:'#e8eaed',
+   title:'Walking out — authorised?',
    subtitle:'SOP 3901 §14–18',
    start:'q1',
    nodes:{
-     q1:{q:'Aktualny stan alarmowy (Alert State)?',
+     q1:{q:'Current Alert State?',
        opts:[{l:'ALPHA / BRAVO',c:'ok',n:'q2'},{l:'CHARLIE',c:'warn',n:'q3'},{l:'DELTA',c:'danger',n:'r-delta'}]},
-     q2:{q:'Czy osoba ma autoryzację od Branch/Section Chief, SNR lub MNBN Cdr?',
-       opts:[{l:'TAK',c:'ok',n:'q4'},{l:'NIE',c:'danger',n:'r-no-auth'}]},
-     q3:{q:'Czy osoba posiada Force Exemption Card wydaną przez COS HQ EUFOR lub COS NHQ Sa?',
-       opts:[{l:'TAK — ma Force Exemption Card',c:'ok',n:'q4'},{l:'NIE',c:'danger',n:'r-no-fec'}]},
-     q4:{q:'Czy cel wyjścia jest na aktualnej liście Off-Limits (J2)?',
-       opts:[{l:'NIE — lokalizacja dozwolona',c:'ok',n:'r-ok-walkout'},{l:'TAK — Off-Limits',c:'danger',n:'r-offlimits'}]},
-     'r-delta':{result:true, verdict:'DELTA — Zakaz opuszczania obozu',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Powiedz: "Stan DELTA — wyjście z obozu jest zabronione dla wszystkich bez wyjątku."','Skieruj osobę z powrotem do obozu.','Wpis DOB.'],
+     q2:{q:'Does the person have authorisation from Branch/Section Chief, SNR or MNBN Cdr?',
+       opts:[{l:'YES — authorised',c:'ok',n:'q4'},{l:'NO — no authorisation',c:'danger',n:'r-no-auth'}]},
+     q3:{q:'Does the person hold a Force Exemption Card issued by COS HQ EUFOR or COS NHQ Sa?',
+       opts:[{l:'YES — Force Exemption Card present',c:'ok',n:'q4'},{l:'NO',c:'danger',n:'r-no-fec'}]},
+     q4:{q:'Is the intended destination on the current J2 Off-Limits list?',
+       opts:[{l:'NO — location is permitted',c:'ok',n:'r-ok-walkout'},{l:'YES — Off-Limits',c:'danger',n:'r-offlimits'}]},
+     'r-delta':{result:true,verdict:'DELTA — No walking out permitted',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Say: "Alert State DELTA is in effect. All personnel must remain in Camp Butmir. No walking out is permitted."','Direct person back into camp.','DOB entry.'],
        docs:['DOB'],
-       note:'SOP 3901 §15c. Brak wyjątków przy stanie DELTA.'},
-     'r-no-auth':{result:true, verdict:'Brak autoryzacji — zatrzymaj wyjście',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Zatrzymaj osobę przy bramie.','Poinformuj o konieczności uzyskania zgody Branch/Section Chief lub SNR.','Wpis DOB.'],
+       note:'SOP 3901 §15c. No exceptions apply under Alert State DELTA.'},
+     'r-no-auth':{result:true,verdict:'No authorisation — stop walk-out',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Stop person at gate.','Advise: authorisation must be obtained from Branch/Section Chief or SNR before leaving.','DOB entry.'],
        docs:['DOB'],note:''},
-     'r-no-fec':{result:true, verdict:'Brak Force Exemption Card (CHARLIE)',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Zatrzymaj. Przy stanie CHARLIE wymagana Force Exemption Card od COS.','Skieruj do COS HQ EUFOR lub COS NHQ Sa po kartę.'],
+     'r-no-fec':{result:true,verdict:'No Force Exemption Card (CHARLIE)',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Halt. Under Alert State CHARLIE a Force Exemption Card from COS is required.','Direct person to COS HQ EUFOR or COS NHQ Sa to obtain card before exiting.'],
        docs:['DOB'],note:''},
-     'r-offlimits':{result:true, verdict:'Off-Limits — wyjście zabronione do tej lokalizacji',
-       color:'#b91c1c', bg:'#fee2e2',
-       actions:['Poinformuj: "Lokalizacja jest na liście Off-Limits J2. Wejście zabronione."','Lista publikowana przez J2 — GALAXY, CHRONOS, tablice przy DFAC i Gym.'],
+     'r-offlimits':{result:true,verdict:'Off-Limits — destination prohibited',
+       color:'#b91c1c',bg:'#fee2e2',
+       actions:['Inform person: "That location is on the current J2 Off-Limits list. Entry is prohibited."','Off-Limits list: GALAXY, CHRONOS, DFAC and Gym notice boards.'],
        docs:['DOB'],note:''},
-     'r-ok-walkout':{result:true, verdict:'Walking out — autoryzowany',
-       color:'#15803d', bg:'#dcfce7',
-       actions:['Osoby mogą wyjść w mundurze lub ubraniu cywilnym.','Ubranie cywilne rekomendowane.','Przypomnienie o zakazie odwiedzania miejsc Off-Limits.'],
+     'r-ok-walkout':{result:true,verdict:'Walking out — authorised',
+       color:'#15803d',bg:'#dcfce7',
+       actions:['Personnel may walk out in uniform or civilian clothes.','Civilian clothes recommended.','Remind personnel to avoid all locations on the Off-Limits list.'],
        docs:[],note:''}
    }
   }
@@ -3215,12 +3206,12 @@ function renderItrees(){
       <div class="dtree-body" id="itree-body-${t.id}">
         <div id="itree-content-${t.id}" style="padding:0"></div>
         <div style="padding:8px 14px;border-top:1px solid var(--border)">
-          <button onclick="resetItree('${t.id}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--text3);cursor:pointer;font-family:var(--body);font-weight:600">↺ Reset</button>
+          <button onclick="resetItree('${t.id}')" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--text3);cursor:pointer;font-family:var(--body);font-weight:600">&#8635; Reset</button>
         </div>
       </div>
     </div>`).join('');
   itrees.forEach(t=>{
-    itreeState[t.id]={current:t.start};
+    itreeState[t.id]={current:t.start, trail:[]};
     renderItreeNode(t.id);
   });
 }
@@ -3233,76 +3224,73 @@ function toggleItree(id){
 function resetItree(id){
   const t=itrees.find(x=>x.id===id);
   if(!t) return;
-  itreeState[id]={current:t.start};
+  itreeState[id]={current:t.start, trail:[]};
   renderItreeNode(id);
 }
 
 function renderItreeNode(treeId){
   const t=itrees.find(x=>x.id===treeId);
   if(!t) return;
-  const nodeId=itreeState[treeId].current;
-  const node=t.nodes[nodeId];
+  const state=itreeState[treeId];
+  if(!state) return;
+  const node=t.nodes[state.current];
   if(!node) return;
   const container=document.getElementById('itree-content-'+treeId);
   if(!container) return;
+  const trail=state.trail||[];
 
-  // Build breadcrumb trail
-  const trail=itreeState[treeId].trail||[];
+  const trailHtml=trail.length?`<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">
+    ${trail.map((s,i)=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 7px;border-radius:10px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s}</span>${i<trail.length-1?'<span style="color:var(--border);font-size:12px">›</span>':''}`).join('')}
+  </div>`:'';
 
   if(node.result){
-    // RESULT NODE
-    const docHtml=node.docs.length?node.docs.map(d=>{
+    const docHtml=node.docs&&node.docs.length?node.docs.filter(d=>d&&!d.includes('(optional)') && !d.includes('if ')).map(d=>{
       const cls=d.startsWith('MPR')?'doc-mpr':d.startsWith('TVR')?'doc-tvr':d.startsWith('PVR')?'doc-pvr':'doc-dob';
-      return `<span class="dtree-step-doc ${cls}">${d}</span>`;
-    }).join(' '):'';
-    container.innerHTML=`
-      ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+      return `<span class="dtree-step-doc ${cls}" style="margin-right:4px">${d}</span>`;
+    }).join(''):'';
+    container.innerHTML=`${trailHtml}
       <div style="padding:14px;background:${node.bg};border-bottom:3px solid ${node.color}">
-        <div style="font-weight:900;font-size:15px;color:${node.color};margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">▶ ${node.verdict}</div>
+        <div style="font-weight:900;font-size:14px;color:${node.color};margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">&#9654; ${node.verdict}</div>
         ${node.actions.map((a,i)=>`
           <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid ${node.color}22">
-            <span style="font-family:var(--mono);font-size:10px;color:${node.color};font-weight:700;min-width:16px;flex-shrink:0;padding-top:1px">${i+1}</span>
+            <span style="font-family:var(--mono);font-size:10px;color:${node.color};font-weight:700;min-width:16px;flex-shrink:0;padding-top:2px">${i+1}</span>
             <span style="font-size:13px;color:var(--text);line-height:1.4">${a}</span>
           </div>`).join('')}
-        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-          ${docHtml}
-        </div>
-        ${node.note?`<div style="margin-top:10px;padding:6px 10px;background:rgba(0,0,0,.07);border-radius:4px;font-size:11px;color:var(--text2);line-height:1.5">${node.note}</div>`:''}
+        ${docHtml?`<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px">${docHtml}</div>`:''}
+        ${node.note?`<div style="margin-top:10px;padding:6px 10px;background:rgba(0,0,0,.06);border-radius:4px;font-size:11px;color:var(--text2);line-height:1.5">${node.note}</div>`:''}
       </div>`;
     return;
   }
 
-  // QUESTION NODE
   if(node.type==='input'){
-    container.innerHTML=`
-      ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+    container.innerHTML=`${trailHtml}
       <div style="padding:12px 14px">
-        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px">${node.q}</div>
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;line-height:1.4">${node.q}</div>
         <div style="display:flex;gap:8px">
-          <input id="inp-${treeId}" placeholder="${node.inputPlaceholder}" type="number" min="0"
-            style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:16px;outline:none;font-weight:700"
-            onkeydown="if(event.key==='Enter')submitItreeInput('${treeId}','${nodeId}')">
-          <button onclick="submitItreeInput('${treeId}','${nodeId}')"
-            style="background:var(--accent2);border:none;border-radius:6px;padding:10px 18px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">OK</button>
+          <input id="inp-${treeId}" placeholder="${node.inputPlaceholder||''}" type="number" min="0"
+            style="flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:18px;outline:none;font-weight:700"
+            onkeydown="if(event.key==='Enter')submitItreeInput('${treeId}')">
+          <button onclick="submitItreeInput('${treeId}')"
+            style="background:var(--accent2);border:none;border-radius:6px;padding:10px 20px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--body)">OK</button>
         </div>
+        <div id="inp-err-${treeId}" style="color:var(--danger);font-size:11px;margin-top:6px;display:none">Please enter a valid number.</div>
       </div>`;
-    setTimeout(()=>{const inp=document.getElementById('inp-'+treeId);if(inp)inp.focus();},50);
+    setTimeout(()=>{const el=document.getElementById('inp-'+treeId);if(el)el.focus();},80);
     return;
   }
 
-  // OPTIONS NODE
+  // Options node
   const colorMap={yes:'#15803d',no:'#b91c1c',warn:'#b45309',danger:'#b91c1c',ok:'#15803d',info:'#1a5cb8'};
   const bgMap={yes:'#dcfce7',no:'#fee2e2',warn:'#fef3c7',danger:'#fee2e2',ok:'#dcfce7',info:'#dbeafe'};
-  container.innerHTML=`
-    ${trail.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border)">${trail.map(s=>`<span style="font-size:10px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:10px">${s}</span>`).join('<span style="color:var(--text3);font-size:10px">›</span>')}</div>`:''}
+  container.innerHTML=`${trailHtml}
     <div style="padding:12px 14px">
-      <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:10px;line-height:1.4">${node.q}</div>
+      <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:12px;line-height:1.4">${node.q}</div>
       <div style="display:flex;flex-direction:column;gap:6px">
         ${node.opts.map(o=>`
-          <button onclick="advanceItree('${treeId}','${o.n}','${o.l.replace(/'/g,"\\'")}')"
-            style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${bgMap[o.c]||bgMap.info};border:1.5px solid ${colorMap[o.c]||colorMap.info}44;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--body);transition:border-color .15s">
+          <button onclick="advanceItree('${treeId}','${o.n}','${o.l.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')"
+            style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:${bgMap[o.c]||bgMap.info};border:1.5px solid ${colorMap[o.c]||colorMap.info}55;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--body);width:100%">
             <span style="font-weight:700;font-size:13px;color:${colorMap[o.c]||colorMap.info};flex:1;line-height:1.3">${o.l}</span>
-            <span style="color:${colorMap[o.c]||colorMap.info};font-size:14px">›</span>
+            <span style="color:${colorMap[o.c]||colorMap.info};font-size:16px;flex-shrink:0">&#8250;</span>
           </button>`).join('')}
       </div>
     </div>`;
@@ -3310,25 +3298,33 @@ function renderItreeNode(treeId){
 
 function advanceItree(treeId, nextNodeId, choiceLabel){
   const state=itreeState[treeId];
+  if(!state) return;
   if(!state.trail) state.trail=[];
   state.trail.push(choiceLabel);
   state.current=nextNodeId;
   renderItreeNode(treeId);
 }
 
-function submitItreeInput(treeId, nodeId){
+function submitItreeInput(treeId){
   const t=itrees.find(x=>x.id===treeId);
   if(!t) return;
-  const node=t.nodes[nodeId];
+  const state=itreeState[treeId];
+  if(!state) return;
+  const node=t.nodes[state.current];
+  if(!node||!node.compute) return;
   const inp=document.getElementById('inp-'+treeId);
+  const err=document.getElementById('inp-err-'+treeId);
   if(!inp) return;
   const val=inp.value.trim();
-  if(!val){inp.style.borderColor='var(--danger)';return;}
+  if(!val){if(err)err.style.display='block';return;}
   const nextId=node.compute(val);
-  if(!nextId){inp.style.borderColor='var(--danger)';return;}
-  const state=itreeState[treeId];
+  if(!nextId){
+    if(inp) inp.style.borderColor='var(--danger)';
+    if(err) err.style.display='block';
+    return;
+  }
   if(!state.trail) state.trail=[];
-  state.trail.push(val);
+  state.trail.push(val+' km/h');
   state.current=nextId;
   renderItreeNode(treeId);
 }
@@ -5258,477 +5254,7 @@ setTimeout(initRosterPusher, 3000);
 
 </body>
 </html>
-
-
-// ── 9-LINER MEDEVAC BUILDER ───────────────────────────────────────────────────
-const ninerDef=[
-  {
-    line:1, label:'Location',
-    desc:'Grid reference or place name of pick-up site.',
-    type:'text', placeholder:'e.g. SIA E7 Gate / Grid 12345',
-    classified:false
-  },
-  {
-    line:2, label:'Radio Frequency & Call Sign',
-    desc:'Frequency in MHz and call sign of requesting unit.',
-    type:'text', placeholder:'e.g. IMP DUTY / IPN 5783',
-    classified:false
-  },
-  {
-    line:3, label:'Number of Patients by Precedence',
-    desc:'Number + code letter. Multiple categories: separate entries.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'A',label:'A — Urgent',note:'Life-threatening. Evac within 1 hour.'},
-      {code:'B',label:'B — Urgent Surgical',note:'Requires surgery within 1h to save life/limb.'},
-      {code:'C',label:'C — Priority',note:'Serious but not immediate threat. Within 4h.'},
-      {code:'D',label:'D — Routine',note:'Evacuation within 24h. Condition stable.'},
-      {code:'E',label:'E — Convenience',note:'Evacuation for administrative reasons.'}
-    ],
-    prefix:'1 '
-  },
-  {
-    line:4, label:'Special Equipment Required',
-    desc:'Equipment needed at pick-up site.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'A',label:'A — None',note:'No special equipment needed.'},
-      {code:'B',label:'B — Hoist',note:'Hoist / winch required.'},
-      {code:'C',label:'C — Extraction equipment',note:'Special extraction equipment needed.'},
-      {code:'D',label:'D — Ventilator',note:'Ventilator required during transport.'}
-    ],
-    prefix:''
-  },
-  {
-    line:5, label:'Number of Patients by Type',
-    desc:'Litter (carried on stretcher) or Ambulatory (can walk).',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'L',label:'L — Litter',note:'Patient cannot walk. Carried on stretcher.'},
-      {code:'A',label:'A — Ambulatory',note:'Patient can walk without assistance.'},
-      {code:'LA',label:'L + A',note:'Both litter and ambulatory patients.'}
-    ],
-    prefix:'1 '
-  },
-  {
-    line:6, label:'Security at Pick-Up Site',
-    desc:'Enemy status. Transmitted using NATO phonetic alphabet.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'N',label:'NOVEMBER — No enemy',note:'No enemy troops in area.'},
-      {code:'P',label:'PAPA — Possible enemy',note:'Possible enemy in area. Approach with caution.'},
-      {code:'E',label:'ECHO — Enemy troops',note:'Enemy troops in area. Armed escort required.'},
-      {code:'X',label:'XRAY — Armed escort required',note:'Enemy in area. Armed escort mandatory for extraction.'}
-    ],
-    prefix:'',
-    phoneticNote:true
-  },
-  {
-    line:7, label:'Method of Marking Pick-Up Site',
-    desc:'How the pick-up site is marked for the aircraft.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'A',label:'A — Panels',note:'VS-17 panels or similar marking panels.'},
-      {code:'B',label:'B — Pyrotechnic signal',note:'Flare or signal pistol.'},
-      {code:'C',label:'C — Smoke signal',note:'Smoke grenade. Colour transmitted separately after freq check.'},
-      {code:'D',label:'D — None',note:'No marking. Aircraft uses grid only.'},
-      {code:'E',label:'E — Lights',note:'Strobe light or flashlight.'}
-    ],
-    prefix:''
-  },
-  {
-    line:8, label:'Patient Nationality & Status',
-    desc:'Nationality and military/civilian status.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'A',label:'A — US Military',note:'US Armed Forces personnel.'},
-      {code:'B',label:'B — US Civilian',note:'US civilian personnel.'},
-      {code:'C',label:'C — Non-US Military',note:'Use with nationality. e.g. C EUFOR, C POL, C AUT'},
-      {code:'D',label:'D — Non-US Civilian',note:'Non-US civilian personnel.'},
-      {code:'E',label:'E — EPW',note:'Enemy Prisoner of War.'}
-    ],
-    prefix:'',
-    euforNote:true
-  },
-  {
-    line:9, label:'NBC Contamination',
-    desc:'Nuclear, Biological, Chemical contamination at site.',
-    type:'select',
-    classified:true,
-    options:[
-      {code:'N',label:'N — None',note:'No contamination.'},
-      {code:'C',label:'C — Chemical',note:'Chemical contamination present.'},
-      {code:'B',label:'B — Biological',note:'Biological contamination present.'},
-      {code:'R',label:'R — Radiological',note:'Radiological contamination present.'},
-      {code:'X',label:'X — Nuclear',note:'Nuclear contamination present.'}
-    ],
-    prefix:''
-  }
-];
-
-let ninerValues={};
-
-function open9Liner(){
-  ninerValues={};
-  const modal=document.getElementById('ninerModal');
-  if(modal) modal.classList.add('open');
-  setNinerMode('build');
-  render9LinerLines();
-  document.getElementById('ninerOutput').style.display='none';
-}
-function close9Liner(){
-  const m=document.getElementById('ninerModal');
-  if(m) m.classList.remove('open');
-}
-function setNinerMode(mode){
-  const build=document.getElementById('ninerBuildMode');
-  const ref=document.getElementById('ninerRefMode');
-  const btnB=document.getElementById('ninerModeBuild');
-  const btnR=document.getElementById('ninerModeRef');
-  if(mode==='build'){
-    build.style.display='block'; ref.style.display='none';
-    btnB.style.background='var(--danger)'; btnB.style.color='#fff'; btnB.style.borderColor='var(--danger)';
-    btnR.style.background='var(--surface2)'; btnR.style.color='var(--text2)'; btnR.style.borderColor='var(--border)';
-  } else {
-    build.style.display='none'; ref.style.display='block';
-    btnR.style.background='var(--danger)'; btnR.style.color='#fff'; btnR.style.borderColor='var(--danger)';
-    btnB.style.background='var(--surface2)'; btnB.style.color='var(--text2)'; btnB.style.borderColor='var(--border)';
-    renderNinerRef();
-  }
-}
-
-function render9LinerLines(){
-  const container=document.getElementById('ninerLines');
-  if(!container) return;
-  container.innerHTML=ninerDef.map(l=>{
-    const lineId=`nl${l.line}`;
-    if(l.type==='text'){
-      return `
-        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
-          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
-            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
-            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
-          <input id="${lineId}" placeholder="${l.placeholder}" oninput="ninerValues[${l.line}]=this.value"
-            style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none">
-        </div>`;
-    } else {
-      return `
-        <div style="margin-bottom:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px">
-          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
-            <span style="font-family:var(--mono);font-weight:700;font-size:13px;color:var(--danger);min-width:22px">L${l.line}</span>
-            <span style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</span>
-            ${l.classified?'<span style="font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700">CODED</span>':''}
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${l.desc}</div>
-          ${l.phoneticNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">⚠ Transmitted using NATO phonetic alphabet</div>':''}
-          ${l.euforNote?'<div style="font-size:10px;color:var(--accent);margin-bottom:6px;font-weight:700">For EUFOR personnel: C EUFOR</div>':''}
-          <div style="display:flex;flex-direction:column;gap:4px">
-            ${l.options.map(o=>`
-              <label style="display:flex;align-items:flex-start;gap:8px;padding:7px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer">
-                <input type="radio" name="${lineId}" value="${o.code}" onchange="ninerValues[${l.line}]='${(l.prefix||'')+o.code}${l.euforNote&&o.code==='C'?' EUFOR':''}';"
-                  style="margin-top:2px;accent-color:var(--danger);flex-shrink:0">
-                <div>
-                  <div style="font-family:var(--mono);font-weight:700;font-size:12px;color:var(--accent)">${o.code}</div>
-                  <div style="font-size:12px;color:var(--text);font-weight:600">${o.label}</div>
-                  <div style="font-size:11px;color:var(--text3)">${o.note}</div>
-                </div>
-              </label>`).join('')}
-          </div>
-        </div>`;
-    }
-  }).join('');
-}
-
-function generate9Liner(){
-  const lines=[];
-  let missing=[];
-  ninerDef.forEach(l=>{
-    const val=ninerValues[l.line];
-    if(!val||val.trim()==='') missing.push('Line '+l.line+' ('+l.label+')');
-    else lines.push(`LINE ${l.line}: ${val.trim()}`);
-  });
-  const out=document.getElementById('ninerOutput');
-  const txt=document.getElementById('ninerText');
-  if(!out||!txt) return;
-  if(missing.length){
-    txt.textContent='⚠ MISSING:\n'+missing.join('\n');
-    txt.style.color='#fca5a5';
-  } else {
-    const ts=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    txt.textContent='=== 9-LINER MEDEVAC ===\n'+ts+' LOCAL\n\n'+lines.join('\n')+'\n\n=== END OF MESSAGE ===';
-    txt.style.color='#86efac';
-  }
-  out.style.display='block';
-  out.scrollIntoView({behavior:'smooth'});
-}
-
-function reset9Liner(){
-  ninerValues={};
-  render9LinerLines();
-  const out=document.getElementById('ninerOutput');
-  if(out) out.style.display='none';
-}
-
-function copy9Liner(){
-  const txt=document.getElementById('ninerText');
-  if(!txt) return;
-  navigator.clipboard?.writeText(txt.textContent).then(()=>alert('9-liner copied.')).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=txt.textContent;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('9-liner copied.');
-  });
-}
-
-function renderNinerRef(){
-  const c=document.getElementById('ninerRefContent');
-  if(!c) return;
-  c.innerHTML=ninerDef.map(l=>`
-    <div style="margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)">
-        <span style="font-family:var(--mono);font-weight:700;font-size:14px;color:var(--danger);min-width:24px">L${l.line}</span>
-        <div>
-          <div style="font-weight:700;font-size:13px;color:var(--text)">${l.label}</div>
-          <div style="font-size:11px;color:var(--text3)">${l.desc}</div>
-        </div>
-        ${l.classified?'<span style="margin-left:auto;font-family:var(--mono);font-size:9px;padding:1px 5px;background:#fee2e2;color:var(--danger);border-radius:3px;border:1px solid #fca5a5;font-weight:700;flex-shrink:0">CODED</span>':''}
-      </div>
-      ${l.type==='text'?`<div style="padding:8px 12px;font-size:12px;color:var(--text3)">Free text — ${l.placeholder}</div>`:
-      l.options.map(o=>`
-        <div style="display:grid;grid-template-columns:28px 1fr;gap:6px;padding:6px 12px;border-bottom:1px solid var(--border)">
-          <span style="font-family:var(--mono);font-weight:900;font-size:14px;color:var(--accent)">${o.code}</span>
-          <div>
-            <div style="font-weight:600;font-size:12px;color:var(--text)">${o.label.replace(/^[A-Z] — /,'')}</div>
-            <div style="font-size:11px;color:var(--text3)">${o.note}</div>
-          </div>
-        </div>`).join('')}
-      ${l.phoneticNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">⚠ Use NATO phonetic alphabet: N=NOVEMBER, P=PAPA, E=ECHO, X=XRAY</div>`:''}
-      ${l.euforNote?`<div style="padding:6px 12px;font-size:11px;color:var(--accent);font-weight:700;border-top:1px solid var(--border)">For EUFOR personnel → C EUFOR</div>`:''}
-    </div>`).join('');
-}
-
-// ── SIA AIRPORT ──────────────────────────────────────────────────────────────
-const siaProcs={
-  dep:{
-    title:'Departing Flight — ADMP Duties',
-    color:'var(--accent2)',
-    steps:[
-      {n:'1',t:'Arrive at terminal 2h before departure',d:'ADMP must be at airport entrance/initial screening area 2 hours before planned departure time.'},
-      {n:'2',t:'Weapon unloading at entrance',d:'Remind EUFOR/NHQ Sa passengers: weapons must be unloaded before entering terminal. If possible, leave weapons outside.',say:'"All EUFOR personnel: unload weapons before entering the terminal. Weapons should be left outside if possible."'},
-      {n:'3',t:'Collect ammunition from passengers',d:'All passengers travelling must hand over ammunition in their possession. Magazines sealed with baggage tags → handed to aircraft Load Master. Knives/sharp implements removed from person and hand luggage → placed in hold luggage.',doc:'DOB'},
-      {n:'4',t:'Check-in supervision',d:'FS/NR checks in at designated desk. ADMP present at Check-In Counter. Flight closed minimum 45 min before departure.'},
-      {n:'5',t:'Security Control — Departure Lounge',d:'ADMP escorts passengers through Security Scanner. Only ADMP may physically search EUFOR/NHQ Sa personnel. BPBiH may use scanning wand but cannot physically search or detain EUFOR personnel.',say:'"EUFOR personnel only. Proceed through security scanner. Any prohibited items must be removed now."'},
-      {n:'6',t:'Passport Control',d:'ADMP assists BPBiH at Passport Control. Dedicated EUFOR/NHQ Sa channel. Personnel present: EUFOR/NHQ Sa ID + National Military ID Card with travel order, or passport.'},
-      {n:'7',t:'Boarding to aircraft',d:'ADMP escorts passengers from Departure Lounge → bus → aircraft. Passengers wait in Departure Lounge until called. Do NOT allow passengers to proceed before being called by ADMP.'},
-      {n:'8',t:'Confiscated items handling',d:'All confiscated items: bagged, identified, taken to aircraft by ADMP, handed to crew for safekeeping until destination. Passenger must ask crew for return at destination.'},
-      {n:'9',t:'DOB entry on completion',d:'Entry: flight number/type, CCN if applicable, number of passengers, departure time, any incidents, confiscated items.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §5–8. ALS has final authority on all disputes between EUFOR/NHQ Sa and BPBiH.'
-  },
-  arr:{
-    title:'Arriving Flight — ADMP Duties',
-    color:'var(--ok)',
-    steps:[
-      {n:'1',t:'Red Pass and E7 Gate preparation',d:'ADMP issues Red Passes in exchange for EUFOR ID cards (SOP 3945). Written request to ALS at least 24h in advance. Access to airside only through Security Door.'},
-      {n:'2',t:'Aircraft on approach (10 min out)',d:'ALS informs ADMP. Escort FS/NR and cargo team to bus. FS/NR ensures Red Pass is visible to Airport Security Service (ASS).',say:'"Aircraft on final approach. All personnel: Red Pass visible. No hats airside. Secure all loose articles."'},
-      {n:'3',t:'Aircraft handling at stand',d:'Receive incoming passenger manifest. Deliver outgoing PAX manifest to crew. Receive cargo. Sign all delivery documents together with Load Master.'},
-      {n:'4',t:'Passenger disembarkation',d:'Sarajevo-bound passengers disembark first. Transit passengers: segregated to rear of bus or separate transport. ADMP escorts to Terminal.'},
-      {n:'5',t:'Passport Control — inbound',d:'Passengers: present EUFOR/NHQ Sa ID, National Military ID (with travel order) or passport to BPBiH. EUFOR personnel exempt customs under SOFA — but must respect customs officials and produce ID if stopped.'},
-      {n:'6',t:'Collect Red Passes',d:'FS/NR must return all Red Passes to ALS office. ADMP returns EUFOR/NHQ Sa ID cards to personnel. FS/NR stays at airport until aircraft has taken off.',doc:'DOB'},
-      {n:'7',t:'DOB entry',d:'Entry: flight type, number of passengers (in/out/transit), any incidents, Red Passes issued/returned.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §5, §15. ADMP stays at airport until aircraft departure. ALS office manned weekdays 0800–1630.'
-  },
-  vip:{
-    title:'VIP Handling — Procedure A & B',
-    color:'var(--accent)',
-    steps:[
-      {n:'⚠',t:'VIP definition',d:'Military VIP = OF-6 (Colonel) or above, or civilian equivalent. Others processed as normal passengers. VIP Lounge booking through JVB. Request: Special Request Form to ALS min 24h in advance.'},
-      {n:'A',t:'Procedure A — small aircraft, VIP party only',d:'Once aircraft lands: SIA OPC Supervisor, ALS and/or ADMP approach aircraft. Once safe to approach ADMP signals greeting party. Max 2 persons at aircraft when VIP disembarks. ADMP escorts VIP + welcome party back through E7 gate to vehicles.'},
-      {n:'B',t:'Procedure B — mixed passengers on same aircraft',d:'All welcome party members board bus outside VIP Lounge. Bus drives to aircraft. ALS, ADMP and FS/NR disembark first to brief Loadmaster. Welcome party then invited to welcome disembarking VIPs. Baggage to trolley → follows bus back to VIP Lounge via E7 gate.',say:'"VIP passengers only step forward. All others remain on the bus."'},
-      {n:'3',t:'Vehicles and access',d:'Max 5 vehicles + max 7 persons (greeting party) at E7 gate. Vehicles parked in street near administration building 30 min before arrival. ADMP escorts personnel via E7 gate to EUFOR VIP Lounge.'},
-      {n:'4',t:'No hats airside',d:'Hats NOT worn beyond the white line (FOD line). Exception: VIP formal greeting — hats allowed up to white line only.'},
-      {n:'5',t:'VIP on commercial flight',d:'Max 1–2 Red Staff Passes per incoming VIP group. ADMP escorts nominees to Arrivals Lounge. Wait at baggage delivery area until VIP through Immigration. Do NOT cross Immigration Line. ADMP escorts VIPs to waiting cars.',doc:'DOB'},
-      {n:'6',t:'DOB entry',d:'Entry: VIP name (rank+position), flight type, procedure used (A/B), greeting party personnel, any incidents.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §15b. For VIP flight 3–5 ADMP required. VIP Lounge booked through JVB — not for embassy or outside EUFOR/NATO use.'
-  },
-  ammo:{
-    title:'Ammunition & Explosives at SIA',
-    color:'var(--danger)',
-    steps:[
-      {n:'⚠',t:'SIA is NOT licensed to handle explosives',d:'All responsibility lies with National Explosives Officer. Decisions made by NEO in consultation with SIA Supervisor, ALS and EUFOR/NATO Explosives Officer.',say:'"This aircraft is carrying Class 1 dangerous goods. Confirm National Explosives Officer is present and all documentation is with ALS office."'},
-      {n:'1',t:'Pre-arrival — paperwork to ALS',d:'Full aircraft manifest + total Net Explosives Quantity (NEQ) must reach ALS office minimum 48h before aircraft arrival. Monday/Tuesday aircraft: paperwork by previous Thursday/Friday.'},
-      {n:'2',t:'Guard team',d:'Guard team required for aircraft and loaded vehicles while at SIA. Guard names + name of National Explosives Officer → sent to ALS with paperwork. All guard personnel at airport min 1h before aircraft arrival.'},
-      {n:'3',t:'Aircraft parking position',d:'Aircraft parked at end of runway — furthest point from terminal and civilian areas. Access through Gate E3 only.'},
-      {n:'4',t:'ADMP escorts ammunition',d:'Ammunition removed from passengers, packed by NSE staff → ADMP/ALS escort to aircraft airside. Magazines sealed with baggage tags. Ammunition handed over to Load Master.',doc:'DOB'},
-      {n:'5',t:'Small quantities (≤20kg NEQ 1.4S)',d:'Aircraft parked away from others. DAC unloaded first by NEO. Transported through E7 gate.'},
-      {n:'6',t:'Large quantities',d:'Request for flight approval + notification to ALS 48h in advance + special handling request + transportation ONLY through Gate E3.'},
-      {n:'7',t:'Overnight stay',d:'All dangerous cargo MUST be unloaded if aircraft stays overnight. Cannot be stored at SIA. Must be transported away (TCC responsibility).',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §17c. Weapons with ammunition: cleared before airport terminal. ADMP are the only ones authorized to carry weapons through SIA controls.'
-  },
-  medevac:{
-    title:'MEDEVAC Procedure at SIA',
-    color:'var(--danger)',
-    steps:[
-      {n:'1',t:'Notification to ALS',d:'Send to ALS: Special Request Form + copy of passenger\'s passport + EUFOR ID card.',say:'"This is ADMP. MEDEVAC request for [Name, Rank, Unit]. Sending Special Request Form and ID documentation to ALS now."'},
-      {n:'2',t:'Transmit 9-Liner MEDEVAC request',d:'Before or during notification — transmit 9-liner to Medical Cell (ext. 912) and JOC. Use coded format. Open 9-Liner Builder below → tap "9-Liner" button.',say:'[USE 9-LINER BUILDER — tap button below procedure list]'},
-      {n:'3',t:'Arrival timing',d:'MED/NSE team arrives at airport 15 min before aircraft arrival. Vehicles parked at E7 gate, in street near administration building.'},
-      {n:'4',t:'Document check at BPBiH',d:'NSE/MED team shows passenger\'s passport and EUFOR ID card to BiH Border Police. Team waits if aircraft needs to refuel.'},
-      {n:'5',t:'ADMP Red Cards and E7 escort',d:'ADMP issues Red Cards to MED/NSE team and escorts via E7 gate to aircraft.',say:'"Red Cards issued. Follow me to E7 gate. No hats airside. Stay with the group at all times."'},
-      {n:'6',t:'Stretcher patient',d:'If passenger is on stretcher: "Follow Me" car comes to E7 gate. MED/NSE team with vehicles follows "Follow Me" car to aircraft. Vehicles return via E7 gate after patient disembarkation.'},
-      {n:'7',t:'Out of hours',d:'SIA operating hours: 0600–2200. EUFOR may request airport to open OOH for medical emergency. Contact ALS immediately → informal approach to air traffic → formal request signed at highest possible level.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §15g. Medical Cell: ext. 912. ALS on permanent call: 061 206 134. JOC: 5366–5368.'
-  },
-  delay:{
-    title:'Flight Delay or Cancellation',
-    color:'var(--warn)',
-    steps:[
-      {n:'1',t:'Delay announced',d:'FS/NR informs ALS office immediately. ALS advises passengers.',say:'"Attention EUFOR/NHQ Sa passengers. Your flight is delayed. Please remain at [location] and await further instruction from your Flight Sponsor."'},
-      {n:'2',t:'Delay ≤2h — checked in',d:'Passengers remain at SIA and make themselves comfortable. Boarding cards retained.'},
-      {n:'3',t:'Delay >2h — checked in',d:'Passengers proceed through boarding gate handing in boarding cards. Issued EUFOR/NHQ Sa boarding cards → transit through Arrivals Lounge → return to Camp Butmir until further notice. NR/FS co-ordinates transport.'},
-      {n:'4',t:'Flight cancelled',d:'Passengers NOT issued replacement boarding passes. Collect luggage from carousel while transiting Arrivals Lounge. Welfare and onward movement: responsibility of NR/FS (not ALS).'},
-      {n:'5',t:'ADMP duties during delay',d:'Maintain security of sterile areas. Ensure transit passengers remain in Departure Area (security and immigration reasons). May move transit passengers out of Departure Area for refreshments if lengthy delay.'},
-      {n:'6',t:'DOB entry',d:'Entry: flight details, reason for delay/cancellation, number of passengers affected, actions taken, time of return to Camp Butmir if applicable.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §15f. NR/FS responsible for keeping passengers informed and organized. ALS not responsible for resolving delay/cancellation issues.'
-  },
-  redpass:{
-    title:'Red Pass — Issue & Control',
-    color:'#b91c1c',
-    steps:[
-      {n:'1',t:'Written request required',d:'Special Request Form to ALS minimum 24 hours in advance. Red Pass is an accountable document — must be tracked.',say:'"Red Pass requires written request to ALS at least 24 hours in advance. Complete Special Request Form first."'},
-      {n:'2',t:'ID collateral',d:'EUFOR/NHQ Sa personnel MUST give ADMP their EUFOR/NHQ Sa ID card as collateral when signing out a Red Pass (SOP 3945 compliance).'},
-      {n:'3',t:'When is Red Pass required?',d:'• Meeting aircraft/escorting passengers from aircraft\n• Escorting passengers through Passport Control (NRs/FSs only)\n• Escorting weapons, ammo, cargo for National Flight\n• Meeting VIPs in Arrivals Lounge (commercial flight)\n• Visiting Operations or Flight Planning pre-flight'},
-      {n:'4',t:'Access rules',d:'Access to airside ONLY through Security Door. No bags/packages through these doors without airport security scanning. Personnel must stay in immediate vicinity of ALS staff or be escorted.'},
-      {n:'5',t:'Return Red Pass',d:'Red Pass must be returned to ALS office or ADMPs on task completion. FS/NR must return all Red Passes before ADMP returns ID cards.',say:'"Please return your Red Pass now. I will return your ID card once all passes are accounted for."'},
-      {n:'6',t:'DOB entry',d:'Log: every Red Pass issued (name, unit, time issued) and every return (time returned). Use Red Pass Tracker below.',doc:'DOB'}
-    ],
-    note:'Ref: SOP 6240 Annex B §8f, SOP 3945. Red Pass is accountable — every issue and return must be logged. ADMP has ultimate authority for any investigation airside.'
-  },
-  items:{
-    title:'Prohibited Items — Baggage Rules',
-    color:'var(--text2)',
-    steps:[
-      {n:'H',t:'HAND BAGGAGE — Nil sharps',d:'No knives, sharp implements or "sharps" in hand baggage UNLESS specific permission given for troops to travel in fighting order.'},
-      {n:'L',t:'HOLD BAGGAGE — allowed (with conditions)',d:'Aircrew knives, survival knives (if valid operational requirement), Leatherman/Gerber tools, open razors, scalpels, scissors, penknives, bayonets, kukris, machetes (service issue), ice picks, ceremonial swords, tools with blades, ammunition.'},
-      {n:'✕',t:'PROHIBITED — cannot travel at all',d:'Flick knives, butterfly knives, gravity catch knives, stilettos, non-ceremonial swords, swordsticks, harpoons, spears, arrows, other unclassified bladed objects.'},
-      {n:'A',t:'AMMUNITION handling',d:'Passenger clears weapon before airport terminal. Magazines/ammo: sealed with baggage tags, given to aircraft Load Master. Returned to passenger at destination (passenger must request return from crew).'},
-      {n:'L',t:'LIQUIDS',d:'Regulations and bans on liquids apply in hand and hold baggage. Check with NSE for destination airport requirements.'},
-      {n:'⚠',t:'CONFISCATION by ADMP',d:'If prohibited item found on person or in hand baggage: confiscated by ADMP, marked, handed to aircraft Loadmaster. Returned to passenger at destination.',say:'"I am confiscating this item as it is prohibited in hand baggage. It will be handed to the Loadmaster and returned to you at your destination."'}
-    ],
-    note:'Ref: SOP 6240 Annex B §8c. Only ADMP may confiscate items from EUFOR/NHQ Sa personnel. BPBiH authorized to scan but not to physically search or detain EUFOR personnel.'
-  }
-};
-
-function renderSIAList(){
-  const list=document.getElementById('siaList');
-  if(!list) return;
-  const cards=[
-    {id:'dep',icon:'✈',label:'Departing Flight',color:'var(--accent2)'},
-    {id:'arr',icon:'🛬',label:'Arriving Flight',color:'var(--ok)'},
-    {id:'vip',icon:'⭐',label:'VIP Handling (A/B)',color:'var(--accent)'},
-    {id:'ammo',icon:'⚠',label:'Ammo / Explosives',color:'var(--danger)'},
-    {id:'medevac',icon:'🚑',label:'MEDEVAC',color:'var(--danger)'},
-    {id:'delay',icon:'⏱',label:'Delay / Cancellation',color:'var(--warn)'},
-    {id:'redpass',icon:'🪪',label:'Red Pass Control',color:'#b91c1c'},
-    {id:'items',icon:'✕',label:'Prohibited Items',color:'var(--text2)'}
-  ];
-  list.innerHTML=cards.map(c=>`
-    <div class="proc-card" onclick="openSIA('${c.id}')" style="cursor:pointer">
-      <div class="proc-header">
-        <div class="proc-icon" style="background:${c.color}22;color:${c.color}">
-          <span style="font-size:16px">${c.icon}</span>
-        </div>
-        <span class="proc-title">${c.label}</span>
-        <span style="color:var(--text3);font-size:10px">›</span>
-      </div>
-    </div>`).join('');
-}
-
-function openSIA(id){
-  const p=siaProcs[id];
-  if(!p) return;
-  const modal=document.getElementById('siaModal');
-  const title=document.getElementById('siaModalTitle');
-  const body=document.getElementById('siaModalBody');
-  if(!modal||!title||!body) return;
-  title.childNodes[0].textContent=p.title+' ';
-  body.innerHTML=`
-    <ol style="list-style:none;padding:0">
-      ${p.steps.map(s=>`
-        <li style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
-          <span style="font-family:var(--mono);font-size:11px;color:${p.color};flex-shrink:0;padding-top:2px;font-weight:700;min-width:20px">${s.n}</span>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px">${s.t}</div>
-            <div style="font-size:12px;color:var(--text2);line-height:1.5;white-space:pre-line">${s.d}</div>
-            ${s.say?`<div style="background:#fff8ed;border:1px solid #f0c070;border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:5px 0;font-size:12px;color:var(--text);line-height:1.5">💬 ${s.say}</div>`:''}
-            ${s.doc?`<span style="display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:#dcfce7;color:#15803d;border:1px solid #86efac;font-weight:700">${s.doc}</span>`:''}
-          </div>
-        </li>`).join('')}
-    </ol>
-    ${p.note?`<div style="margin-top:10px;padding:8px 12px;background:#fef3c7;border-radius:4px;border-left:3px solid var(--warn);font-size:12px;color:var(--warn);line-height:1.4;font-weight:600">${p.note}</div>`:''}`;
-  modal.classList.add('open');
-}
-function closeSIA(){
-  const m=document.getElementById('siaModal');
-  if(m) m.classList.remove('open');
-}
-
-// RED PASS TRACKER
-function issueRedPass(){
-  const name=document.getElementById('rpName').value.trim();
-  const unit=document.getElementById('rpUnit').value.trim();
-  if(!name){alert('Enter name.');return;}
-  let passes=[];
-  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
-  passes.push({name,unit,ts:Date.now(),id:Date.now()});
-  localStorage.setItem('imp_rp',JSON.stringify(passes));
-  document.getElementById('rpName').value='';
-  document.getElementById('rpUnit').value='';
-  renderRedPasses();
-}
-
-function returnRedPass(id){
-  let passes=[];
-  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
-  passes=passes.filter(p=>p.id!==id);
-  localStorage.setItem('imp_rp',JSON.stringify(passes));
-  renderRedPasses();
-}
-
-function renderRedPasses(){
-  const list=document.getElementById('rpList');
-  if(!list) return;
-  let passes=[];
-  try{passes=JSON.parse(localStorage.getItem('imp_rp')||'[]');}catch(e){}
-  if(!passes.length){
-    list.innerHTML='<div style="text-align:center;padding:12px;color:var(--text3);font-size:12px">No Red Passes currently issued.</div>';
-    return;
-  }
-  list.innerHTML=passes.map(p=>{
-    const mins=Math.floor((Date.now()-p.ts)/60000);
-    const timeStr=mins<60?`${mins}m ago`:`${Math.floor(mins/60)}h ${mins%60}m ago`;
-    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div>
-        <div style="font-weight:700;font-size:13px;color:var(--text)">${p.name}</div>
-        <div style="font-size:11px;color:var(--text3)">${p.unit||'—'} · Issued ${timeStr}</div>
-      </div>
-      <button onclick="returnRedPass(${p.id})" style="background:#dcfce7;border:1px solid #86efac;border-radius:6px;padding:6px 12px;color:#15803d;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--body)">✓ Return</button>
-    </div>`;
-  }).join('');
-}
-renderSIAList();
-renderRedPasses();
-
-// ── CCN DECODER ───────────────────────────────────────────────────────────────
+ ───────────────────────────────────────────────────────────────
 const ccnNations={
   'AFG':'Afghanistan','ALB':'Albania','AUT':'Austria','BEL':'Belgium',
   'BIH':'Bosnia & Herzegovina','BGR':'Bulgaria','HRV':'Croatia','CYP':'Cyprus',
@@ -6086,1043 +5612,6 @@ function renderRankPage(){
   });
 }
 
-
-// ── GLOBAL SEARCH ─────────────────────────────────────────────────────────────
-function openGSearch(){
-  document.getElementById('gsearchOverlay').classList.add('open');
-  setTimeout(()=>document.getElementById('gsearchInput').focus(),100);
-}
-function closeGSearch(){
-  document.getElementById('gsearchOverlay').classList.remove('open');
-  document.getElementById('gsearchInput').value='';
-  document.getElementById('gsearchResults').innerHTML='<div class="gsearch-empty">Type to search across all content</div>';
-}
-
-function runGSearch(q){
-  const out=document.getElementById('gsearchResults');
-  if(!q||q.length<2){out.innerHTML='<div class="gsearch-empty">Type at least 2 characters</div>';return;}
-  const fq=q.toLowerCase();
-  const results=[];
-
-  // Strip HTML helper
-  function strip(html){return html?String(html).replace(/<[^>]+>/g,'').replace(/&[a-z]+;/gi,' ').toLowerCase():'';}
-
-  // Search violations
-  violations.forEach(v=>{
-    const titleMatch=v.title.toLowerCase().includes(fq);
-    const penaltyMatch=v.penalties.some(p=>strip(p.text).includes(fq)||strip(p.num).includes(fq));
-    if(titleMatch||penaltyMatch){
-      const matchP=v.penalties.find(p=>strip(p.text).includes(fq));
-      const snippet=matchP?strip(matchP.text).substring(0,90):'';
-      results.push({tag:'VIOLATION',title:v.title,snippet,action:`switchTab('violations',document.querySelector('[data-tab=violations]'));closeGSearch()`});
-    }
-  });
-
-  // Search procedures (steps are strings with HTML)
-  procedures.forEach(p=>{
-    const titleMatch=p.title.toLowerCase().includes(fq);
-    const stepMatch=p.steps.some(s=>strip(s).includes(fq));
-    const noteMatch=p.note&&strip(p.note).includes(fq);
-    if(titleMatch||stepMatch||noteMatch){
-      const matchStep=p.steps.find(s=>strip(s).includes(fq))||p.steps[0];
-      results.push({tag:'PROCEDURE',title:p.title,snippet:strip(matchStep).substring(0,90),action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-proc',document.querySelectorAll('#tab-procedures .subnav-btn')[0]);setTimeout(()=>openProc('${p.id}'),100);},50);closeGSearch()`});
-    }
-  });
-
-  // Search decision trees (steps are objects {num,title,desc,say})
-  dtrees.forEach(d=>{
-    const titleMatch=d.title.toLowerCase().includes(fq);
-    const stepMatch=d.steps.some(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq))||(s.say&&s.say.toLowerCase().includes(fq)));
-    const branchMatch=d.branches&&d.branches.some(b=>b.text.toLowerCase().includes(fq));
-    if(titleMatch||stepMatch||branchMatch){
-      const matchStep=d.steps.find(s=>(s.title&&s.title.toLowerCase().includes(fq))||(s.desc&&s.desc.toLowerCase().includes(fq)));
-      const snippet=matchStep?(matchStep.title+': '+matchStep.desc).substring(0,90):'';
-      results.push({tag:'DECISION TREE',title:d.title,snippet,action:`switchTab('procedures',document.querySelector('[data-tab=procedures]'));setTimeout(()=>{switchSub('procedures','sub-dtree',document.querySelectorAll('#tab-procedures .subnav-btn')[1]);setTimeout(()=>{const el=document.getElementById('${d.id}');if(el){el.scrollIntoView({behavior:'smooth'});el.classList.add('open');}},100);},50);closeGSearch()`});
-    }
-  });
-
-  // Search SOP refs
-  sopRefs.forEach(r=>{
-    const titleMatch=r.title.toLowerCase().includes(fq)||r.tag.toLowerCase().includes(fq);
-    const ruleMatch=r.rules.some(rule=>rule.toLowerCase().includes(fq));
-    if(titleMatch||ruleMatch){
-      const matchRule=r.rules.find(rule=>rule.toLowerCase().includes(fq))||r.rules[0];
-      results.push({tag:'SOP '+r.tag,title:r.title,snippet:matchRule.substring(0,90)+'…',action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
-    }
-  });
-
-  // Search acronyms
-  const acroHits=acronyms.filter(a=>a[0].toLowerCase().includes(fq)||a[1].toLowerCase().includes(fq)).slice(0,5);
-  if(acroHits.length){
-    results.push({tag:'ACRONYMS',title:`${acroHits.length} match(es): ${acroHits.map(a=>a[0]).join(', ')}`,snippet:acroHits.map(a=>`${a[0]} = ${a[1]}`).join(' · ').substring(0,100),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));closeGSearch()`});
-  }
-
-  // Search routes
-  if(typeof routes!=='undefined'){
-    const routeHits=routes.filter(r=>r.name.toLowerCase().includes(fq)||(r.path&&r.path.toLowerCase().includes(fq))).slice(0,3);
-    routeHits.forEach(r=>{
-      results.push({tag:'ROUTE',title:r.name,snippet:(r.path||'').substring(0,80),action:`switchTab('refs',document.querySelector('[data-tab=refs]'));setTimeout(()=>switchSub('refs','sub-routes',document.querySelectorAll('#tab-refs .subnav-btn')[1]),50);closeGSearch()`});
-    });
-  }
-
-  if(!results.length){out.innerHTML=`<div class="gsearch-empty">No results for "<strong>${q}</strong>"</div>`;return;}
-
-  // Highlight matching text
-  function hl(text){
-    if(!text||!fq)return text||'';
-    return String(text).replace(new RegExp('('+fq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark style="background:#fef08a;color:#713f12;border-radius:2px;padding:0 1px">$1</mark>');
-  }
-
-  out.innerHTML=results.map(r=>`
-    <div class="gsearch-result" onclick="${r.action}">
-      <div class="gsearch-tag">${r.tag}</div>
-      <div class="gsearch-title">${hl(r.title)}</div>
-      ${r.snippet?`<div class="gsearch-snippet">${hl(r.snippet)}</div>`:''}
-    </div>`).join('');
-}
-
-// ── QUICK ACTION ──────────────────────────────────────────────────────────────
-function openQA(){document.getElementById('qaModal').classList.add('open');}
-function closeQA(){document.getElementById('qaModal').classList.remove('open');}
-
-// ── DUI CALCULATOR ────────────────────────────────────────────────────────────
-function openDUI(){document.getElementById('duiModal').classList.add('open');updateDUI(0);}
-function closeDUI(){document.getElementById('duiModal').classList.remove('open');}
-function setDUI(v){document.getElementById('duiSlider').value=v;updateDUI(v);}
-
-function updateDUI(v){
-  v=parseFloat(v);
-  document.getElementById('duiValue').textContent=v.toFixed(2);
-  const res=document.getElementById('duiResult');
-  if(v===0){res.innerHTML='';return;}
-
-  let level,color,actions;
-  if(v>0&&v<0.2){
-    level='TRACE — Below threshold';color='var(--ok)';
-    actions=['No formal violation if not impaired','Note in DOB if behaviour suspicious','Monitor situation'];
-  } else if(v>=0.2&&v<0.5){
-    level='LOW — Positive result';color='var(--warn)';
-    actions=["Notify driver's SNR/Branch Chief","Driver's license suspended until further notice","All action reported to FPM","IMP Report required"];
-  } else if(v>=0.5&&v<1.0){
-    level='MEDIUM — DUI Confirmed';color='#e67e22';
-    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical check recommended"];
-  } else {
-    level='HIGH — Severe DUI';color='var(--danger)';
-    actions=["Driver's license suspended until EOT","Notify SNR/Branch Chief IMMEDIATELY","Report to HQ CAMP CMDT and FPM","IMP Report — IMMEDIATE","Medical Station (912) — consider welfare check","Detain if aggressive or unsafe"];
-  }
-
-  res.innerHTML=`
-    <div class="dui-result" style="border-color:${color}">
-      <div style="font-weight:700;font-size:14px;color:${color};margin-bottom:10px">${level}</div>
-      ${actions.map((a,i)=>`
-        <div style="display:flex;gap:8px;margin-bottom:6px;align-items:flex-start">
-          <span style="font-family:var(--mono);font-size:11px;color:${color};font-weight:700;flex-shrink:0;margin-top:1px">${i+1}.</span>
-          <span style="font-size:13px;color:var(--text2)">${a}</span>
-        </div>`).join('')}
-    </div>`;
-}
-
-// ── INCIDENT LOG ──────────────────────────────────────────────────────────────
-const LOG_TTL = 4 * 60 * 60 * 1000; // 4 hours in ms
-
-function openLog(){
-  purgeExpiredLogs();
-  document.getElementById('logModal').classList.add('open');
-  renderLog();
-}
-function closeLog(){document.getElementById('logModal').classList.remove('open');}
-
-function purgeExpiredLogs(){
-  try{
-    const entries=JSON.parse(localStorage.getItem('imp_log')||'[]');
-    const now=Date.now();
-    const fresh=entries.filter(e=>e.ts&&(now-e.ts)<LOG_TTL);
-    if(fresh.length!==entries.length){
-      localStorage.setItem('imp_log',JSON.stringify(fresh));
-    }
-  }catch(e){}
-}
-
-function logTypeChanged(val){
-  const sev=document.getElementById('logSev');
-  if(!sev)return;
-  if(['DUI / Alcohol','Weapon Carry Violation','Traffic Accident','Alarm / Distress','No ID — Identity Unverifiable'].includes(val)) sev.value='MAJOR';
-  else if(['Speeding 11-20 km/h','Speeding 21+ km/h','Uncooperative Behaviour','Excessive Drinking','Parking — Bldg 200/Circle'].includes(val)) sev.value='WARNING';
-  else sev.value='INFO';
-}
-
-function getCheckedActions(){
-  const map={act_verbal:'Verbal Warning',act_written:'Written Warning',act_tvr:'TVR Issued',act_pvr:'PVR Issued',act_mpr:'MPR Produced',act_snr:'SNR Notified',act_fpm:'FPM Notified',act_med:'Medical (912)',act_lic:'License Suspended',act_det:'Detained'};
-  return Object.entries(map).filter(([id])=>document.getElementById(id)?.checked).map(([,v])=>v);
-}
-
-function clearLogForm(){
-  ['logType','logSev','logLoc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='logSev'?'INFO':''});
-  ['logName','logUnit','logNote'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  ['act_verbal','act_written','act_tvr','act_pvr','act_mpr','act_snr','act_fpm','act_med','act_lic','act_det'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
-}
-
-function formatExpiry(ts){
-  if(!ts) return '';
-  const remaining=LOG_TTL-(Date.now()-ts);
-  if(remaining<=0) return '<span style="color:var(--danger);font-size:10px">EXPIRED</span>';
-  const mins=Math.floor(remaining/60000);
-  const hrs=Math.floor(mins/60);
-  const m=mins%60;
-  if(hrs>0) return `<span style="color:var(--text3);font-size:10px">⏱ expires in ${hrs}h ${m}m</span>`;
-  return `<span style="color:var(--warn);font-size:10px;font-weight:700">⏱ expires in ${m}m</span>`;
-}
-
-function renderLog(){
-  const body=document.getElementById('logBody');
-  let entries=[];
-  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
-
-  // Update clear-all button visibility
-  const clearBtn=document.getElementById('logClearAll');
-  if(clearBtn) clearBtn.style.display=entries.length?'block':'none';
-
-  if(!entries.length){
-    body.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No entries yet.<br><span style="font-size:11px">Entries auto-delete after 4 hours.</span></div>';
-    return;
-  }
-  const sevColor={INFO:'var(--accent2)',WARNING:'var(--warn)',MAJOR:'var(--danger)'};
-  body.innerHTML=entries.slice().reverse().map((e,i)=>`
-    <div class="log-entry" style="border-left:3px solid ${sevColor[e.sev]||sevColor.INFO}">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
-        <span style="font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:700">${e.time} · ${e.date}</span>
-        <span style="font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;background:${sevColor[e.sev]||sevColor.INFO};color:#fff;font-weight:700">${e.sev||'INFO'}</span>
-      </div>
-      <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:2px">${e.type}</div>
-      ${e.loc?`<div style="font-size:12px;color:var(--text3)">📍 ${e.loc}</div>`:''}
-      ${e.person?`<div style="font-size:12px;color:var(--text2)">👤 ${e.person}</div>`:''}
-      ${e.actions&&e.actions.length?`<div style="font-size:11px;color:var(--accent2);margin-top:3px">${e.actions.join(' · ')}</div>`:''}
-      ${e.note?`<div class="log-entry-note">${e.note}</div>`:''}
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
-        ${formatExpiry(e.ts)}
-        <button onclick="deleteLogEntry(${entries.length-1-i})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;font-family:var(--body);padding:0;font-weight:600">✕ Delete</button>
-      </div>
-    </div>`).join('');
-}
-
-function saveLogEntry(){
-  const type=document.getElementById('logType').value;
-  if(!type){alert('Please select an incident type.');return;}
-  purgeExpiredLogs();
-  const sev=document.getElementById('logSev').value||'INFO';
-  const loc=document.getElementById('logLoc').value||'';
-  const name=document.getElementById('logName').value.trim();
-  const unit=document.getElementById('logUnit').value.trim();
-  const person=[name,unit].filter(Boolean).join(' / ');
-  const actions=getCheckedActions();
-  const note=document.getElementById('logNote').value.trim();
-  const now=new Date();
-  const date=now.toLocaleDateString('en-GB');
-  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  const ts=Date.now();
-  let entries=[];
-  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
-  entries.push({type,sev,loc,person,actions,note,date,time,ts,user:currentUserId||'—'});
-  localStorage.setItem('imp_log',JSON.stringify(entries));
-  clearLogForm();
-  renderLog();
-  const body=document.getElementById('logBody');
-  if(body) body.scrollTop=0;
-}
-
-function clearAllLogs(){
-  if(!confirm('Delete ALL log entries? This cannot be undone.')) return;
-  localStorage.removeItem('imp_log');
-  renderLog();
-}
-
-function genDOBText(){
-  const type=document.getElementById('logType').value||'—';
-  const loc=document.getElementById('logLoc').value||'—';
-  const name=document.getElementById('logName').value.trim()||'—';
-  const unit=document.getElementById('logUnit').value.trim()||'—';
-  const actions=getCheckedActions();
-  const note=document.getElementById('logNote').value.trim();
-  const now=new Date();
-  const date=now.toLocaleDateString('en-GB');
-  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  const text=`ENTRY TYPE: ${type}\nENTRY TIME: ${time} ${date}\nLOCATION: ${loc}\nPERSON: ${name} / ${unit}\nACTION TAKEN: ${actions.length?actions.join(', '):'None'}\n${note?'NOTES: '+note+'\n':''}REPORTING IMP DUTY: ${currentUserId||'—'}\nNSTR: NO`;
-  navigator.clipboard?.writeText(text).then(()=>alert('DOB text copied to clipboard.')).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('DOB text copied.');
-  });
-}
-
-function deleteLogEntry(idx){
-  let entries=[];
-  try{entries=JSON.parse(localStorage.getItem('imp_log')||'[]');}catch(e){}
-  entries.splice(idx,1);
-  localStorage.setItem('imp_log',JSON.stringify(entries));
-  renderLog();
-}
-
-// Auto-purge on startup
-purgeExpiredLogs();
-
-// ── PUSH NOTIFICATIONS ────────────────────────────────────────────────────────
-function requestNotifPermission(){
-  if(!('Notification' in window))return;
-  if(Notification.permission==='default'){
-    Notification.requestPermission();
-  }
-}
-
-function scheduleReportReminders(){
-  if(!('Notification' in window)||Notification.permission!=='granted')return;
-  // Check every minute if it's time for a reminder
-  setInterval(()=>{
-    const now=new Date();
-    const day=now.getDay(); // 0=Sun,1=Mon,...4=Thu
-    const h=now.getHours();
-    const m=now.getMinutes();
-    const key=`notif_${now.toDateString()}`;
-    const sent=JSON.parse(localStorage.getItem(key)||'{}');
-
-    if(day===1&&h===7&&m===45&&!sent.monday){
-      new Notification('IMP Compass — Report Due',{body:'Informacja Tygodniowa must be sent by 08:00',icon:'icon-192.png',tag:'monday-report'});
-      sent.monday=true;localStorage.setItem(key,JSON.stringify(sent));
-    }
-    if(day===4&&h===7&&m===45&&!sent.thursday){
-      new Notification('IMP Compass — Report Due',{body:'Wstawka do Meldunku NSE due today',icon:'icon-192.png',tag:'thursday-report'});
-      sent.thursday=true;localStorage.setItem(key,JSON.stringify(sent));
-    }
-  },60000);
-}
-
-// Init notifications on load
-requestNotifPermission();
-scheduleReportReminders();
-
-// ── PUSHER ALARM SYSTEM ───────────────────────────────────────────────────────
-const PUSHER_KEY = 'e6b466c12fe64811ae86';
-const PUSHER_CLUSTER = 'eu';
-const VERCEL_URL = 'https://imp-compass.vercel.app/api/trigger-alarm';
-const SUBSCRIBE_URL = 'https://imp-compass.vercel.app/api/subscribe';
-const PUSH_URL = 'https://imp-compass.vercel.app/api/send-push';
-const VAPID_PUBLIC = 'BDLVw-wytUwOpQKk2am-lBKYxADb-cUhy7qU0g78B-SUo8q-VxOsiO0iV2wAuGEIB5kSn4HmtRKVlAMlCqwxdzQ';
-
-let pusherClient = null;
-let currentUserId = null;
-
-// Load Pusher JS dynamically
-function loadPusher(cb){
-  if(window.Pusher){cb();return;}
-  const s=document.createElement('script');
-  s.src='https://js.pusher.com/8.3/pusher.min.js';
-  s.onload=cb;
-  document.head.appendChild(s);
-}
-
-function initPusher(){
-  loadPusher(()=>{
-    pusherClient = new Pusher(PUSHER_KEY, {cluster: PUSHER_CLUSTER});
-    const channel = pusherClient.subscribe('imp-compass');
-
-    channel.bind('alarm', data => {
-      showIncomingAlarm(data);
-    });
-
-    channel.bind('all-clear', data => {
-      showAllClear(data);
-    });
-
-    console.log('Pusher connected');
-  });
-}
-
-function showIncomingAlarm(data){
-  // Play alarm sound
-  try {
-    const audio = new Audio('/IMP_Compass/alarm.mp3');
-    audio.loop = true;
-    audio.volume = 1.0;
-    audio.play().catch(()=>{});
-    // Stop after 30 seconds
-    setTimeout(()=>audio.pause(), 30000);
-    // Store reference to stop manually
-    window._alarmAudio = audio;
-  } catch(e){}
-
-  const mapsUrl = data.lat && data.lng
-    ? `https://maps.google.com/?q=${data.lat},${data.lng}`
-    : null;
-
-  const el = document.createElement('div');
-  el.id = 'alarmBanner';
-  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--danger);padding:12px 14px;display:flex;flex-direction:column;gap:6px;animation:flashBanner 1s infinite`;
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div style="font-weight:700;font-size:16px;color:#fff;letter-spacing:1px">
-        🚨 ALARM — ${data.userId}
-      </div>
-      <button onclick="if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}document.getElementById('alarmBanner').remove()" 
-        style="background:rgba(0,0,0,.3);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px">&#x2715;</button>
-    </div>
-    <div style="font-size:13px;color:rgba(255,255,255,.9)">
-      ${data.timestamp} ${data.message ? '· ' + data.message : ''}
-    </div>
-    ${mapsUrl ? `
-    <a href="${mapsUrl}" target="_blank"
-      style="background:rgba(0,0,0,.3);color:#fff;text-decoration:none;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;text-align:center;display:block">
-      📍 Open Location in Maps
-    </a>` : '<div style="font-size:12px;color:rgba(255,255,255,.7)">No GPS location available</div>'}`;
-
-  // Remove existing banner if any
-  const existing = document.getElementById('alarmBanner');
-  if(existing) existing.remove();
-
-  document.body.appendChild(el);
-
-  // Vibrate if supported
-  if(navigator.vibrate) navigator.vibrate([500,200,500,200,500]);
-
-  // Push notification
-  if(Notification.permission === 'granted'){
-    new Notification(`🚨 ALARM — ${data.userId}`, {
-      body: mapsUrl ? `Location available — tap to open` : 'No GPS',
-      icon: 'icon-192.png',
-      tag: 'imp-alarm',
-      requireInteraction: true
-    });
-  }
-}
-
-function showAllClear(data){
-  // Stop alarm sound
-  if(window._alarmAudio){window._alarmAudio.pause();window._alarmAudio=null;}
-  const existing = document.getElementById('alarmBanner');
-  if(existing) existing.remove();
-
-  const el = document.createElement('div');
-  el.style.cssText = `position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--ok);padding:12px 14px;display:flex;align-items:center;justify-content:space-between`;
-  el.innerHTML = `
-    <div style="font-weight:700;font-size:15px;color:#fff">✓ ALL CLEAR — ${data.userId}</div>
-    <button onclick="this.parentElement.remove()" style="background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer">&#x2715;</button>`;
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 8000);
-}
-
-// ALARM MODAL
-function openAlarmModal(){
-  if(!currentUserId){
-    openUserSelect();
-    return;
-  }
-  document.getElementById('alarmModal').classList.add('open');
-}
-function closeAlarmModal2(){document.getElementById('alarmModal').classList.remove('open');}
-
-function openUserSelect(){
-  document.getElementById('userSelectModal').classList.add('open');
-  pinReset();
-}
-function closeUserSelect(){
-  document.getElementById('userSelectModal').classList.remove('open');
-  pinReset();
-}
-
-// PIN data
-const impPins = {
-  'IMP-1':'1111','IMP-2':'2222','IMP-3':'3333','IMP-4':'4444',
-  'IMP-5':'5555','IMP-6':'6666','IMP-7':'7777','IMP-8':'8888',
-  'IMP-9':'9999','IMP-10':'1010','IMP-11':'1101','IMP-12':'1212',
-  'IMP-13':'1313','IMP-14':'1414','IMP-15':'1515',
-  'Admin':'2685'
-};
-
-let pinSelectedUnit = '';
-let pinEntered = '';
-
-function pinReset(){
-  pinSelectedUnit = '';
-  pinEntered = '';
-  document.getElementById('pinStep1').style.display = 'block';
-  document.getElementById('pinStep2').style.display = 'none';
-  document.getElementById('pinError').style.display = 'none';
-  updatePinDots();
-}
-
-function pinSelectUnit(id){
-  pinSelectedUnit = id;
-  pinEntered = '';
-  document.getElementById('pinStep1').style.display = 'none';
-  document.getElementById('pinStep2').style.display = 'block';
-  document.getElementById('pinUnitLabel').textContent = id;
-  document.getElementById('pinError').style.display = 'none';
-  updatePinDots();
-}
-
-function pinBack(){
-  pinReset();
-}
-
-function pinKey(digit){
-  if(pinEntered.length >= 4) return;
-  pinEntered += digit;
-  updatePinDots();
-  if(pinEntered.length === 4) pinVerify();
-}
-
-function pinDelete(){
-  pinEntered = pinEntered.slice(0,-1);
-  updatePinDots();
-}
-
-function updatePinDots(){
-  for(let i=1;i<=4;i++){
-    const dot = document.getElementById('pd'+i);
-    if(!dot) return;
-    dot.classList.toggle('filled', i <= pinEntered.length);
-    dot.classList.remove('error');
-  }
-}
-
-function pinVerify(){
-  const correct = impPins[pinSelectedUnit];
-  if(pinEntered === correct){
-    // Success
-    currentUserId = pinSelectedUnit;
-    localStorage.setItem('imp_user_id', pinSelectedUnit);
-    closeUserSelect();
-    // Update alarm modal label
-    const lbl = document.getElementById('alarmUserLabel');
-    if(lbl) lbl.textContent = currentUserId;
-    // Subscribe Web Push with new userId
-    navigator.serviceWorker.ready.then(reg => subscribePush(reg)).catch(()=>{});
-    // Open alarm modal
-    document.getElementById('alarmModal').classList.add('open');
-  } else {
-    // Wrong PIN
-    for(let i=1;i<=4;i++){
-      const dot = document.getElementById('pd'+i);
-      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
-    }
-    document.getElementById('pinError').style.display = 'block';
-    setTimeout(()=>{
-      pinEntered = '';
-      updatePinDots();
-      document.getElementById('pinError').style.display = 'none';
-    }, 1200);
-  }
-}
-
-function triggerAlarm(){
-  if(!currentUserId) return;
-  const btn = document.getElementById('triggerAlarmBtn');
-  btn.textContent = 'Getting GPS…';
-  btn.disabled = true;
-
-  const send = (lat, lng) => {
-    const now = new Date();
-    const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
-    const message = document.getElementById('alarmMessage').value.trim();
-    const payload = {userId:currentUserId, lat, lng, timestamp, message};
-
-    // Send Pusher (for open apps)
-    fetch(VERCEL_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({type:'alarm', ...payload})
-    });
-
-    // Send Web Push (for closed/background apps)
-    fetch(PUSH_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({type:'alarm', ...payload})
-    })
-    .then(r=>r.json())
-    .then(d=>{
-      btn.textContent = `🚨 SENT TO ${d.sent || 'ALL'} UNITS`;
-      btn.style.background = 'var(--ok)';
-      setTimeout(()=>{
-        btn.textContent = 'SEND ALARM';
-        btn.style.background = '';
-        btn.disabled = false;
-        closeAlarmModal2();
-        document.getElementById('alarmMessage').value = '';
-      }, 2000);
-    })
-    .catch(()=>{
-      btn.textContent = 'ERROR — Retry';
-      btn.disabled = false;
-    });
-  };
-
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(
-      pos => send(pos.coords.latitude, pos.coords.longitude),
-      ()  => send(null, null),
-      {timeout:6000, enableHighAccuracy:true}
-    );
-  } else {
-    send(null, null);
-  }
-}
-
-function sendAllClear(){
-  const now = new Date();
-  const timestamp = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) + 'L';
-  const payload = {type:'all-clear', userId:currentUserId, timestamp, message:'Situation resolved'};
-  fetch(VERCEL_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  fetch(PUSH_URL,   {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  closeAlarmModal2();
-}
-
-// Flash animation
-const flashStyle = document.createElement('style');
-flashStyle.textContent = `@keyframes flashBanner{0%,100%{opacity:1}50%{opacity:.7}}`;
-document.head.appendChild(flashStyle);
-
-// Init Pusher and restore user
-loadPusher(()=>{
-  initPusher();
-  const saved = localStorage.getItem('imp_user_id');
-  if(saved) currentUserId = saved;
-});
-
-// ── SERVICE WORKER + WEB PUSH ─────────────────────────────────────────────────
-function urlBase64ToUint8Array(base64String){
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for(let i=0;i<rawData.length;++i) outputArray[i] = rawData.charCodeAt(i);
-  return outputArray;
-}
-
-async function registerSW(){
-  if(!('serviceWorker' in navigator)) return;
-  try {
-    const reg = await navigator.serviceWorker.register('/IMP_Compass/sw.js');
-    console.log('SW registered');
-    await subscribePush(reg);
-  } catch(e) {
-    console.warn('SW registration failed:', e);
-  }
-}
-
-async function subscribePush(reg){
-  if(!('PushManager' in window)) return;
-  if(!currentUserId) return;
-
-  try {
-    const permission = await Notification.requestPermission();
-    if(permission !== 'granted') return;
-
-    let sub = await reg.pushManager.getSubscription();
-    if(!sub){
-      sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC)
-      });
-    }
-
-    // Save subscription to server
-    await fetch(SUBSCRIBE_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ userId: currentUserId, subscription: sub.toJSON() })
-    });
-    console.log('Push subscription saved for', currentUserId);
-  } catch(e) {
-    console.warn('Push subscription failed:', e);
-  }
-}
-
-// Register SW on load
-window.addEventListener('load', registerSW);
-
-// ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
-const SESSION_DURATION = 2 * 60 * 60 * 1000; // 2 hours
-let loginPinBuffer = '';
-let loginSelectedUnit = '';
-
-function checkSession(){
-  try {
-    const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
-    if(session && session.userId && (Date.now() - session.ts) < SESSION_DURATION){
-      // Valid session — unlock app
-      currentUserId = session.userId;
-      unlockApp();
-      return;
-    }
-  } catch(e){}
-  // No valid session — show login
-  document.getElementById('loginOverlay').classList.remove('hidden');
-}
-
-function unlockApp(){
-  document.getElementById('loginOverlay').classList.add('hidden');
-  // Update header badge
-  const badge = document.getElementById('userBadge');
-  if(badge){
-    badge.innerHTML = currentUserId + ' →';
-    badge.style.color = currentUserId==='Admin' ? 'var(--accent)' : 'var(--text3)';
-    badge.style.borderColor = currentUserId==='Admin' ? 'var(--accent)' : 'var(--border)';
-  }
-  // Subscribe push (only for IMP units, not Admin)
-  if(currentUserId !== 'Admin'){
-    navigator.serviceWorker?.ready.then(reg => subscribePush(reg)).catch(()=>{});
-  }
-  // Load roster data from server
-  loadRoster().catch(()=>{});
-  // Auto-logout after 2h
-  setTimeout(()=>{
-    alert('Session expired. Please log in again.');
-    logout();
-  }, SESSION_DURATION);
-}
-
-function loginSelectUnit(id){
-  if(!id){
-    // Back to step 1
-    loginSelectedUnit = '';
-    loginPinBuffer = '';
-    document.getElementById('loginStep1').style.display = 'block';
-    document.getElementById('loginStep2').style.display = 'none';
-    return;
-  }
-  loginSelectedUnit = id;
-  loginPinBuffer = '';
-  document.getElementById('loginUnitLabel').textContent = id;
-  document.getElementById('loginStep1').style.display = 'none';
-  document.getElementById('loginStep2').style.display = 'block';
-  document.getElementById('loginPinError').style.display = 'none';
-  updateLoginDots();
-}
-
-function loginPinKey(digit){
-  if(loginPinBuffer.length >= 4) return;
-  loginPinBuffer += digit;
-  updateLoginDots();
-  if(loginPinBuffer.length === 4) loginPinVerify();
-}
-
-function loginPinDelete(){
-  loginPinBuffer = loginPinBuffer.slice(0,-1);
-  updateLoginDots();
-}
-
-function updateLoginDots(){
-  for(let i=1;i<=4;i++){
-    const dot = document.getElementById('lpd'+i);
-    if(!dot) return;
-    dot.classList.toggle('filled', i <= loginPinBuffer.length);
-    dot.classList.remove('error');
-  }
-}
-
-function loginPinVerify(){
-  const correct = impPins[loginSelectedUnit];
-  if(loginPinBuffer === correct){
-    // Save session
-    currentUserId = loginSelectedUnit;
-    localStorage.setItem('imp_user_id', loginSelectedUnit);
-    localStorage.setItem('imp_session', JSON.stringify({userId: loginSelectedUnit, ts: Date.now()}));
-    unlockApp();
-  } else {
-    // Wrong PIN
-    for(let i=1;i<=4;i++){
-      const dot = document.getElementById('lpd'+i);
-      if(dot){dot.classList.remove('filled');dot.classList.add('error');}
-    }
-    document.getElementById('loginPinError').style.display = 'block';
-    setTimeout(()=>{
-      loginPinBuffer = '';
-      updateLoginDots();
-      document.getElementById('loginPinError').style.display = 'none';
-    }, 1400);
-  }
-}
-
-function confirmLogout(){
-  if(confirm(`Log out ${currentUserId}?`)) logout();
-}
-
-function logout(){
-  localStorage.removeItem('imp_session');
-  localStorage.removeItem('imp_user_id');
-  currentUserId = null;
-  loginSelectedUnit = '';
-  loginPinBuffer = '';
-  document.getElementById('loginStep1').style.display = 'block';
-  document.getElementById('loginStep2').style.display = 'none';
-  updateLoginDots();
-  document.getElementById('loginOverlay').classList.remove('hidden');
-}
-
-// ── DUTY BOARD ───────────────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://zqyrgerhyapgggwmovpm.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_tb9qpy8kUPlhmPeONIC91g_T44a5IgQ';
-const ROSTER_URL = `${SUPABASE_URL}/rest/v1/roster`;
-const IMP_UNITS = ['IMP-1','IMP-2','IMP-3','IMP-4','IMP-5','IMP-6','IMP-7',
-                   'IMP-8','IMP-9','IMP-10','IMP-11','IMP-12','IMP-13','IMP-14','IMP-15'];
-const DAYS = ['MON','TUE','WED','THU','FRI'];
-const STATUS_COLORS = {S:'rs-S', D:'rs-D', L:'rs-L', '':'rs-empty'};
-
-let rosterData = {}; // { 'IMP-1': { 'MON': {status:'D', task:'...'}, ... }, ... }
-let rosterWeekOffset = 0; // 0 = current week
-let rosterEditCell = null; // {unit, day}
-let rosterCurrentWeek = null;
-
-function getMondayOfWeek(offset = 0){
-  const now = new Date();
-  const day = now.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  const mon = new Date(now);
-  mon.setDate(now.getDate() + diff + offset * 7);
-  mon.setHours(0,0,0,0);
-  return mon;
-}
-
-function getWeekDates(offset = 0){
-  const mon = getMondayOfWeek(offset);
-  return DAYS.map((d, i) => {
-    const date = new Date(mon);
-    date.setDate(mon.getDate() + i);
-    return {
-      day: d,
-      label: d + ' ' + date.getDate().toString().padStart(2,'0') + '/' + (date.getMonth()+1).toString().padStart(2,'0'),
-      iso: date.toISOString().split('T')[0]
-    };
-  });
-}
-
-function getWeekKey(offset = 0){
-  const mon = getMondayOfWeek(offset);
-  return mon.toISOString().split('T')[0];
-}
-
-function formatWeekLabel(offset = 0){
-  const dates = getWeekDates(offset);
-  return dates[0].label.split(' ')[1] + ' – ' + dates[4].label.split(' ')[1];
-}
-
-async function loadRoster(){
-  const label = document.getElementById('rosterWeekLabel');
-  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
-
-  try {
-    const r = await fetch(`${ROSTER_URL}?select=*`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    if(!r.ok) throw new Error('HTTP ' + r.status);
-    const rows = await r.json();
-
-    // Convert rows to rosterData object
-    rosterData = {};
-    rows.forEach(row => {
-      rosterData[row.cell_key] = {
-        status: row.status || '',
-        task: row.task || ''
-      };
-    });
-
-    const upd = document.getElementById('rosterUpdated');
-    if(upd){
-      if(rows.length){
-        const latest = rows.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
-        const d = new Date(latest.updated_at);
-        upd.textContent = 'Updated ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      } else {
-        upd.textContent = 'No entries yet';
-      }
-    }
-  } catch(e){
-    console.warn('Roster load failed:', e);
-    const container = document.getElementById('rosterTable');
-    if(container) container.innerHTML = `<div style="padding:20px;color:var(--danger);font-size:13px;text-align:center">⚠ Load error: ${e.message}<br><br><button onclick="loadRoster()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--body)">Retry</button></div>`;
-    return;
-  }
-
-  const label2 = document.getElementById('rosterWeekLabel');
-  if(label2) label2.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
-  renderRoster();
-}
-
-function renderRoster(){
-  const container = document.getElementById('rosterTable');
-  if(!container) return;
-
-  const dates = getWeekDates(rosterWeekOffset);
-  const weekKey = getWeekKey(rosterWeekOffset);
-  const isAdmin = currentUserId === 'Admin';
-
-  let html = '<table class="roster-table"><thead><tr>';
-  html += '<th class="rt-unit">Unit</th>';
-  dates.forEach(d => { html += `<th>${d.label}</th>`; });
-  html += '</tr></thead><tbody>';
-
-  IMP_UNITS.forEach(unit => {
-    const isMe = unit === currentUserId;
-    html += `<tr class="${isMe ? 'rt-me' : ''}">`;
-    html += `<td class="rt-unit">${unit}</td>`;
-
-    dates.forEach(d => {
-      const cellKey = `${weekKey}_${unit}_${d.day}`;
-      const cell = rosterData[cellKey] || {status:'', task:''};
-      const statusClass = STATUS_COLORS[cell.status] || 'rs-empty';
-      const statusText = cell.status || '·';
-      const clickable = isAdmin ? `onclick="openRosterEdit('${unit}','${d.day}','${weekKey}')"` : '';
-
-      html += `<td>
-        <div class="roster-cell" ${clickable}>
-          <span class="rs-badge ${statusClass}">${statusText}</span>
-          ${cell.task ? `<span class="rs-task">${cell.task}</span>` : ''}
-        </div>
-      </td>`;
-    });
-
-    html += '</tr>';
-  });
-
-  html += '</tbody></table>';
-  container.innerHTML = html;
-
-  // Update week label
-  const label = document.getElementById('rosterWeekLabel');
-  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
-}
-
-function changeRosterWeek(dir){
-  rosterWeekOffset += dir;
-  renderRoster();
-  const label = document.getElementById('rosterWeekLabel');
-  if(label) label.textContent = 'Week ' + formatWeekLabel(rosterWeekOffset);
-}
-
-// Edit modal (Admin only)
-let editWeekKey = '';
-let editUnit = '';
-let editDay = '';
-let editStatus = '';
-
-function openRosterEdit(unit, day, weekKey){
-  if(currentUserId !== 'Admin') return;
-  editUnit = unit;
-  editDay = day;
-  editWeekKey = weekKey;
-
-  const cellKey = `${weekKey}_${unit}_${day}`;
-  const cell = rosterData[cellKey] || {status:'', task:''};
-  editStatus = cell.status || '';
-
-  document.getElementById('rosterEditTitle').textContent = `${unit} — ${day}`;
-  document.getElementById('rosterTaskInput').value = cell.task || '';
-
-  // Highlight active status button
-  document.querySelectorAll('.rs-pick-btn').forEach(btn => btn.classList.remove('active'));
-  updateRosterPickButtons(editStatus);
-
-  document.getElementById('rosterEditModal').classList.add('open');
-}
-
-function closeRosterEdit(){
-  document.getElementById('rosterEditModal').classList.remove('open');
-}
-
-function rosterPickStatus(s){
-  editStatus = s;
-  updateRosterPickButtons(s);
-}
-
-function updateRosterPickButtons(s){
-  document.querySelectorAll('.rs-pick-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if((s === 'S' && btn.classList.contains('rs-S')) ||
-       (s === 'D' && btn.classList.contains('rs-D')) ||
-       (s === 'L' && btn.classList.contains('rs-L')) ||
-       (s === '' && btn.classList.contains('rs-empty'))){
-      btn.classList.add('active');
-    }
-  });
-}
-
-async function saveRosterCell(){
-  const task = document.getElementById('rosterTaskInput').value.trim();
-  const cellKey = `${editWeekKey}_${editUnit}_${editDay}`;
-
-  // Update local state immediately
-  if(editStatus === '' && !task){
-    delete rosterData[cellKey];
-  } else {
-    rosterData[cellKey] = {status: editStatus, task};
-  }
-
-  closeRosterEdit();
-  renderRoster();
-
-  // Save to Supabase via upsert
-  try {
-    if(editStatus === '' && !task){
-      // Delete row
-      await fetch(`${ROSTER_URL}?cell_key=eq.${encodeURIComponent(cellKey)}`, {
-        method: 'DELETE',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
-      });
-    } else {
-      // Upsert row
-      await fetch(ROSTER_URL, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'resolution=merge-duplicates,return=minimal'
-        },
-        body: JSON.stringify({
-          cell_key: cellKey,
-          status: editStatus,
-          task: task,
-          updated_at: new Date().toISOString()
-        })
-      });
-    }
-
-    // Notify via Pusher
-    fetch('https://imp-compass.vercel.app/api/trigger-alarm', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({type:'roster-update', userId:'Admin', timestamp: new Date().toISOString()})
-    }).catch(()=>{});
-
-  } catch(e){
-    console.warn('Roster save failed:', e);
-  }
-}
-
-// Listen for roster updates via Pusher
-function initRosterPusher(){
-  loadPusher(()=>{
-    if(!pusherClient) initPusher();
-    // Listen on existing channel
-    setTimeout(()=>{
-      if(pusherClient){
-        const ch = pusherClient.subscribe('imp-compass');
-        ch.bind('roster-update', ()=>{
-          loadRoster();
-        });
-      }
-    }, 2000);
-  });
-}
-
-// Check session on load
-checkSession();
-try{const s=localStorage.getItem("alertState");if(s)setAlert(s);}catch(e){}
-// Init roster pusher after session
-setTimeout(initRosterPusher, 3000);
 </script>
 
 <!-- RANK MODAL -->
