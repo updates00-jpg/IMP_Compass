@@ -458,7 +458,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
     <div style="margin-bottom:20px">
       <div style="font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Salt — Admin device only, leave blank otherwise</div>
       <input id="setupAdminSalt" type="text" placeholder="Leave blank for IMP devices" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+        oninput="setupAdminSaltPreview(this.value)"
         style="width:100%;background:#111827;border:1.5px solid #2a3a5a;border-radius:8px;padding:13px 14px;color:#f0f4ff;font-family:var(--mono);font-size:16px;letter-spacing:3px;outline:none;text-transform:uppercase">
+      <!-- LIVE PREVIEW — visible only when Admin Salt is typed -->
+      <div id="setupAdminPreview" style="display:none;margin-top:8px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:10px 12px">
+        <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">&#x1F512; Admin Code Preview</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:10px;color:#86efac">TODAY</span>
+          <span id="previewToday" style="font-family:var(--mono);font-size:22px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:10px;color:#6b7a99">TOMORROW</span>
+          <span id="previewTomorrow" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:10px;color:#6b7a99">DAY +2</span>
+          <span id="previewDayPlus2" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
+        </div>
+      </div>
     </div>
     <div id="setupError" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin-bottom:12px;text-align:center">⚠ IMP Salt cannot be empty</div>
     <button onclick="setupSave()"
@@ -4943,6 +4960,33 @@ function setupSave() {
   document.getElementById('loginStep1').style.display = 'block';
 }
 
+// Live preview for Admin Salt field only
+function setupAdminSaltPreview(val) {
+  const preview = document.getElementById('setupAdminPreview');
+  const salt = val.trim().toUpperCase();
+  if (!salt) { preview.style.display = 'none'; return; }
+  preview.style.display = 'block';
+
+  function calcCode(salt, offsetDays) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const dateStr = d.getFullYear()
+      + String(d.getMonth()+1).padStart(2,'0')
+      + String(d.getDate()).padStart(2,'0');
+    const input = dateStr + salt;
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = Math.imul(hash, 31) + input.charCodeAt(i);
+      hash = hash | 0;
+    }
+    return String(Math.abs(hash) % 10000).padStart(4, '0');
+  }
+
+  document.getElementById('previewToday').textContent    = calcCode(salt, 0);
+  document.getElementById('previewTomorrow').textContent = calcCode(salt, 1);
+  document.getElementById('previewDayPlus2').textContent = calcCode(salt, 2);
+}
+
 // ── BRUTE-FORCE PROTECTION ────────────────────────────────────────────────────
 function getAttempts(key) {
   try { return JSON.parse(localStorage.getItem(key) || '{"count":0,"lockUntil":0}'); }
@@ -6002,6 +6046,28 @@ function toggleCodeVis(id){
   el.style.filter = el.style.filter === 'none' ? 'blur(4px)' : 'none';
 }
 
+function adminSaltPreview(type, val) {
+  const salt = val.trim().toUpperCase();
+  const previewId = type === 'imp' ? 'adminImpSaltPreview' : 'adminAdminSaltPreview';
+  const todayId   = type === 'imp' ? 'adminImpCodeToday'   : 'adminAdmCodeToday';
+  const tomorrowId= type === 'imp' ? 'adminImpCodeTomorrow': 'adminAdmCodeTomorrow';
+  const preview = document.getElementById(previewId);
+  if (!preview) return;
+  if (!salt) { preview.style.display = 'none'; return; }
+  preview.style.display = 'block';
+
+  function calc(s, offset) {
+    const d = new Date(); d.setDate(d.getDate() + offset);
+    const ds = d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+    let h=0; const inp=ds+s;
+    for(let i=0;i<inp.length;i++){h=Math.imul(h,31)+inp.charCodeAt(i);h=h|0;}
+    return String(Math.abs(h)%10000).padStart(4,'0');
+  }
+
+  document.getElementById(todayId).textContent    = calc(salt, 0);
+  document.getElementById(tomorrowId).textContent = calc(salt, 1);
+}
+
 function copyBriefingCode(){
   const impSalt = localStorage.getItem('imp_salt') || '';
   const code = getDailyCode(impSalt);
@@ -6058,12 +6124,24 @@ function adminResetDevice(){
       <div style="margin-bottom:8px">
         <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">IMP Salt (shared)</div>
         <input id="adminImpSalt" type="text" autocomplete="off" autocapitalize="characters"
+          oninput="adminSaltPreview('imp', this.value)"
           style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+        <div id="adminImpSaltPreview" style="display:none;margin-top:6px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:8px 12px">
+          <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Code Preview</div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#86efac">TODAY</span><span id="adminImpCodeToday" style="font-family:var(--mono);font-size:20px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span></div>
+          <div style="display:flex;justify-content:space-between;margin-top:3px"><span style="font-size:10px;color:#6b7a99">TOMORROW</span><span id="adminImpCodeTomorrow" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span></div>
+        </div>
       </div>
       <div style="margin-bottom:10px">
         <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">Admin Salt (private)</div>
         <input id="adminAdminSalt" type="text" autocomplete="off" autocapitalize="characters"
+          oninput="adminSaltPreview('admin', this.value)"
           style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
+        <div id="adminAdminSaltPreview" style="display:none;margin-top:6px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:8px 12px">
+          <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Code Preview</div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#86efac">TODAY</span><span id="adminAdmCodeToday" style="font-family:var(--mono);font-size:20px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span></div>
+          <div style="display:flex;justify-content:space-between;margin-top:3px"><span style="font-size:10px;color:#6b7a99">TOMORROW</span><span id="adminAdmCodeTomorrow" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span></div>
+        </div>
       </div>
       <button onclick="adminSaveSalt()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Save Salt</button>
     </div>
