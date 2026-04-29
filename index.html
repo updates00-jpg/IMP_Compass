@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0c0f">
+<meta name="theme-color" content="#0d1117">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-title" content="IMP Compass">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <title>IMP Compass — Camp Butmir</title>
 <style>
 :root {
@@ -5590,6 +5592,27 @@ function initRosterPusher(){
     }, 2000);
   });
 }
+
+// ── VERSION CHECK & CACHE BUST ────────────────────────────────────────────────
+const APP_VERSION = '2.4.0';
+(function(){
+  const stored = localStorage.getItem('imp_app_version');
+  if(stored && stored !== APP_VERSION){
+    // New version deployed — clear caches and reload
+    localStorage.setItem('imp_app_version', APP_VERSION);
+    if('caches' in window){
+      caches.keys().then(keys => {
+        Promise.all(keys.map(k => caches.delete(k))).then(() => {
+          window.location.reload(true);
+        });
+      });
+    } else {
+      window.location.reload(true);
+    }
+    return;
+  }
+  localStorage.setItem('imp_app_version', APP_VERSION);
+})();
 
 // Check session on load
 checkSession();
