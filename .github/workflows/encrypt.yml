@@ -37,7 +37,7 @@ jobs:
             --template-color-primary "#b8620a" \
             --template-color-secondary "#1a2035"
           cp encrypted/index.html index.html
-
+ 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
