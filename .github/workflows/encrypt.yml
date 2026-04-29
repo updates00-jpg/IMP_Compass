@@ -1,1 +1,47 @@
+name: Encrypt & Deploy
 
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  encrypt-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install StaticCrypt
+        run: npm install -g staticrypt
+
+      - name: Encrypt index.html
+        env:
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          staticrypt index.html \
+            --password "$SITE_PASSWORD" \
+            --short \
+            --template-title "IMP Compass — Camp Butmir" \
+            --template-instructions "Enter mission access password" \
+            --template-placeholder "Password" \
+            --template-button "ACCESS" \
+            --output encrypted_index.html
+          mv encrypted_index.html index.html
+
+      - name: Commit encrypted file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "chore: encrypt [skip ci]"
+          git push
