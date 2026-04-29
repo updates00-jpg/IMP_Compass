@@ -24,41 +24,19 @@ jobs:
       - name: Install StaticCrypt
         run: npm install -g staticrypt@latest
 
-      - name: Verify password secret exists
-        env:
-          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
-        run: |
-          if [ -z "$SITE_PASSWORD" ]; then
-            echo "ERROR: SITE_PASSWORD secret is not set!"
-            echo "Go to Settings → Secrets and variables → Actions → New repository secret"
-            echo "Name: SITE_PASSWORD"
-            exit 1
-          fi
-          echo "Password secret OK (length: ${#SITE_PASSWORD})"
-
       - name: Encrypt index.html
         env:
-          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+          STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
         run: |
           staticrypt index.html \
-            --password "$SITE_PASSWORD" \
             --short \
-            --no-remember \
+            --remember false \
             --template-title "IMP Compass" \
             --template-instructions "Enter mission access password" \
             --template-placeholder "Mission password" \
-            --template-button "ACCESS"
-
-      - name: Move encrypted file
-        run: |
-          if [ -f "encrypted/index.html" ]; then
-            cp encrypted/index.html index.html
-            echo "OK: encrypted/index.html → index.html"
-          else
-            echo "ERROR: encrypted/index.html not found"
-            ls -la
-            exit 1
-          fi
+            --template-color-primary "#b8620a" \
+            --template-color-secondary "#1a2035"
+          cp encrypted/index.html index.html
 
       - name: Commit and push
         run: |
