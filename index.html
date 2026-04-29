@@ -443,72 +443,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
 <div id="loginOverlay">
 
   <!-- STEP 0: First-time setup (shown only when no salt configured) -->
-  <div id="loginStep0" class="login-step" style="display:none;width:100%;max-width:340px">
-    <div class="login-logo">IMP</div>
-    <div class="login-title">First-Time Setup</div>
-    <div class="login-sub">Camp Butmir · EUFOR</div>
-    <div style="background:#1e2a42;border:1px solid #2a3a5a;border-radius:10px;padding:14px;margin-bottom:20px;font-size:12px;color:#93b4f0;line-height:1.7;text-align:left">
-      ⚠ This device has not been configured.<br>
-      Enter the <strong style="color:#fbbf24">IMP Salt</strong> provided by IMP CMDR.<br>
-      <span style="color:#6b7a99;font-size:11px">Admin devices also require the Admin Salt.</span>
-    </div>
-    <div style="margin-bottom:14px">
-      <div style="font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Salt — required on all devices</div>
-      <input id="setupImpSalt" type="text" placeholder="e.g. BUTMIR26" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-        oninput="setupSaltPreview()"
-        style="width:100%;background:#111827;border:1.5px solid #2a3a5a;border-radius:8px;padding:13px 14px;color:#f0f4ff;font-family:var(--mono);font-size:16px;letter-spacing:3px;outline:none;text-transform:uppercase">
-      <!-- IMP preview — only shown when Admin Salt is also filled -->
-      <div id="setupImpPreview" style="display:none;margin-top:8px;background:#0d1a2e;border:1px solid #1a3a6a;border-radius:6px;padding:10px 12px">
-        <div style="font-size:9px;font-weight:700;color:#60a5fa;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">&#x1F512; IMP Code Preview</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-size:10px;color:#93c5fd">TODAY</span>
-          <span id="previewImpToday" style="font-family:var(--mono);font-size:22px;font-weight:900;color:#60a5fa;letter-spacing:4px">----</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-size:10px;color:#4b5563">TOMORROW</span>
-          <span id="previewImpTomorrow" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:10px;color:#4b5563">DAY +2</span>
-          <span id="previewImpDayPlus2" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
-        </div>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <!-- Admin Salt toggle — hidden by default so IMP doesn't see it -->
-      <button onclick="toggleAdminSaltField()" id="adminSaltToggleBtn"
-        style="background:none;border:none;color:#374151;font-size:11px;cursor:pointer;font-family:var(--mono);letter-spacing:1px;padding:0;margin-bottom:10px;opacity:.6">
-        + Admin Setup
-      </button>
-      <div id="adminSaltField" style="display:none">
-        <div style="font-size:10px;font-weight:700;color:#6b7a99;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Salt — Admin device only</div>
-        <input id="setupAdminSalt" type="text" placeholder="Admin salt (private)" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-          oninput="setupSaltPreview()"
-          style="width:100%;background:#111827;border:1.5px solid #2a3a5a;border-radius:8px;padding:13px 14px;color:#f0f4ff;font-family:var(--mono);font-size:16px;letter-spacing:3px;outline:none;text-transform:uppercase">
-        <!-- Admin preview -->
-        <div id="setupAdminPreview" style="display:none;margin-top:8px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:10px 12px">
-          <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">&#x1F512; Admin Code Preview</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-            <span style="font-size:10px;color:#86efac">TODAY</span>
-            <span id="previewToday" style="font-family:var(--mono);font-size:22px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-            <span style="font-size:10px;color:#4b5563">TOMORROW</span>
-            <span id="previewTomorrow" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:10px;color:#4b5563">DAY +2</span>
-            <span id="previewDayPlus2" style="font-family:var(--mono);font-size:16px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="setupError" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin-bottom:12px;text-align:center">⚠ IMP Salt cannot be empty</div>
-    <button onclick="setupSave()"
-      style="width:100%;padding:15px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:var(--body);letter-spacing:1.5px;text-transform:uppercase">
-      Confirm &amp; Save
-    </button>
-  </div>
 
   <!-- STEP 1: Select unit -->
   <div id="loginStep1" class="login-step">
@@ -576,46 +510,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--b
   </div>
 
   <!-- STEP 3: Daily Code -->
-  <div id="loginStep3" class="login-step" style="display:none;text-align:center">
-    <div class="login-logo" style="background:var(--accent2)">2FA</div>
-    <div class="login-title">Daily Code</div>
-    <div id="loginDailyDate" class="login-sub"></div>
-
-    <div style="background:#111827;border:1px solid #2a3a5a;border-radius:8px;padding:12px 16px;margin-bottom:22px;font-size:12px;color:#93b4f0;line-height:1.6">
-      Enter today's 4-digit access code<br>
-      <span style="color:#6b7a99;font-size:11px">Provided by IMP CMDR at morning briefing</span>
-    </div>
-
-    <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
-      <div class="pin-dot" id="dcd1"></div>
-      <div class="pin-dot" id="dcd2"></div>
-      <div class="pin-dot" id="dcd3"></div>
-      <div class="pin-dot" id="dcd4"></div>
-    </div>
-
-    <div id="loginDailyError" style="display:none;color:#f87171;font-size:13px;font-weight:700;margin-bottom:16px">&#x2715; Wrong code — try again</div>
-    <div id="loginDailyAttemptsMsg" style="display:none;color:#fbbf24;font-size:11px;margin-bottom:8px"></div>
-    <div id="loginDailyLockMsg" style="display:none;color:#f87171;font-size:12px;font-weight:700;margin-bottom:16px">&#x1F512; Max attempts reached. Wait 30 min.</div>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto">
-      <button class="pin-key" onclick="dailyCodeKey('1')">1</button>
-      <button class="pin-key" onclick="dailyCodeKey('2')">2</button>
-      <button class="pin-key" onclick="dailyCodeKey('3')">3</button>
-      <button class="pin-key" onclick="dailyCodeKey('4')">4</button>
-      <button class="pin-key" onclick="dailyCodeKey('5')">5</button>
-      <button class="pin-key" onclick="dailyCodeKey('6')">6</button>
-      <button class="pin-key" onclick="dailyCodeKey('7')">7</button>
-      <button class="pin-key" onclick="dailyCodeKey('8')">8</button>
-      <button class="pin-key" onclick="dailyCodeKey('9')">9</button>
-      <button class="pin-key" onclick="loginSelectUnit('')" style="color:#6b7a99;font-size:13px">←</button>
-      <button class="pin-key" onclick="dailyCodeKey('0')">0</button>
-      <button class="pin-key" onclick="dailyCodeDelete()" style="color:#f87171">⌫</button>
-    </div>
-
-    <div style="margin-top:18px;font-size:11px;color:#4b5563">
-      Code valid until 00:00 local · <span id="loginDailyExpiry" style="color:#6b7a99"></span>
-    </div>
-  </div>
 
 </div>
 
@@ -4942,7 +4836,6 @@ const LOCK_DURATION = 30 * 60 * 1000; // 30 min
 
 let loginSelectedUnit = '';
 let loginPinBuffer = '';
-let dailyCodeBuffer = '';
 
 // ── DAILY CODE ALGORITHM ──────────────────────────────────────────────────────
 function getTodayStr() {
@@ -4952,92 +4845,6 @@ function getTodayStr() {
     + String(d.getDate()).padStart(2,'0');
 }
 
-function getDailyCode(salt) {
-  const input = getTodayStr() + salt;
-  let hash = 0;
-  for (let i = 0; i < input.length; i++) {
-    hash = Math.imul(hash, 31) + input.charCodeAt(i);
-    hash = hash | 0;
-  }
-  return String(Math.abs(hash) % 10000).padStart(4, '0');
-}
-
-function getSalt(type) {
-  // type: 'imp' or 'admin'
-  const key = type === 'admin' ? 'imp_salt_admin' : 'imp_salt';
-  return localStorage.getItem(key) || '';
-}
-
-function hasSalt() {
-  return !!localStorage.getItem('imp_salt');
-}
-
-// ── SETUP ─────────────────────────────────────────────────────────────────────
-function setupSave() {
-  const impSalt = document.getElementById('setupImpSalt').value.trim().toUpperCase();
-  const adminSalt = (document.getElementById('setupAdminSalt') && document.getElementById('setupAdminSalt').value.trim().toUpperCase()) || '';
-  const err = document.getElementById('setupError');
-  if (!impSalt) { err.style.display = 'block'; return; }
-  err.style.display = 'none';
-  localStorage.setItem('imp_salt', impSalt);
-  if (adminSalt) localStorage.setItem('imp_salt_admin', adminSalt);
-  document.getElementById('loginStep0').style.display = 'none';
-  document.getElementById('loginStep1').style.display = 'block';
-}
-
-function toggleAdminSaltField() {
-  const field = document.getElementById('adminSaltField');
-  const btn   = document.getElementById('adminSaltToggleBtn');
-  if (!field) return;
-  const visible = field.style.display !== 'none';
-  field.style.display = visible ? 'none' : 'block';
-  btn.textContent = visible ? '+ Admin Setup' : '− Admin Setup';
-}
-
-// Live preview for Setup screen — both IMP and Admin salt
-// IMP preview only shows when Admin Salt is also filled (so IMP users don't see it)
-function setupSaltPreview() {
-  const impSalt   = (document.getElementById('setupImpSalt').value   || '').trim().toUpperCase();
-  const adminSalt = (document.getElementById('setupAdminSalt').value || '').trim().toUpperCase();
-
-  const impPreview   = document.getElementById('setupImpPreview');
-  const adminPreview = document.getElementById('setupAdminPreview');
-
-  function calc(salt, offsetDays) {
-    if (!salt) return '----';
-    const d = new Date(); d.setDate(d.getDate() + offsetDays);
-    const ds = d.getFullYear()
-      + String(d.getMonth()+1).padStart(2,'0')
-      + String(d.getDate()).padStart(2,'0');
-    const input = ds + salt;
-    let hash = 0;
-    for (let i = 0; i < input.length; i++) {
-      hash = Math.imul(hash, 31) + input.charCodeAt(i);
-      hash = hash | 0;
-    }
-    return String(Math.abs(hash) % 10000).padStart(4, '0');
-  }
-
-  // IMP preview — only when BOTH salts are filled (admin is configuring)
-  if (adminSalt && impSalt) {
-    impPreview.style.display = 'block';
-    document.getElementById('previewImpToday').textContent    = calc(impSalt, 0);
-    document.getElementById('previewImpTomorrow').textContent = calc(impSalt, 1);
-    document.getElementById('previewImpDayPlus2').textContent = calc(impSalt, 2);
-  } else {
-    impPreview.style.display = 'none';
-  }
-
-  // Admin preview — when Admin Salt is filled
-  if (adminSalt) {
-    adminPreview.style.display = 'block';
-    document.getElementById('previewToday').textContent    = calc(adminSalt, 0);
-    document.getElementById('previewTomorrow').textContent = calc(adminSalt, 1);
-    document.getElementById('previewDayPlus2').textContent = calc(adminSalt, 2);
-  } else {
-    adminPreview.style.display = 'none';
-  }
-}
 
 // ── BRUTE-FORCE PROTECTION ────────────────────────────────────────────────────
 function getAttempts(key) {
@@ -5137,15 +4944,7 @@ function loginPinVerify() {
   if (loginPinBuffer === correct) {
     clearAttempts(attemptKey);
     document.getElementById('loginPinError').style.display = 'none';
-    // Check if salt is set for daily code
-    const saltOk = hasSalt();
-    if (!saltOk) {
-      // No salt — skip 2FA (shouldn't happen after setup but failsafe)
-      finalizeLogin();
-      return;
-    }
-    // Proceed to daily code step
-    showDailyCodeStep();
+    finalizeLogin();
   } else {
     const a = recordFailedAttempt(attemptKey, MAX_PIN_ATTEMPTS);
     for (let i = 1; i <= 6; i++) {
@@ -5168,92 +4967,8 @@ function loginPinVerify() {
   }
 }
 
-// ── DAILY CODE STEP ───────────────────────────────────────────────────────────
-function showDailyCodeStep() {
-  dailyCodeBuffer = '';
-  updateDailyDots();
+// ── DAILY CODE STEP (removed — handled by StaticCrypt layer) ──────────────────
 
-  // Date display
-  const d = new Date();
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const dateStr = String(d.getDate()).padStart(2,'0') + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-  document.getElementById('loginDailyDate').textContent = dateStr;
-
-  // Expiry countdown
-  const midnight = new Date(); midnight.setHours(24,0,0,0);
-  const minsLeft = Math.floor((midnight - Date.now()) / 60000);
-  const hLeft = Math.floor(minsLeft / 60);
-  const mLeft = minsLeft % 60;
-  document.getElementById('loginDailyExpiry').textContent = `expires in ${hLeft}h ${mLeft}m`;
-
-  document.getElementById('loginDailyError').style.display = 'none';
-  document.getElementById('loginDailyLockMsg').style.display = 'none';
-  document.getElementById('loginDailyAttemptsMsg').style.display = 'none';
-
-  showStep(3);
-}
-
-function dailyCodeKey(digit) {
-  if (dailyCodeBuffer.length >= DAILY_CODE_LENGTH) return;
-  dailyCodeBuffer += digit;
-  updateDailyDots();
-  if (dailyCodeBuffer.length === DAILY_CODE_LENGTH) dailyCodeVerify();
-}
-
-function dailyCodeDelete() {
-  dailyCodeBuffer = dailyCodeBuffer.slice(0,-1);
-  updateDailyDots();
-}
-
-function updateDailyDots() {
-  for (let i = 1; i <= 4; i++) {
-    const dot = document.getElementById('dcd'+i);
-    if (!dot) continue;
-    dot.classList.toggle('filled', i <= dailyCodeBuffer.length);
-    dot.classList.remove('error');
-  }
-}
-
-function dailyCodeVerify() {
-  const isAdmin = loginSelectedUnit === 'Admin';
-  const saltType = isAdmin ? 'admin' : 'imp';
-  const salt = getSalt(saltType);
-
-  // If Admin has no admin salt, fall back to IMP salt
-  const effectiveSalt = salt || getSalt('imp');
-  const correct = getDailyCode(effectiveSalt);
-  const attemptKey = 'daily_attempts_' + getTodayStr();
-
-  if (dailyCodeBuffer === correct) {
-    clearAttempts(attemptKey);
-    finalizeLogin();
-  } else {
-    const a = recordFailedAttempt(attemptKey, MAX_DAILY_ATTEMPTS);
-    for (let i = 1; i <= 4; i++) {
-      const dot = document.getElementById('dcd'+i);
-      if (dot) { dot.classList.remove('filled'); dot.classList.add('error'); }
-    }
-    if (a.lockUntil) {
-      document.getElementById('loginDailyError').style.display = 'none';
-      document.getElementById('loginDailyLockMsg').style.display = 'block';
-    } else {
-      const remaining = MAX_DAILY_ATTEMPTS - (a.count || 0);
-      document.getElementById('loginDailyError').style.display = 'block';
-      const attMsg = document.getElementById('loginDailyAttemptsMsg');
-      if (remaining > 0) {
-        attMsg.textContent = `${remaining} attempt(s) remaining before 30-min lockout`;
-        attMsg.style.display = 'block';
-      }
-    }
-    setTimeout(() => {
-      dailyCodeBuffer = '';
-      updateDailyDots();
-      document.getElementById('loginDailyError').style.display = 'none';
-    }, 1400);
-  }
-}
-
-// ── FINALIZE LOGIN ────────────────────────────────────────────────────────────
 function finalizeLogin() {
   currentUserId = loginSelectedUnit;
   localStorage.setItem('imp_user_id', loginSelectedUnit);
@@ -5292,24 +5007,15 @@ function unlockApp(){
 
 // ── SESSION CHECK ─────────────────────────────────────────────────────────────
 function checkSession() {
-  // First-time setup check
-  if (!hasSalt()) {
-    showStep(0);
-    return;
-  }
-
   try {
     const session = JSON.parse(localStorage.getItem('imp_session') || 'null');
     if (session && session.userId && session.date === getTodayStr()) {
-      // Valid session from today — unlock
       currentUserId = session.userId;
       unlockApp();
       return;
     }
   } catch(e) {}
-  // No valid session — show login
   showStep(1);
-  document.getElementById('loginOverlay').classList.remove('hidden');
 }
 
 function logout() {
@@ -5318,7 +5024,6 @@ function logout() {
   currentUserId = null;
   loginSelectedUnit = '';
   loginPinBuffer = '';
-  dailyCodeBuffer = '';
   showStep(1);
   updateLoginDots();
   document.getElementById('loginOverlay').classList.remove('hidden');
@@ -6035,13 +5740,6 @@ function renderRankPage(){
 // ── ADMIN PANEL ───────────────────────────────────────────────────────────────
 function openAdminPanel(){
   if(currentUserId !== 'Admin') return;
-  // Populate current salt values
-  const impSalt = localStorage.getItem('imp_salt') || '';
-  const adminSalt = localStorage.getItem('imp_salt_admin') || '';
-  document.getElementById('adminImpSalt').value = impSalt;
-  document.getElementById('adminAdminSalt').value = adminSalt;
-  // Generate code rows
-  renderAdminCodes();
   document.getElementById('adminPanelModal').classList.add('open');
 }
 
@@ -6049,129 +5747,6 @@ function closeAdminPanel(){
   document.getElementById('adminPanelModal').classList.remove('open');
 }
 
-function renderAdminCodes(){
-  const container = document.getElementById('adminCodeRows');
-  if(!container) return;
-  const impSalt = localStorage.getItem('imp_salt') || '';
-  const adminSalt = localStorage.getItem('imp_salt_admin') || impSalt;
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
-  const rows = [];
-  for(let offset = 0; offset <= 2; offset++){
-    const d = new Date(); d.setDate(d.getDate() + offset);
-    const dateStr = d.getFullYear()
-      + String(d.getMonth()+1).padStart(2,'0')
-      + String(d.getDate()).padStart(2,'0');
-    const label = offset === 0 ? 'TODAY' : offset === 1 ? 'TOMORROW' : 'DAY +2';
-    const dispDate = String(d.getDate()).padStart(2,'0') + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-
-    let hash = 0;
-    const input = dateStr + impSalt;
-    for(let i = 0; i < input.length; i++){
-      hash = Math.imul(hash, 31) + input.charCodeAt(i);
-      hash = hash | 0;
-    }
-    const impCode = String(Math.abs(hash) % 10000).padStart(4,'0');
-
-    let ahash = 0;
-    const ainput = dateStr + adminSalt;
-    for(let i = 0; i < ainput.length; i++){
-      ahash = Math.imul(ahash, 31) + ainput.charCodeAt(i);
-      ahash = ahash | 0;
-    }
-    const adminCode = String(Math.abs(ahash) % 10000).padStart(4,'0');
-
-    rows.push({label, dispDate, impCode, adminCode, isToday: offset===0});
-  }
-
-  container.innerHTML = rows.map(r=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-      <div>
-        <div style="font-family:var(--mono);font-size:10px;color:${r.isToday?'var(--accent)':'var(--text3)'};font-weight:700;letter-spacing:1px">${r.label}</div>
-        <div style="font-size:12px;color:var(--text2)">${r.dispDate}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:10px;color:var(--text3)">IMP</span>
-          <span id="code-imp-${r.label}" style="font-family:var(--mono);font-size:22px;font-weight:900;color:${r.isToday?'var(--danger)':'var(--text3)'};letter-spacing:4px;filter:blur(4px);cursor:pointer"
-            onclick="toggleCodeVis('code-imp-${r.label}')">${r.impCode}</span>
-        </div>
-        ${r.adminCode !== r.impCode ? `
-        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
-          <span style="font-size:10px;color:var(--text3)">ADM</span>
-          <span id="code-adm-${r.label}" style="font-family:var(--mono);font-size:18px;font-weight:900;color:var(--text3);letter-spacing:4px;filter:blur(4px);cursor:pointer"
-            onclick="toggleCodeVis('code-adm-${r.label}')">${r.adminCode}</span>
-        </div>` : ''}
-      </div>
-    </div>`).join('');
-
-  // Copy for briefing button
-  const todayRow = rows[0];
-  container.innerHTML += `
-    <button onclick="copyBriefingCode()" style="width:100%;margin-top:12px;padding:10px;background:var(--accent2);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">
-      Copy Today's IMP Code for Briefing
-    </button>`;
-}
-
-function toggleCodeVis(id){
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.style.filter = el.style.filter === 'none' ? 'blur(4px)' : 'none';
-}
-
-function adminSaltPreview(type, val) {
-  const salt = val.trim().toUpperCase();
-  const previewId = type === 'imp' ? 'adminImpSaltPreview' : 'adminAdminSaltPreview';
-  const todayId   = type === 'imp' ? 'adminImpCodeToday'   : 'adminAdmCodeToday';
-  const tomorrowId= type === 'imp' ? 'adminImpCodeTomorrow': 'adminAdmCodeTomorrow';
-  const preview = document.getElementById(previewId);
-  if (!preview) return;
-  if (!salt) { preview.style.display = 'none'; return; }
-  preview.style.display = 'block';
-
-  function calc(s, offset) {
-    const d = new Date(); d.setDate(d.getDate() + offset);
-    const ds = d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-    let h=0; const inp=ds+s;
-    for(let i=0;i<inp.length;i++){h=Math.imul(h,31)+inp.charCodeAt(i);h=h|0;}
-    return String(Math.abs(h)%10000).padStart(4,'0');
-  }
-
-  document.getElementById(todayId).textContent    = calc(salt, 0);
-  document.getElementById(tomorrowId).textContent = calc(salt, 1);
-}
-
-function copyBriefingCode(){
-  const impSalt = localStorage.getItem('imp_salt') || '';
-  const code = getDailyCode(impSalt);
-  const d = new Date();
-  const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const dateStr = String(d.getDate()).padStart(2,'0')+' '+months[d.getMonth()]+' '+d.getFullYear();
-  const text = `IMP COMPASS — DAILY ACCESS CODE\n${dateStr}\nCode: ${code}\nValid until 00:00 local`;
-  navigator.clipboard?.writeText(text).then(()=>alert('Code copied to clipboard.')).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Code copied.');
-  });
-}
-
-function adminSaveSalt(){
-  const impSalt = document.getElementById('adminImpSalt').value.trim().toUpperCase();
-  const adminSalt = document.getElementById('adminAdminSalt').value.trim().toUpperCase();
-  if(!impSalt){ alert('IMP Salt cannot be empty.'); return; }
-  localStorage.setItem('imp_salt', impSalt);
-  if(adminSalt) localStorage.setItem('imp_salt_admin', adminSalt);
-  else localStorage.removeItem('imp_salt_admin');
-  renderAdminCodes();
-  alert('Salt saved. Inform all IMP devices to reconfigure.');
-}
-
-function adminResetDevice(){
-  if(!confirm('Reset this device? You will need to re-enter the salt on next login.')) return;
-  localStorage.removeItem('imp_salt');
-  localStorage.removeItem('imp_salt_admin');
-  localStorage.removeItem('imp_session');
-  closeAdminPanel();
-  logout();
-}
 
 </script>
 <!-- ADMIN PANEL MODAL -->
@@ -6182,48 +5757,35 @@ function adminResetDevice(){
       <button class="modal-close" onclick="closeAdminPanel()">&#x2715;</button>
     </div>
 
-    <!-- Daily codes -->
+    <!-- PIN Management info -->
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Daily Access Codes</div>
-      <div id="adminCodeRows"></div>
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Access Control</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7">
+        <div>🔐 <strong>StaticCrypt</strong> — site password (Warstwa 1)</div>
+        <div>🪪 <strong>IMP PIN</strong> — 4 digits, unique per officer</div>
+        <div>👑 <strong>Admin PIN</strong> — 6 digits (268585)</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">To change PINs — edit <code>impPins</code> in index.html and re-deploy.</div>
+      </div>
     </div>
 
-    <!-- Salt management -->
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">Salt Configuration</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:10px">
-        Change salt (all IMP devices must be reconfigured after change).
+    <!-- Roster admin controls -->
+    <div id="adminAlertControls" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Alert State</div>
+      <div class="alert-set-row">
+        <button class="alert-set-btn asb-bravo" onclick="setAlert('BRAVO');closeAdminPanel()">BRAVO</button>
+        <button class="alert-set-btn asb-charlie" onclick="setAlert('CHARLIE');closeAdminPanel()">CHARLIE</button>
+        <button class="alert-set-btn asb-delta" onclick="setAlert('DELTA');closeAdminPanel()">DELTA</button>
       </div>
-      <div style="margin-bottom:8px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">IMP Salt (shared)</div>
-        <input id="adminImpSalt" type="text" autocomplete="off" autocapitalize="characters"
-          oninput="adminSaltPreview('imp', this.value)"
-          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
-        <div id="adminImpSaltPreview" style="display:none;margin-top:6px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:8px 12px">
-          <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">IMP Code Preview</div>
-          <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#86efac">TODAY</span><span id="adminImpCodeToday" style="font-family:var(--mono);font-size:20px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span></div>
-          <div style="display:flex;justify-content:space-between;margin-top:3px"><span style="font-size:10px;color:#6b7a99">TOMORROW</span><span id="adminImpCodeTomorrow" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span></div>
-        </div>
-      </div>
-      <div style="margin-bottom:10px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:4px">Admin Salt (private)</div>
-        <input id="adminAdminSalt" type="text" autocomplete="off" autocapitalize="characters"
-          oninput="adminSaltPreview('admin', this.value)"
-          style="width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:14px;letter-spacing:2px;outline:none;text-transform:uppercase">
-        <div id="adminAdminSaltPreview" style="display:none;margin-top:6px;background:#0d1f0d;border:1px solid #1a4d1a;border-radius:6px;padding:8px 12px">
-          <div style="font-size:9px;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Admin Code Preview</div>
-          <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:#86efac">TODAY</span><span id="adminAdmCodeToday" style="font-family:var(--mono);font-size:20px;font-weight:900;color:#4ade80;letter-spacing:4px">----</span></div>
-          <div style="display:flex;justify-content:space-between;margin-top:3px"><span style="font-size:10px;color:#6b7a99">TOMORROW</span><span id="adminAdmCodeTomorrow" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#4b5563;letter-spacing:3px">----</span></div>
-        </div>
-      </div>
-      <button onclick="adminSaveSalt()" style="width:100%;padding:10px;background:var(--accent);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Save Salt</button>
     </div>
 
-    <!-- Reset device -->
-    <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:14px">
-      <div style="font-size:10px;font-weight:700;color:var(--danger);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Device Reset</div>
-      <div style="font-size:12px;color:var(--danger);margin-bottom:10px">Clears salt from this device. Will require re-setup on next login.</div>
-      <button onclick="adminResetDevice()" style="width:100%;padding:10px;background:var(--danger);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">Reset This Device</button>
+    <!-- Session info -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">Session</div>
+      <div style="font-size:12px;color:var(--text2)">Logged in as: <strong style="color:var(--accent)">Admin</strong></div>
+      <button onclick="closeAdminPanel();document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('tab-roster').classList.add('active');document.querySelector('[data-tab=roster]').classList.add('active')"
+        style="width:100%;margin-top:10px;padding:10px;background:var(--accent2);border:none;border-radius:6px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--body)">
+        Open Roster Board
+      </button>
     </div>
   </div>
 </div>
