@@ -19,10 +19,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install StaticCrypt
         run: npm install -g staticrypt@latest
+
+      - name: Verify password secret exists
+        env:
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          if [ -z "$SITE_PASSWORD" ]; then
+            echo "ERROR: SITE_PASSWORD secret is not set!"
+            echo "Go to Settings → Secrets and variables → Actions → New repository secret"
+            echo "Name: SITE_PASSWORD"
+            exit 1
+          fi
+          echo "Password secret OK (length: ${#SITE_PASSWORD})"
 
       - name: Encrypt index.html
         env:
@@ -35,22 +47,23 @@ jobs:
             --template-title "IMP Compass" \
             --template-instructions "Enter mission access password" \
             --template-placeholder "Mission password" \
-            --template-button "ACCESS" \
-            2>&1
-          ls -la
+            --template-button "ACCESS"
 
-      - name: Move encrypted file to root
+      - name: Move encrypted file
         run: |
           if [ -f "encrypted/index.html" ]; then
             cp encrypted/index.html index.html
-            echo "Copied from encrypted/"
+            echo "OK: encrypted/index.html → index.html"
+          else
+            echo "ERROR: encrypted/index.html not found"
+            ls -la
+            exit 1
           fi
-          ls -la *.html
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --staged --quiet && echo "No changes to commit" || \
-            git commit -m "chore: auto-encrypt [skip ci]" && git push
+          git diff --staged --quiet && echo "No changes" || \
+          (git commit -m "chore: encrypt [skip ci]" && git push)
