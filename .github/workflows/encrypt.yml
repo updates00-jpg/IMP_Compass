@@ -11,37 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
       - name: Install StaticCrypt
         run: npm install -g staticrypt@latest
 
-      - name: Encrypt index.html
+      - name: Encrypt
         env:
           STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
         run: |
-          staticrypt index.html \
-            --short \
-            --remember false \
-            --template-title "IMP Compass" \
-            --template-instructions "Enter mission access password" \
-            --template-placeholder "Mission password" \
-            --template-color-primary "#b8620a" \
-            --template-color-secondary "#1a2035"
+          staticrypt index.html --short --remember false
           cp encrypted/index.html index.html
- 
-      - name: Commit and push
+
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --staged --quiet && echo "No changes" || \
-          (git commit -m "chore: encrypt [skip ci]" && git push)
+          git diff --staged --quiet || (git commit -m "chore: encrypt [skip ci]" && git push)
