@@ -4896,7 +4896,6 @@ function pinVerify(){
     const lbl = document.getElementById('alarmUserLabel');
     if(lbl) lbl.textContent = currentUserId;
     // Subscribe Web Push with new userId
-    subscribeToFCM();
     // Open alarm modal
     document.getElementById('alarmModal').classList.add('open');
   } else {
@@ -4988,100 +4987,6 @@ loadPusher(()=>{
   const saved = localStorage.getItem('imp_user_id');
   if(saved) currentUserId = saved;
 });
-
-
-// ── FIREBASE FCM ──────────────────────────────────────────────────────────────
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDTNjvZulBljljA6CPAywo6Tyj7Vi1ubxI",
-  authDomain: "imp-compass.firebaseapp.com",
-  projectId: "imp-compass",
-  storageBucket: "imp-compass.firebasestorage.app",
-  messagingSenderId: "205813071452",
-  appId: "1:205813071452:web:7ef12edfc81a89d095f099"
-};
-const VAPID_PUBLIC = 'BBAXUZMe1yZdfSfEldxBv7XQgp2lKpsT1a0gNWVJwxVswuWqIVngKynoLAJws6Lvg7qPGNW3F0svwNUuLeNXsZI';
-
-let firebaseApp = null;
-let fcmMessaging = null;
-
-async function initFirebase(){
-  if(firebaseApp) return;
-  try {
-    // Load Firebase SDKs dynamically
-    await loadScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
-    await loadScript('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
-
-    firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
-    fcmMessaging = firebase.messaging();
-    console.log('Firebase initialized');
-  } catch(e) {
-    console.warn('Firebase init failed:', e);
-  }
-}
-
-function loadScript(src){
-  return new Promise((resolve, reject) => {
-    if(document.querySelector(`script[src="${src}"]`)){resolve();return;}
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-async function registerSW(){
-  if(!('serviceWorker' in navigator)) return;
-  try {
-    const reg = await navigator.serviceWorker.register('/IMP_Compass/sw.js');
-    console.log('SW registered');
-    return reg;
-  } catch(e) {
-    console.warn('SW registration failed:', e);
-  }
-}
-
-async function subscribeToFCM(){
-  if(!currentUserId) return;
-  try {
-    await initFirebase();
-    if(!fcmMessaging) return;
-
-    const permission = await Notification.requestPermission();
-    if(permission !== 'granted'){
-      console.warn('Notification permission denied');
-      return;
-    }
-
-    const token = await fcmMessaging.getToken({ vapidKey: VAPID_PUBLIC });
-    if(!token){ console.warn('No FCM token'); return; }
-
-    // Save token to server
-    await fetch(SUBSCRIBE_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ userId: currentUserId, token })
-    });
-    console.log('FCM token saved for', currentUserId);
-
-    // Handle foreground messages (app is open)
-    fcmMessaging.onMessage(payload => {
-      const data = payload.data || {};
-      if(data.type === 'alarm'){
-        showIncomingAlarm(data);
-      } else if(data.type === 'all-clear'){
-        showAllClear(data);
-      }
-    });
-
-  } catch(e) {
-    console.warn('FCM subscription failed:', e);
-  }
-}
-
-// Register SW immediately (before login) so it can receive background push
-window.addEventListener('load', registerSW);
-
 
 
 // ── LOGIN SYSTEM ──────────────────────────────────────────────────────────────
@@ -5261,7 +5166,6 @@ function unlockApp(){
   const adminCtrl = document.getElementById('adminCtrl');
   if(adminCtrl) adminCtrl.style.display = currentUserId==='Admin' ? 'block' : 'none';
   if(currentUserId !== 'Admin'){
-    subscribeToFCM();
   }
   loadRoster().catch(()=>{});
   // Auto-logout at midnight (daily code expires)
