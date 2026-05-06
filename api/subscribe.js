@@ -1,39 +1,44 @@
-// In-memory store (resets on cold start)
-// For production use a database (e.g. Vercel KV)
-if (!global.subscriptions) global.subscriptions = {};
+// api/subscribe.js — Save FCM token to Firestore
+const { initializeApp, getApps, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+
+if (!getApps().length) {
+  initializeApp({
+    credential: cert({
+      type: "service_account",
+      project_id: process.env.FIREBASE_PROJECT_ID,
+      private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+      private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      client_id: process.env.FIREBASE_CLIENT_ID,
+      auth_uri: "https://accounts.google.com/o/oauth2/auth",
+      token_uri: "https://oauth2.googleapis.com/token",
+    })
+  });
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
   if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // GET — return count (for debug)
-  if (req.method === 'GET') {
-    return res.status(200).json({
-      count: Object.keys(global.subscriptions).length,
-      users: Object.keys(global.subscriptions)
-    });
+  try {
+    const { token, userId } = req.body;
+    if (!token) return res.status(400).json({ error: 'Token required' });
+
+    const db = getFirestore();
+    // Use token as document ID to prevent duplicates
+    await db.collection('fcm_tokens').doc(token).set({
+      token,
+      userId: userId || 'unknown',
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('Subscribe error:', err);
+    return res.status(500).json({ error: err.message });
   }
-
-  // DELETE — remove subscription
-  if (req.method === 'DELETE') {
-    const { userId } = req.body;
-    if (userId) delete global.subscriptions[userId];
-    return res.status(200).json({ ok: true });
-  }
-
-  // POST — save subscription
-  if (req.method === 'POST') {
-    const { userId, subscription } = req.body;
-    if (!userId || !subscription) {
-      return res.status(400).json({ error: 'Missing userId or subscription' });
-    }
-    global.subscriptions[userId] = subscription;
-    console.log(`Subscribed: ${userId} — total: ${Object.keys(global.subscriptions).length}`);
-    return res.status(200).json({ ok: true });
-  }
-
-  return res.status(405).json({ error: 'Method not allowed' });
 };
