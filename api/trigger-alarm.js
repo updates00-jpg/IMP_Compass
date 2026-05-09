@@ -1,7 +1,7 @@
 // api/trigger-alarm.js
 // Triggers alarm via Pusher (open apps) + FCM (background/locked phones).
 //
-// SECURITY FIXES vs original:
+// SECURITY FIXES vs original: 
 //   - Auth: requires X-IMP-Secret header matching IMP_API_SECRET env var
 //   - Rate limit: max 5 alarms/minute per IP (prevents spam/DoS)
 //   - FCM called via module import, NOT internal HTTP (eliminates extra cold start)
