@@ -1,12 +1,12 @@
 {
   "name": "imp-compass-api",
   "version": "1.1.0",
-  "description": "IMP Compass API — Firebase FCM + Pusher (Vercel serverless)",
+  "description": "IMP Compass API \u2014 Firebase FCM + Pusher (Vercel serverless)",
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@vercel/blob": "^0.24.0",
+    "@vercel/blob": "0.24.0",
     "firebase-admin": "12.1.0",
     "pusher": "5.2.0"
   },
