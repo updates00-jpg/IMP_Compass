@@ -1,0 +1,71 @@
+name: Encrypt & Deploy
+
+# Triggers on push to main, but NOT when GitHub Actions itself pushes
+# (the [skip ci] commit message tag prevents re-trigger)
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  encrypt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install StaticCrypt
+        run: npm install -g staticrypt@latest
+
+      - name: Guard — skip if already encrypted
+        id: guard
+        run: |
+          if grep -q "staticryptInitiator" index.html 2>/dev/null; then
+            echo "SKIP=true" >> "$GITHUB_OUTPUT"
+            echo "File is already encrypted — skipping to prevent double-encryption"
+          else
+            echo "SKIP=false" >> "$GITHUB_OUTPUT"
+            echo "File is plaintext — proceeding with encryption"
+          fi
+
+      - name: Verify SITE_PASSWORD secret is set
+        if: steps.guard.outputs.SKIP == 'false'
+        env:
+          STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          if [ -z "$STATICRYPT_PASSWORD" ]; then
+            echo "ERROR: SITE_PASSWORD secret is not configured in GitHub repository settings."
+            echo "Go to: Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+          echo "Password secret is present (length: ${#STATICRYPT_PASSWORD})"
+
+      - name: Encrypt index.html
+        if: steps.guard.outputs.SKIP == 'false'
+        env:
+          STATICRYPT_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          staticrypt index.html --short --remember false
+          if [ ! -f "encrypted/index.html" ]; then
+            echo "ERROR: staticrypt did not produce encrypted/index.html"
+            ls -la
+            exit 1
+          fi
+          cp encrypted/index.html index.html
+          echo "Encryption successful"
+
+      - name: Commit encrypted file
+        if: steps.guard.outputs.SKIP == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet \
+            && echo "No changes to commit" \
+            || (git commit -m "chore: encrypt [skip ci]" && git push)
