@@ -1,4 +1,4 @@
-// api/send-push.js
+// api/send-push.js 
 // Sends FCM push notification to all registered devices.
 //
 // SECURITY FIXES vs original:
