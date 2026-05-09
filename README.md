@@ -1,6 +1,6 @@
 # IMP Compass
 
-Operational reference application for EUFOR International Military Police at Camp Butmir, Sarajevo.
+Operational reference application for EUFOR International Military Police at Camp Butmir, Sarajevo. 
 
 ## Stack
 
