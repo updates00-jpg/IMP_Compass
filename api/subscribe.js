@@ -1,4 +1,4 @@
-// api/subscribe.js
+// api/subscribe.js 
 // Saves FCM device token to Firestore for push notification targeting.
 //
 // SECURITY FIXES vs original:
