@@ -1,4 +1,4 @@
-name: Encrypt & Deploy
+name: Encrypt & Deploy 
 
 # Triggers on push to main, but NOT when GitHub Actions itself pushes
 # (the [skip ci] commit message tag prevents re-trigger)
